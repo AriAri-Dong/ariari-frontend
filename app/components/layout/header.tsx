@@ -9,7 +9,7 @@ import SearchTermContext from "@/context/searchTermContext";
 import Tooltip from "../tooltip";
 import User from "../user/user";
 import HeaderTab from "../tab/headerTab";
-import SmallButton from "../button/smallButton";
+import SmallBtn from "../button/basicBtn/smallBtn";
 import MobileUser from "../user/mobileUser";
 
 const Header = () => {
@@ -46,10 +46,7 @@ const Header = () => {
             <div className="flex space-x-5">
               <User />
               <Tooltip message="동아리 관리 버튼을 설명하는 헬프 텍스트 입니다. 000 (최대 55자)">
-                <SmallButton
-                  title={"동아리 관리"}
-                  onClick={handleButtonClick}
-                />
+                <SmallBtn title={"동아리 관리"} onClick={handleButtonClick} />
               </Tooltip>
             </div>
           </div>

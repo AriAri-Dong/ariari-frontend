@@ -42,6 +42,10 @@ const config: Config = {
         button2: "#c6d4e8",
         button3: "#bfd1e8",
         button_border: "#889cd6",
+        black_50: "rgba(0, 0, 0, 0.5)",
+        aelectedoption_default: "rgba(88, 155, 255, 0.1)",
+        aelectedoption_hover: "rgba(88, 155, 255, 0.2)",
+        aelectedoption_pressed: "rgba(88, 155, 255, 0.26)",
       },
       boxShadow: {
         default: "2px 2px 12px 0px rgba(0, 0, 0, 0.12)",
@@ -52,6 +56,11 @@ const config: Config = {
         md: "768px",
         lg: "1024px",
         lx: "1288px",
+      },
+      borderRadius: {
+        28: "28px",
+        30: "30px",
+        60: "60px",
       },
     },
   },

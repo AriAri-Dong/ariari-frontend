@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import arrow from "@/images/icon/arrow.svg";
 import UserDropdown from "../dropdown/userDropdown";
-import Notification from "../notification";
 import { USER_MENU } from "@/data/header";
+import  LoginBtn from "../button/basicBtn/loginBtn";
+import Notification from "../button/iconBtn/notification";
 
 const User = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -41,7 +42,7 @@ const User = () => {
     <>
       {isLoggedIn ? (
         <div className="relative flex items-center space-x-5" ref={dropdownRef}>
-          <Notification />
+          <Notification size={"small"} onClick={() => {}} />
           <button
             className="relative flex items-center space-x-2 p-2 text-subtext2 cursor-pointer rounded-[30px]
             hover:bg-hover focus:bg-pressed"
@@ -59,9 +60,7 @@ const User = () => {
           )}
         </div>
       ) : (
-        <button className="text-subtext2 text-base px-7" onClick={handleLogin}>
-          로그인 후 이용하기
-        </button>
+        <LoginBtn onClick={handleLogin} />
       )}
     </>
   );
