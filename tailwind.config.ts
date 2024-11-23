@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { PluginAPI } from "tailwindcss/types/config";
 
 const config: Config = {
   darkMode: "class",
@@ -9,6 +10,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        pretendard: ["Pretendard", "sans-serif"],
+      },
+      fontSize: {
+        19: "19px",
+        15: "15px",
+        13: "13px",
+        10: "10px",
+      },
       colors: {
         background: "#fff",
         text1: "#000",
@@ -35,9 +45,28 @@ const config: Config = {
       },
       boxShadow: {
         default: "2px 2px 12px 0px rgba(0, 0, 0, 0.12)",
+        border: "0px -3px 20px 0px rgba(0, 0, 0, 0.05)",
+      },
+      screens: {
+        sm: "360px",
+        md: "768px",
+        lg: "1024px",
+        lx: "1288px",
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function (pluginAPI: PluginAPI) {
+      pluginAPI.addUtilities({
+        ".no-scrollbar": {
+          "-ms-overflow-style": "none",
+          "scrollbar-width": "none",
+        },
+        ".no-scrollbar::-webkit-scrollbar": {
+          display: "none",
+        },
+      });
+    },
+  ],
 };
 export default config;

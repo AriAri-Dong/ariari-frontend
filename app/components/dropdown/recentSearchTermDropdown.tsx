@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import closeIcon from "@/images/icon/close.svg";
+import deleteIcon from "@/images/icon/delete.svg";
 
 interface RecentSearchTermDropdownProps {
   recentSearches: string[];
@@ -26,7 +27,7 @@ const RecentSearchTermDropdown = ({
       {recentSearches.map((search, index) => (
         <div
           key={index}
-          className={`flex justify-between items-center px-[22px] py-[14px] hover:bg-hover text-base cursor-pointer focus:bg-pressed 
+          className={`flex justify-between items-center px-3 md:px-[22px] py-2.5 md:py-[14px] hover:bg-hover text-sm md:text-base cursor-pointer focus:bg-pressed 
                 ${index === 0 ? "rounded-t-xl" : ""} 
                 ${index === recentSearches.length - 1 ? "rounded-b-xl" : ""}`}
           onMouseDown={(e) => e.preventDefault()}
@@ -40,7 +41,24 @@ const RecentSearchTermDropdown = ({
               onRemoveSearchItem(index);
             }}
           >
-            <Image src={closeIcon} alt="close" width={24} height={24} />
+            <div className="hidden md:block">
+              <Image
+                src={closeIcon}
+                alt="close"
+                width={20}
+                height={20}
+                className="md:w-6 md:h-6"
+              />
+            </div>
+            <div className="md:hidden">
+              <Image
+                src={deleteIcon}
+                alt="delete"
+                width={20}
+                height={20}
+                className="md:w-6 md:h-6"
+              />
+            </div>
           </button>
         </div>
       ))}

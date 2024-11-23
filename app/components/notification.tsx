@@ -29,6 +29,8 @@ const Notification = () => {
         onMouseDown={() => setNotificationStatus("pressed")}
         onMouseUp={() => setNotificationStatus("default")}
         className="cursor-pointer"
+        height={24}
+        width={24}
       />
     </>
   );

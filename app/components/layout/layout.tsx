@@ -12,7 +12,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <SearchTermContext.Provider value={{ searchTerm, setSearchTerm }}>
       <div className="flex flex-col min-h-screen">
         <Header />
-        <main className="flex-grow overflow-y-auto">{children}</main>
+        <main className="flex-grow flex justify-center items-center">
+          <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5">
+            {children}
+          </div>
+        </main>
         <Footer />
       </div>
     </SearchTermContext.Provider>
