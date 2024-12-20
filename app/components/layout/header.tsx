@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from "@/images/logo/logo.svg";
 import SearchInput from "../input/searchInput";
@@ -14,6 +14,8 @@ import MobileUser from "../user/mobileUser";
 
 const Header = () => {
   const router = useRouter();
+  const pathname = usePathname();
+
   const { setSearchTerm } = useContext(SearchTermContext);
 
   const handleHomeClick = () => {
@@ -29,8 +31,18 @@ const Header = () => {
     console.log("검색어 :", searchTerm);
   };
 
+  const isHiddenPath = [
+    "/myPage/myPoint",
+    "/myPage/interestClub",
+    "/myPage/interestRecruitment",
+  ].includes(pathname);
+
   return (
-    <header className="w-full flex justify-center bg-background pt-[14px] md:pt-7">
+    <header
+      className={`w-full justify-center bg-background pt-[14px] md:pt-7 ${
+        isHiddenPath ? "hidden md:flex" : "flex"
+      }`}
+    >
       <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5 space-y-8">
         <div className="flex justify-between items-center w-full">
           <Image
