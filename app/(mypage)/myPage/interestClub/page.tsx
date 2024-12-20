@@ -21,7 +21,7 @@ const InterestClub = () => {
 
   return (
     <div>
-      <div className="flex flex-col gap-5 mt-5 md:mt-8 md:gap-[22px]">
+      <div className="flex flex-col gap-5 mt-[46px] md:mt-8 md:gap-[22px]">
         <HeaderSection />
         <FilterSection
           isChecked={isChecked}

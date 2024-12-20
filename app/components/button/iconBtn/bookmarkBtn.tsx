@@ -12,7 +12,7 @@ const BookmarkBtn = ({ onClick, count, isScrap }: BookMartProp) => {
   return (
     <div
       className="flex justify-center items-center w-[52px] h-[52px] md:w-[60px] md:h-[60px] cursor-pointer
-    bg-background focus:bg-hover md:hover:bg-hover md:focus:bg-pressed rounded-lg border border-menuborder cursor-pointer"
+    bg-background focus:bg-hover md:hover:bg-hover md:focus:bg-pressed rounded-lg border border-menuborder"
       onClick={onClick}
     >
       <div className="flex flex-col items-center gap-0">
