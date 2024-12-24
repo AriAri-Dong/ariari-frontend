@@ -8,7 +8,7 @@ const FilterBtn = ({ onClick }: ButtonProps) => {
   return (
     <button
       className="flex justify-center items-center p-[3px] border border-menuborder
-    bg-background focus:bg-hover rounded-full cursor-pointer"
+    bg-background focus:bg-hover rounded-full cursor-pointer md:hidden"
       onClick={onClick}
     >
       <Image src={filter} alt={"filter"} width={20} height={20} />

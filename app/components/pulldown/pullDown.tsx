@@ -90,8 +90,8 @@ const PullDown = ({
 
   const getDynamicStyle = () => {
     const length = selectedOptionText.replace(/\s/g, "").length;
-    if (length <= 3) return "text-[15px]";
-    else return "text-[14px]";
+    if (length <= 3) return "text-15";
+    else return "text-sm";
   };
 
   useEffect(() => {
@@ -107,9 +107,9 @@ const PullDown = ({
         ref={buttonRef}
         onClick={toggleDropdown}
         className={`relative flex items-center justify-between 
-          pl-[12px] pr-[8px] py-[6px]
-          cursor-pointer rounded-[30px] border gap-[6px]
-          md:pl-[20px] md:pr-[14px] md:py-[8px]
+          pl-[11px] pr-[7px] py-[5px]
+          cursor-pointer rounded-30 border gap-[6px]
+          md:pl-5 md:pr-[14px] md:py-2
           ${
             isSelected
               ? `bg-selectedoption_default border-selectedoptionborder hover:bg-selectedoption_hover focus:bg-selectedoption_pressed`
@@ -118,20 +118,20 @@ const PullDown = ({
         `}
       >
         <span
-          className={`text-[13px] text-left md:text-[14px] ${
+          className={`text-mobile_body2_m md:text-body1_m ${
             isSelected ? "text-primary" : "text-text1"
           } md:${getDynamicStyle()}`}
         >
           {selectedOptionText}
         </span>
-
         <Image
           src={keyboardArrowDown}
           alt="keyboardArrowDown"
-          className="w-[24px] h-[24px] md:w-[16px] md:h-[16px]"
+          width={16}
+          height={16}
+          className="md:w-6 md:h-6"
         />
       </button>
-
       {isDropdownOpen &&
         (!multiple ? (
           isTabOver ? (
