@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import NotiPopUp from "../modal/notiPopUp";
 
@@ -25,7 +27,7 @@ const SubTap = ({ optionData }: SubTapProps) => {
 
   return (
     <div
-      className={`h-[40px] p-[2px] flex justify-between items-center gap-[6px] bg-searchbar rounded-[28px] md:h-[44px] md:rounded-[28px] md:gap-[10px]`}
+      className={`h-[40px] p-[2px] flex justify-between items-center gap-[6px] bg-searchbar rounded-28 md:h-[44px] md:rounded-[28px] md:gap-[10px]`}
     >
       {optionData.map((option, index) =>
         selectedOption == index ? (
