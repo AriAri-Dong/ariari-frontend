@@ -55,7 +55,7 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
                 <DdayBadge date={item.date} />
               </div>
             </div>
-            <div className="felx flex-col w-full md:px-2 md:mt-2.5 md:mb-6">
+            <div className="flex flex-col w-full md:px-2 md:mt-2.5 md:mb-6">
               <div className="flex justify-between">
                 <p className="text-subtext1 text-mobile_body3_m mb-[6px] md:text-h4">
                   {item.clubName}
