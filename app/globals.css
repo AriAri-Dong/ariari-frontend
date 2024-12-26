@@ -12,3 +12,10 @@
 body {
   font-family: "Pretendard", sans-serif;
 }
+
+.slick-slider {
+  margin-inline: -9px;
+}
+.slick-list .slick-track .slick-slide > div {
+  margin-inline: 9px;
+}
