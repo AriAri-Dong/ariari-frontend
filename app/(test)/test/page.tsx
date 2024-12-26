@@ -4,13 +4,14 @@ import { useState } from "react";
 import MobileButtons from "../components/buttons/mobile_Buttons";
 import PcButtons from "../components/buttons/PC_Buttons";
 import Badges from "../components/badges";
-import LoginDialog from "@/components/modal/loginDialog";
 import ProfileSettingModal from "@/components/modal/profileSetting/profileSettingModal";
+import LoginModal from "@/components/modal/login/loginModal";
+import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 
 const TestPage = () => {
-  const [isButtonVisible, setIsButtonVisible] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
+  const [isButtonVisible, setIsButtonVisible] = useState<boolean>(true);
   const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(true);
 
   const handleOpenModal = () => {
@@ -54,16 +55,29 @@ const TestPage = () => {
           ? "Hidden Profile Setting Components"
           : "Show Profile Setting Components"}
       </button>
-      {isModalOpen && <LoginDialog onClose={handleCloseModal} />}
+
+      {/* Login Modal */}
+      {isModalOpen && (
+        <>
+          <LoginModal onClose={handleCloseModal} />
+          <MobileLoginModal onClose={handleCloseModal} />
+        </>
+      )}
+
+      {/* Profile Setting Modal */}
       {isProfileOpen && (
         <ProfileSettingModal onClose={() => setIsProfileOpen(false)} />
       )}
+
+      {/* Button Components */}
       {isButtonVisible && (
         <div className="bg-pink-100 p-3">
           <PcButtons />
           <MobileButtons />
         </div>
       )}
+
+      {/* Badge Components */}
       {isBadgeVisible && (
         <div className="bg-gray-100 p-3">
           <Badges />
