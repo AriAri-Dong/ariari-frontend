@@ -36,6 +36,7 @@ export const Target_Type = [
   { id: 2, label: "대학생" },
   { id: 3, label: "대학원생" },
   { id: 4, label: "직장인" },
+  { id: 5, label: "기타" },
 ];
 
 export const Date_Sort_Type = [
