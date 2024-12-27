@@ -8,6 +8,9 @@ import { useRouter } from "next/navigation";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import RoundVectorBtn from "../button/iconBtn/roundVectorBtn";
+import { useRef } from "react";
+import { useCallback } from "react";
 
 interface CardProps {
   data: MainRecruitmentCardProps[];
@@ -16,23 +19,37 @@ interface CardProps {
 const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
   const router = useRouter();
   const [cardData, setCardData] = useState<MainRecruitmentCardProps[]>(data);
+  const slickRef = useRef<Slider>(null);
+
+  const handleSliderPrevClick = useCallback(
+    () => slickRef?.current?.slickPrev(),
+    []
+  );
+  const handleSliderNextClick = useCallback(
+    () => slickRef?.current?.slickNext(),
+    []
+  );
+
   const carouselSettings = {
     dots: false,
     infinite: false,
     speed: 500,
     slidesToShow: 4,
+    slidesToScroll: 4,
     swipe: false,
     responsive: [
       {
         breakpoint: 1288,
         settings: {
           slidesToShow: 3,
+          slidesToScroll: 3,
         },
       },
       {
         breakpoint: 768,
         settings: {
           slidesToShow: 1,
+          slidesToScroll: 1,
         },
       },
     ],
@@ -57,8 +74,28 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
 
   return (
     <>
-      <div className="w-full">
-        <Slider {...carouselSettings}>
+      <div className="w-full relative">
+        <div
+          className="absolute rotate-180 top-[calc(50%-24px)] left-[-10px]"
+          style={{ zIndex: 1 }}
+        >
+          <RoundVectorBtn
+            className="p-[9px]"
+            imageSize={30}
+            onClick={handleSliderPrevClick}
+          />
+        </div>
+        <div
+          className="absolute top-[calc(50%-24px)] right-[-10px]"
+          style={{ zIndex: 1 }}
+        >
+          <RoundVectorBtn
+            className="p-[9px]"
+            imageSize={30}
+            onClick={handleSliderNextClick}
+          />
+        </div>
+        <Slider ref={slickRef} {...carouselSettings}>
           {cardData.map((item, index) => {
             const isExpired = calculateRemainingDays(item.date) === "마감";
             return (
