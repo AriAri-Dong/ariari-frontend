@@ -10,6 +10,7 @@ import Step2 from "./step2";
 import Step3 from "./step3";
 import { validateEmail } from "@/schema/email";
 import { useProfileContext } from "@/context/profileConetxt";
+import { formatTime } from "@/utils/timeFormatter";
 
 interface ProfileSettingProps {
   step: number;
@@ -68,10 +69,18 @@ const MobileProfileSetting = ({
       return;
     }
     setAlertMessage(null);
-    onNextStep(step + 1);
+    if (step === 3) {
+      onClose();
+    } else {
+      onNextStep(step + 1);
+    }
   };
 
-  const handleBack = () => {};
+  const handleBack = () => {
+    if (step > 1) {
+      onNextStep(step - 1);
+    }
+  };
 
   useEffect(() => {
     if (step === 3) {
@@ -89,15 +98,6 @@ const MobileProfileSetting = ({
     }
   }, [step]);
 
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(
-      2,
-      "0"
-    )}`;
-  };
-
   return (
     <div
       className="fixed top-0 left-0 w-full h-full bg-background z-50 flex flex-col
@@ -111,6 +111,7 @@ const MobileProfileSetting = ({
             height={24}
             width={24}
             onClick={handleBack}
+            className={step === 1 ? "hidden" : ""}
           />
           <h1 className="flex-1 text-center text-text1 text-mobile_h1_contents_title mr-6">
             {step === 1 ? "프로필 생성" : "학교 등록"}
