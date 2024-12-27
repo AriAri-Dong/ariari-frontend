@@ -15,10 +15,12 @@ import RecruitmentSummary from "../components/recruitmentSummary";
 import ClubProfileCard from "@/components/card/clubProfileCard";
 import ReportBottomSheet from "@/components/bottomSheet/reportBottomSheet";
 import Alert from "@/components/alert/alert";
+import ReportModal from "@/components/modal/reportModal";
 
 const ClubInfo = () => {
   const [isHeart, setIsHeart] = useState<boolean>(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
+  const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const onHeartClick = () => {
@@ -27,8 +29,14 @@ const ClubInfo = () => {
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen((prev) => !prev);
   };
+
+  const toggleBottomModal = () => {
+    setIsBottomModalOpen((prev) => !prev);
+  };
+
   const handleReportSubmit = () => {
     setIsBottomSheetOpen(false);
+    setIsBottomModalOpen(false);
     setAlertMessage("신고가 정상적으로 접수되었습니다.");
   };
 
@@ -147,7 +155,7 @@ const ClubInfo = () => {
                 type={"declaration"}
                 size={"large"}
                 title={"신고하기"}
-                onClick={toggleBottomSheet}
+                onClick={toggleBottomModal}
               />
             </div>
           </div>
@@ -159,6 +167,12 @@ const ClubInfo = () => {
         {isBottomSheetOpen && (
           <ReportBottomSheet
             onClose={() => setIsBottomSheetOpen(false)}
+            onSubmit={handleReportSubmit}
+          />
+        )}
+        {isBottomModalOpen && (
+          <ReportModal
+            onClose={() => setIsBottomModalOpen(false)}
             onSubmit={handleReportSubmit}
           />
         )}
