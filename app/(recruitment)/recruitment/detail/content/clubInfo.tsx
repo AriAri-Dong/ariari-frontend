@@ -13,12 +13,23 @@ import RecruitmentBottomBar from "@/components/bar/floatingBar/recruitmentBottom
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import RecruitmentSummary from "../components/recruitmentSummary";
 import ClubProfileCard from "@/components/card/clubProfileCard";
+import ReportBottomSheet from "@/components/bottomSheet/reportBottomSheet";
+import Alert from "@/components/alert/alert";
 
 const ClubInfo = () => {
   const [isHeart, setIsHeart] = useState<boolean>(false);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const onHeartClick = () => {
     setIsHeart(!isHeart);
+  };
+  const toggleBottomSheet = () => {
+    setIsBottomSheetOpen((prev) => !prev);
+  };
+  const handleReportSubmit = () => {
+    setIsBottomSheetOpen(false);
+    setAlertMessage("신고가 정상적으로 접수되었습니다.");
   };
 
   return (
@@ -45,7 +56,7 @@ const ClubInfo = () => {
               type={"declaration"}
               size={"large"}
               title={""}
-              onClick={() => {}}
+              onClick={toggleBottomSheet}
             />
           </div>
           <div className="h-0.5 bg-menuborder sm_md:w-[350px] mt-6 mb-6 md:hidden" />
@@ -136,7 +147,7 @@ const ClubInfo = () => {
                 type={"declaration"}
                 size={"large"}
                 title={"신고하기"}
-                onClick={() => {}}
+                onClick={toggleBottomSheet}
               />
             </div>
           </div>
@@ -145,6 +156,15 @@ const ClubInfo = () => {
         {/* <DayFloatingBar deadline={new Date("2024-12-31T23:59:59")} /> */}
         {/* <PointStatusFloatingBar /> */}
         {/* <MobilePointStatusFloatingBar /> */}
+        {isBottomSheetOpen && (
+          <ReportBottomSheet
+            onClose={() => setIsBottomSheetOpen(false)}
+            onSubmit={handleReportSubmit}
+          />
+        )}
+        {alertMessage && (
+          <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+        )}
       </div>
     </div>
   );
