@@ -34,10 +34,10 @@ const Step3 = ({ onResend, verificationFailed }: Step3Props) => {
         재학 중인 학교가 있다면 학교를 등록하고 <br />
         교내 동아리를 아리아리에서 탐색해 보세요.
       </p>
-      <div className="flex w-full justify-between items-center">
+      <div className="flex w-full justify-between items-center mt-10">
         <input
           className="w-full bg-searchbar text-mobile_body1_r text-subtext2 py-3 px-4 rounded-xl 
-      focus:border-blue-500 focus:outline-none mt-10"
+      focus:border-blue-500 focus:outline-none"
           placeholder="재학중인 학교의 이메일을 입력해 주세요."
           value={email}
           onChange={handleChange}
@@ -66,7 +66,7 @@ const Step3 = ({ onResend, verificationFailed }: Step3Props) => {
         onChange={handleNumberChange}
       />
       {verificationFailed && (
-        <p className="text-noti text-body4_r mt-2 pl-[22px]">
+        <p className="w-full text-noti text-mobile_body4_r mt-2 pl-2">
           인증번호를 다시 확인해 주세요.
         </p>
       )}
