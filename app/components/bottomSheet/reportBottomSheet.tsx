@@ -1,22 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import checkIcon from "@/images/icon/radio_button_checked.svg";
 import uncheckIcon from "@/images/icon/radio_button_unchecked.svg";
 import close from "@/images/icon/close.svg";
 import Alert from "../alert/alert";
 import LargeBtn from "../button/basicBtn/largeBtn";
-
-const REPORT_REASONS = [
-  "스팸 홍보/도배글 입니다.",
-  "음란물입니다.",
-  "불법정보를 포함하고 있습니다.",
-  "욕설/생명경시/혐오/차별적 표현입니다.",
-  "개인정보 노출 게시물입니다.",
-  "불쾌한 표현이 있습니다.",
-  "기타",
-];
+import { REPORT_REASONS } from "@/data/report";
 
 interface ReportBottomSheetProps {
   onClose: () => void;
@@ -24,34 +15,61 @@ interface ReportBottomSheetProps {
 }
 
 const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
-  const [selectedReason, setSelectedReason] = useState<string | null>(
-    REPORT_REASONS[0]
-  );
+  const [selectedReason, setSelectedReason] = useState<string | null>(null);
   const [details, setDetails] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [isClosing, setIsClosing] = useState<boolean>(false);
+  const startY = useRef(0);
+  const currentY = useRef(0);
+  const sheetRef = useRef<HTMLDivElement>(null);
 
   const handleReasonChange = (reason: string) => {
     setSelectedReason(reason);
+    setAlertMessage(null);
   };
 
   const handleSubmit = () => {
     if (!selectedReason) {
-      alert("신고 사유를 선택해주세요.");
+      setAlertMessage("신고 사유를 선택해주세요.");
       return;
     }
 
     console.log("신고 사유:", selectedReason);
     console.log("신고 사유 상세:", details);
 
-    setSelectedReason(REPORT_REASONS[0]);
+    setSelectedReason(null);
     setDetails("");
     onSubmit();
     onClose();
   };
 
-  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if ((e.target as HTMLDivElement).id === "background") {
-      onClose();
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    startY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    currentY.current = e.touches[0].clientY;
+    const translateY = Math.max(0, currentY.current - startY.current);
+
+    if (sheetRef.current) {
+      sheetRef.current.style.transform = `translateY(${translateY}px)`;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    const translateY = currentY.current - startY.current;
+
+    // 일정 높이 이상 내려가면 닫힘
+    if (translateY > 100) {
+      setIsClosing(true);
+      setTimeout(() => {
+        onClose();
+      }, 300);
+    } else {
+      // 원래 위치로
+      if (sheetRef.current) {
+        sheetRef.current.style.transform = "translateY(0)";
+      }
     }
   };
 
@@ -66,12 +84,20 @@ const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
   return (
     <div
       id="background"
-      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-end duration-300"
-      onClick={handleBackgroundClick}
+      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center
+      items-end duration-300"
+      onClick={(e) =>
+        (e.target as HTMLDivElement).id === "background" && onClose()
+      }
     >
       <div
-        className="bg-white w-full p-4 shadow-lg rounded-t-2xl"
+        ref={sheetRef}
+        className={`bg-white w-full p-4 shadow-lg rounded-t-2xl transition-transform
+            duration-300 ${isClosing ? "translate-y-full" : "translate-y-0"}`}
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         <div className="flex justify-between items-center pb-4 border-b">
           <h2 className="text-mobile_h1_contents_title">신고하기</h2>
@@ -89,7 +115,7 @@ const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
             {REPORT_REASONS.map((reason, index) => (
               <li key={index}>
                 <label
-                  className="flex items-center cursor-pointer text-mobile_h4 text-subtext2"
+                  className="flex items-center cursor-pointer text-mobile_h4text-subtext2"
                   onClick={() => handleReasonChange(reason)}
                 >
                   <Image
@@ -114,9 +140,14 @@ const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
             onChange={(e) => setDetails(e.target.value)}
             maxLength={1000}
             className="w-full p-1 h-32 border-0 rounded-md resize-none text-mobile_body1_r 
-            text-subtext1  focus:outline-none focus:ring-[1px] focus:ring-searchbarborder placeholder:text-unselected"
+            text-subtext1  focus:outline-none focus:ring-[1px]
+            focus:ring-searchbarborder placeholder:text-unselected"
           />
         </div>
+
+        {alertMessage && (
+          <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+        )}
 
         <div className="mt-[6px] flex items-center gap-6">
           <p className="text-right text-unselected text-mobile_h4">
@@ -125,9 +156,6 @@ const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
           <LargeBtn onClick={handleSubmit} title={"신고하기"} />
         </div>
       </div>
-      {alertMessage && (
-        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
-      )}
     </div>
   );
 };
