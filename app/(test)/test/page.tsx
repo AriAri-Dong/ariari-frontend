@@ -7,6 +7,8 @@ import Badges from "../components/badges";
 import ProfileSettingModal from "@/components/modal/profileSetting/profileSettingModal";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
+import MobileSnackBar from "@/components/bar/mobileSnackBar";
+import MobileProfileSettingModal from "@/components/modal/profileSetting/mobile/mobileProfileSettingModal";
 
 const TestPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -66,7 +68,10 @@ const TestPage = () => {
 
       {/* Profile Setting Modal */}
       {isProfileOpen && (
-        <ProfileSettingModal onClose={() => setIsProfileOpen(false)} />
+        <>
+          <ProfileSettingModal onClose={() => setIsProfileOpen(false)} />
+          <MobileProfileSettingModal onClose={() => setIsProfileOpen(false)} />
+        </>
       )}
 
       {/* Button Components */}
@@ -83,6 +88,7 @@ const TestPage = () => {
           <Badges />
         </div>
       )}
+      {!isProfileOpen && <MobileSnackBar text={"로그인이 완료되었습니다."} />}
     </div>
   );
 };
