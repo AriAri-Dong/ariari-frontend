@@ -92,7 +92,7 @@ const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
     >
       <div
         ref={sheetRef}
-        className={`bg-white w-full p-4 shadow-lg rounded-t-2xl transition-transform
+        className={`bg-white w-full p-4 shadow-modal rounded-t-2xl transition-transform
             duration-300 ${isClosing ? "translate-y-full" : "translate-y-0"}`}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={handleTouchStart}
@@ -115,7 +115,7 @@ const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
             {REPORT_REASONS.map((reason, index) => (
               <li key={index}>
                 <label
-                  className="flex items-center cursor-pointer text-mobile_h4text-subtext2"
+                  className="flex items-center cursor-pointer text-mobile_h4 text-subtext2"
                   onClick={() => handleReasonChange(reason)}
                 >
                   <Image
