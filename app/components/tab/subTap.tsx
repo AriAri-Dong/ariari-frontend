@@ -27,36 +27,35 @@ const SubTap = ({ optionData }: SubTapProps) => {
 
   return (
     <div
-      className={`h-[40px] p-[2px] flex justify-between items-center gap-[6px] bg-searchbar rounded-28 md:h-[44px] md:rounded-[28px] md:gap-[10px]`}
+      className={`w-fit h-10 p-[2px] flex items-center gap-1.5 bg-searchbar rounded-28 whitespace-nowrap md:h-12 md:rounded-28 md:gap-2.5`}
+      style={{
+        WebkitOverflowScrolling: "touch",
+      }}
     >
-      {optionData.map((option, index) =>
-        selectedOption == index ? (
-          <div
-            key={index}
-            className={`h-[36px] px-[16px] flex items-center justify-center gap-[4px] text-center font-semibold text-primary text-sm  bg-white shadow-default rounded-[28px] cursor-pointer transition-all duration-500 md:h-[40px] md:rounded-[28px] md:px-[20px] md:text-base`}
-          >
-            {option.label}
-            {option.number && (
-              <div className=" w-[20px] h-[20px] flex items-center justify-center bg-selectedoption_default rounded-full text-xs  md:w-[24px] md:h-[24px]">
-                {option.number}
-              </div>
-            )}
-          </div>
-        ) : (
-          <div
-            key={index}
-            className={`px-[16px] flex items-center justify-center gap-[4px] text-center text-unselected text-sm cursor-pointer md:px-[20px] md:text-base `}
-            onClick={() => handleValue(index)}
-          >
-            {option.label}
-            {option.number && (
-              <div className="w-[20px] h-[20px] flex items-center justify-center bg-token_bg rounded-full text-xs text-center md:w-[24px] md:h-[24px]">
-                {option.number}
-              </div>
-            )}
-          </div>
-        )
-      )}
+      {optionData.map((option, index) => (
+        <div
+          key={index}
+          className={`flex-shrink-0 px-4 h-9 flex items-center justify-center gap-1 text-center rounded-28 cursor-pointer truncate transition-all duration-500 md:px-5 md:h-11 ${
+            selectedOption === index
+              ? "text-primary bg-background shadow-default"
+              : "text-unselected"
+          }`}
+          onClick={() => handleValue(index)}
+        >
+          <p className="text-body1_sb md:text-h4_sb">{option.label}</p>
+          {option.number && (
+            <p
+              className={`w-5 h-5 flex items-center justify-center rounded-full text-8 transition-all duration-500 md:w-6 md:h-6 md:text-10 ${
+                selectedOption === index
+                  ? "bg-selectedoption_default"
+                  : "bg-token_bg"
+              }`}
+            >
+              {option.number}
+            </p>
+          )}
+        </div>
+      ))}
 
       {isModalOpen && (
         <NotiPopUp

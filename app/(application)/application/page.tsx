@@ -24,14 +24,16 @@ const Application = () => {
 
   return (
     <div>
-      <div className="flex flex-col gap-5 mt-5 md:mt-8 md:gap-[22px]">
+      <div className="w-full inline-flex flex-col gap-4 mt-6 md:mt-8 md:gap-[22px]">
         <div className="md:flex md:justify-between">
           <h1 className="text-text1 text-mobile_h1_contents_title mb-4 md:text-h1_contents_title md:mb-0">
             동아리 지원
           </h1>
-          <SubTap optionData={options} />
+          <div className="overflow-x-auto no-scrollbar">
+            <SubTap optionData={options} />
+          </div>
         </div>
-        <p className="text-subtext2 text-mobile_body2_m mb-4 md:text-h4 md:mb-[22px]">
+        <p className="text-subtext2 text-mobile_body2_m mb-5 md:text-h4 md:mb-[22px]">
           총 25개의 지원서가 있어요.
         </p>
       </div>
