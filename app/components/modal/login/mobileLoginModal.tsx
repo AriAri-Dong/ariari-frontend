@@ -1,35 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import loginAriari from "@/images/icon/loginAriari.svg";
 import kakoBtn from "@/images/kakao/complete/ko/kakao_login_large_wide.png";
 import close from "@/images/icon/close.svg";
+import useScreenHeight from "../../../../hooks/useScreenHeight";
 
 interface LoginDialogProps {
   onClose: () => void;
 }
 
-/**
- *
- * @param onClose 모달 닫힘 함수
- * @returns
- */
 const MobileLoginModal = ({ onClose }: LoginDialogProps) => {
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-
-  useEffect(() => {
-    const checkScreenHeight = () => {
-      setIsSmallScreen(window.innerHeight <= 700);
-    };
-
-    checkScreenHeight();
-    window.addEventListener("resize", checkScreenHeight);
-
-    return () => {
-      window.removeEventListener("resize", checkScreenHeight);
-    };
-  }, []);
+  const isSmallScreen = useScreenHeight(740);
 
   return (
     <div
