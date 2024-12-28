@@ -67,7 +67,7 @@ const ClubRanking = () => {
   return (
     <section className="mt-5 mb-12 md:mt-8 md:mb-[68px]">
       <div className="flex justify-between items-center">
-        <div className="text-[18px] font-bold md:text-[28px]">
+        <div className="text-mobile_h1_contents_title md:text-h1_contents_title">
           실시간 동아리 랭킹
         </div>
         <div className=" md:flex md:gap-[16px]">
