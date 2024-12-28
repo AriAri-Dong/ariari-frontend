@@ -112,7 +112,7 @@ const PullDown = ({
           md:pl-5 md:pr-[14px] md:py-2
           ${
             isSelected
-              ? `bg-selectedoption_default border-selectedoptionborder hover:bg-selectedoption_hover focus:bg-selectedoption_pressed`
+              ? `bg-selectedoption_default border-selectedoption_border hover:bg-selectedoption_hover focus:bg-selectedoption_pressed`
               : `bg-white border-menuborder hover:bg-hover focus:bg-pressed`
           }
         `}
