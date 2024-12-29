@@ -1,18 +1,21 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import LargeBtn from "@/components/button/basicBtn/largeBtn";
+import backVector from "@/images/icon/backVector.svg";
+import Image from "next/image";
+import Alert from "@/components/alert/alert";
 import Step1 from "./step1";
 import Step2 from "./step2";
 import Step3 from "./step3";
-import LargeBtn from "../../button/basicBtn/largeBtn";
-import Alert from "@/components/alert/alert";
-import { useProfileContext } from "@/context/profileConetxt";
 import { validateEmail } from "@/schema/email";
+import { useProfileContext } from "@/context/profileConetxt";
 import { formatTime } from "@/utils/timeFormatter";
 
 interface ProfileSettingProps {
   step: number;
   onNextStep: (nextStep: number) => void;
+  onClose: () => void;
 }
 
 /**
@@ -21,17 +24,25 @@ interface ProfileSettingProps {
  * @param onNextStep 특정 step으로 넘어가는 함수
  * @returns
  */
-const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
+const MobileProfileSetting = ({
+  step,
+  onNextStep,
+  onClose,
+}: ProfileSettingProps) => {
   const { profileData } = useProfileContext();
 
-  const [timeLeft, setTimeLeft] = useState<number>(300); // 인증 시간 (5분)
-  const [alertMessage, setAlertMessage] = useState<string | null>(null); // Alert 메시지 상태
-  const [verificationFailed, setVerificationFailed] = useState(false); // Step3 인증 실패 상태
+  const [timeLeft, setTimeLeft] = useState<number>(300);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [verificationFailed, setVerificationFailed] = useState<boolean>(false);
 
   // 인증 번호 재전송
   const resetTimer = () => {
     setTimeLeft(300);
     setAlertMessage("인증번호를 전송했습니다.");
+  };
+
+  const handleSkip = () => {
+    onClose();
   };
 
   const validateCurrentStep = (): boolean => {
@@ -57,13 +68,17 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
     if (!validateCurrentStep()) {
       return;
     }
-
     setAlertMessage(null);
     if (step === 3) {
-      // 인증 완료 시 Step4로 이동
-      onNextStep(4);
+      onClose();
     } else {
       onNextStep(step + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (step > 1) {
+      onNextStep(step - 1);
     }
   };
 
@@ -83,37 +98,51 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
     }
   }, [step]);
 
-  const handleSkip = () => {
-    onNextStep(4);
-  };
-
   return (
-    <div className="relative w-[430px] px-5 pb-9 pt-[26px] bg-background rounded-2xl">
-      <h1 className="text-text1 text-h1_contents_title mb-8 text-center">
-        {step === 1 ? "프로필 생성" : "학교 등록"}
-      </h1>
-      {step === 1 && <Step1 />}
-      {step === 2 && <Step2 />}
-      {step === 3 && (
-        <Step3 onResend={resetTimer} verificationFailed={verificationFailed} />
-      )}
-      <div className="flex flex-col w-full gap-4 mt-8">
+    <div
+      className="fixed top-0 left-0 w-full h-full bg-background z-50 flex flex-col
+    justify-between pt-[46px] pb-5 px-4 md:hidden"
+    >
+      <div className="flex flex-col items-center">
+        <div className={`w-full relative flex items-center`}>
+          <Image
+            src={backVector}
+            alt={"prev"}
+            height={24}
+            width={24}
+            onClick={handleBack}
+            className={step === 1 ? "hidden" : ""}
+          />
+          <h1 className="flex-1 text-center text-text1 text-mobile_h1_contents_title mr-6">
+            {step === 1 ? "프로필 생성" : "학교 등록"}
+          </h1>
+        </div>
+        {step === 1 && <Step1 />}
+        {step === 2 && <Step2 />}
+        {step === 3 && (
+          <Step3
+            onResend={resetTimer}
+            verificationFailed={verificationFailed}
+          />
+        )}
+      </div>
+      <div className="flex flex-col w-full gap-2">
         <LargeBtn
           title={step === 3 ? `학교 인증하기 ${formatTime(timeLeft)}` : "다음"}
           onClick={handleNextStep}
         />
         <button
           onClick={handleSkip}
-          className="text-primary text-body1_sb py-2.5"
+          className="text-primary text-mobile_body2_sb py-2.5"
         >
           건너뛰기
         </button>
+        {alertMessage && (
+          <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+        )}
       </div>
-      {alertMessage && (
-        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
-      )}
     </div>
   );
 };
 
-export default ProfileSetting;
+export default MobileProfileSetting;
