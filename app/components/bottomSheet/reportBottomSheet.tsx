@@ -33,10 +33,6 @@ const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
       setAlertMessage("신고 사유를 선택해주세요.");
       return;
     }
-
-    console.log("신고 사유:", selectedReason);
-    console.log("신고 사유 상세:", details);
-
     setSelectedReason(null);
     setDetails("");
     onSubmit();
@@ -84,7 +80,7 @@ const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
   return (
     <div
       id="background"
-      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center
+      className="fixed backdrop-blur-sm inset-0 bg-black bg-opacity-50 z-50 flex justify-center
       items-end duration-300"
       onClick={(e) =>
         (e.target as HTMLDivElement).id === "background" && onClose()
@@ -131,7 +127,6 @@ const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
             ))}
           </ul>
         </div>
-
         <div className="mt-[38px]">
           <h3 className="text-mobile_h2 mb-[14px]">신고 사유 상세</h3>
           <textarea
@@ -144,11 +139,9 @@ const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
             focus:ring-searchbarborder placeholder:text-unselected"
           />
         </div>
-
         {alertMessage && (
           <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
-
         <div className="mt-[6px] flex items-center gap-6">
           <p className="text-right text-unselected text-mobile_h4">
             {details.length}/1000
