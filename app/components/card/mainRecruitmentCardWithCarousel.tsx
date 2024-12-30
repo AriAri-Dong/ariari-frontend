@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { MainRecruitmentCardProps } from "@/types/components/card";
 import DdayBadge from "../badge/dDayBadge";
@@ -9,8 +11,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import RoundVectorBtn from "../button/iconBtn/roundVectorBtn";
-import { useRef } from "react";
-import { useCallback } from "react";
+import useResponsive from "../../../hooks/useResponsive";
 
 interface CardProps {
   data: MainRecruitmentCardProps[];
@@ -18,7 +19,10 @@ interface CardProps {
 
 const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
   const router = useRouter();
+  const isXlUp = useResponsive("lx");
   const [cardData, setCardData] = useState<MainRecruitmentCardProps[]>(data);
+  const [isFirstSlide, setIsFirstSlide] = useState<boolean>(true);
+  const [isLastSlide, setIsLastSlide] = useState<boolean>(false);
   const slickRef = useRef<Slider>(null);
 
   const handleSliderPrevClick = useCallback(
@@ -53,6 +57,11 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
         },
       },
     ],
+    afterChange: (index: number) => {
+      const slidesToScroll = isXlUp ? 4 : 3;
+      setIsFirstSlide(index === 0);
+      setIsLastSlide(cardData.length - slidesToScroll <= index);
+    },
   };
 
   const toggleScrap = (index: number) => {
@@ -62,6 +71,11 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
       )
     );
   };
+
+  useEffect(() => {
+    const slidesToScroll = isXlUp ? 4 : 3;
+    setIsLastSlide(cardData.length - slidesToScroll <= 0);
+  }, [cardData.length, isXlUp]);
 
   if (cardData.length === 0) {
     return null;
@@ -76,7 +90,9 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
     <>
       <div className="w-full relative">
         <div
-          className="absolute rotate-180 top-[calc(50%-24px)] left-[-10px]"
+          className={`absolute rotate-180 top-[calc(50%-24px)] left-[-10px] ${
+            isFirstSlide ? "hidden" : "block"
+          }`}
           style={{ zIndex: 1 }}
         >
           <RoundVectorBtn
@@ -86,7 +102,9 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
           />
         </div>
         <div
-          className="absolute top-[calc(50%-24px)] right-[-10px]"
+          className={`absolute top-[calc(50%-24px)] right-[-10px] ${
+            isLastSlide ? "hidden" : "block"
+          }`}
           style={{ zIndex: 1 }}
         >
           <RoundVectorBtn
