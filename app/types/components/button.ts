@@ -6,4 +6,5 @@ export interface ButtonWithTextProps {
   title: string;
   onClick: () => void;
   round?: boolean;
+  className?: string;
 }
