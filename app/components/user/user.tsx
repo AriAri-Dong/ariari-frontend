@@ -8,12 +8,19 @@ import { USER_MENU } from "@/data/header";
 import LoginBtn from "../button/basicBtn/loginBtn";
 import Notification from "../button/iconBtn/notification";
 import rabbit from "@/images/profile/rabbit.svg";
+import NotificationModal from "../modal/notificationModal";
+import MobileNotificationModal from "../modal/mobileNotificationModal";
 
 const User = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("백설공주");
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+
+  const handleModalOpen = () => {
+    setIsOpenModal(true);
+  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -43,7 +50,9 @@ const User = () => {
     <>
       {isLoggedIn ? (
         <div className="relative flex items-center space-x-5" ref={dropdownRef}>
-          <Notification size={"small"} onClick={() => {}} />
+          <NotificationModal>
+            <Notification size={"small"} onClick={handleModalOpen} />
+          </NotificationModal>
           <button
             className="relative flex items-center space-x-2 p-2 text-subtext2 cursor-pointer rounded-[30px]
             hover:bg-hover focus:bg-pressed"
@@ -62,6 +71,13 @@ const User = () => {
         </div>
       ) : (
         <LoginBtn onClick={handleLogin} />
+      )}
+      {isOpenModal && (
+        <MobileNotificationModal
+          onclose={() => {
+            setIsOpenModal(false);
+          }}
+        />
       )}
     </>
   );
