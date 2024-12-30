@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import PullDown from "@/components/pulldown/pullDown";
 import {
@@ -19,7 +19,7 @@ import vector from "@/images/icon/backVector.svg";
 import Alert from "@/components/alert/alert";
 import NotiPopUp from "@/components/modal/notiPopUp";
 
-const pullDownOptions = [
+const OPTIONS = [
   { label: "동아리 소속", key: "affiliationType", data: Affiliation_Type },
   { label: "동아리 분야", key: "fieldType", data: Field_Type },
   { label: "동아리 지역", key: "areaType", data: Area_Type },
@@ -28,11 +28,13 @@ const pullDownOptions = [
 
 const CreateClubPage = () => {
   const router = useRouter();
-
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [submit, setSubmit] = useState<boolean>(false);
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
   const [clubName, setClubName] = useState<string>("");
   const [clubIntroduction, setClubIntroduction] = useState<string>("");
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [selections, setSelections] = useState({
     affiliationType: [] as string[],
     fieldType: [] as string[],
@@ -41,19 +43,18 @@ const CreateClubPage = () => {
   });
 
   const handleGoBack = () => {
+    // 임시 경로
     router.push("/club");
   };
 
   const handleClubNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setClubName(value);
+    setClubName(event.target.value);
   };
 
   const handleClubIntroductionChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const value = event.target.value;
-    setClubIntroduction(value);
+    setClubIntroduction(event.target.value);
   };
 
   const handleSelectionChange =
@@ -61,7 +62,37 @@ const CreateClubPage = () => {
       setSelections((prev) => ({ ...prev, [key]: value }));
     };
 
-  // 유효성 검증
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // 파일 용량 및 확장자 확인
+      const maxFileSize = 100 * 1024 * 1024;
+      const allowedExtensions = ["image/png", "image/jpeg", "image/svg+xml"];
+      if (file.size > maxFileSize) {
+        setAlertMessage("파일 용량은 100MB 를 초과할 수 없습니다.");
+        setAlertVisible(true);
+        return;
+      }
+      if (!allowedExtensions.includes(file.type)) {
+        setAlertMessage("png, jpg, svg 파일만 업로드 가능합니다.");
+        setAlertVisible(true);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        setUploadedImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   const validateForm = () => {
     if (
       !clubName.trim() ||
@@ -80,6 +111,7 @@ const CreateClubPage = () => {
       setAlertVisible(false);
       setTimeout(() => {
         setAlertVisible(true);
+        setAlertMessage("미입력한 항목이 있습니다.");
       }, 0);
       return;
     }
@@ -128,18 +160,24 @@ const CreateClubPage = () => {
           png, jpg, svg를 올려주세요 )
         </p>
         <div className="relative inline-block mb-[30px] md:mb-7">
-          <Image
-            src={defaultImg}
-            alt={"ariari"}
-            width={95}
-            height={95}
-            className="md:w-[152px] md:h-[152px] rounded-full border border-menuborder p-1"
-          />
-          <div className="absolute bottom-0 right-0 translate-x-1/5 translate-y-1/5">
-            <WriteBtn
-              size="small"
-              onClick={() => console.log("Small size clicked")}
+          <label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
             />
+            <Image
+              src={uploadedImage || defaultImg}
+              alt="Uploaded or Default"
+              width={95}
+              height={95}
+              className="md:w-[152px] md:h-[152px] rounded-full border border-menuborder p-1 cursor-pointer"
+            />
+          </label>
+          <div className="absolute bottom-0 right-0 translate-x-1/5 translate-y-1/5">
+            <WriteBtn size="small" onClick={triggerFileInput} />
           </div>
         </div>
 
@@ -164,7 +202,7 @@ const CreateClubPage = () => {
           maxLength={30}
           className="mb-[30px] md:mb-7 max-w-[770px]"
         />
-        {pullDownOptions.map(({ label, key, data }) => (
+        {OPTIONS.map(({ label, key, data }) => (
           <div className="flex flex-col mb-[30px] md:mb-7" key={key}>
             <h3 className="flex text-mobile_h3 mb-[14px] md:text-h3 md:mb-[18px]">
               {label}
@@ -193,7 +231,7 @@ const CreateClubPage = () => {
           className="block md:hidden mb-20"
         />
       </div>
-      {alertVisible && <Alert text={"미입력한 항목이 있습니다."} />}
+      {alertVisible && <Alert text={alertMessage} />}
       {submit && (
         <NotiPopUp
           onClose={() => {
