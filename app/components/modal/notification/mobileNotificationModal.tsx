@@ -33,8 +33,8 @@ const MobileNotificationModal = ({ onclose }: ModalProps) => {
         </div>
       </div>
       <div
-        className="flex flex-col overflow-y-scroll pb-20"
-        style={{ maxHeight: "calc(100vh - 93px)" }}
+        className="flex flex-col overflow-y-scroll custom-scrollbar"
+        style={{ maxHeight: "calc(100vh - 113px)" }}
       >
         {TEMP_DATA.map((item, index) => (
           <div
@@ -55,6 +55,7 @@ const MobileNotificationModal = ({ onclose }: ModalProps) => {
           </div>
         ))}
       </div>
+      <div className="h-5" />
     </div>
   );
 };
