@@ -1,7 +1,8 @@
 "use client";
 
-import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import React, { useState, useEffect } from "react";
+import LargeBtn from "@/components/button/basicBtn/largeBtn";
+import WriteBtn from "@/components/button/iconBtn/writeBtn";
 
 interface DayFloatingBarProps {
   deadline: Date;
@@ -17,12 +18,13 @@ const RecruitmentGuideFloatingBar = ({ deadline }: DayFloatingBarProps) => {
 
   return (
     <div
-      className="fixed bottom-0 left-0 w-full flex justify-center"
+      className="hidden md:flex fixed bottom-0 w-full max-w-[1248px] mb-9 gap-5
+      justify-center left-1/2 transform -translate-x-1/2"
       style={{ zIndex: 1000 }}
     >
       <div
         className="w-full bg-white70 shadow-default rounded-56
-        max-w-[1248px] mb-9 pl-[38px] pr-3 py-[10px]"
+        pl-[38px] pr-3 py-[10px]"
       >
         <div className="flex justify-between items-center">
           <div className="flex flex-col">
@@ -31,8 +33,13 @@ const RecruitmentGuideFloatingBar = ({ deadline }: DayFloatingBarProps) => {
             </p>
             <h3 className="text-h3 text-text1">{formattedDeadline}</h3>
           </div>
-          <LargeBtn title={"모집공고 보기"} onClick={() => {}} round={true} />
+          <div className="w-full max-w-[390px]">
+            <LargeBtn title={"모집공고 보기"} onClick={() => {}} round={true} />
+          </div>
         </div>
+      </div>
+      <div className="flex items-center">
+        <WriteBtn onClick={() => {}} />
       </div>
     </div>
   );
