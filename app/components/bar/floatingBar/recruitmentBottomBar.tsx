@@ -24,7 +24,6 @@ const RecruitmentBottomBar = () => {
 
   return (
     <div className="flex bg-white w-full space-x-3">
-      {/* 작은 버튼들은 고정된 크기를 유지 */}
       <div className="flex-shrink-0">
         <SahreBtn onClick={() => {}} />
       </div>
@@ -35,12 +34,10 @@ const RecruitmentBottomBar = () => {
           isScrap={isScrap}
         />
       </div>
-      {/* MediumBtn과 LargeBtn을 조건에 따라 배치 */}
       <div className="hidden md:flex flex-shrink-0">
         <MediumBtn title={"지원하기 D-3"} onClick={() => {}} />
       </div>
       <div className="block md:hidden flex-grow">
-        {/* LargeBtn이 부모의 남은 공간을 차지 */}
         <LargeBtn title={"지원하기 D-3"} onClick={() => {}} />
       </div>
     </div>
