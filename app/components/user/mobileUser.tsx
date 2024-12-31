@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import notification_default from "@/images/icon/notification_default.svg";
 import notification_pressed from "@/images/icon/notification_pressed.svg";
@@ -10,6 +11,8 @@ import UserModal from "../modal/userModal";
 import MobileNotificationModal from "../modal/notification/mobileNotificationModal";
 
 const MobileUser = () => {
+  const router = useRouter();
+
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -33,7 +36,8 @@ const MobileUser = () => {
   };
 
   const handleModalOpen = () => {
-    setIsOpenModal(true);
+    // setIsOpenModal(true);
+    router.push("/notification");
   };
 
   const handleLogin = () => {
@@ -42,7 +46,6 @@ const MobileUser = () => {
 
   const handleLogout = () => {
     setShowModal(true);
-    // setIsLoggedIn(false);
   };
 
   const handleNotificationClick = () => {
