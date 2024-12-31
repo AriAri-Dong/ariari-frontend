@@ -9,6 +9,8 @@ import { MdFavorite } from "react-icons/md";
 import Alert from "@/components/alert/alert";
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
+import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
+import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
 
 const CATEGORY = [
   { id: 0, label: "동아리 소속", type: "affiliation", value: "아리아리" },
@@ -17,12 +19,23 @@ const CATEGORY = [
   { id: 3, label: "활동 대상", type: "target", value: "대학생 및 직장인" },
 ];
 
+// const MENU_DATA = [
+//   { id: 0, label: "공유하기", image: share, url: "/recruitment/detail" },
+//   { id: 1, label: "신고하기", image: dotMenu, url: "/club" },
+//   { id: 2, label: "동아리 탈퇴하기", image: test_image, url: "/" },
+// ];
+
+const MENU_DATA = [
+  { id: 0, label: "공유하기" },
+  { id: 1, label: "신고하기" },
+  { id: 2, label: "동아리 탈퇴하기" },
+];
+
 const ClubInfoSection = () => {
   const [isHeart, setIsHeart] = useState<boolean>(false);
   const [isCopy, setIsCopy] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-
-  console.log(isCopy);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
 
   const onHeartClick = () => {
     setIsHeart(!isHeart);
@@ -47,6 +60,24 @@ const ClubInfoSection = () => {
       return;
     }
   };
+
+  const handleMenuClick = (label: string) => {
+    switch (label) {
+      case "공유하기":
+        handleShare();
+        break;
+      case "신고하기":
+        alert("신고하기 동작");
+        break;
+      case "동아리 탈퇴하기":
+        alert("동아리 탈퇴하기 동작");
+        break;
+      default:
+        break;
+    }
+    setIsBottomSheetOpen(false);
+  };
+
   return (
     <>
       <div className="relative">
@@ -105,14 +136,14 @@ const ClubInfoSection = () => {
               width={16}
               height={16}
               className="md:hidden"
-              onClick={() => {}}
+              onClick={() => setIsBottomSheetOpen(true)} // 바텀시트 열기
             />
           </div>
           <p className="text-subtext2 text-mobile_body3_m md:hidden">
             {CATEGORY.map((item) => item.value).join(" | ")}
           </p>
           <p className="text-subtext1 text-mobile_body1_r mt-1 md:mt-0 md:text-body1_r">
-            동아리 소개 소개소개소래소개소래소개
+            동아리 소개 소개소개소래소개소래소개입니다ㅏ아아아ㅏ
           </p>
         </div>
         <div className="block mt-4 md:hidden">
@@ -133,6 +164,16 @@ const ClubInfoSection = () => {
         </div>
       </div>
       {isCopy && <Alert text={message} />}
+      <RecruitmentGuideFloatingBar deadline={new Date("2024-12-31T23:59:59")} />
+      {isBottomSheetOpen && (
+        <CommonBottomSheet
+          optionData={MENU_DATA}
+          selectedOption=""
+          handleMenuClick={handleMenuClick}
+          onClose={() => setIsBottomSheetOpen(false)}
+          alignType="center"
+        />
+      )}
     </>
   );
 };
