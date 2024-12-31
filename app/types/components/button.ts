@@ -10,4 +10,5 @@ export interface ButtonWithTextProps {
   className?: string;
   imageSize?: number;
   round?: boolean;
+  className?: string;
 }
