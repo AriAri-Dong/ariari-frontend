@@ -36,8 +36,8 @@ const MobileUser = () => {
   };
 
   const handleModalOpen = () => {
-    // setIsOpenModal(true);
-    router.push("/notification");
+    setIsOpenModal(true);
+    // router.push("/notification");
   };
 
   const handleLogin = () => {
