@@ -17,7 +17,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     <SearchTermContext.Provider value={{ searchTerm, setSearchTerm }}>
       <div className="flex flex-col min-h-screen">
         <Header />
-        <main className="flex-grow flex justify-center items-center">
+        <main className="flex-grow flex justify-center">
           <div
             className={`w-full ${
               !isSpecialComponent
