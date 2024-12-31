@@ -33,31 +33,35 @@ const NotificationModal = ({ children }: TooltipProps) => {
         <>
           <div className="fixed inset-0 z-40" onClick={closeModal}></div>
           <div
-            className="z-50 tooltip-content absolute py-2.5 px-4 mt-4 top-10
-          left-1/2 transform -translate-x-1/2 bg-background
-          rounded-xl w-[400px] max-h-[548px] shadow-default"
+            className="z-50 tooltip-container absolute mt-4 top-10
+          left-1/2 transform -translate-x-1/2"
           >
             <Image
               src={tooltip}
               alt={"tooltip"}
               width={24}
               height={24}
-              className="tooltip-arrow absolute -top-2 left-1/2 transform -translate-x-1/2"
+              className="absolute -top-2 left-1/2 transform -translate-x-1/2"
             />
-            {TEMP_DATA.map((item, index) => (
-              <div
-                key={index}
-                className={`flex items-center justify-between py-[14px] px-2.5 cursor-pointer ${
-                  index === TEMP_DATA.length - 1 ? "" : "border-b"
-                }`}
-              >
-                <div className="flex flex-col">
-                  <h3 className="text-text1 text-body2_m">{item.title}</h3>
-                  <p className="text-unselected text-body4_r">{item.date}</p>
+            <div
+              className="tooltip-content py-2.5 px-4 bg-background
+              rounded-xl w-[400px] max-h-[548px] shadow-default
+              overflow-y-scroll custom-scrollbar"
+            >
+              {TEMP_DATA.map((item, index) => (
+                <div
+                  key={index}
+                  className={`flex items-center justify-between py-[14px] px-2.5 cursor-pointer
+                  ${index === TEMP_DATA.length - 1 ? "" : "border-b"}`}
+                >
+                  <div className="flex flex-col">
+                    <h3 className="text-text1 text-body2_m">{item.title}</h3>
+                    <p className="text-unselected text-body4_r">{item.date}</p>
+                  </div>
+                  <Image src={vector} alt={"바로가기"} width={24} height={24} />
                 </div>
-                <Image src={vector} alt={"바로가기"} width={24} height={24} />
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </>
       )}
