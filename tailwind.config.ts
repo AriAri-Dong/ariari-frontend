@@ -27,10 +27,10 @@ const config: Config = {
         pressed: "#E8EBF1",
         searchbar: "#F2F4F6",
         searchbarborder: "#7495B6",
+        primary: "#589BFF",
         primary_hover: "#4188EB",
         primary_pressed: "#4080DB",
         pulldownmenutext: "#404040",
-        primary: "#589BFF",
         sub1: "#93BEFF",
         sub2: "#8A84FE",
         point: "#D1F75D",
@@ -109,6 +109,23 @@ const config: Config = {
   plugins: [
     function (pluginAPI: PluginAPI) {
       pluginAPI.addUtilities({
+        ".custom-scrollbar": {
+          "&::-webkit-scrollbar": {
+            width: "6px",
+            height: "6px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#BFC4CE",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#ABB0BA",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#fff",
+            borderRadius: "4px",
+          },
+        },
         ".no-scrollbar": {
           "-ms-overflow-style": "none",
           "scrollbar-width": "none",
