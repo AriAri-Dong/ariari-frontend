@@ -11,7 +11,7 @@ interface BtnType extends ButtonWithTextProps {
   size: "large" | "small";
 }
 
-const IconBtn = ({ title, onClick, type, size }: BtnType) => {
+const IconBtn = ({ title, onClick, type, size, className }: BtnType) => {
   const getIcon = () => {
     switch (type) {
       case "reset":
@@ -27,8 +27,8 @@ const IconBtn = ({ title, onClick, type, size }: BtnType) => {
 
   return (
     <button
-      className="py-1 px-[6px] text-icon rounded-lg
-      focus:bg-hover md:hover:bg-hover md:focus:bg-pressed"
+      className={`py-1 px-[6px] text-icon rounded-lg
+      focus:bg-hover md:hover:bg-hover md:focus:bg-pressed ${className}`}
       onClick={onClick}
     >
       <div
