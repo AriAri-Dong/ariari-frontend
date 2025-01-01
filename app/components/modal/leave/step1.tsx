@@ -12,17 +12,19 @@ const Step1 = ({ handleNextStep, onClose }: StepProps) => {
   const [isInputValid, setIsInputValid] = useState<boolean>(true);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
+  const withdrawalMessage = "아리아리를 탈퇴합니다";
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setInputValue(value);
     if (isSubmitted) {
-      setIsInputValid(value === "아리아리를 탈퇴합니다");
+      setIsInputValid(value === withdrawalMessage);
     }
   };
 
   const handleSubmit = () => {
     setIsSubmitted(true);
-    if (inputValue === "아리아리를 탈퇴합니다") {
+    if (inputValue === withdrawalMessage) {
       handleNextStep();
     } else {
       setIsInputValid(false);
@@ -30,7 +32,7 @@ const Step1 = ({ handleNextStep, onClose }: StepProps) => {
   };
 
   return (
-    <div className="w-full pt-9 pb-6.5">
+    <div className="w-full pt-9 pb-[26px]">
       <h2 className="text-h1_contents_title mb-8 text-center">서비스 탈퇴</h2>
       <div className="w-full mb-8">
         <div className="w-full flex px-[22px] py-[13.5px] bg-searchbar text-mobile_body1_r text-subtext2 rounded-12 justify-between items-center ">
