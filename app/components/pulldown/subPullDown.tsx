@@ -12,13 +12,15 @@ import BottomSheet from "./bottomSheet";
 interface SubPullDownProps {
   optionData: { id: number; label: string }[];
   selectedOption: string;
-  handleOption: (label: string) => void;
+  handleOption?: (label: string) => void;
+  handleOptionWithId?: (label: string, id: number) => void;
 }
 
 const SubPullDown = ({
   optionData,
   selectedOption,
   handleOption,
+  handleOptionWithId,
 }: SubPullDownProps) => {
   const SubPullDownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -35,7 +37,17 @@ const SubPullDown = ({
   };
 
   const handleMenuClick = (label: string) => {
-    handleOption(label);
+    if (handleOption) {
+      handleOption(label);
+    }
+
+    toggleDropdown();
+  };
+  const handleMenuClickWithId = (label: string, id: number) => {
+    if (handleOptionWithId) {
+      console.log(label, id);
+      handleOptionWithId(label, id);
+    }
     toggleDropdown();
   };
 
@@ -79,14 +91,22 @@ const SubPullDown = ({
           <SingleSelectOptions
             optionData={optionData.slice(1)}
             selectedOption={selectedOption}
-            handleMenuClick={handleMenuClick}
+            {...(handleOption
+              ? { handleMenuClick }
+              : handleOptionWithId
+              ? { handleMenuClickWithId: handleMenuClickWithId }
+              : {})}
             size="small"
           />
         ) : (
           <BottomSheet
             optionData={optionData.slice(1)}
             selectedOptions={selectedOption}
-            handleMenuClick={handleMenuClick}
+            {...(handleOption
+              ? { handleMenuClick }
+              : handleOptionWithId
+              ? { handleMenuClickWithId: handleMenuClickWithId }
+              : {})}
             onClose={() => setIsDropdownOpen(false)}
           />
         ))}
