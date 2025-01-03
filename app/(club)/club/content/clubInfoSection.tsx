@@ -11,25 +11,7 @@ import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
 import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
-
-const CATEGORY = [
-  { id: 0, label: "동아리 소속", type: "affiliation", value: "아리아리" },
-  { id: 1, label: "활동 분야", type: "field", value: "프로그래밍" },
-  { id: 2, label: "활동 지역", type: "region", value: "서울" },
-  { id: 3, label: "활동 대상", type: "target", value: "대학생 및 직장인" },
-];
-
-// const MENU_DATA = [
-//   { id: 0, label: "공유하기", image: share, url: "/recruitment/detail" },
-//   { id: 1, label: "신고하기", image: dotMenu, url: "/club" },
-//   { id: 2, label: "동아리 탈퇴하기", image: test_image, url: "/" },
-// ];
-
-const MENU_DATA = [
-  { id: 0, label: "공유하기" },
-  { id: 1, label: "신고하기" },
-  { id: 2, label: "동아리 탈퇴하기" },
-];
+import { CATEGORY, MENU_DATA } from '@/data/club';
 
 const ClubInfoSection = () => {
   const [isHeart, setIsHeart] = useState<boolean>(false);
