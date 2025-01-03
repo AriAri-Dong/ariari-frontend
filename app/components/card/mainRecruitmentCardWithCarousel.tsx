@@ -64,12 +64,16 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
     },
   };
 
-  const toggleScrap = (index: number) => {
+  const toggleScrap = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    index: number
+  ) => {
     setCardData((prevData) =>
       prevData.map((item, idx) =>
         idx === index ? { ...item, isScrap: !item.isScrap } : item
       )
     );
+    e.preventDefault();
   };
 
   useEffect(() => {
@@ -122,7 +126,7 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
                 className={`flex gap-4 mr-[18px] md:gap-5 md:flex-col cursor-pointer ${
                   isExpired ? "opacity-50 backdrop-filter backdrop-blur-md" : ""
                 }`}
-                onClick={handleRouter}
+                onClick={() => handleRouter}
               >
                 <div className="relative min-w-[114px] md:w-full mb-[20px]">
                   <Image
@@ -142,7 +146,7 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
                       {item.clubName}
                     </p>
                     <button
-                      onClick={() => toggleScrap(index)}
+                      onClick={(e) => toggleScrap(e, index)}
                       className="focus:outline-none"
                     >
                       {item.isScrap ? (

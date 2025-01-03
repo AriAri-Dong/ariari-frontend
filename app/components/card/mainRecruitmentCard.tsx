@@ -14,12 +14,16 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
   const router = useRouter();
   const [cardData, setCardData] = useState<MainRecruitmentCardProps[]>(data);
 
-  const toggleScrap = (index: number) => {
+  const toggleScrap = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    index: number
+  ) => {
     setCardData((prevData) =>
       prevData.map((item, idx) =>
         idx === index ? { ...item, isScrap: !item.isScrap } : item
       )
     );
+    e.preventDefault();
   };
 
   if (cardData.length === 0) {
@@ -41,7 +45,7 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
             className={`flex gap-4 md:gap-5 md:flex-col cursor-pointer ${
               isExpired ? "opacity-50 backdrop-filter backdrop-blur-md" : ""
             }`}
-            onClick={handleRouter}
+            onClick={() => handleRouter}
           >
             <div className="relative min-w-[114px] md:w-full">
               <Image
@@ -61,7 +65,7 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
                   {item.clubName}
                 </p>
                 <button
-                  onClick={() => toggleScrap(index)}
+                  onClick={(e) => toggleScrap(e, index)}
                   className="focus:outline-none"
                 >
                   {item.isScrap ? (
