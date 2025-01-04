@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
+import WithdrawalInput from "@/(withdrawal)/withdrawal/components/withdrawalInput";
 
 interface StepProps {
   handleNextStep: () => void;
   onClose: () => void;
+  inputValue: string;
+  setInputValue: (value: string) => void;
 }
 
-const Step1 = ({ handleNextStep, onClose }: StepProps) => {
-  const [inputValue, setInputValue] = useState<string>("");
+const Step1 = ({
+  handleNextStep,
+  onClose,
+  inputValue,
+  setInputValue,
+}: StepProps) => {
   const [isInputValid, setIsInputValid] = useState<boolean>(true);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
@@ -41,10 +48,10 @@ const Step1 = ({ handleNextStep, onClose }: StepProps) => {
             value={inputValue}
             placeholder="'아리아리를 탈퇴합니다'라고 입력해 주세요."
             onChange={handleInputChange}
-            maxLength={15}
+            maxLength={withdrawalMessage.length}
             className="grow shrink basis-0 bg-searchbar border-none outline-none text-subtext1"
           />
-          <div>{`${inputValue.length}/${15}`}</div>
+          <div>{`${inputValue.length}/${withdrawalMessage.length}`}</div>
         </div>
         {isSubmitted && !isInputValid && (
           <div className="mt-2 ml-[22px] text-body4_r text-noti">
