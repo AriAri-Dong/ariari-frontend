@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import HeaderSection from "./content/headerSection";
 import WithdrawalCard from "@/components/card/withdrawalCard";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
@@ -12,27 +14,10 @@ import LeaveDialog from "@/components/modal/leave/leaveDialog";
 import { WITHDRAWAL_INFO } from "@/data/withdrawal";
 import { Club_Data } from "@/data/joinedClub";
 import { Delegator, JoinedClub } from "@/types/components/delegate";
+import MobileSnackBar from "@/components/bar/mobileSnackBar";
 
 const WithDrawal = () => {
-  const [inputValue, setInputValue] = useState<string>("");
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    if (event.target.value === "아리아리를 탈퇴합니다") {
-      setCurrentStep(4);
-    } else {
-      setCurrentStep(1);
-    }
-  };
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const [clubs, setClubs] = useState<JoinedClub[]>(Club_Data);
@@ -40,6 +25,57 @@ const WithDrawal = () => {
     Record<number, Delegator>
   >({}); // 클럽id, 위임자
   // 각 클럽마다 위임자 저장 (클럽 id, 위임자)
+
+  const withdrawalMessage = "아리아리를 탈퇴합니다";
+  const [inputValue, setInputValue] = useState<string>("");
+  const [isInputValid, setIsInputValid] = useState<boolean>(true);
+
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  // currentStep이 4인 경우 3초뒤 홈으로 이동
+  useEffect(() => {
+    if (currentStep === 4) {
+      setTimeout(() => {
+        router.push("/");
+      }, 2000);
+    }
+  }, [currentStep, router]);
+
+  // 모바일 input
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setInputValue(value);
+    if (isSubmitted) {
+      setIsInputValid(value === withdrawalMessage);
+    }
+  };
+
+  // 모바일 탈퇴하기 버튼
+  const handleSubmit = () => {
+    setIsSubmitted(true);
+    if (inputValue === withdrawalMessage) {
+      // 1단계인 경우
+      if (currentStep === 1 && clubs.length) {
+        if (clubs.length) {
+          handleNextStep();
+        } else {
+          handleNext2Step();
+        }
+      }
+      // 2단계인 경우
+      if (currentStep === 2) {
+        handleNextStep();
+        setIsModalOpen(true);
+      }
+    } else {
+      setIsInputValid(false);
+    }
+  };
+  const handleClose = () => {
+    setIsModalOpen(false);
+    setCurrentStep(1);
+  };
 
   const handleNextStep = () => {
     if (currentStep < 4) {
@@ -85,51 +121,60 @@ const WithDrawal = () => {
             아리아리 서비스 탈퇴시 가입, 개설한 동아리에서 탈퇴처리 되며 올린
             게시글과 댓글이 모두 삭제 되어 복구할 수 없습니다.
           </p>
-          <div className="w-full flex px-4 py-3 mb-3.5 bg-searchbar text-mobile_body1_r text-subtext2 rounded-12 justify-between items-center md:hidden">
-            <input
-              type="text"
-              value={inputValue}
-              placeholder="'아리아리를 탈퇴합니다'라고 입력해 주세요."
-              onChange={handleInputChange}
-              maxLength={11}
-              className="grow shrink basis-0 bg-searchbar border-none outline-none"
-            />
-            <div>{`${inputValue.length}/${11}`}</div>
-          </div>
-          <div className="md:hidden">
-            <div className="mb-3.5 text-mobile_h3">관리자 권한 위임</div>
-            <div className="mb-3.5 text-mobile_body3_r text-[#7D8595]">
-              회원님이 동아리 관리자로 있는 동아리가 있습니다. 관리자 권한을
-              다른 사용자에게 위임해주세요.
+          <div className="mb-3.5  md:hidden">
+            <div className="w-full flex px-4 py-3 bg-searchbar text-mobile_body1_r text-subtext2 rounded-12 justify-between items-center">
+              <input
+                type="text"
+                value={inputValue}
+                placeholder={`'${withdrawalMessage}'라고 입력해 주세요.`}
+                onChange={handleInputChange}
+                maxLength={withdrawalMessage.length}
+                className="grow shrink basis-0 bg-searchbar border-none outline-none"
+              />
+              <div>{`${inputValue.length}/${withdrawalMessage.length}`}</div>
             </div>
-            <div className="flex flex-col gap-4 mb-5">
-              {Club_Data.map((club) => (
-                <div key={club.id}>
-                  <SelectAdministrator
-                    club={club}
-                    selectedUser={
-                      selectedDelegates[club.id] || { name: "없음", id: "" }
-                    }
-                    setSelectedUser={(name: string, id: number) => {
-                      handleDelegateSelection(club.id, { name, id });
-                      console.log(club.name, name, id);
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
+            {isSubmitted && !isInputValid && (
+              <div className="mt-1 ml-4 text-mobile_body3_r text-primary">
+                올바른 내용이 아닙니다.
+              </div>
+            )}
           </div>
+          {currentStep == 2 && (
+            <div className="md:hidden">
+              <div className="mb-3.5 text-mobile_h3">관리자 권한 위임</div>
+              <div className="mb-3.5 text-mobile_body3_r text-[#7D8595]">
+                회원님이 동아리 관리자로 있는 동아리가 있습니다. 관리자 권한을
+                다른 사용자에게 위임해주세요.
+              </div>
+              <div className="flex flex-col gap-4 mb-5">
+                {Club_Data.map((club) => (
+                  <div key={club.id}>
+                    <SelectAdministrator
+                      club={club}
+                      selectedUser={
+                        selectedDelegates[club.id] || { name: "없음", id: "" }
+                      }
+                      setSelectedUser={(name: string, id: number) => {
+                        handleDelegateSelection(club.id, { name, id });
+                        console.log(club.name, name, id);
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="hidden md:flex">
-            <SmallBtn title={"탈퇴하기"} onClick={handleOpenModal} />
+            <SmallBtn title={"탈퇴하기"} onClick={() => setIsModalOpen(true)} />
           </div>
           <div className="md:hidden">
-            <LargeBtn title={"탈퇴하기"} onClick={handleOpenModal} />
+            <LargeBtn title={"탈퇴하기"} onClick={handleSubmit} />
           </div>
         </div>
       </div>
 
-      {isModalOpen && (
+      {(isModalOpen || currentStep > 1) && (
         <LeaveDialog
           step={currentStep}
           clubs={clubs}
@@ -137,9 +182,12 @@ const WithDrawal = () => {
           handleNext2Step={handleNext2Step}
           selectedDelegates={selectedDelegates}
           handleDelegateSelection={handleDelegateSelection}
-          onClose={() => setIsModalOpen(false)}
+          onClose={handleClose}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
         />
       )}
+      {currentStep === 4 && <MobileSnackBar text={"탈퇴가 완료되었습니다"} />}
     </div>
   );
 };
