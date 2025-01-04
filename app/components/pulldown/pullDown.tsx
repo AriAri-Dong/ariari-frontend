@@ -136,14 +136,14 @@ const PullDown = ({
         (!multiple ? (
           isTabOver ? (
             <SingleSelectOptions
-              optionData={optionData.slice(1)}
+              optionData={optionData}
               selectedOption={selectedOption[0]}
               handleMenuClick={handleMenuClick}
               size={optionSize}
             />
           ) : (
             <BottomSheet
-              optionData={optionData.slice(1)}
+              optionData={optionData}
               selectedOptions={selectedOption}
               handleMenuClick={handleMenuClick}
               onClose={() => setIsDropdownOpen(false)}
@@ -152,14 +152,14 @@ const PullDown = ({
           )
         ) : isTabOver ? (
           <MultiSelectOptions
-            optionData={optionData.slice(1)}
+            optionData={optionData}
             selectedOptions={selectedOption}
             handleMenuClick={handleMenuClick}
             size={optionSize}
           />
         ) : (
           <BottomSheet
-            optionData={optionData.slice(1)}
+            optionData={optionData}
             selectedOptions={selectedOption}
             handleMenuClick={handleMenuClick}
             onClose={() => setIsDropdownOpen(false)}

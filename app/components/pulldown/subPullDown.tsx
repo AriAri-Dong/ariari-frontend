@@ -89,7 +89,7 @@ const SubPullDown = ({
       {isDropdownOpen &&
         (isTabOver ? (
           <SingleSelectOptions
-            optionData={optionData.slice(1)}
+            optionData={optionData}
             selectedOption={selectedOption}
             {...(handleOption
               ? { handleMenuClick }
@@ -100,7 +100,7 @@ const SubPullDown = ({
           />
         ) : (
           <BottomSheet
-            optionData={optionData.slice(1)}
+            optionData={optionData}
             selectedOptions={selectedOption}
             {...(handleOption
               ? { handleMenuClick }
