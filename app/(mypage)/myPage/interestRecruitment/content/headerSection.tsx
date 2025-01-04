@@ -19,7 +19,7 @@ const HeaderSection = () => {
   };
 
   const handleGoBack = () => {
-    router.push("/");
+    router.push("/myPage");
   };
 
   return (

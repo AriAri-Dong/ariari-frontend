@@ -31,24 +31,12 @@ const HeaderSection = () => {
     setTargetType([]);
   };
 
-  const handleGoBack = () => {
-    router.push("/");
-  };
-
   return (
     <div className="flex flex-col md:flex-row justify-between">
       <div className="flex justify-between gap-2">
         <div className="flex">
-          <Image
-            src={vector}
-            alt={"뒤로가기"}
-            width={24}
-            height={24}
-            onClick={handleGoBack}
-            className="md:hidden cursor-pointer"
-          />
           <h1 className="text-text1 text-mobile_h1_contents_title md:text-h1_contents_title">
-            관심 모집공고
+            모집공고
           </h1>
         </div>
         <div className="md:hidden">

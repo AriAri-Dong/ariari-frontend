@@ -1,15 +1,18 @@
 "use client";
 
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import ClubInfoCard from "@/components/card/clubInfoCard";
 import ClubIntroduction from "@/components/card/clubIntroduction";
 import { CLUB_PROFILE_DATA } from "@/data/clubProfile";
-import { useState } from "react";
 import { Popularity_Sort_Type } from "@/data/pulldown";
 import FilterSection from "./content/filterSection";
 import HeaderSection from "./content/headerSection";
 
 const InterestClub = () => {
+  const router = useRouter();
+
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [sortType, setSortType] = useState<string>(
     Popularity_Sort_Type[0].label
@@ -17,6 +20,10 @@ const InterestClub = () => {
 
   const toggleCheck = () => {
     setIsChecked(!isChecked);
+  };
+
+  const handleGoBack = () => {
+    router.push("/myPage");
   };
 
   return (
@@ -55,7 +62,7 @@ const InterestClub = () => {
           ))}
         </div>
         <div className="self-center mt-9 mb-[80px] md:mt-10 md:mb-[124px]">
-          <PlusBtn title={"더보기"} onClick={() => {}} />
+          <PlusBtn title={"더보기"} onClick={handleGoBack} />
         </div>
       </div>
     </div>
