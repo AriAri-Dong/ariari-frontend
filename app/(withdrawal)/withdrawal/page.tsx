@@ -33,7 +33,7 @@ const WithDrawal = () => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  // currentStep이 4인 경우 3초뒤 홈으로 이동
+  // currentStep이 4인 경우 2초뒤 홈으로 이동
   useEffect(() => {
     if (currentStep === 4) {
       setTimeout(() => {

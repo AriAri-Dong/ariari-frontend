@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
-import WithdrawalInput from "@/(withdrawal)/withdrawal/components/withdrawalInput";
 
 interface StepProps {
   handleNextStep: () => void;
