@@ -74,7 +74,7 @@ const ClubRanking = () => {
           {isTab ? (
             <>
               <PullDown
-                optionData={Field_Type}
+                optionData={Field_Type.slice(1)}
                 optionSize="small"
                 handleOption={setFieldType}
                 selectedOption={fieldType}
@@ -90,13 +90,13 @@ const ClubRanking = () => {
         <div className="flex mt-[16px] gap-[10px] md:hidden ">
           <>
             <PullDown
-              optionData={Affiliation_Type}
+              optionData={Affiliation_Type.slice(1)}
               optionSize="small"
               handleOption={setAffiliationType}
               selectedOption={affiliationType}
             />
             <PullDown
-              optionData={Field_Type}
+              optionData={Field_Type.slice(1)}
               optionSize="small"
               handleOption={setFieldType}
               selectedOption={fieldType}
