@@ -104,7 +104,7 @@ const WithDrawal = () => {
           Ariari 탈퇴 진행 전, 관련 사항들을 확인해주세요.
         </p>
       </div>
-      <div className="flex flex-col gap-10 rounded-8 bg-background mt-5 md:mt-[22px] md:px-6 md:py-[26px]">
+      <div className="flex flex-col gap-7 rounded-8 bg-background mt-5 md:mt-[22px] md:px-6 md:py-[26px] md:gap-10">
         <div className="flex flex-col gap-10 md:gap-12">
           {WITHDRAWAL_INFO.map((info, index) => (
             <div key={index}>
@@ -187,6 +187,7 @@ const WithDrawal = () => {
           setInputValue={setInputValue}
         />
       )}
+
       {currentStep === 4 && <MobileSnackBar text={"탈퇴가 완료되었습니다"} />}
     </div>
   );

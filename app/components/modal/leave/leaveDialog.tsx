@@ -42,48 +42,50 @@ const LeaveDialog = ({
   onClose,
 }: LeaveDialogProps) => {
   return (
-    <div
-      className={`${
-        step == 3 ? "flex" : "hidden"
-      } md:flex fixed inset-0 bg-black_50 justify-center items-center z-50 `}
-    >
-      <div className="absolute inset-0" onClick={onClose}></div>
+    <div>
+      {step !== 3 && (
+        <div
+          className={`hidden md:flex fixed inset-0 bg-black_50 justify-center items-center z-50 `}
+        >
+          <div className="absolute inset-0" onClick={onClose}></div>
 
-      <div className="relative flex flex-col w-[430px] px-5 bg-background rounded-16">
-        {step === 1 && (
-          <Step1
-            handleNextStep={handleNextStep}
-            onClose={onClose}
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-          />
-        )}
+          <div className="relative flex flex-col w-[430px] px-5 bg-background rounded-16">
+            {step === 1 && (
+              <Step1
+                handleNextStep={handleNextStep}
+                onClose={onClose}
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+              />
+            )}
 
-        {step === 2 && (
-          <Step2
-            clubs={clubs}
-            selectedDelegates={selectedDelegates}
-            onDelegateSelect={handleDelegateSelection}
-            handleNextStep={handleNextStep}
-          />
-        )}
+            {step === 2 && (
+              <Step2
+                clubs={clubs}
+                selectedDelegates={selectedDelegates}
+                onDelegateSelect={handleDelegateSelection}
+                handleNextStep={handleNextStep}
+              />
+            )}
 
-        {step === 3 && (
-          <NotiPopUp
-            onClose={onClose}
-            icon={"not"}
-            title={"정말 탈퇴하시겠습니까?"}
-            description="아리아리 서비스 탈퇴시 일부 기능이 제한됩니다."
-            firstButton={handleNextStep}
-            firstButtonText="예"
-            secondButton={onClose}
-            secondButtonText="아니오"
-            modalType="button"
-          />
-        )}
+            {step === 4 && <Step4 />}
+          </div>
+        </div>
+      )}
 
-        {step === 4 && <Step4 />}
-      </div>
+      {step === 3 && (
+        <NotiPopUp
+          onClose={onClose}
+          icon={"not"}
+          title={"정말 탈퇴하시겠습니까?"}
+          description="아리아리 서비스 탈퇴시 일부 기능이 제한됩니다."
+          firstButton={handleNextStep}
+          firstButtonText="예"
+          secondButton={onClose}
+          secondButtonText="아니오"
+          modalType="button"
+        />
+      )}
     </div>
   );
 };
