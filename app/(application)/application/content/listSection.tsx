@@ -1,7 +1,6 @@
 import ApplicationCard, {
   ApplicationCardProps,
 } from "@/components/card/applicationCard";
-import PointList from "@/components/list/pointList";
 
 const ListSection = ({
   dataList = [],
