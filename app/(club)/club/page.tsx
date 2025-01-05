@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
+import { useRouter } from 'next/navigation';
 import ClubInfoSection from "./content/clubInfoSection";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
-import { useRouter } from 'next/navigation';
 
 const ClubPage = () => {
   const router = useRouter()
@@ -20,7 +20,9 @@ const ClubPage = () => {
 
   return (
     <div>
+      {/* === 공통 영역 === */}
       <ClubInfoSection />
+      {/* === 모바일 해상도에서만 보이는 하단 버튼 ===  */}
       <div className="fixed bottom-[77px] right-5 md:hidden">
         <WriteBtn onClick={handleWrite} />
       </div>

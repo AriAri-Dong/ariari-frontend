@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 
@@ -8,6 +8,11 @@ interface DayFloatingBarProps {
   deadline: Date;
 }
 
+/**
+ * 마감일을 알려주는 floatingBar 컴포넌트
+ * @param deadline 마감일 
+ * @returns 
+ */
 const RecruitmentGuideFloatingBar = ({ deadline }: DayFloatingBarProps) => {
   const formattedDeadline = `${
     deadline.getMonth() + 1
@@ -15,6 +20,14 @@ const RecruitmentGuideFloatingBar = ({ deadline }: DayFloatingBarProps) => {
     .getMinutes()
     .toString()
     .padStart(2, "0")} 모집 마감`;
+
+    const handleWrite = () =>{
+      console.log("handleWrite Click")
+    }
+
+    const handleView = () =>{
+      console.log("모집 공고 보기")
+    }
 
   return (
     <div
@@ -34,12 +47,12 @@ const RecruitmentGuideFloatingBar = ({ deadline }: DayFloatingBarProps) => {
             <h3 className="text-h3 text-text1">{formattedDeadline}</h3>
           </div>
           <div className="w-full max-w-[390px]">
-            <LargeBtn title={"모집공고 보기"} onClick={() => {}} round={true} />
+            <LargeBtn title={"모집공고 보기"} onClick={handleView} round={true} />
           </div>
         </div>
       </div>
       <div className="flex items-center">
-        <WriteBtn onClick={() => {}} />
+        <WriteBtn onClick={handleWrite} />
       </div>
     </div>
   );

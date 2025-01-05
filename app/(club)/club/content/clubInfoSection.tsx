@@ -13,6 +13,10 @@ import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmen
 import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
 import { CATEGORY, MENU_DATA } from '@/data/club';
 
+/**
+ * Club 페이지에서 사용되는 clubInfo 공통 section
+ * @returns 
+ */
 const ClubInfoSection = () => {
   const [isHeart, setIsHeart] = useState<boolean>(false);
   const [isCopy, setIsCopy] = useState<boolean>(false);
