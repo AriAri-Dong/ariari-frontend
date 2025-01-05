@@ -23,6 +23,11 @@ const ClubInfoSection = () => {
     setIsHeart(!isHeart);
   };
 
+  const handleModify = () =>{
+    console.log("동아리 정보 수정 핸들러")
+  }
+
+  // URL이 복사
   const handleShare = async () => {
     try {
       const currentUrl = window.location.href;
@@ -43,6 +48,7 @@ const ClubInfoSection = () => {
     }
   };
 
+  // 모바일 해상도에서 바텀시트 메뉴 클릭 이벤트
   const handleMenuClick = (label: string) => {
     switch (label) {
       case "공유하기":
@@ -118,7 +124,7 @@ const ClubInfoSection = () => {
               width={16}
               height={16}
               className="md:hidden"
-              onClick={() => setIsBottomSheetOpen(true)} // 바텀시트 열기
+              onClick={() => setIsBottomSheetOpen(true)}
             />
           </div>
           <p className="text-subtext2 text-mobile_body3_m md:hidden">
@@ -129,7 +135,7 @@ const ClubInfoSection = () => {
           </p>
         </div>
         <div className="block mt-4 md:hidden">
-          <LargeBtn title={"동아리 정보 수정"} onClick={() => {}} />
+          <LargeBtn title={"동아리 정보 수정"} onClick={handleModify} />
         </div>
         <div className="md:flex flex-row w-full md:justify-between md:max-w-[642px] hidden">
           {CATEGORY.map((item) => {
