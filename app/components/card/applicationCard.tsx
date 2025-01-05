@@ -12,6 +12,7 @@ import congratulation from "@/images/icon/application/congratulation.svg";
 
 import chevron_right from "@/images/icon/chevron_right.svg";
 import deleteIcon from "@/images/icon/delete.svg";
+import DeleteBtn from "../button/iconBtn/deleteBtn";
 
 export interface ApplicationCardProps {
   clubId: number;
@@ -44,6 +45,10 @@ const ApplicationCard = ({
   const onApplicationClick = () => {
     router.push(`/club/${clubId}`);
   };
+  const onDeleteClick = () => {
+    if (confirm("정말로 삭제하시겠습니까?")) {
+    }
+  };
 
   const status = [
     { id: 1, title: "작성중" },
@@ -71,7 +76,7 @@ const ApplicationCard = ({
   return (
     <div
       tabIndex={0}
-      className="w-full flex flex-col gap-3 py-3.5 px-4 mb-3 bg-background rounded-[8px] cursor-pointer focus:bg-hover md:hover:bg-hover md:focus:bg-pressed md:pl-9 md:pr-[30px] md:py-[26px] md:mb-3.5 md:gap-5 "
+      className="w-full flex flex-col gap-3 py-3.5 px-4 mb-2.5 bg-background rounded-[8px] cursor-pointer focus:bg-hover md:hover:bg-hover md:focus:bg-pressed md:pl-9 md:pr-[30px] md:py-[26px] md:mb-2.5 md:gap-5 "
       onClick={onApplicationClick}
     >
       <div className="flex justify-between items-center">
@@ -88,13 +93,9 @@ const ApplicationCard = ({
           </div>
         </div>
         {applicationStatus === "작성중" && (
-          <Image
-            src={deleteIcon}
-            alt={"delete"}
-            width={20}
-            height={20}
-            className="md:hidden"
-          />
+          <div className="md:hidden">
+            <DeleteBtn onClick={onDeleteClick} />
+          </div>
         )}
         <div className="hidden items-center gap-2.5 md:flex">
           {status.map((item) => {
@@ -138,13 +139,16 @@ const ApplicationCard = ({
             {date}
           </div>
           {applicationStatus === "작성중" && (
-            <Image
-              src={deleteIcon}
-              alt={"delete"}
-              width={20}
-              height={20}
-              className="hidden md:flex md:w-5 md:h-5"
-            />
+            <button className="hidden md:flex w-7 h-7 justify-center items-center p-0.5 rounded-full cursor-pointer hover:bg-hover focus:bg-hover">
+              <Image
+                src={deleteIcon}
+                alt={"delete"}
+                width={24}
+                height={24}
+                className=""
+                onClick={onDeleteClick}
+              />
+            </button>
           )}
         </div>
       </div>
