@@ -8,6 +8,7 @@ import LargeBtn from "../../button/basicBtn/largeBtn";
 import Alert from "@/components/alert/alert";
 import { useProfileContext } from "@/context/profileConetxt";
 import { validateEmail } from "@/schema/email";
+import { formatTime } from "@/utils/timeFormatter";
 
 interface ProfileSettingProps {
   step: number;
@@ -81,15 +82,6 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
       return () => clearInterval(timer);
     }
   }, [step]);
-
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(
-      2,
-      "0"
-    )}`;
-  };
 
   const handleSkip = () => {
     onNextStep(4);

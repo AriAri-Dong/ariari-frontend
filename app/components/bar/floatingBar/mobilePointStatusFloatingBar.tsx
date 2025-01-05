@@ -25,7 +25,7 @@ const MobilePointStatusFloatingBar = ({}: DayFloatingBarProps) => {
             </p>
           </div>
           <div className="flex items-center gap-1.5 text-primary">
-            <div className="text-h4_sb">20</div>
+            <p className="text-h4_sb">20</p>
             <p className="text-body3_r">p</p>
           </div>
         </div>

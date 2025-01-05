@@ -1,6 +1,6 @@
 import ClubRanking from "@/pages/home/clubRanking";
-import LatestRecruitment from "@/pages/home/latestRecruitment";
-import PopularRecruitment from "@/pages/home/popularRecruitment";
+import LatestRecruitment from "./content/latestRecruitment";
+import PopularRecruitment from "./content/popularRecruitment";
 
 const Home = () => {
   return (

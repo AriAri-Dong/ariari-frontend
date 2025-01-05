@@ -4,13 +4,16 @@ import { useState } from "react";
 import MobileButtons from "../components/buttons/mobile_Buttons";
 import PcButtons from "../components/buttons/PC_Buttons";
 import Badges from "../components/badges";
-import LoginDialog from "@/components/modal/loginDialog";
 import ProfileSettingModal from "@/components/modal/profileSetting/profileSettingModal";
+import LoginModal from "@/components/modal/login/loginModal";
+import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
+import MobileSnackBar from "@/components/bar/mobileSnackBar";
+import MobileProfileSettingModal from "@/components/modal/profileSetting/mobile/mobileProfileSettingModal";
 
 const TestPage = () => {
-  const [isButtonVisible, setIsButtonVisible] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
+  const [isButtonVisible, setIsButtonVisible] = useState<boolean>(true);
   const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(true);
 
   const handleOpenModal = () => {
@@ -54,21 +57,38 @@ const TestPage = () => {
           ? "Hidden Profile Setting Components"
           : "Show Profile Setting Components"}
       </button>
-      {isModalOpen && <LoginDialog onClose={handleCloseModal} />}
-      {isProfileOpen && (
-        <ProfileSettingModal onClose={() => setIsProfileOpen(false)} />
+
+      {/* Login Modal */}
+      {isModalOpen && (
+        <>
+          <LoginModal onClose={handleCloseModal} />
+          <MobileLoginModal onClose={handleCloseModal} />
+        </>
       )}
+
+      {/* Profile Setting Modal */}
+      {isProfileOpen && (
+        <>
+          <ProfileSettingModal onClose={() => setIsProfileOpen(false)} />
+          <MobileProfileSettingModal onClose={() => setIsProfileOpen(false)} />
+        </>
+      )}
+
+      {/* Button Components */}
       {isButtonVisible && (
         <div className="bg-pink-100 p-3">
           <PcButtons />
           <MobileButtons />
         </div>
       )}
+
+      {/* Badge Components */}
       {isBadgeVisible && (
         <div className="bg-gray-100 p-3">
           <Badges />
         </div>
       )}
+      {!isProfileOpen && <MobileSnackBar text={"로그인이 완료되었습니다."} />}
     </div>
   );
 };

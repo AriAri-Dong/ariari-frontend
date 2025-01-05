@@ -8,6 +8,7 @@ import { USER_MENU } from "@/data/header";
 import LoginBtn from "../button/basicBtn/loginBtn";
 import Notification from "../button/iconBtn/notification";
 import rabbit from "@/images/profile/rabbit.svg";
+import NotificationModal from "../modal/notification/notificationModal";
 
 const User = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -43,7 +44,9 @@ const User = () => {
     <>
       {isLoggedIn ? (
         <div className="relative flex items-center space-x-5" ref={dropdownRef}>
-          <Notification size={"small"} onClick={() => {}} />
+          <NotificationModal>
+            <Notification size={"small"} onClick={() => {}} />
+          </NotificationModal>
           <button
             className="relative flex items-center space-x-2 p-2 text-subtext2 cursor-pointer rounded-[30px]
             hover:bg-hover focus:bg-pressed"

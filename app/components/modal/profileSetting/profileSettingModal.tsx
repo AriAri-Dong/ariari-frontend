@@ -6,11 +6,11 @@ import { ProfileProvider } from "@/context/profileConetxt";
 import ProfileSetting from "./profileSetting";
 import Step4 from "./step4";
 
-interface LoginDialogProps {
+interface LoginModalProps {
   onClose: () => void;
 }
 
-const ProfileSettingModal = ({ onClose }: LoginDialogProps) => {
+const ProfileSettingModal = ({ onClose }: LoginModalProps) => {
   const [step, setStep] = useState<number>(1);
 
   const handleNextStep = (nextStep: number) => {

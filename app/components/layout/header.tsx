@@ -31,9 +31,12 @@ const Header = () => {
     console.log("검색어 :", searchTerm);
   };
 
-  const isHiddenPath = ["/myPage/myPoint", "/myPage/interestClub"].includes(
-    pathname
-  );
+  const isHiddenPath = [
+    "/myPage/myPoint",
+    "/myPage/interestClub",
+    "/myPage/interestRecruitment",
+    "/notification",
+  ].includes(pathname);
 
   return (
     <header
