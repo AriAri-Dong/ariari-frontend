@@ -87,7 +87,7 @@ const HeaderTab = () => {
     }
     updateBarPosition();
     scrollToActiveItem();
-  }, [pathname, menu]);
+  }, [menu]);
 
   useEffect(() => {
     if (navRef.current) {
