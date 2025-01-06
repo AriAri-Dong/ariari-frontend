@@ -14,6 +14,12 @@ interface ReportBottomSheetProps {
   onSubmit: () => void;
 }
 
+/**
+ * 신고하기 바텀 시트 컴포넌트
+ * @param onClose 바텀시트 닫는 함수
+ * @param onSubmit 신고 제출 함수
+ * @returns 
+ */
 const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
   const [selectedReason, setSelectedReason] = useState<string | null>(null);
   const [details, setDetails] = useState<string>("");
