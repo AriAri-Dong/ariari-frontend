@@ -37,3 +37,10 @@ export const POINT_DATA_LIST: ListSectionProps[] = [
   { date: "2024-03-04", title: "회원가입 했으니까 줌", point: 20 },
   { date: "2024-03-01", title: "동아리 후기 조회했으니까 뺐음", point: -10 },
 ];
+
+
+
+export interface DayFloatingBarProps {
+  deductionPoint:number
+  currentPoint: number
+}
