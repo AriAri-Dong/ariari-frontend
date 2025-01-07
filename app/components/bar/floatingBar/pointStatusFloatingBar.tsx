@@ -3,12 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import dollar from "@/images/icon/dollar.svg";
-
-interface DayFloatingBarProps {
-  deductionPoint:number
-  currentPoint: number
-}
-
+import { DayFloatingBarProps } from '@/data/point';
 
 /**
  * 포인트 현황 플로팅 바 컴포넌트
