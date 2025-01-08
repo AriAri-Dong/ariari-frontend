@@ -18,12 +18,12 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     index: number
   ) => {
+    e.stopPropagation();
     setCardData((prevData) =>
       prevData.map((item, idx) =>
         idx === index ? { ...item, isScrap: !item.isScrap } : item
       )
     );
-    e.preventDefault();
   };
 
   if (cardData.length === 0) {
@@ -45,7 +45,7 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
             className={`flex gap-4 md:gap-5 md:flex-col cursor-pointer ${
               isExpired ? "opacity-50 backdrop-filter backdrop-blur-md" : ""
             }`}
-            onClick={() => handleRouter}
+            onClick={handleRouter}
           >
             <div className="relative min-w-[114px] md:w-full">
               <Image
