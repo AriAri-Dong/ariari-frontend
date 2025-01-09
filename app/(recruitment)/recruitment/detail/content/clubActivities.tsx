@@ -4,8 +4,7 @@ import React from "react";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import RecruitmentCard from "@/components/card/recruitmentCard";
 import AcceptanceReviewDropdown from "@/components/dropdown/acceptanceReviewDropdown";
-import { ACCEPTANCE_REVIEWS, RECRUITMENT_CARDS } from '@/data/club';
-
+import { ACCEPTANCE_REVIEWS, RECRUITMENT_CARDS } from "@/data/club";
 
 const ClubActivities = () => {
   return (
@@ -26,6 +25,9 @@ const ClubActivities = () => {
                 title={item.title}
                 date={item.date}
                 onClick={() => {}}
+                onBtnClick={() => {}}
+                document={0}
+                interview={0}
               />
             );
           })}
