@@ -23,7 +23,7 @@ const AcceptanceReviewDropdown = ({
 }: AcceptanceReviewDropdownProps) => {
   return (
     <div
-      className="w-full m-w-[1248px] p-4 md:pt-[18px] md:pb-[22px] md:pl-9 md:pr-[34px] rounded-lg
+      className="w-full m-w-[1248px] p-4 md:pt-[18px] md:pb-[22px] md:px-6 rounded-lg
   bg-background focus:bg-hover md:hover:bg-hover md:focus:bg-pressed cursor-pointer"
       onClick={onClick}
     >
