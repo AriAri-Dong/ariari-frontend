@@ -157,7 +157,6 @@ const ClubInfoSection = () => {
       </div>
       {isCopy && <Alert text={message} />}
       <RecruitmentGuideFloatingBar deadline={new Date("2024-12-31T23:59:59")} />
-      <RecruitmentGuideFloatingBar deadline={new Date("2024-12-31T23:59:59")} />
       {isBottomSheetOpen && (
         <CommonBottomSheet
           optionData={MENU_DATA}
