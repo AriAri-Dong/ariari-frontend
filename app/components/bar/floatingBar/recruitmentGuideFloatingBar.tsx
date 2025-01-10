@@ -39,7 +39,7 @@ const RecruitmentGuideFloatingBar = ({ deadline }: DayFloatingBarProps) => {
   return (
     <div
       className="hidden md:flex fixed bottom-0 w-full max-w-[1248px] mb-9
-      justify-center left-1/2 transform -translate-x-1/2"
+      justify-center left-1/2 transform -translate-x-1/2 px-5"
       style={{ zIndex: 1000 }}
     >
       <div className="flex flex-col w-full">
