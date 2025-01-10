@@ -1,42 +1,63 @@
-
 export const ACCEPTANCE_REVIEWS = [
-    {
-      id: 0,
-      title: "2024년 봄학기 동아리 모집",
-      date: "2024.12.31",
-    },
-    {
-      id: 1,
-      title: "가을학기 동아리 모집 후기",
-      date: "2024.10.15",
-    },
-    {
-      id: 2,
-      title: "여름방학 동아리 모집 후기",
-      date: "2024.07.20",
-    },
-  ];
-  
-export  const RECRUITMENT_CARDS = [
-    {
-      id: 0,
-      title: "2024년 봄학기 동아리 모집",
-      date: "2024.12.31",
-      status: "모집중",
-    },
-    {
-      id: 1,
-      title: "가을학기 동아리 모집 공고",
-      date: "2024.10.15",
-      status: "모집중",
-    },
-    {
-      id: 2,
-      title: "여름방학 동아리 모집 안내",
-      date: "2024.07.20",
-      status: "모집마감",
-    },
-  ];
+  {
+    id: 0,
+    title: "2024년 봄학기 동아리 모집",
+    date: "2024.12.31",
+  },
+  {
+    id: 1,
+    title: "가을학기 동아리 모집 후기",
+    date: "2024.10.15",
+  },
+  {
+    id: 2,
+    title: "여름방학 동아리 모집 후기",
+    date: "2024.07.20",
+  },
+  {
+    id: 3,
+    title: "겨울학기 동아리 모집 안내",
+    date: "2025.02.20",
+  },
+  {
+    id: 4,
+    title: "겨울학기 동아리 모집 공고",
+    date: "2025.03.04",
+  },
+];
+
+export const RECRUITMENT_CARDS = [
+  {
+    id: 0,
+    title: "2024년 봄학기 동아리 모집",
+    date: "2024.12.31",
+    status: "모집마감",
+  },
+  {
+    id: 1,
+    title: "가을학기 동아리 모집 공고",
+    date: "2024.10.15",
+    status: "모집마감",
+  },
+  {
+    id: 2,
+    title: "여름방학 동아리 모집 안내",
+    date: "2024.07.20",
+    status: "모집마감",
+  },
+  {
+    id: 3,
+    title: "겨울학기 동아리 모집 안내",
+    date: "2025.02.20",
+    status: "모집중",
+  },
+  {
+    id: 4,
+    title: "겨울학기 동아리 모집 공고",
+    date: "2025.03.04",
+    status: "모집중",
+  },
+];
 
 export const CATEGORY = [
   { id: 0, label: "동아리 소속", type: "affiliation", value: "아리아리" },
