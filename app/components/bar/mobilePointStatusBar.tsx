@@ -1,24 +1,26 @@
 "use client";
 
-import { DayFloatingBarProps } from "@/data/point";
+import { DayFloatingBarProps } from "@/types/components/point";
 import React from "react";
 
 /**
  * 포인트 현황 플로팅 바 컴포넌트
  * @param deductionPoint 차감 포인트
  * @param currentPoint 현재 포인트
+ * @param className
  * @returns
  */
 
 const MobilePointStatusBar = ({
   deductionPoint,
   currentPoint,
+  className,
 }: DayFloatingBarProps) => {
   return (
-    <div className="w-full flex justify-center md:hidden">
+    <div className={`w-full flex justify-center lg:hidden ${className}`}>
       <div
         className="w-full bg-selectedoption_default rounded-lg
-        max-w-[1248px] mb-9 px-5 py-2"
+        max-w-[1248px] px-5 py-2"
       >
         <div className="flex justify-between">
           <div className="flex flex-col">
