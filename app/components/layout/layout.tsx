@@ -20,9 +20,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <Header />
         <main
           className={`flex-grow flex justify-center items-center 
-            ${isBgComponent && "bg-sub_bg"} ${
-            isBgComponentOnlyMobile && "md:bg-sub_bg"
-          }`}
+            ${isBgComponent && "bg-sub_bg"} 
+            ${isBgComponentOnlyMobile && "md:bg-sub_bg"}`
+          }
         >
           <div
             className={`w-full ${
