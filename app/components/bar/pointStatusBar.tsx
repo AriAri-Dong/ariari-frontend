@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import dollar from "@/images/icon/dollar.svg";
-import { DayFloatingBarProps } from "@/data/point";
+import { DayFloatingBarProps } from "@/types/components/point";
 
 /**
  * 포인트 현황 플로팅 바 컴포넌트
@@ -16,7 +16,7 @@ const PointStatusBar = ({
   currentPoint,
 }: DayFloatingBarProps) => {
   return (
-    <div className="hidden w-full md:flex justify-center">
+    <div className="hidden w-full lg:flex justify-center">
       <div
         className="w-full bg-background rounded-56 border border-primary
         max-w-[1248px] px-10 py-5"
