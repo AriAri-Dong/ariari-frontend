@@ -11,6 +11,15 @@ interface BtnType extends ButtonWithTextProps {
   size: "large" | "small";
 }
 
+/**
+ * 
+ * @param title 버튼 타이틀
+ * @param onClick 클릭 핸들러
+ * @param type 아이콘 타입
+ * @param size 버튼 사이즈
+ * @param className 추가 className 
+ * @returns 
+ */
 const IconBtn = ({ title, onClick, type, size, className }: BtnType) => {
   const getIcon = () => {
     switch (type) {
