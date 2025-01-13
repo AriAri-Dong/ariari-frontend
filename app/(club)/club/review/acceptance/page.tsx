@@ -51,7 +51,7 @@ const ReviewPage = () => {
               />
               <div
                 className="flex-row justify-between items-center w-full my-2.5 hidden md:flex
-              py-1.5 pl-6 pr-[166px] rounded-lg bg-white70 text-subtext2 text-body1_m"
+              py-1.5 pl-6 pr-[176px] rounded-lg bg-white70 text-subtext2 text-body1_m"
               >
                 <p>제목</p>
                 <p>작성일</p>
