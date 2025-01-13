@@ -6,6 +6,7 @@ import IconBadge from "../badge/iconBadge";
 import IconBtn from "../button/withIconBtn/IconBtn";
 import ReportModal from "../modal/reportModal";
 import Alert from "../alert/alert";
+import ProgressBar from "../bar/progressBar";
 
 interface AcceptanceReviewDropdownProps {
   onClick: () => void;
@@ -43,7 +44,10 @@ const AcceptanceReviewDropdown = ({
   };
 
   return (
-    <div className="w-full max-w-[1248px] p-4 md:pt-[18px] md:pb-[22px] md:pl-9 md:pr-[34px] rounded-lg bg-background focus:bg-hover md:hover:bg-hover md:focus:bg-pressed cursor-pointer">
+    <div
+      className="w-full max-w-[1248px] p-4 md:pt-[18px] md:pb-[22px] md:pl-9 md:pr-[34px]
+    rounded-lg bg-background focus:bg-hover md:hover:bg-hover md:focus:bg-pressed cursor-pointer"
+    >
       {/* default */}
       <div
         className="flex flex-col items-start gap-3 md:gap-0 md:flex-row md:justify-between md:items-center"
@@ -58,7 +62,10 @@ const AcceptanceReviewDropdown = ({
             </div>
           </div>
         </div>
-        <div className="flex sm:justify-between sm:items-center sm:w-full md:w-auto md:self-start md:m-w-[194px] md:gap-7">
+        <div
+          className="flex sm:justify-between sm:items-center sm:w-full
+        md:w-auto md:self-startmd:m-w-[194px] md:gap-7"
+        >
           <p className="text-subtext2 text-body4_r content-center md:text-body3_r">
             {date}
           </p>
@@ -77,7 +84,7 @@ const AcceptanceReviewDropdown = ({
         }`}
       >
         <div className="flex flex-col md:flex-row w-full justify-between mb-4 mt-7 md:mt-9 md:mb-2">
-          <div className="flex md:flex-col w-full justify-between md:w-[183px] md:gap-[44px]">
+          <div className="flex md:flex-col w-full justify-between md:justify-normal md:w-[183px] md:gap-[44px]">
             <div className="flex flex-col gap-2.5 md:gap-[14px]">
               <h3 className="text-mobile_body1_sb md:text-h4_sb text-text1">
                 합격전형
@@ -102,6 +109,18 @@ const AcceptanceReviewDropdown = ({
                 그룹면접
               </p>
             </div>
+            <div className="hidden md:flex flex-col md:gap-[14px]">
+              <h3 className="text-mobile_body1_sb md:text-h4_sb text-text1">
+                면접분위기
+              </h3>
+              <ProgressBar />
+            </div>
+          </div>
+          <div className="flex md:hidden flex-col gap-2.5 mb-2 mt-[26px]">
+            <h3 className="text-mobile_body1_sb md:text-h4_sb text-text1">
+              면접분위기
+            </h3>
+            <ProgressBar />
           </div>
           <div className="flex flex-col w-full max-w-[669px] md:gap-10">
             <div>
