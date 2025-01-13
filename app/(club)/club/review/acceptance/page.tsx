@@ -12,6 +12,19 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import Image from "next/image";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import helpText from "@/images/icon/mobile_point_Helptext.svg";
+import SubTap from "@/components/tab/subTap";
+import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound";
+import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
+
+const options = [
+  { id: 0, label: "모집관리" },
+  { id: 1, label: "동아리 멤버 관리" },
+  { id: 2, label: "활동관리" },
+  { id: 3, label: "활동내역" },
+  { id: 4, label: "FAQ/Q&A" },
+  { id: 5, label: "활동후기" },
+  { id: 6, label: "합격후기" },
+];
 
 const ReviewPage = () => {
   const router = useRouter();
@@ -36,6 +49,24 @@ const ReviewPage = () => {
       </div>
       <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
         <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6as  md:pt-8 md:px-5">
+          <div className="flex mb-4 mt-6 md:mt-0 lg:hidden">
+            <div className="w-10 h-10">
+              <NotificationRoundBtn onClick={() => {}} />
+            </div>
+            <div className="flex overflow-x-auto no-scrollbar ml-2 relative">
+              <div className="flex whitespace-nowrap">
+                <SubTap optionData={options} />
+              </div>
+            </div>
+            <div className="flex items-center">
+              <RoundVectorBtn
+                imageSize={20}
+                className="w-7 h-7 p-0 rotate-90"
+                onClick={() => {}}
+              />
+            </div>
+          </div>
+
           <div className="flex gap-9">
             {/* 임시 메뉴 */}
             <div className="w-[256px] h-[536px] bg-white hidden lg:block" />
