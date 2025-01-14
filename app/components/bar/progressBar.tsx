@@ -1,16 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const ProgressBar = () => {
-  const [currentStep, setCurrentStep] = useState<number | null>(null);
+interface ProgressBarProp {
+  disabled?: boolean;
+  initialStep?: number | null;
+}
+
+/**
+ *
+ * @param disabled 비활성화 상태 (읽기 모드일 경우 true)
+ * @param initialStep 초기
+ * @returns
+ */
+const ProgressBar = ({
+  disabled = false,
+  initialStep = null,
+}: ProgressBarProp) => {
+  const [currentStep, setCurrentStep] = useState<number | null>(initialStep);
   const steps = [0, 1, 2, 3, 4];
 
   const handleStepClick = (step: number) => {
-    if (currentStep === step) {
-      setCurrentStep(null);
-    } else {
-      setCurrentStep(step);
+    if (!disabled) {
+      setCurrentStep(currentStep === step ? null : step);
     }
   };
+
+  // 초기 step이 있을 경우 상태 설정
+  useEffect(() => {
+    if (initialStep !== null) {
+      setCurrentStep(initialStep);
+    }
+  }, [initialStep]);
 
   return (
     <div className="flex flex-col items-center w-full max-w-[183px]">
@@ -25,12 +44,12 @@ const ProgressBar = () => {
             <div
               key={step}
               className={`h-5 w-full flex-grow mx-0.5 cursor-pointer ${
-                currentStep !== null && index <= currentStep
+                index <= (currentStep ?? -1)
                   ? "bg-pulldownmenutext"
                   : "bg-menuborder"
-              } ${index === 0 && "ml-[-2px] rounded-l-20"} ${
-                index === steps.length - 1 && "mr-[-2px] rounded-r-20"
-              }`}
+              } ${disabled ? "cursor-default" : ""} ${
+                index === 0 ? "ml-[-2px] rounded-l-20" : ""
+              } ${index === steps.length - 1 ? "mr-[-2px] rounded-r-20" : ""}`}
               onClick={() => handleStepClick(index)}
             />
           ))}
