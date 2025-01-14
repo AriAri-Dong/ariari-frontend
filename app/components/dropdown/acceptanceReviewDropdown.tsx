@@ -7,6 +7,7 @@ import IconBtn from "../button/withIconBtn/IconBtn";
 import ReportModal from "../modal/reportModal";
 import Alert from "../alert/alert";
 import ProgressBar from "../bar/progressBar";
+import CustomInput from "../input/customInput";
 
 interface AcceptanceReviewDropdownProps {
   onClick: () => void;
@@ -16,6 +17,24 @@ interface AcceptanceReviewDropdownProps {
   document: number;
   interview: number;
 }
+
+const SECTIONS = [
+  {
+    title: "서류문항",
+    questions: [
+      { id: 1, question: "작성된 문항 1", answer: "작성된 답변 1" },
+      { id: 2, question: "작성된 문항 2", answer: "작성된 답변 2" },
+    ],
+  },
+  {
+    title: "면접문항",
+    questions: [
+      { id: 1, question: "작성된 문항 1", answer: "작성된 답변 1" },
+      { id: 2, question: "작성된 문항 2", answer: "작성된 답변 2" },
+      { id: 3, question: "작성된 문항 3", answer: "작성된 답변 3" },
+    ],
+  },
+];
 
 const AcceptanceReviewDropdown = ({
   onClick,
@@ -46,7 +65,8 @@ const AcceptanceReviewDropdown = ({
   return (
     <div
       className="w-full max-w-[1248px] p-4 md:pt-[18px] md:pb-[22px] md:pl-9 md:pr-[34px]
-    rounded-lg bg-background focus:bg-hover md:hover:bg-hover md:focus:bg-pressed cursor-pointer"
+    rounded-lg bg-background cursor-pointer"
+      // focus:bg-hover md:hover:bg-hover md:focus:bg-pressed
     >
       {/* default */}
       <div
@@ -85,130 +105,72 @@ const AcceptanceReviewDropdown = ({
       >
         <div className="flex flex-col md:flex-row w-full justify-between mb-4 mt-7 md:mt-9 md:mb-2">
           <div className="flex md:flex-col w-full justify-between md:justify-normal md:w-[183px] md:gap-[44px]">
-            <div className="flex flex-col gap-2.5 md:gap-[14px]">
-              <h3 className="text-mobile_body1_sb md:text-h4_sb text-text1">
-                합격전형
-              </h3>
-              <p className="text-subtext2 text-mobile_body1_r md:text-body2_m">
-                서류 · 면접 전형
-              </p>
-            </div>
-            <div className="flex flex-col gap-2.5 md:gap-[14px]">
-              <h3 className="text-mobile_body1_sb md:text-h4_sb text-text1">
-                면접방식
-              </h3>
-              <p className="text-subtext2 text-mobile_body1_r md:text-body2_m">
-                온라인
-              </p>
-            </div>
-            <div className="flex flex-col gap-2.5 md:gap-[14px]">
-              <h3 className="text-mobile_body1_sb md:text-h4_sb text-text1">
-                면접인원
-              </h3>
-              <p className="text-subtext2 text-mobile_body1_r md:text-body2_m">
-                그룹면접
-              </p>
-            </div>
-            <div className="hidden md:flex flex-col md:gap-[14px]">
+            {["합격전형", "면접방식", "면접인원"].map((label, index) => (
+              <div key={index} className="flex flex-col gap-2.5 md:gap-[14px]">
+                <h3 className="text-mobile_body1_sb md:text-h4_sb text-text1">
+                  {label}
+                </h3>
+                <p className="text-subtext2 text-mobile_body1_r md:text-body2_m">
+                  {index === 0
+                    ? "서류 · 면접 전형"
+                    : index === 1
+                    ? "온라인"
+                    : "그룹면접"}
+                </p>
+              </div>
+            ))}
+            {/* PC */}
+            <div className="hidden md:flex flex-col md:gap-[14px] mb-6">
               <h3 className="text-mobile_body1_sb md:text-h4_sb text-text1">
                 면접분위기
               </h3>
-              <ProgressBar />
+              <ProgressBar disabled={true} initialStep={2} />
             </div>
           </div>
-          <div className="flex md:hidden flex-col gap-2.5 mb-2 mt-[26px]">
+          {/* PC */}
+
+          {/* mobile */}
+          <div className="flex md:hidden flex-col gap-2.5 mb-8 mt-[26px]">
             <h3 className="text-mobile_body1_sb md:text-h4_sb text-text1">
               면접분위기
             </h3>
-            <ProgressBar />
+            <ProgressBar disabled={true} initialStep={2} />
           </div>
-          <div className="flex flex-col w-full max-w-[669px] md:gap-10">
-            <div>
-              <h3 className="md:block hidden text-body1_m md:text-h4_sb text-text1">
-                서류문항
-              </h3>
-              <div className="mt-6">
-                <p className="md:text-h4 text-mobile_body1_sb text-text1 mb-4 md:mb-[18px]">
-                  문항-1
-                </p>
-                <div className="flex flex-col gap-[14px]">
-                  <input
-                    type="text"
-                    value={inputValue}
-                    placeholder="작성된 문항"
-                    className="w-full p-3 md:px-[22px] md:py-[14px] rounded-xl md:text-body1_r text-mobile_body1_r bg-searchbar text-black focus:outline-none"
-                  />
-                  <input
-                    type="text"
-                    value={inputValue}
-                    placeholder="어떤 문항을 작성할까용가리가리가리"
-                    className="w-full p-3 md:px-[22px] md:py-[14px] rounded-xl md:text-body1_r text-mobile_body1_r bg-searchbar text-black focus:outline-none"
-                  />
+          {/* mobile */}
+          <div className="flex flex-col w-full max-w-[669px] md:gap-10 md:max-h-none">
+            {SECTIONS.map((section, sectionIdx) => (
+              <div key={sectionIdx}>
+                <h3 className="md:block hidden text-body1_m md:text-h4_sb mb-6 text-text1">
+                  {section.title}
+                </h3>
+                <div className="flex flex-col md:max-h-[380px] md:overflow-y-auto no-scrollbar">
+                  {section.questions.map((question, questionIdx) => (
+                    <div
+                      key={questionIdx}
+                      className={`${questionIdx === 0 ? "" : "mt-6"}`}
+                    >
+                      <p className="md:text-h4 text-mobile_body1_sb text-text1 mb-4 md:mb-[18px]">
+                        문항-{question.id}
+                      </p>
+                      <div className="flex flex-col gap-[14px]">
+                        <CustomInput
+                          value={question.question}
+                          placeholder="작성된 문항"
+                          disable={true}
+                          onChange={() => {}}
+                        />
+                        <CustomInput
+                          value={question.answer}
+                          placeholder="작성된 답변"
+                          disable={true}
+                          onChange={() => {}}
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="mt-6">
-                <p className="md:text-h4 text-mobile_body1_sb text-text1 mb-4 md:mb-[18px]">
-                  문항-1
-                </p>
-                <div className="flex flex-col gap-[14px]">
-                  <input
-                    type="text"
-                    value={inputValue}
-                    placeholder="작성된 문항"
-                    className="w-full p-3 md:px-[22px] md:py-[14px] rounded-xl md:text-body1_r text-mobile_body1_r bg-searchbar text-black focus:outline-none"
-                  />
-                  <input
-                    type="text"
-                    value={inputValue}
-                    placeholder="어떤 문항을 작성할까용가리가리가리"
-                    className="w-full p-3 md:px-[22px] md:py-[14px] rounded-xl md:text-body1_r text-mobile_body1_r bg-searchbar text-black focus:outline-none"
-                  />
-                </div>
-              </div>
-            </div>
-            <div>
-              <h3 className="md:block hidden text-body1_m md:text-h4_sb text-text1">
-                면접문항
-              </h3>
-              <div className="mt-7 md:mt-6">
-                <p className="md:text-h4 text-mobile_body1_sb text-text1 mb-4 md:mb-[18px]">
-                  문항-1
-                </p>
-                <div className="flex flex-col gap-2.5 md:gap-[14px]">
-                  <input
-                    type="text"
-                    value={inputValue}
-                    placeholder="작성된 문항"
-                    className="w-full p-3 md:px-[22px] md:py-[14px] rounded-xl md:text-body1_r text-mobile_body1_r bg-searchbar text-black focus:outline-none"
-                  />
-                  <input
-                    type="text"
-                    value={inputValue}
-                    placeholder="어떤 문항을 작성할까용가리가리가리"
-                    className="w-full p-3 md:px-[22px] md:py-[14px] rounded-xl md:text-body1_r text-mobile_body1_r bg-searchbar text-black focus:outline-none"
-                  />
-                </div>
-              </div>
-              <div className="mt-7 md:mt-6">
-                <p className="md:text-h4 text-mobile_body1_sb text-text1 mb-4 md:mb-[18px]">
-                  문항-1
-                </p>
-                <div className="flex flex-col gap-2.5 md:gap-[14px]">
-                  <input
-                    type="text"
-                    value={inputValue}
-                    placeholder="작성된 문항"
-                    className="w-full p-3 md:px-[22px] md:py-[14px] rounded-xl md:text-body1_r text-mobile_body1_r bg-searchbar text-black focus:outline-none"
-                  />
-                  <input
-                    type="text"
-                    value={inputValue}
-                    placeholder="어떤 문항을 작성할까용가리가리가리"
-                    className="w-full p-3 md:px-[22px] md:py-[14px] rounded-xl md:text-body1_r text-mobile_body1_r bg-searchbar text-black focus:outline-none"
-                  />
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
         <IconBtn
