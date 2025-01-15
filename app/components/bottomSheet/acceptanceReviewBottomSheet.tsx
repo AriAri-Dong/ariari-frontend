@@ -23,7 +23,7 @@ export const INTERVIEWE_STYLE = [
   { id: 0, label: "면접방식" },
   { id: 1, label: "온라인" },
   { id: 2, label: "오프라인" },
-  { id: 2, label: "기타" },
+  { id: 3, label: "기타" },
 ];
 
 interface BottomSheetProps {
@@ -39,6 +39,15 @@ const AcceptanceReviewBottomSheet = ({
   const [interviewer, setInterviewer] = useState<string[]>([]);
   const [intervieweStyle, setIntervieweStyle] = useState<string[]>([]);
 
+  // 문항과 질문 상태
+  const [documentQuestions, setDocumentQuestions] = useState<
+    { question: string; answer: string }[]
+  >([{ question: "", answer: "" }]);
+
+  const [interviewQuestions, setInterviewQuestions] = useState<
+    { question: string; answer: string }[]
+  >([{ question: "", answer: "" }]);
+
   useEffect(() => {
     setIsVisible(true);
   }, []);
@@ -50,11 +59,57 @@ const AcceptanceReviewBottomSheet = ({
     }, 300);
   };
 
+  // 문항 추가 함수
+  const addDocumentQuestion = () => {
+    setDocumentQuestions((prev) => [...prev, { question: "", answer: "" }]);
+  };
+
+  // 문항 삭제 함수
+  const removeDocumentQuestion = (index: number) => {
+    if (documentQuestions.length > 1) {
+      setDocumentQuestions((prev) => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  // 면접 질문 추가 함수
+  const addInterviewQuestion = () => {
+    setInterviewQuestions((prev) => [...prev, { question: "", answer: "" }]);
+  };
+
+  // 면접 질문 삭제 함수
+  const removeInterviewQuestion = (index: number) => {
+    if (interviewQuestions.length > 1) {
+      setInterviewQuestions((prev) => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  // 문항 입력값 변경 처리
+  const handleDocumentQuestionChange = (
+    index: number,
+    field: "question" | "answer",
+    value: string
+  ) => {
+    const updatedQuestions = [...documentQuestions];
+    updatedQuestions[index][field] = value;
+    setDocumentQuestions(updatedQuestions);
+  };
+
+  // 면접 질문 입력값 변경 처리
+  const handleInterviewQuestionChange = (
+    index: number,
+    field: "question" | "answer",
+    value: string
+  ) => {
+    const updatedQuestions = [...interviewQuestions];
+    updatedQuestions[index][field] = value;
+    setInterviewQuestions(updatedQuestions);
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-end bg-black/50">
       <div className="absolute inset-0" onClick={handleClose} />
       <div
-        className={`relative w-full h-[480px] overflow-y-auto px-4 bg-background rounded-t-[24px] shadow-default transition-transform duration-300 ${
+        className={`relative w-full h-4/5 overflow-y-auto px-4 bg-background rounded-t-[24px] shadow-default transition-transform duration-300 ${
           isVisible ? "translate-y-0" : "translate-y-full"
         }`}
       >
@@ -65,8 +120,7 @@ const AcceptanceReviewBottomSheet = ({
           </h1>
           <Image src={close} alt={"닫기"} width={20} height={20} />
         </div>
-        {/* 구분선 */}
-        <div className="h-[1px] bg-menuborder " />
+        <div className="h-[1px] bg-menuborder" />
         {/* content 영역 */}
         <div>
           <h3 className="flex text-text1 text-mobile_h2 mt-[22px] mb-2.5">
@@ -95,27 +149,50 @@ const AcceptanceReviewBottomSheet = ({
               서류 문항
               <span className="text-noti text-mobile_body3_m pl-1">*</span>
             </h3>
-            <p className="text-primary text-mobile_body3_m">+ 추가</p>
+            <p
+              className="text-primary text-mobile_body3_m cursor-pointer"
+              onClick={addDocumentQuestion}
+            >
+              + 추가
+            </p>
           </div>
-          <div className="h-[1px] bg-menuborder " />
-          <div className="flex flex-col">
-            <div className="flex justify-between mt-[14px] mb-2.5">
-              <h3 className="text-text1 text-mobile_h4_sb">문항 - 1</h3>
-              <DeleteBtn onClick={() => {}} />
+          <div className="h-[1px] bg-menuborder" />
+          {documentQuestions.map((docQuestion, index) => (
+            <div className="flex flex-col" key={`doc-${index}`}>
+              <div className="flex justify-between mt-[14px] mb-2.5">
+                <h3 className="text-text1 text-mobile_h4_sb">{`문항 - ${
+                  index + 1
+                }`}</h3>
+                {index !== 0 && (
+                  <DeleteBtn onClick={() => removeDocumentQuestion(index)} />
+                )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <CustomInput
+                  value={docQuestion.question}
+                  placeholder={"문항을 작성해주세요"}
+                  onChange={(e) =>
+                    handleDocumentQuestionChange(
+                      index,
+                      "question",
+                      e.target.value
+                    )
+                  }
+                />
+                <CustomInput
+                  value={docQuestion.answer}
+                  placeholder={"답변을 작성해주세요"}
+                  onChange={(e) =>
+                    handleDocumentQuestionChange(
+                      index,
+                      "answer",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <CustomInput
-                value={""}
-                placeholder={"문항을 작성해주세요"}
-                onChange={() => {}}
-              />
-              <CustomInput
-                value={""}
-                placeholder={"답변을 작성해주세요"}
-                onChange={() => {}}
-              />
-            </div>
-          </div>
+          ))}
           <div className="flex justify-between mt-[30px] mb-2.5 items-center">
             <h3 className="flex text-text1 text-mobile_h2">
               면접
@@ -154,27 +231,50 @@ const AcceptanceReviewBottomSheet = ({
               면접 질문
               <span className="text-noti text-mobile_body3_m pl-1">*</span>
             </h3>
-            <p className="text-primary text-mobile_body3_m">+ 추가</p>
+            <p
+              className="text-primary text-mobile_body3_m cursor-pointer"
+              onClick={addInterviewQuestion}
+            >
+              + 추가
+            </p>
           </div>
-          <div className="h-[1px] bg-menuborder " />
-          <div className="flex flex-col">
-            <div className="flex justify-between mt-[14px] mb-2.5">
-              <h3 className="text-text1 text-mobile_h4_sb">질문 - 1</h3>
-              <DeleteBtn onClick={() => {}} />
+          <div className="h-[1px] bg-menuborder" />
+          {interviewQuestions.map((intQuestion, index) => (
+            <div className="flex flex-col" key={`int-${index}`}>
+              <div className="flex justify-between mt-[14px] mb-2.5">
+                <h3 className="text-text1 text-mobile_h4_sb">{`질문 - ${
+                  index + 1
+                }`}</h3>
+                {index !== 0 && (
+                  <DeleteBtn onClick={() => removeInterviewQuestion(index)} />
+                )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <CustomInput
+                  value={intQuestion.question}
+                  placeholder={"질문을 작성해주세요"}
+                  onChange={(e) =>
+                    handleInterviewQuestionChange(
+                      index,
+                      "question",
+                      e.target.value
+                    )
+                  }
+                />
+                <CustomInput
+                  value={intQuestion.answer}
+                  placeholder={"답변을 작성해주세요"}
+                  onChange={(e) =>
+                    handleInterviewQuestionChange(
+                      index,
+                      "answer",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <CustomInput
-                value={""}
-                placeholder={"질문을 작성해주세요"}
-                onChange={() => {}}
-              />
-              <CustomInput
-                value={""}
-                placeholder={"답변을 작성해주세요"}
-                onChange={() => {}}
-              />
-            </div>
-          </div>
+          ))}
         </div>
         <div className="h-[113px] w-full bg-white" />
       </div>

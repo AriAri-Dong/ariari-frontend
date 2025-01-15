@@ -9,10 +9,10 @@ interface AlertProps {
 }
 
 /**
- *
- * @param text
- * @param subText
- * @param onClose
+ * Alert component
+ * @param text main 텍스트
+ * @param subText sub 텍스트
+ * @param onClose 닫기 핸들러
  * @returns
  */
 const Alert = ({ text, subText, onClose }: AlertProps) => {
@@ -28,7 +28,6 @@ const Alert = ({ text, subText, onClose }: AlertProps) => {
 
     return () => clearTimeout(timeout);
   }, [onClose]);
-
   return (
     <>
       {isVisible && (
