@@ -16,7 +16,8 @@ interface PulldownProps {
   multiple?: boolean;
   selectedOption: string[];
   handleOption: (label: string[]) => void;
-  optionSize: "small" | "medium" | "large";
+  optionSize: "small" | "medium" | "large" | "mobile";
+  forceDropdown?: boolean;
 }
 
 const PullDown = ({
@@ -25,16 +26,16 @@ const PullDown = ({
   multiple = false,
   selectedOption,
   handleOption,
+  forceDropdown = false,
 }: PulldownProps) => {
   const pulldownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const isTabOver = useResponsive("md");
-
   const isSelected = selectedOption.length > 0;
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false); //옵션메뉴
-  const [isModalOpen, setModalOpen] = useState<boolean>(false); // ex) 학교 인증 모달
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   const schoolCertification = false; // 학교 인증 여부 임시값
 
@@ -134,7 +135,7 @@ const PullDown = ({
       </button>
       {isDropdownOpen &&
         (!multiple ? (
-          isTabOver ? (
+          isTabOver || forceDropdown ? (
             <SingleSelectOptions
               optionData={optionData.slice(1)}
               selectedOption={selectedOption[0]}
@@ -150,7 +151,7 @@ const PullDown = ({
               multiple={false}
             />
           )
-        ) : isTabOver ? (
+        ) : isTabOver || forceDropdown ? (
           <MultiSelectOptions
             optionData={optionData.slice(1)}
             selectedOptions={selectedOption}
