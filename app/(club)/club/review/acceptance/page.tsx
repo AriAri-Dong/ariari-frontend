@@ -17,6 +17,7 @@ import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound"
 import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
 import AcceptanceReviewBottomSheet from "@/components/bottomSheet/acceptanceReviewBottomSheet";
+import Alert from "@/components/alert/alert";
 
 const options = [
   { id: 0, label: "모집관리" },
@@ -33,6 +34,7 @@ const ReviewPage = () => {
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openBottomSheet, setOpenBottomSheet] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const handleRouter = () => {
     // 모집 공고 임시 경로
@@ -46,6 +48,11 @@ const ReviewPage = () => {
 
   const handleViewReview = () => {
     console.log("열람하기");
+  };
+
+  const handleSubmitSuccess = () => {
+    setAlertMessage("합격후기가 등록되었습니다.");
+    setOpenBottomSheet(false);
   };
 
   return (
@@ -130,10 +137,12 @@ const ReviewPage = () => {
         <ReviewFloatingBtn onClick={handleWrite} />
         {openBottomSheet && (
           <AcceptanceReviewBottomSheet
-            onClose={() => {
-              setOpenBottomSheet(false);
-            }}
+            onClose={() => setOpenBottomSheet(false)}
+            onSubmit={handleSubmitSuccess}
           />
+        )}
+        {alertMessage && (
+          <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
       </div>
     </>

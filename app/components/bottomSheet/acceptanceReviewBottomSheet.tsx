@@ -7,6 +7,7 @@ import DeleteBtn from "../button/iconBtn/deleteBtn";
 import LargeBtn from "../button/basicBtn/largeBtn";
 import PullDown from "../pulldown/pullDown";
 import ProgressBar from "../bar/progressBar";
+import Alert from "../alert/alert";
 
 export const INTERVIEWER = [
   { id: 0, label: "면접인원" },
@@ -28,16 +29,20 @@ export const INTERVIEWE_STYLE = [
 
 interface BottomSheetProps {
   onClose: () => void;
+  onSubmit: () => void;
   className?: string;
 }
 
 const AcceptanceReviewBottomSheet = ({
   onClose,
+  onSubmit,
   className,
 }: BottomSheetProps) => {
+  const [title, setTitle] = useState<string>("");
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [interviewer, setInterviewer] = useState<string[]>([]);
   const [intervieweStyle, setIntervieweStyle] = useState<string[]>([]);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   // 문항과 질문 상태
   const [documentQuestions, setDocumentQuestions] = useState<
@@ -57,6 +62,10 @@ const AcceptanceReviewBottomSheet = ({
     setTimeout(() => {
       onClose();
     }, 300);
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
   };
 
   // 문항 추가 함수
@@ -105,6 +114,52 @@ const AcceptanceReviewBottomSheet = ({
     setInterviewQuestions(updatedQuestions);
   };
 
+  // 유효성 검사 함수
+  const validateForm = () => {
+    // 제목 검사
+    const titleInput = document.querySelector(
+      "input[placeholder='합격후기 제목을 작성해주세요']"
+    ) as HTMLInputElement;
+    if (!titleInput.value) {
+      setAlertMessage("합격후기 제목을 작성해주세요.");
+      titleInput.focus();
+      return false;
+    }
+
+    // 합격 전형 검사
+    if (!intervieweStyle.length || !interviewer.length) {
+      setAlertMessage("합격 전형과 면접 인원 정보를 선택해주세요.");
+      return false;
+    }
+
+    // 서류 문항 검사
+    for (let i = 0; i < documentQuestions.length; i++) {
+      const docQuestion = documentQuestions[i];
+      if (!docQuestion.question || !docQuestion.answer) {
+        setAlertMessage(`서류 문항 ${i + 1}에 모든 값을 입력해주세요.`);
+        return false;
+      }
+    }
+
+    // 면접 질문 검사
+    for (let i = 0; i < interviewQuestions.length; i++) {
+      const intQuestion = interviewQuestions[i];
+      if (!intQuestion.question || !intQuestion.answer) {
+        setAlertMessage(`면접 질문 ${i + 1}에 모든 값을 입력해주세요.`);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleSubmit = () => {
+    if (validateForm()) {
+      onClose();
+      onSubmit();
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-end bg-black/50">
       <div className="absolute inset-0" onClick={handleClose} />
@@ -120,6 +175,7 @@ const AcceptanceReviewBottomSheet = ({
           </h1>
           <Image src={close} alt={"닫기"} width={20} height={20} />
         </div>
+        {/* 구분선 */}
         <div className="h-[1px] bg-menuborder" />
         {/* content 영역 */}
         <div>
@@ -128,9 +184,9 @@ const AcceptanceReviewBottomSheet = ({
             <span className="text-noti text-mobile_body3_m pl-1">*</span>
           </h3>
           <CustomInput
-            value={""}
+            value={title}
             placeholder={"합격후기 제목을 작성해주세요"}
-            onChange={() => {}}
+            onChange={handleTitleChange}
           />
           <h3 className="flex text-text1 text-mobile_h2 mt-[30px] mb-2.5">
             합격 전형
@@ -144,6 +200,7 @@ const AcceptanceReviewBottomSheet = ({
               onClick={() => {}}
             />
           </div>
+
           <div className="flex justify-between mt-[30px] mb-2.5 items-center">
             <h3 className="flex text-text1 text-mobile_h2">
               서류 문항
@@ -281,9 +338,12 @@ const AcceptanceReviewBottomSheet = ({
       {/* 버튼 영역 */}
       <div className="fixed bottom-0 left-0 px-4 w-full">
         <div className="h-[6px] w-full bg-white" />
-        <LargeBtn title={"등록하기"} onClick={() => {}} />
+        <LargeBtn title={"등록하기"} onClick={handleSubmit} />
         <div className="h-6 w-full bg-white" />
       </div>
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+      )}
     </div>
   );
 };
