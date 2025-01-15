@@ -3,17 +3,20 @@ import React, { useState, useEffect } from "react";
 interface ProgressBarProp {
   disabled?: boolean;
   initialStep?: number | null;
+  align?: "horizontal" | "vertical";
 }
 
 /**
  *
  * @param disabled 비활성화 상태 (읽기 모드일 경우 true)
  * @param initialStep 초기
+ * @param align 정렬 상태
  * @returns
  */
 const ProgressBar = ({
   disabled = false,
   initialStep = null,
+  align = "vertical",
 }: ProgressBarProp) => {
   const [currentStep, setCurrentStep] = useState<number | null>(initialStep);
   const steps = [0, 1, 2, 3, 4];
@@ -32,13 +35,29 @@ const ProgressBar = ({
   }, [initialStep]);
 
   return (
-    <div className="flex flex-col items-center w-full max-w-[183px]">
-      <div className="flex justify-between w-full mb-2 text-subtext2 text-mobile_body3_r md:text-body1_r">
-        <span>편안한</span>
-        <span>엄숙한</span>
-      </div>
-
-      <div className="relative w-full flex items-center">
+    <div
+      className={`flex items-center w-full ${
+        align === "vertical" && "flex-col max-w-[183px]"
+      }`}
+    >
+      {align === "vertical" && (
+        <div className="flex justify-between w-full mb-2 text-subtext2 text-mobile_body3_r md:text-body1_r">
+          <span>편안한</span>
+          <span>엄숙한</span>
+        </div>
+      )}
+      <span
+        className={`text-subtext2 text-mobile_body3_sb md:text-body1_r mr-0.5 ${
+          align === "vertical" && "hidden"
+        }`}
+      >
+        편안한
+      </span>
+      <div
+        className={`relative flex items-center ${
+          align === "vertical" ? "w-full" : "w-[183px]"
+        }`}
+      >
         <div className="relative z-10 flex w-full justify-between px-1">
           {steps.map((step, index) => (
             <div
@@ -55,6 +74,13 @@ const ProgressBar = ({
           ))}
         </div>
       </div>
+      <span
+        className={`text-subtext2 text-mobile_body3_sb md:text-body1_r ml-0.5 ${
+          align === "vertical" && "hidden"
+        }`}
+      >
+        엄숙한
+      </span>
     </div>
   );
 };
