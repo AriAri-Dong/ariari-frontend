@@ -50,3 +50,7 @@ export const Popularity_Sort_Type = [
   { id: 1, label: "조회수순" },
   { id: 2, label: "즐겨찾기순" },
 ];
+export const QUESTION_TYPE = [
+  { id: 0, label: "FAQ" },
+  { id: 1, label: "QNA" },
+];
