@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import ClubInfoSection from "../../content/clubInfoSection";
 import AcceptanceReviewDropdown from "@/components/dropdown/acceptanceReviewDropdown";
 import { ACCEPTANCE_REVIEWS } from "@/data/club";
@@ -15,6 +15,8 @@ import helpText from "@/images/icon/mobile_point_Helptext.svg";
 import SubTap from "@/components/tab/subTap";
 import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound";
 import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
+import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
+import AcceptanceReviewBottomSheet from "@/components/bottomSheet/acceptanceReviewBottomSheet";
 
 const options = [
   { id: 0, label: "모집관리" },
@@ -29,12 +31,18 @@ const options = [
 const ReviewPage = () => {
   const router = useRouter();
 
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openBottomSheet, setOpenBottomSheet] = useState<boolean>(false);
+
   const handleRouter = () => {
     // 모집 공고 임시 경로
     router.push("/");
   };
 
-  const handleWrite = () => [console.log("작성 핸들러")];
+  const handleWrite = () => {
+    setOpenBottomSheet(true);
+    // setOpenModal(true);
+  };
 
   const handleViewReview = () => {
     console.log("열람하기");
@@ -119,6 +127,14 @@ const ReviewPage = () => {
         <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 md:hidden">
           <DarkBtn title={"모집공고 보기"} onClick={handleRouter} />
         </div>
+        <ReviewFloatingBtn onClick={handleWrite} />
+        {openBottomSheet && (
+          <AcceptanceReviewBottomSheet
+            onClose={() => {
+              setOpenBottomSheet(false);
+            }}
+          />
+        )}
       </div>
     </>
   );
