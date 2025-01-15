@@ -9,9 +9,12 @@ import LoginBtn from "../button/basicBtn/loginBtn";
 import Notification from "../button/iconBtn/notification";
 import rabbit from "@/images/profile/rabbit.svg";
 import NotificationModal from "../modal/notification/notificationModal";
+import LoginModal from "../modal/login/loginModal";
+import MobileLoginModal from "../modal/login/mobileLoginModal";
 
 const User = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("백설공주");
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
@@ -20,9 +23,14 @@ const User = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    setUsername("백설공주");
+  const handleCloseModal = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  const handleLoginClick = () => {
+    setIsLoginModalOpen(true);
+    //setIsLoggedIn(true);
+    //setUsername("백설공주");
   };
 
   useEffect(() => {
@@ -64,7 +72,15 @@ const User = () => {
           )}
         </div>
       ) : (
-        <LoginBtn onClick={handleLogin} />
+        <>
+          <LoginBtn onClick={handleLoginClick} />
+          {isLoginModalOpen && (
+            <>
+              <LoginModal onClose={handleCloseModal} />
+              <MobileLoginModal onClose={handleCloseModal} />
+            </>
+          )}
+        </>
       )}
     </>
   );
