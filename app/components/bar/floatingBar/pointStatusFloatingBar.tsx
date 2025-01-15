@@ -3,15 +3,18 @@
 import React from "react";
 import Image from "next/image";
 import dollar from "@/images/icon/dollar.svg";
-import { DayFloatingBarProps } from '@/data/point';
+import { DayFloatingBarProps } from "@/types/components/point";
 
 /**
  * 포인트 현황 플로팅 바 컴포넌트
  * @param deductionPoint 차감 포인트
  * @param currentPoint 현재 포인트
- * @returns 
+ * @returns
  */
-const PointStatusFloatingBar = ({deductionPoint, currentPoint}: DayFloatingBarProps) => {
+const PointStatusFloatingBar = ({
+  deductionPoint,
+  currentPoint,
+}: DayFloatingBarProps) => {
   return (
     <div
       className="hidden fixed bottom-0 left-0 w-full md:flex justify-center"

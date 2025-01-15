@@ -18,6 +18,8 @@ import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
 import AcceptanceReviewBottomSheet from "@/components/bottomSheet/acceptanceReviewBottomSheet";
 import Alert from "@/components/alert/alert";
+import useResponsive from "../../../../../hooks/useResponsive";
+import AcceptanceReviewModal from "@/components/modal/review/acceptanceReviewModal";
 
 const options = [
   { id: 0, label: "모집관리" },
@@ -31,6 +33,7 @@ const options = [
 
 const ReviewPage = () => {
   const router = useRouter();
+  const isMdUp = useResponsive("md");
 
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openBottomSheet, setOpenBottomSheet] = useState<boolean>(false);
@@ -42,8 +45,11 @@ const ReviewPage = () => {
   };
 
   const handleWrite = () => {
+    setOpenModal(true);
+  };
+
+  const handleMobileWrite = () => {
     setOpenBottomSheet(true);
-    // setOpenModal(true);
   };
 
   const handleViewReview = () => {
@@ -129,14 +135,20 @@ const ReviewPage = () => {
           className="fixed bottom-[125px] right-1.5 md:hidden"
         />
         <div className="fixed bottom-[77px] right-5 md:hidden">
-          <WriteBtn onClick={handleWrite} />
+          <WriteBtn onClick={isMdUp ? handleWrite : handleMobileWrite} />
         </div>
         <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 md:hidden">
           <DarkBtn title={"모집공고 보기"} onClick={handleRouter} />
         </div>
-        <ReviewFloatingBtn onClick={handleWrite} />
+        {openModal === false && <ReviewFloatingBtn onClick={handleWrite} />}
         {openBottomSheet && (
           <AcceptanceReviewBottomSheet
+            onClose={() => setOpenBottomSheet(false)}
+            onSubmit={handleSubmitSuccess}
+          />
+        )}
+        {openModal && (
+          <AcceptanceReviewModal
             onClose={() => setOpenBottomSheet(false)}
             onSubmit={handleSubmitSuccess}
           />
