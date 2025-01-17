@@ -26,6 +26,56 @@ export const ACCEPTANCE_REVIEWS = [
   },
 ];
 
+export const ACTIVITY_REVIEWS = [
+  {
+    id: 0,
+    title: "아리아리 활동 후기",
+    date: "2024.12.31",
+    username: "아리아리",
+    detail: "아리아리 활동 후기 상세 내용",
+    badgeType: ["selfDevelopment", "relationship", "skill"],
+  },
+  {
+    id: 1,
+    title: "완전 최악임 들어오지 마셈..",
+    date: "2025.01.15",
+    username: "떵개에요",
+    detail: "진차 완전 별로 진짜 최악 웩 웩에ㅔ에게ㅔㄱㄱ",
+    badgeType: ["employment", "experience", "health"],
+  },
+  {
+    id: 2,
+    title: "활동 후기를 적어볼까나",
+    date: "2024.07.20",
+    username: "수여니",
+    detail: "룰루랄라룰라랄",
+    badgeType: ["employment", "interest", "health"],
+  },
+  {
+    id: 3,
+    title: "아리아리 짱 좋아요",
+    date: "2025.02.20",
+    username: "백설공주",
+    detail:
+      "아리아리 활동 후기 상세 내용 아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용",
+    badgeType: [
+      "employment",
+      "relationship",
+      "health",
+      "interest",
+      "experience",
+    ],
+  },
+  {
+    id: 4,
+    title: "프로그래밍 동아리 찾는다면 여기 강추",
+    date: "2025.03.04",
+    username: "생생정보통 ",
+    detail: "아리아리 활동 후기 상세 내용",
+    badgeType: ["interest", "experience", "health"],
+  },
+];
+
 export const RECRUITMENT_CARDS = [
   {
     id: 0,
