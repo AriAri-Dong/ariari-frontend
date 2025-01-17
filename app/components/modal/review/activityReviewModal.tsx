@@ -6,20 +6,9 @@ import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import CustomInput from "@/components/input/customInput";
 import { REVIEW_BADGE_LIST } from "@/data/reviewBadge";
 import ReviewBadgeContainer from "@/components/badge/review/reviewBadgeContainer";
+import { ActivityReviewProps } from "@/types/components/review";
 
-interface ActivityReviewModalProps {
-  onClose: () => void;
-  onSubmit: (data: {
-    title: string;
-    details: string;
-    badges: number[];
-  }) => void;
-}
-
-const ActivityReviewModal = ({
-  onClose,
-  onSubmit,
-}: ActivityReviewModalProps) => {
+const ActivityReviewModal = ({ onClose, onSubmit }: ActivityReviewProps) => {
   const [title, setTitle] = useState<string>("");
   const [details, setDetails] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);

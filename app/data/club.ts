@@ -127,3 +127,23 @@ export const MENU_DATA = [
   { id: 1, label: "신고하기" },
   { id: 2, label: "동아리 탈퇴하기" },
 ];
+
+export const MONILE_MENU_OPTIONS = [
+  { id: 0, label: "모집관리" },
+  { id: 1, label: "동아리 멤버 관리" },
+  { id: 2, label: "활동관리" },
+  { id: 3, label: "활동내역" },
+  { id: 4, label: "FAQ/Q&A" },
+  { id: 5, label: "활동후기" },
+  { id: 6, label: "합격후기" },
+];
+
+export const PERCENT_DATA = [
+  { type: "employment", percent: 80 },
+  { type: "experience", percent: 90 },
+  { type: "health", percent: 75 },
+  { type: "interest", percent: 60 },
+  { type: "relationship", percent: 85 },
+  { type: "selfDevelopment", percent: 50 },
+  { type: "skill", percent: 70 },
+];

@@ -8,36 +8,14 @@ import LargeBtn from "../button/basicBtn/largeBtn";
 import PullDown from "../pulldown/pullDown";
 import ProgressBar from "../bar/progressBar";
 import Alert from "../alert/alert";
-
-export const INTERVIEWER = [
-  { id: 0, label: "면접인원" },
-  { id: 1, label: "0명" },
-  { id: 2, label: "1명" },
-  { id: 3, label: "2명" },
-  { id: 4, label: "3명" },
-  { id: 5, label: "4명" },
-  { id: 6, label: "5명" },
-  { id: 7, label: "5명 이상" },
-];
-
-export const INTERVIEWE_STYLE = [
-  { id: 0, label: "면접방식" },
-  { id: 1, label: "온라인" },
-  { id: 2, label: "오프라인" },
-  { id: 3, label: "기타" },
-];
-
-interface BottomSheetProps {
-  onClose: () => void;
-  onSubmit: () => void;
-  className?: string;
-}
+import { INTERVIEWE_STYLE, INTERVIEWER } from "@/data/review";
+import { AcceptanceReviewProps } from "@/types/components/review";
 
 const AcceptanceReviewBottomSheet = ({
   onClose,
   onSubmit,
   className,
-}: BottomSheetProps) => {
+}: AcceptanceReviewProps) => {
   const [title, setTitle] = useState<string>("");
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [interviewer, setInterviewer] = useState<string[]>([]);

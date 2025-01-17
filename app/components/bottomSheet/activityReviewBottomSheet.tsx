@@ -6,17 +6,12 @@ import LargeBtn from "../button/basicBtn/largeBtn";
 import Alert from "../alert/alert";
 import ReviewBadgeContainer from "../badge/review/reviewBadgeContainer";
 import { REVIEW_BADGE_LIST } from "@/data/reviewBadge";
+import { ActivityReviewProps } from "@/types/components/review";
 
-interface BottomSheetProps {
-  onClose: () => void;
-  onSubmit: (data: {
-    title: string;
-    details: string;
-    badges: number[];
-  }) => void;
-}
-
-const ActivityReviewBottomSheet = ({ onClose, onSubmit }: BottomSheetProps) => {
+const ActivityReviewBottomSheet = ({
+  onClose,
+  onSubmit,
+}: ActivityReviewProps) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [details, setDetails] = useState<string>("");

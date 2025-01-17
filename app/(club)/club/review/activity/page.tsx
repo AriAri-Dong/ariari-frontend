@@ -2,7 +2,11 @@
 
 import React, { useState } from "react";
 import ClubInfoSection from "../../content/clubInfoSection";
-import { ACCEPTANCE_REVIEWS, ACTIVITY_REVIEWS } from "@/data/club";
+import {
+  ACTIVITY_REVIEWS,
+  MONILE_MENU_OPTIONS,
+  PERCENT_DATA,
+} from "@/data/club";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import PointStatusBar from "@/components/bar/pointStatusBar";
 import MobilePointStatusBar from "@/components/bar/mobilePointStatusBar";
@@ -21,26 +25,6 @@ import ActivityReviewModal from "@/components/modal/review/activityReviewModal";
 import ActivityReviewDropdown from "@/components/dropdown/activityReviewDropdown";
 import ReviewPercentList from "@/components/list/reviewPercentList";
 import MobileReviewPercentList from "@/components/list/mobileReviewPercentList";
-
-const OPTIONS = [
-  { id: 0, label: "모집관리" },
-  { id: 1, label: "동아리 멤버 관리" },
-  { id: 2, label: "활동관리" },
-  { id: 3, label: "활동내역" },
-  { id: 4, label: "FAQ/Q&A" },
-  { id: 5, label: "활동후기" },
-  { id: 6, label: "합격후기" },
-];
-
-const PERCENT_DATA = [
-  { type: "employment", percent: 80 },
-  { type: "experience", percent: 90 },
-  { type: "health", percent: 75 },
-  { type: "interest", percent: 60 },
-  { type: "relationship", percent: 85 },
-  { type: "selfDevelopment", percent: 50 },
-  { type: "skill", percent: 70 },
-];
 
 const ReviewPage = () => {
   const router = useRouter();
@@ -78,7 +62,7 @@ const ReviewPage = () => {
             </div>
             <div className="flex overflow-x-auto no-scrollbar ml-2 relative">
               <div className="flex whitespace-nowrap">
-                <SubTap optionData={OPTIONS} />
+                <SubTap optionData={MONILE_MENU_OPTIONS} />
               </div>
             </div>
             <div className="flex items-center">
