@@ -68,7 +68,8 @@ const ReviewPage = () => {
             <div className="flex items-center">
               <RoundVectorBtn
                 imageSize={20}
-                className="w-7 h-7 p-0 rotate-90"
+                className="md:hidden w-7 h-7 rotate-90"
+                btnSize="small"
                 onClick={() => {}}
               />
             </div>
