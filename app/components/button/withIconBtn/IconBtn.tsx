@@ -45,7 +45,7 @@ const IconBtn = ({ title, onClick, type, size, className }: BtnType) => {
           ${
             size === "large"
               ? `${"text-13 md:text-15"}`
-              : `${"text-xs md:text-13"}`
+              : `${"text-mobile_body3_r md:text-13"}`
           }`}
       >
         {getIcon() && (
