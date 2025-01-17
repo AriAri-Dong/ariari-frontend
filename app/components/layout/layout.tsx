@@ -10,9 +10,17 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
 
-  const isSpecialComponent = pathname.includes("recruitment/detail");
-  const isBgComponent = pathname.includes("application");
-  const isBgComponentOnlyMobile = pathname.includes("/club/create");
+  const specialPaths = ["recruitment/detail", "/club/review"];
+  const bgPaths = ["application"];
+  const mobileBgPaths = ["/club/create"];
+
+  const isSpecialComponent = specialPaths.some((path) =>
+    pathname.includes(path)
+  );
+  const isBgComponent = bgPaths.some((path) => pathname.includes(path));
+  const isBgComponentOnlyMobile = mobileBgPaths.some((path) =>
+    pathname.includes(path)
+  );
 
   return (
     <SearchTermContext.Provider value={{ searchTerm, setSearchTerm }}>
@@ -21,8 +29,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <main
           className={`flex-grow flex justify-center items-center 
             ${isBgComponent && "bg-sub_bg"} 
-            ${isBgComponentOnlyMobile && "md:bg-sub_bg"}`
-          }
+            ${isBgComponentOnlyMobile && "md:bg-sub_bg"}`}
         >
           <div
             className={`w-full ${
