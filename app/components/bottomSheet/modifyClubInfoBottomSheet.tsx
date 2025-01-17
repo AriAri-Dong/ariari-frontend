@@ -10,6 +10,8 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import Noti from "@/images/icon/noti.svg";
 import test_image from "@/images/test/test_image.jpg";
 import CustomInput from "@/components/input/customInput";
+import LargeBtn from "../button/basicBtn/largeBtn";
+import IconBtn from "../button/withIconBtn/IconBtn";
 
 const OPTIONS = [
   { label: "동아리 소속", value: "아리아리" },
@@ -18,7 +20,8 @@ const OPTIONS = [
   { label: "활동 대상", value: "대학생 및 직장인" },
 ];
 
-const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
+const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
+  const [isVisible, setIsVisible] = useState<boolean>(true);
   const [clubName, setClubName] = useState<string>("");
   const [clubIntroduction, setClubIntroduction] = useState<string>("");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
@@ -85,58 +88,69 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
   }, []);
 
   return (
-    <div
-      id="background"
-      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
-      onClick={(e) =>
-        (e.target as HTMLDivElement).id === "background" && handleClose()
-      }
-    >
+    <div className="fixed inset-0 z-50 md:hidden flex items-end bg-black/50">
+      <div className="absolute inset-0" onClick={handleClose} />
       <div
-        className={`bg-white p-5 shadow-modal rounded-2xl w-[826px] max-h-[90vh] flex flex-col`}
+        className={`relative w-full h-4/5 bg-background px-4 rounded-t-[24px] shadow-default transition-transform duration-300 ${
+          isVisible ? "translate-y-0" : "translate-y-full"
+        } flex flex-col`}
       >
-        <div className="flex justify-between mb-5">
-          <h1 className="text-text1 text-h1_contents_title">
-            동아리 정보 수정하기
+        {/* 제목 영역 */}
+        <div className="flex justify-between mt-[22px] mb-4">
+          <h1 className="text-text1 text-mobile_h1_contents_title">
+            활동후기 작성하기
           </h1>
           <Image
             src={close}
             alt={"닫기"}
-            width={24}
-            height={24}
+            width={20}
+            height={20}
             onClick={handleClose}
-            className="md:w-6 md:h-6 cursor-pointer"
           />
         </div>
+        {/* 구분선 */}
         <div className="h-[1px] bg-menuborder" />
 
-        {/* content 영역 (스크롤 가능한 영역) */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar">
-          <div className="flex bg-sub_bg items-center gap-5 py-4 px-5 rounded-12 mt-[22px]">
+        {/* 스크롤 가능한 내용 영역 */}
+        <div className="flex-1 overflow-y-auto">
+          {/* 공지 */}
+          <div className="flex bg-sub_bg items-center gap-3 p-4 rounded-12 mt-[22px]">
             <Image src={Noti} alt="공지" width={32} height={32} />
-            <p className="text-body2_m text-icon">
+            <p className="text-mobile_body3_m text-icon">
               동아리 이름과 세부 카테고리 수정은 아리아리 고객센터로
               문의해주세요.
             </p>
           </div>
-          {/* 동아리 배너 이미지 */}
-          <h3 className="flex text-text1 text-h3 mt-7 mb-[18px]">
-            동아리 배너 이미지
-          </h3>
+          {/* 배너 */}
+          <div className="flex items-center mt-4 mb-[14px] justify-between">
+            <h3 className="text-text1 text-mobile_h2">동아리 배너 이미지</h3>
+            <IconBtn
+              type={"trash"}
+              size={"small"}
+              title={"삭제하기"}
+              onClick={() => {}}
+            />
+          </div>
           <div className="relative">
             <Image
               src={test_image}
               alt={"Test Image"}
-              className="rounded-20 w-full h-[196px]"
+              className="rounded-20 w-full h-[82px]"
             />
-            <div className="absolute bottom-5 right-5 cursor-pointer block">
+            <div className="absolute bottom-2 right-2 cursor-pointer block">
               <WriteBtn size="small" onClick={triggerFileInput} />
             </div>
           </div>
-          {/* 동아리 대표 이미지 */}
-          <h3 className="flex text-text1 text-h3 mt-7 mb-[18px]">
-            동아리 대표 이미지
-          </h3>
+          {/* 이미지 */}
+          <div className="flex items-center mt-[30px] mb-[14px] justify-between">
+            <h3 className="text-text1 text-mobile_h2">동아리 대표 이미지</h3>
+            <IconBtn
+              type={"trash"}
+              size={"small"}
+              title={"삭제하기"}
+              onClick={() => {}}
+            />
+          </div>
           <div className="relative inline-block">
             <label>
               <input
@@ -149,8 +163,8 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
               <Image
                 src={uploadedImage || defaultImg}
                 alt="Uploaded or Default"
-                width={114}
-                height={114}
+                width={95}
+                height={95}
                 className="rounded-full border border-menuborder p-1 cursor-pointer"
               />
             </label>
@@ -158,8 +172,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
               <WriteBtn size="small" onClick={triggerFileInput} />
             </div>
           </div>
-          {/* 동아리 이름 */}
-          <h3 className="flex text-text1 text-h3 mt-7 mb-[18px]">
+          <h3 className="text-text1 text-mobile_h2 mt-[30px] mb-[14px]">
             동아리 이름
           </h3>
           <CustomInput
@@ -168,8 +181,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
             placeholder={""}
             disable={true}
           />
-          {/* 동아리 한 줄 소개 */}
-          <h3 className="flex text-text1 text-h3 mt-7 mb-[18px]">
+          <h3 className="text-text1 text-mobile_h2 mt-[30px] mb-[14px]">
             동아리 한 줄 소개
           </h3>
           <TextInputWithCounter
@@ -178,24 +190,27 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
             placeholder="동아리 한 줄 소개"
             maxLength={30}
           />
-          <h3 className="flex text-text1 text-h3 mt-7 mb-[18px]">
-            동아리 세부 카테고리
+          <h3 className="text-text1 text-mobile_h2 mt-[30px] mb-[14px]">
+            동아리 한 줄 소개
           </h3>
           <div className="flex justify-between mb-10 text-center">
             {OPTIONS.map((item) => {
               return (
-                <div className="flex flex-col gap-[14px]">
-                  <p className="text-subtext2 text-body2_m">{item.label}</p>
-                  <h3 className="text-h4_sb text-text1">{item.value}</h3>
+                <div className="flex flex-col gap-2">
+                  <p className="text-subtext2 text-mobile_body3_r">
+                    {item.label}
+                  </p>
+                  <h3 className="text-mobile_body1_sb text-text1">
+                    {item.value}
+                  </h3>
                 </div>
               );
             })}
           </div>
         </div>
-
-        {/* 하단 버튼 */}
-        <div className="flex justify-end mt-6 pb-1">
-          <SmallBtn title="수정하기" onClick={handleSubmit} />
+        {/* 고정 버튼 영역 */}
+        <div className="pb-6 pt-[6px]">
+          <LargeBtn title={"등록하기"} onClick={handleSubmit} />
         </div>
       </div>
       {alertMessage && (
@@ -206,4 +221,4 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
   );
 };
 
-export default ModifyClubInfoModal;
+export default ModifyClubInfoBottomSheet;
