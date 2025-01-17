@@ -8,6 +8,7 @@ import DeleteBtn from "@/components/button/iconBtn/deleteBtn";
 import RadioBtn from "@/components/button/radioBtn";
 import CustomInput from "@/components/input/customInput";
 import PullDown from "@/components/pulldown/pullDown";
+import CustomTextArea from "@/components/textArea/customTextArea";
 
 export const INTERVIEWER = [
   { id: 0, label: "면접인원" },
@@ -180,8 +181,8 @@ const AcceptanceReviewModal = ({
         className={`bg-white p-5 shadow-modal rounded-2xl w-[950px] max-h-[90vh]`}
       >
         {/* title 영역 */}
-        <div className="flex justify-between mt-[22px] mb-4">
-          <h1 className="text-text1 text-mobile_h1_contents_title">
+        <div className="flex justify-between mt-5 mb-5">
+          <h1 className="text-text1 text-h1_contents_title">
             합격후기 작성하기
           </h1>
           <Image
@@ -190,17 +191,17 @@ const AcceptanceReviewModal = ({
             width={20}
             height={20}
             onClick={handleClose}
+            className="md:w-6 md:h-6 cursor-pointer"
           />
         </div>
-        {/* 구분선 */}
         <div className="h-[1px] bg-menuborder" />
 
         {/* content 영역 (스크롤 가능한 영역) */}
-        <div className="overflow-y-auto max-h-[calc(90vh-240px)]">
+        <div className="overflow-y-auto custom-scrollbar max-h-[calc(90vh-240px)]">
           {/* 제목 */}
-          <h3 className="flex text-text1 text-mobile_h2 mt-[22px] mb-2.5">
+          <h3 className="flex text-text1 text-h3 mt-[22px] mb-[18px]">
             합격후기 제목
-            <span className="text-noti text-mobile_body3_m pl-1">*</span>
+            <span className="text-noti text-body1_m pl-1">*</span>
           </h3>
           <CustomInput
             value={title}
@@ -208,9 +209,9 @@ const AcceptanceReviewModal = ({
             onChange={handleTitleChange}
           />
           {/* 합격 전형 */}
-          <h3 className="flex text-text1 text-mobile_h2 mt-[30px] mb-2.5">
+          <h3 className="flex text-text1 text-h3 mt-7 mb-3">
             합격 전형
-            <span className="text-noti text-mobile_body3_m pl-1">*</span>
+            <span className="text-noti text-body1_m pl-1">*</span>
           </h3>
           <div className="flex gap-[14px] p-2">
             <RadioBtn isChecked={true} label={"서류"} onClick={() => {}} />
@@ -222,13 +223,13 @@ const AcceptanceReviewModal = ({
           </div>
 
           {/* 문항 추가 */}
-          <div className="flex justify-between mt-[30px] mb-2.5 items-center">
-            <h3 className="flex text-text1 text-mobile_h2">
+          <div className="flex justify-between mt-7 mb-3 items-center">
+            <h3 className="flex text-text1 text-h3">
               서류 문항
-              <span className="text-noti text-mobile_body3_m pl-1">*</span>
+              <span className="text-noti text-body1_m pl-1">*</span>
             </h3>
             <p
-              className="text-primary text-mobile_body3_m cursor-pointer"
+              className="text-primary text-body1_m cursor-pointer"
               onClick={addDocumentQuestion}
             >
               + 추가
@@ -237,15 +238,15 @@ const AcceptanceReviewModal = ({
           <div className="h-[1px] bg-menuborder" />
           {documentQuestions.map((docQuestion, index) => (
             <div className="flex flex-col" key={`doc-${index}`}>
-              <div className="flex justify-between mt-[14px] mb-2.5">
-                <h3 className="text-text1 text-mobile_h4_sb">{`문항 - ${
+              <div className="flex justify-between mt-5 mb-[14px]">
+                <h3 className="text-text1 text-h4_sb">{`문항 - ${
                   index + 1
                 }`}</h3>
                 {index !== 0 && (
                   <DeleteBtn onClick={() => removeDocumentQuestion(index)} />
                 )}
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
                 <CustomInput
                   value={docQuestion.question}
                   placeholder={"문항을 작성해주세요"}
@@ -257,7 +258,7 @@ const AcceptanceReviewModal = ({
                     )
                   }
                 />
-                <CustomInput
+                <CustomTextArea
                   value={docQuestion.answer}
                   placeholder={"답변을 작성해주세요"}
                   onChange={(e) =>
@@ -267,52 +268,51 @@ const AcceptanceReviewModal = ({
                       e.target.value
                     )
                   }
+                  className="min-h-[100px]"
                 />
               </div>
             </div>
           ))}
           {/* 면접 질문 */}
-          <div className="flex justify-between mt-[30px] mb-2.5 items-center">
-            <h3 className="flex text-text1 text-mobile_h2">
+          <div className="flex justify-between mt-7 mb-3 items-center">
+            <h3 className="flex text-text1 text-h3">
               면접
-              <span className="text-noti text-mobile_body3_m pl-1">*</span>
+              <span className="text-noti text-body1_m pl-1">*</span>
             </h3>
           </div>
           <div className="flex w-full">
-            <div className="flex flex-col">
-              <div className="flex gap-[14px] mb-[14px]">
-                <PullDown
-                  optionData={INTERVIEWE_STYLE}
-                  selectedOption={intervieweStyle}
-                  handleOption={setIntervieweStyle}
-                  optionSize={"mobile"}
-                  forceDropdown={true}
-                />
-                <PullDown
-                  optionData={INTERVIEWER}
-                  selectedOption={interviewer}
-                  handleOption={setInterviewer}
-                  optionSize={"mobile"}
-                  forceDropdown={true}
-                />
-              </div>
-              <div className="flex gap-[6px] border px-3 py-[6px] rounded-20">
-                <p className="flex text-text1 text-mobile_body2_m whitespace-nowrap">
-                  분위기
-                  <span className="text-noti text-mobile_body3_m pl-1">*</span>
+            <div className="flex flex-row gap-5">
+              <PullDown
+                optionData={INTERVIEWE_STYLE}
+                selectedOption={intervieweStyle}
+                handleOption={setIntervieweStyle}
+                optionSize={"mobile"}
+                forceDropdown={true}
+              />
+              <PullDown
+                optionData={INTERVIEWER}
+                selectedOption={interviewer}
+                handleOption={setInterviewer}
+                optionSize={"mobile"}
+                forceDropdown={true}
+              />
+              <div className="flex gap-2.5 border py-3 px-5 rounded-3xl self-center">
+                <p className="flex text-text1 text-body2_m whitespace-nowrap">
+                  면접 분위기
+                  <span className="text-noti text-body1_m pl-1">*</span>
                 </p>
                 <ProgressBar align="horizontal" />
               </div>
             </div>
           </div>
           {/* 면접 질문 추가 */}
-          <div className="flex justify-between mt-[30px] mb-2.5 items-center">
-            <h3 className="flex text-text1 text-mobile_h2">
+          <div className="flex justify-between mt-7 mb-3 items-center">
+            <h3 className="flex text-text1 text-h3">
               면접 질문
-              <span className="text-noti text-mobile_body3_m pl-1">*</span>
+              <span className="text-noti text-body1_m pl-1">*</span>
             </h3>
             <p
-              className="text-primary text-mobile_body3_m cursor-pointer"
+              className="text-primary text-body1_m cursor-pointer"
               onClick={addInterviewQuestion}
             >
               + 추가
@@ -321,15 +321,15 @@ const AcceptanceReviewModal = ({
           <div className="h-[1px] bg-menuborder" />
           {interviewQuestions.map((intQuestion, index) => (
             <div className="flex flex-col" key={`int-${index}`}>
-              <div className="flex justify-between mt-[14px] mb-2.5">
-                <h3 className="text-text1 text-mobile_h4_sb">{`질문 - ${
+              <div className="flex justify-between mt-5 mb-[14px]">
+                <h3 className="text-text1 text-h4_sb">{`질문 - ${
                   index + 1
                 }`}</h3>
                 {index !== 0 && (
                   <DeleteBtn onClick={() => removeInterviewQuestion(index)} />
                 )}
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
                 <CustomInput
                   value={intQuestion.question}
                   placeholder={"질문을 작성해주세요"}
@@ -341,7 +341,7 @@ const AcceptanceReviewModal = ({
                     )
                   }
                 />
-                <CustomInput
+                <CustomTextArea
                   value={intQuestion.answer}
                   placeholder={"답변을 작성해주세요"}
                   onChange={(e) =>
@@ -351,6 +351,7 @@ const AcceptanceReviewModal = ({
                       e.target.value
                     )
                   }
+                  className="min-h-[100px]"
                 />
               </div>
             </div>
