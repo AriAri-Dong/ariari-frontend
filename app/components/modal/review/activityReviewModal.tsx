@@ -65,17 +65,17 @@ const ActivityReviewModal = ({ onClose, onSubmit }: ActivityReviewProps) => {
       }
     >
       <div
-        className={`bg-white p-5 shadow-modal rounded-2xl w-[950px] max-h-[90vh] flex flex-col`}
+        className={`bg-white p-5 shadow-modal rounded-2xl w-[826px] max-h-[90vh] flex flex-col`}
       >
-        <div className="flex justify-between mt-5 mb-5">
+        <div className="flex justify-between mb-5">
           <h1 className="text-text1 text-h1_contents_title">
             활동후기 작성하기
           </h1>
           <Image
             src={close}
             alt={"닫기"}
-            width={20}
-            height={20}
+            width={24}
+            height={24}
             onClick={handleClose}
             className="md:w-6 md:h-6 cursor-pointer"
           />
