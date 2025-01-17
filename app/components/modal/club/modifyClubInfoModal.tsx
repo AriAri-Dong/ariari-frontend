@@ -184,7 +184,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
           <div className="flex justify-between mb-10 text-center">
             {OPTIONS.map((item) => {
               return (
-                <div className="flex flex-col gap-[14px]">
+                <div className="flex flex-col gap-[14px]" key={item.label}>
                   <p className="text-subtext2 text-body2_m">{item.label}</p>
                   <h3 className="text-h4_sb text-text1">{item.value}</h3>
                 </div>

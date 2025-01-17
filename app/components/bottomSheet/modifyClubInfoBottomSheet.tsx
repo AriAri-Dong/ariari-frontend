@@ -196,7 +196,7 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
           <div className="flex justify-between mb-10 text-center">
             {OPTIONS.map((item) => {
               return (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2" key={item.label}>
                   <p className="text-subtext2 text-mobile_body3_r">
                     {item.label}
                   </p>

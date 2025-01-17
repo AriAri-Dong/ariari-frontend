@@ -1,20 +1,22 @@
 "use client";
 
-import { DayFloatingBarProps } from '@/data/point';
 import React from "react";
+import { DayFloatingBarProps } from "@/types/components/point";
 
 // 추후 수정 필요!
 // 양쪽 패딩 값 없음 (추가해야함.)
-
 
 /**
  * 포인트 현황 플로팅 바 컴포넌트
  * @param deductionPoint 차감 포인트
  * @param currentPoint 현재 포인트
- * @returns 
+ * @returns
  */
 
-const MobilePointStatusFloatingBar = ({deductionPoint, currentPoint}: DayFloatingBarProps) => {
+const MobilePointStatusFloatingBar = ({
+  deductionPoint,
+  currentPoint,
+}: DayFloatingBarProps) => {
   return (
     <div
       className="fixed bottom-0 left-0 w-full flex justify-center md:hidden"
