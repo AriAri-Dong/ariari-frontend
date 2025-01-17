@@ -23,8 +23,8 @@ const TransparentSmallBtn = ({
   return (
     <button
       className={`py-2 px-[18px] md:py-3 md:px-[21px] text-13 md:text-15
-        font-medium text-primary border border-primary focus:bg-selectedoption_hover
-        bg-selectedoption_default md:hover:bg-selectedoption_hover md:focus:bg-selectedoption_pressed
+        font-medium text-primary border border-primary active:bg-selectedoption_hover
+        bg-selectedoption_default md:hover:bg-selectedoption_hover md:active:bg-selectedoption_pressed
         ${round ? "rounded-full" : "rounded-lg"} ${className}`}
       onClick={(e) => {
         e.stopPropagation();

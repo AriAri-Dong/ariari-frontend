@@ -8,7 +8,7 @@ const DeleteBtn = ({ onClick, className }: ButtonProps) => {
   return (
     <button
       className={`flex justify-center items-center p-0.5
-    focus:bg-hover rounded-full cursor-pointer ${className}`}
+    active:bg-hover rounded-full cursor-pointer ${className}`}
       onClick={onClick}
     >
       <Image

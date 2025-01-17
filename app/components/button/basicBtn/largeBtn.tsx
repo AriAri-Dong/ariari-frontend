@@ -19,8 +19,8 @@ const LargeBtn = ({
   return (
     <button
       className={`py-3.5 text-mobile_body1_sb
-    md:py-[18px] mb:text-h4_sb focus:bg-primary_hover
-    bg-primary text-background md:hover:bg-primary_hover md:focus:bg-primary_pressed
+    md:py-[18px] mb:text-h4_sb active:bg-primary_hover
+    bg-primary text-background md:hover:bg-primary_hover md:active:bg-primary_pressed
     ${round ? "rounded-full" : "rounded-lg"} w-full ${className}`}
       onClick={onClick}
     >

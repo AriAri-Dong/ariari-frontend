@@ -17,8 +17,8 @@ const TransparentLargeBtn = ({
   return (
     <button
       className={`py-4 text-sm text-primary border border-primary
-    md:py-[18px] md:text-base font-semibold focus:bg-selectedoption_hover
-    bg-selectedoption_default md:hover:bg-selectedoption_hover md:focus:bg-selectedoption_pressed
+    md:py-[18px] md:text-base font-semibold active:bg-selectedoption_hover
+    bg-selectedoption_default md:hover:bg-selectedoption_hover md:active:bg-selectedoption_pressed
     ${round ? "rounded-full" : "rounded-lg"} w-full`}
       onClick={onClick}
     >

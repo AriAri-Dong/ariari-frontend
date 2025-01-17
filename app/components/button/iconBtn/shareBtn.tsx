@@ -8,7 +8,7 @@ const SahreBtn = ({ onClick }: ButtonProps) => {
   return (
     <button
       className="flex justify-center items-center w-[52px] h-[52px] md:w-[60px] md:h-[60px]
-    bg-background focus:bg-hover md:hover:bg-hover md:focus:bg-pressed rounded-lg border border-menuborder cursor-pointer"
+    bg-background active:bg-hover md:hover:bg-hover md:active:bg-pressed rounded-lg border border-menuborder cursor-pointer"
       onClick={onClick}
     >
       <Image
