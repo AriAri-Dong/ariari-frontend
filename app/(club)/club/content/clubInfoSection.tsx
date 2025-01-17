@@ -138,7 +138,7 @@ const ClubInfoSection = () => {
             동아리 소개 소개소개소래소개소래소개입니다ㅏ아아아ㅏ
           </p>
         </div>
-        <div className="block mt-4 md:hidden">
+        <div className="block mt-4 mb-4 md:hidden">
           <LargeBtn title={"동아리 정보 수정"} onClick={handleModify} />
         </div>
         <div className="md:flex flex-row w-full md:justify-between md:max-w-[642px] hidden">
