@@ -160,13 +160,20 @@ const AcceptanceReviewBottomSheet = ({
     }
   };
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
     <div className="fixed inset-0 z-50 flex items-end bg-black/50">
       <div className="absolute inset-0" onClick={handleClose} />
       <div
-        className={`relative w-full h-4/5 overflow-y-auto px-4 bg-background rounded-t-[24px] shadow-default transition-transform duration-300 ${
+        className={`relative w-full h-4/5 bg-background px-4 rounded-t-[24px] shadow-default transition-transform duration-300 ${
           isVisible ? "translate-y-0" : "translate-y-full"
-        }`}
+        } flex flex-col`}
       >
         {/* title 영역 */}
         <div className="flex justify-between mt-[22px] mb-4">
@@ -178,7 +185,7 @@ const AcceptanceReviewBottomSheet = ({
         {/* 구분선 */}
         <div className="h-[1px] bg-menuborder" />
         {/* content 영역 */}
-        <div>
+        <div className="flex-1 overflow-y-auto">
           <h3 className="flex text-text1 text-mobile_h2 mt-[22px] mb-2.5">
             합격후기 제목
             <span className="text-noti text-mobile_body3_m pl-1">*</span>
@@ -274,7 +281,7 @@ const AcceptanceReviewBottomSheet = ({
                   forceDropdown={true}
                 />
               </div>
-              <div className="flex gap-[6px] border px-3 py-[6px] rounded-20">
+              <div className="flex gap-[6px] border px-3 py-[6px] rounded-20 items-center">
                 <p className="flex text-text1 text-mobile_body2_m whitespace-nowrap">
                   분위기
                   <span className="text-noti text-mobile_body3_m pl-1">*</span>
@@ -332,14 +339,11 @@ const AcceptanceReviewBottomSheet = ({
               </div>
             </div>
           ))}
+          <div className="h-[33px]" />
         </div>
-        <div className="h-[113px] w-full bg-white" />
-      </div>
-      {/* 버튼 영역 */}
-      <div className="fixed bottom-0 left-0 px-4 w-full">
-        <div className="h-[6px] w-full bg-white" />
-        <LargeBtn title={"등록하기"} onClick={handleSubmit} />
-        <div className="h-6 w-full bg-white" />
+        <div className="pb-6 pt-[6px]">
+          <LargeBtn title={"등록하기"} onClick={handleSubmit} />
+        </div>
       </div>
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
