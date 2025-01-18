@@ -32,7 +32,7 @@ import { ClubMemberData } from "@/models/member";
 import { CLUM_MEMBER_DATA } from "@/data/clubmember";
 
 const ClubQuestionSection = () => {
-  const [type, setType] = useState(QUESTION_TYPE[0].id);
+  const [type, setType] = useState<string>(QUESTION_TYPE[0].label);
   const [isQnaFormOpen, setIsQnaFormOpen] = useState<boolean>(false);
   const [isFaqFormOpen, setIsFaqFormOpen] = useState<boolean>(false);
 
@@ -77,7 +77,7 @@ const ClubQuestionSection = () => {
       setIsNotiPopUpOpen(true);
       return;
     } else {
-      type == 0 ? setIsFaqFormOpen(true) : setIsQnaFormOpen(true);
+      type == "FAQ" ? setIsFaqFormOpen(true) : setIsQnaFormOpen(true);
     }
   };
 
@@ -86,13 +86,13 @@ const ClubQuestionSection = () => {
       <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:px-5">
         <div className="flex items-center justify-between mb-[22px]">
           <p className="text-subtext2">
-            총 {type == 0 ? faqPageInfo.totalSize : qnaPageInfo.totalSize}개의
-            FAQ가 있어요
+            총 {type == "FAQ" ? faqPageInfo.totalSize : qnaPageInfo.totalSize}
+            개의 FAQ가 있어요
           </p>
           <SubTap
             optionData={QUESTION_TYPE}
             selectedOption={type}
-            setSelectedOption={setType}
+            handleOption={setType}
           />
         </div>
         <div className="hidden pl-6 pr-[114px] py-1.5 mb-2.5 justify-between bg-white70 text-subtext2 rounded-[4px] text-body1_m md:flex">
@@ -100,10 +100,10 @@ const ClubQuestionSection = () => {
             <div className="px-[19px]">분류</div>
             <div>제목</div>
           </div>
-          <div className={type == 0 ? "hidden" : ""}>작성일</div>
+          <div className={type == "FAQ" ? "hidden" : ""}>작성일</div>
         </div>
 
-        {type == 0
+        {type == "FAQ"
           ? faqData.map((item, index) => (
               <div key={index} className="mb-2.5">
                 <QuestionDropdown
@@ -123,12 +123,12 @@ const ClubQuestionSection = () => {
               </div>
             ))}
 
-        {type == 0 && faqPageInfo.totalPages > faqCurrentPage && (
+        {type == "FAQ" && faqPageInfo.totalPages > faqCurrentPage && (
           <div className="flex justify-center mt-9 md:mt-10">
             <PlusBtn title={"더보기"} onClick={handleLoadMoreFaq} />
           </div>
         )}
-        {type == 1 && qnaPageInfo.totalPages > qnaCurrentPage && (
+        {type == "Q&A" && qnaPageInfo.totalPages > qnaCurrentPage && (
           <div className="flex justify-center  mt-9 md:mt-10">
             <PlusBtn title={"더보기"} onClick={handleLoadMoreQna} />
           </div>
@@ -139,7 +139,7 @@ const ClubQuestionSection = () => {
       {(clubMember == null || !isLoggedIn) && (
         <RecruitmentGuideFloatingBar
           deadline={new Date("2024-12-31T23:59:59")}
-          isWriteButtonVisible={type == 1}
+          isWriteButtonVisible={type == "Q&A"}
           handleWrite={handleOpenForm}
         />
       )}
@@ -151,8 +151,8 @@ const ClubQuestionSection = () => {
       </div>
 
       {/* ====== 공통 작성버튼 : FAQ - 관리자, 매니저, QNA - 일반회원 ======*/}
-      {((type == 1 && clubMember?.clubMemberRoleType == "GENERAL") ||
-        (type == 0 &&
+      {((type == "Q&A" && clubMember?.clubMemberRoleType == "GENERAL") ||
+        (type == "FAQ" &&
           (clubMember?.clubMemberRoleType == "ADMIN" ||
             clubMember?.clubMemberRoleType == "MANAGER"))) && (
         <div className="fixed w-full fixed bottom-[20px] px-5 flex justify-end md:bottom-[44px] md:max-w-[1248px] md:px-5">
@@ -198,16 +198,16 @@ const ClubQuestionSection = () => {
       )}
       <HelpText
         imageVisible={
-          (type == 0 &&
+          (type == "FAQ" &&
             (clubMember?.clubMemberRoleType == "ADMIN" ||
               clubMember?.clubMemberRoleType == "MANAGER")) ||
-          (type == 1 &&
+          (type == "Q&A" &&
             (clubMember?.clubMemberRoleType == "GENERAL" ||
               clubMember == null ||
               !isLoggedIn))
         }
         image={
-          type == 0
+          type == "FAQ"
             ? isTapOver
               ? helpTextFaqPc
               : helpTextFaqMobile
