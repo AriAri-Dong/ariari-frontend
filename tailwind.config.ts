@@ -49,8 +49,10 @@ const config: Config = {
         token_3_bg: "rgba(54, 187, 182, 0.2)",
         token_4: "#58BBF8",
         token_4_bg: "rgba(88, 187, 248, 0.2)",
-        token_5: "#8A84FE",
-        token_5_bg: "rgba(138, 132, 254, 0.2)",
+        // token - sub2와 동일
+        sub2_bg: "rgba(138, 132, 254, 0.2)",
+        // token - primary과 동일
+        // token_bg -selecteoption_hover와 동일
         token_6: "#BE69F6",
         token_6_bg: "rgba(190, 105, 246, 0.2)",
         token_7: "#FF93FB",
