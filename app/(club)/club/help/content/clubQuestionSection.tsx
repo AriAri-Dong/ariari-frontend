@@ -8,7 +8,7 @@ import { FAQ_DATA } from "@/data/faq";
 import { QUESTION_TYPE } from "@/data/pulldown";
 import { pageInfo, QNA_DATA } from "@/data/qna";
 import { ClubFaqData, ClubQuestionData } from "@/models/club";
-import { PageInfo } from "@/models/page";
+import { PageInfo } from "@/models/pageInfo";
 
 import SubTap from "@/components/tab/subTap";
 import QuestionDropdown from "../components/questionDropdown";

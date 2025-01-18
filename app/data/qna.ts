@@ -1,5 +1,5 @@
 import { ClubQuestionData } from "@/models/club";
-import { PageInfo } from "@/models/page";
+import { PageInfo } from "@/models/pageInfo";
 
 export const pageInfo: PageInfo = {
   contentSize: 10,

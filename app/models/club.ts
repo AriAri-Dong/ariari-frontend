@@ -1,5 +1,5 @@
 import { ClubMemberData, MemberData } from "./member";
-import { PageInfo } from "./page";
+import { PageInfo } from "./pageInfo";
 export type TokenType =
   | "C_TOKEN_1"
   | "C_TOKEN_2"
