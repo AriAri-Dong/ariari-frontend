@@ -11,11 +11,11 @@ import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
 import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
-import { CATEGORY, MENU_DATA } from '@/data/club';
+import { CATEGORY, MENU_DATA } from "@/data/club";
 
 /**
  * Club 페이지에서 사용되는 clubInfo 공통 section
- * @returns 
+ * @returns
  */
 const ClubInfoSection = () => {
   const [isHeart, setIsHeart] = useState<boolean>(false);
@@ -27,9 +27,9 @@ const ClubInfoSection = () => {
     setIsHeart(!isHeart);
   };
 
-  const handleModify = () =>{
-    console.log("동아리 정보 수정 핸들러")
-  }
+  const handleModify = () => {
+    console.log("동아리 정보 수정 핸들러");
+  };
 
   // URL이 복사
   const handleShare = async () => {
@@ -156,7 +156,7 @@ const ClubInfoSection = () => {
         </div>
       </div>
       {isCopy && <Alert text={message} />}
-      <RecruitmentGuideFloatingBar deadline={new Date("2024-12-31T23:59:59")} />
+      {/* <RecruitmentGuideFloatingBar deadline={new Date("2024-12-31T23:59:59")} /> */}
       {isBottomSheetOpen && (
         <CommonBottomSheet
           optionData={MENU_DATA}
