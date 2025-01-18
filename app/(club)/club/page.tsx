@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -31,6 +32,7 @@ const ClubPage = () => {
       </div>
     </div>
   );
+
 };
 
 export default ClubPage;

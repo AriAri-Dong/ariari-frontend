@@ -20,11 +20,13 @@ const SubTap = ({ optionData, selectedOption, handleOption }: SubTapProps) => {
         <div
           key={index}
           className={`flex-shrink-0 px-4 h-9 flex items-center justify-center gap-1 text-center rounded-28 cursor-pointer truncate transition-all duration-500 md:px-5 md:h-11 ${
+
             selectedOption === option.label
               ? "text-primary bg-background shadow-default"
               : "text-unselected"
           }`}
           onClick={() => handleOption(option.label)}
+
         >
           <p className="text-body1_sb md:text-h4_sb">{option.label}</p>
           {option.number && (
@@ -40,6 +42,7 @@ const SubTap = ({ optionData, selectedOption, handleOption }: SubTapProps) => {
           )}
         </div>
       ))}
+
     </div>
   );
 };
