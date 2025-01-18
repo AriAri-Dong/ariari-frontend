@@ -78,7 +78,7 @@ export const FAQ_DATA: ClubFaqData[] = [
     title: "총 몇명 뽑나요?",
     body: "50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. ",
     clubFaqClassification: "인원",
-    clubFaqColorType: "C_TOKEN_5",
+    clubFaqColorType: "C_SUB2",
     clubMemberData: {
       id: 3,
       name: "박찬진",
@@ -168,7 +168,7 @@ export const FAQ_DATA: ClubFaqData[] = [
     title: "총 몇명 뽑나요?",
     body: "50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. 50명 뽑습니다. ",
     clubFaqClassification: "인원",
-    clubFaqColorType: "C_TOKEN_5",
+    clubFaqColorType: "C_PRIMARY",
     clubMemberData: {
       id: 3,
       name: "박찬진",

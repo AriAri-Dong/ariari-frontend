@@ -1,19 +1,22 @@
 import { ClubMemberData, MemberData } from "./member";
 import { PageInfo } from "./page";
+export type TokenType =
+  | "C_TOKEN_1"
+  | "C_TOKEN_2"
+  | "C_TOKEN_3"
+  | "C_TOKEN_4"
+  | "C_PRIMARY"
+  | "C_SUB2"
+  | "C_TOKEN_6"
+  | "C_TOKEN_7";
 
 export interface ClubFaqData {
   id: number; // $int64
   title: string;
   body: string;
   clubFaqClassification: string;
-  clubFaqColorType:
-    | "C_TOKEN_1"
-    | "C_TOKEN_2"
-    | "C_TOKEN_3"
-    | "C_TOKEN_4"
-    | "C_TOKEN_5"
-    | "C_TOKEN_6"
-    | "C_TOKEN_7";
+  clubFaqColorType: TokenType;
+
   clubMemberData: ClubMemberData;
 }
 
