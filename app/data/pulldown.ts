@@ -52,5 +52,5 @@ export const Popularity_Sort_Type = [
 ];
 export const QUESTION_TYPE = [
   { id: 0, label: "FAQ" },
-  { id: 1, label: "QNA" },
+  { id: 1, label: "Q&A" },
 ];

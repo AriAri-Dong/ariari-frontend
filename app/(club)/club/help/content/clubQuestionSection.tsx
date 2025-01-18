@@ -151,7 +151,10 @@ const ClubQuestionSection = () => {
       </div>
 
       {/* ====== 공통 작성버튼 : FAQ - 관리자, 매니저, QNA - 일반회원 ======*/}
-      {((type == "Q&A" && clubMember?.clubMemberRoleType == "GENERAL") ||
+      {((type == "Q&A" &&
+        (clubMember?.clubMemberRoleType == "GENERAL" ||
+          clubMember == null ||
+          !isLoggedIn)) ||
         (type == "FAQ" &&
           (clubMember?.clubMemberRoleType == "ADMIN" ||
             clubMember?.clubMemberRoleType == "MANAGER"))) && (
@@ -185,7 +188,7 @@ const ClubQuestionSection = () => {
           onClose={() => setIsNotiPopUpOpen(false)}
           icon={"login"}
           title="로그인 후 이용 부탁드립니다"
-          description={`QNA를 등록하기 위해서는\n아리아리 서비스 로그인이 필요합니다.`}
+          description={`Q&A를 등록하기 위해서는\n아리아리 서비스 로그인이 필요합니다.`}
           modalType={"button"}
           firstButton={() => {
             setIsNotiPopUpOpen(false);

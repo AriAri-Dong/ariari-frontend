@@ -110,7 +110,11 @@ const QuestionDropdown = ({
                 <div className="text-subtext1 text-mobile_body1_r">
                   {data.body}
                 </div>
-                <div className="flex justify-between items-center mb-6 md:mb-8">
+                <div
+                  className={`flex justify-between items-center ${
+                    data.clubAnswerData && "mb-6 md:mb-8"
+                  }`}
+                >
                   <div className="text-unselected text-mobile_body2_m">
                     {data.memberData.nickname}
                   </div>

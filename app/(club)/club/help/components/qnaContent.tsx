@@ -155,7 +155,7 @@ const QnaFormContent = ({
         <p className="text-right text-unselected text-mobile_h4 md:h4">
           {detail.length}/1000
         </p>
-        <div className="md:hidden">
+        <div className="w-full md:hidden">
           <LargeBtn onClick={handleSubmit} title={"질문하기"} />
         </div>
         <div className="hidden md:block">
