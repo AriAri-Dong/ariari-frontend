@@ -10,29 +10,37 @@ import report from "@/images/icon/report.svg";
 import Q from "@/images/icon/Q.svg";
 import A from "@/images/icon/A.svg";
 
-import { colorMapping } from "../../util/colorMapping";
 import { profileImageMap } from "@/utils/mappingProfile";
+import { tokenColorMapping } from "../../util/colorMapping";
 import { ClubFaqData, ClubQuestionData } from "@/models/club";
+import { clubMemberRoleType, profileType } from "@/models/member";
 
 import ReportBottomSheet from "@/components/bottomSheet/reportBottomSheet";
 import ReportModal from "@/components/modal/reportModal";
+import SendBtn from "@/components/button/iconBtn/sendBtn";
 
 interface QuestionDropdownProps {
   data: ClubQuestionData | ClubFaqData;
+  myRoleType: clubMemberRoleType | null | undefined;
+  myProfileType: profileType | null | undefined;
 }
 /**
  *
  * @param data QNA 데이터 or FAQ 데이터
  * @returns
  */
-const QuestionDropdown = ({ data }: QuestionDropdownProps) => {
+const QuestionDropdown = ({
+  data,
+  myRoleType,
+  myProfileType,
+}: QuestionDropdownProps) => {
   let bg, text, label;
   const isFaq = "clubFaqColorType" in data;
   const [reportIsOpen, setReportIsOpen] = useState<boolean>(false);
-
+  const [answer, setAnswer] = useState<string>("");
   if (isFaq) {
     // faq의 경우
-    const color = colorMapping[data.clubFaqColorType];
+    const color = tokenColorMapping[data.clubFaqColorType];
     bg = color.bg;
     text = color.text;
     label = data.clubFaqClassification;
@@ -127,13 +135,26 @@ const QuestionDropdown = ({ data }: QuestionDropdownProps) => {
               </div>
             </div>
           )}
-          {!isFaq && data.clubAnswerData && (
-            <div className="flex gap-2 mb-3 items-center md:hidden">
-              <Image src={A} alt={"A"} width={14} height={16} className="h-4" />
-              <p className="text-mobile_body1_sb text-subtext1">답변이에요</p>
-            </div>
-          )}
-          {(isFaq || (!isFaq && data.clubAnswerData)) && (
+          {!isFaq &&
+            (data.clubAnswerData ||
+              myRoleType == "MANAGER" ||
+              myRoleType == "ADMIN") && (
+              <div className="flex gap-2 mb-3 items-center md:hidden">
+                <Image
+                  src={A}
+                  alt={"A"}
+                  width={14}
+                  height={16}
+                  className="h-4"
+                />
+                <p className="text-mobile_body1_sb text-subtext1">답변이에요</p>
+              </div>
+            )}
+          {(isFaq ||
+            (!isFaq &&
+              (data.clubAnswerData ||
+                myRoleType == "MANAGER" ||
+                myRoleType == "ADMIN"))) && (
             <div
               className={`w-full flex-col justify-start items-start gap-8 flex`}
             >
@@ -143,7 +164,9 @@ const QuestionDropdown = ({ data }: QuestionDropdownProps) => {
                     profileImageMap[
                       isFaq
                         ? data.clubMemberData.profileType
-                        : data.clubAnswerData!.clubMemberData.profileType
+                        : data.clubAnswerData
+                        ? data.clubAnswerData!.clubMemberData.profileType
+                        : myProfileType!
                     ]
                   }
                   alt={"club_img"}
@@ -159,9 +182,24 @@ const QuestionDropdown = ({ data }: QuestionDropdownProps) => {
                     height={30.5}
                     className="hidden absolute left-[-16px] top-[8px] md:block"
                   />
-                  <div className="w-full flex p-3 bg-hover rounded-[12px] justify-start items-center text-subtext2 text-mobile_body1_r md:body1_r  md:p-6 ">
-                    {isFaq ? data.body : data.clubAnswerData!.body}
-                  </div>
+                  {!isFaq && !data.clubAnswerData ? (
+                    <div className="w-full flex px-3 py-2.5 gap-2.5 bg-hover rounded-[12px] justify-between items-center text-subtext2 text-mobile_body1_r  md:body1_r md:px-6 md:py-5 md:gap-4  ">
+                      <input
+                        type="text"
+                        value={answer}
+                        onChange={(e) => setAnswer(e.target.value)}
+                        placeholder="답변을 입력해주세요."
+                        className="w-full py-[5px] rounded-[12px] bg-searchbar text-subtext1 text-mobile_body1_r md:py-1.5 md:text-body1_r focus:outline-none placeholder:text-subtext1"
+                      />
+                      <div>
+                        <SendBtn onClick={() => {}} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full flex p-3 bg-hover rounded-[12px] justify-start items-center text-subtext2 text-mobile_body1_r md:body1_r  md:p-6 ">
+                      {isFaq ? data.body : data.clubAnswerData!.body}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
