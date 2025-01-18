@@ -42,7 +42,10 @@ const NotiPopUp = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+      style={{ zIndex: 1000 }}
+    >
       <div className="absolute inset-0" onClick={onClose}></div>
 
       <div className="relative w-[306px] p-[20px] pt-[52px] bg-white rounded-[16px] md:w-[430px] md:pt-[72px] md:pb-[26px] md:px-[20px]">
