@@ -10,8 +10,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
 
-  const isSpecialComponent = pathname.includes("recruitment/detail");
-  console.log(isSpecialComponent);
+  const specialPaths = ["recruitment/detail", "/club"];
+
+  const isSpecialComponent = specialPaths.some((path) =>
+    pathname.includes(path)
+  );
 
   return (
     <SearchTermContext.Provider value={{ searchTerm, setSearchTerm }}>
