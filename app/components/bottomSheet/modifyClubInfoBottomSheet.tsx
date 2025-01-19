@@ -128,6 +128,15 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
     }
   };
 
+  // 이미지 삭제 처리
+  const handleImageDelete = (imageType: "uploaded" | "banner") => {
+    if (imageType === "uploaded") {
+      setUploadedImage(null);
+    } else {
+      setBannerImage(null);
+    }
+  };
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -176,7 +185,7 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
               type={"trash"}
               size={"small"}
               title={"삭제하기"}
-              onClick={() => {}}
+              onClick={() => handleImageDelete("banner")}
             />
           </div>
           <div className="relative">
@@ -188,12 +197,14 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
               onChange={(e) => handleBannerFileChange(e, setBannerImage)}
             />
             <Image
-              src={test_image}
+              src={bannerImage || test_image}
               alt={"Test Image"}
               className="rounded-20 w-full h-[82px]"
+              width={100}
+              height={82}
             />
             <div className="absolute bottom-2 right-2 cursor-pointer block">
-              <WriteBtn size="small" onClick={triggerFileInput} />
+              <WriteBtn size="small" onClick={triggerBannerFileInput} />
             </div>
           </div>
           {/* 이미지 */}
@@ -203,7 +214,7 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
               type={"trash"}
               size={"small"}
               title={"삭제하기"}
-              onClick={() => {}}
+              onClick={() => handleImageDelete("uploaded")}
             />
           </div>
           <div className="relative inline-block">
@@ -220,7 +231,8 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
                 alt="Uploaded or Default"
                 width={95}
                 height={95}
-                className="rounded-full border border-menuborder p-1 cursor-pointer"
+                className="rounded-full border border-menuborder p-1 cursor-pointer
+                object-cover h-[95px] w-[95px]"
               />
             </label>
             <div className="absolute bottom-0 right-0 translate-x-1/5 translate-y-1/5">
@@ -246,7 +258,7 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
             maxLength={30}
           />
           <h3 className="text-text1 text-mobile_h2 mt-[30px] mb-[14px]">
-            동아리 한 줄 소개
+            동아리 세부 카테고리
           </h3>
           <div className="flex justify-between mb-10 text-center">
             {OPTIONS.map((item) => {

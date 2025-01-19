@@ -11,6 +11,7 @@ import Noti from "@/images/icon/noti.svg";
 import test_image from "@/images/test/test_image.jpg";
 import CustomInput from "@/components/input/customInput";
 import NotiPopUp from "../notiPopUp";
+import trash from "@/images/icon/delete.svg";
 
 const OPTIONS = [
   { label: "동아리 소속", value: "아리아리" },
@@ -127,6 +128,15 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
     }
   };
 
+  // 이미지 삭제 처리
+  const handleImageDelete = (imageType: "uploaded" | "banner") => {
+    if (imageType === "uploaded") {
+      setUploadedImage(null);
+    } else {
+      setBannerImage(null);
+    }
+  };
+
   // 스크롤 방지
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -174,7 +184,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
           <h3 className="flex text-text1 text-h3 mt-7 mb-[18px]">
             동아리 배너 이미지
           </h3>
-          <div className="relative">
+          <div className="relative group">
             <input
               ref={bannerFileInputRef}
               type="file"
@@ -185,10 +195,23 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
             <Image
               src={bannerImage || test_image}
               alt={"Banner Image"}
-              className="rounded-20 w-full h-[196px]"
+              className="rounded-20 w-full h-[196px] transition-all duration-300"
               height={196}
               width={780}
             />
+            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-20">
+              <div className="flex justify-center items-center w-full h-full">
+                <div className="flex p-[6px] rounded-full bg-black_50 cursor-pointer">
+                  <Image
+                    alt={"delete"}
+                    src={trash}
+                    width={24}
+                    height={24}
+                    onClick={() => handleImageDelete("banner")}
+                  />
+                </div>
+              </div>
+            </div>
             <div className="absolute bottom-5 right-5 cursor-pointer block">
               <WriteBtn size="small" onClick={triggerBannerFileInput} />
             </div>
@@ -197,7 +220,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
           <h3 className="flex text-text1 text-h3 mt-7 mb-[18px]">
             동아리 대표 이미지
           </h3>
-          <div className="relative inline-block">
+          <div className="relative inline-block group">
             <label>
               <input
                 ref={fileInputRef}
@@ -209,14 +232,33 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
               <Image
                 src={uploadedImage || defaultImg}
                 alt="Uploaded or Default"
-                width={114}
-                height={114}
-                className="rounded-full border border-menuborder p-1 cursor-pointer"
+                width={116}
+                height={116}
+                className="rounded-full border border-menuborder p-1 cursor-pointer h-[116px] w-[116px]"
               />
             </label>
+            <div
+              className="absolute rounded-full inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300
+            w-[114px] h-[114px]"
+            >
+              <div className="flex justify-center items-center w-full h-full">
+                <div className="flex p-[6px] rounded-full bg-black_50 cursor-pointer">
+                  <Image
+                    alt={"delete"}
+                    src={trash}
+                    width={24}
+                    height={24}
+                    onClick={() => handleImageDelete("uploaded")}
+                  />
+                </div>
+              </div>
+            </div>
+            {/* 수정 버튼 */}
             <div className="absolute bottom-0 right-0 translate-x-1/5 translate-y-1/5">
               <WriteBtn size="small" onClick={triggerFileInput} />
             </div>
+
+            {/* 삭제 아이콘 */}
           </div>
           {/* 동아리 이름 */}
           <h3 className="flex text-text1 text-h3 mt-7 mb-[18px]">
