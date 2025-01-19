@@ -25,18 +25,20 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
 
   const [clubName, setClubName] = useState<string>("");
   const [clubIntroduction, setClubIntroduction] = useState<string>("");
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null); // 동아리 대표 이미지 상태
-  const [bannerImage, setBannerImage] = useState<string | null>(null); // 동아리 배너 이미지 상태
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [bannerImage, setBannerImage] = useState<string | null>(null);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
   const [alertMsg, setAlertMsg] = useState<string>("");
   const [submit, setSubmit] = useState<boolean>(false);
+  const [modify, setModify] = useState<boolean>(false);
 
   // 동아리 한 줄 소개
   const handleClubIntroductionChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setClubIntroduction(event.target.value);
+    setModify(true);
   };
 
   // 이미지 처리 공통 함수 (파일 용량 및 확장자 확인)
@@ -67,11 +69,39 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
     }
   };
 
+  const handleBannerFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setBannerImage: React.Dispatch<React.SetStateAction<string | null>>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const maxFileSize = 100 * 1024 * 1024;
+      const allowedExtensions = ["image/png", "image/jpeg", "image/svg+xml"];
+      if (file.size > maxFileSize) {
+        setAlertMsg("파일 용량은 100MB 를 초과할 수 없습니다.");
+        setAlertVisible(true);
+        return;
+      }
+      if (!allowedExtensions.includes(file.type)) {
+        setAlertMsg("png, jpg, svg 파일만 업로드 가능합니다.");
+        setAlertVisible(true);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        setBannerImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   // 동아리 배너 이미지
   const triggerBannerFileInput = () => {
     if (bannerFileInputRef.current) {
       bannerFileInputRef.current.click();
     }
+    setModify(true);
   };
 
   // 동아리 대표 이미지
@@ -79,6 +109,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
+    setModify(true);
   };
 
   // 수정하기
@@ -89,8 +120,11 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
 
   // 닫기
   const handleClose = () => {
-    setSubmit(true);
-    // onClose();
+    if (modify) {
+      setSubmit(true);
+    } else {
+      onClose();
+    }
   };
 
   // 스크롤 방지
@@ -141,10 +175,19 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
             동아리 배너 이미지
           </h3>
           <div className="relative">
+            <input
+              ref={bannerFileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => handleBannerFileChange(e, setBannerImage)}
+            />
             <Image
               src={bannerImage || test_image}
               alt={"Banner Image"}
               className="rounded-20 w-full h-[196px]"
+              height={196}
+              width={780}
             />
             <div className="absolute bottom-5 right-5 cursor-pointer block">
               <WriteBtn size="small" onClick={triggerBannerFileInput} />

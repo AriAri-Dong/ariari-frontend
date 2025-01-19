@@ -2,7 +2,6 @@ import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import close from "@/images/icon/close.svg";
 import Alert from "@/components/alert/alert";
-import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import { ModalProps } from "@/types/components/modal";
 import TextInputWithCounter from "@/components/input/textInputWithCounter";
@@ -12,6 +11,7 @@ import test_image from "@/images/test/test_image.jpg";
 import CustomInput from "@/components/input/customInput";
 import LargeBtn from "../button/basicBtn/largeBtn";
 import IconBtn from "../button/withIconBtn/IconBtn";
+import NotiPopUp from "../modal/notiPopUp";
 
 const OPTIONS = [
   { label: "동아리 소속", value: "아리아리" },
@@ -21,29 +21,35 @@ const OPTIONS = [
 ];
 
 const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const bannerFileInputRef = useRef<HTMLInputElement | null>(null);
+
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const [clubName, setClubName] = useState<string>("");
   const [clubIntroduction, setClubIntroduction] = useState<string>("");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [bannerImage, setBannerImage] = useState<string | null>(null);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
   const [alertMsg, setAlertMsg] = useState<string>("");
+  const [submit, setSubmit] = useState<boolean>(false);
+  const [modify, setModify] = useState<boolean>(false);
 
+  // 동아리 한 줄 소개
   const handleClubIntroductionChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setClubIntroduction(event.target.value);
+    setModify(true);
   };
 
-  const handleClubNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setClubName(event.target.value);
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // 이미지 처리 공통 함수 (파일 용량 및 확장자 확인)
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setImage: React.Dispatch<React.SetStateAction<string | null>>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
-      // 파일 용량 및 확장자 확인
       const maxFileSize = 100 * 1024 * 1024;
       const allowedExtensions = ["image/png", "image/jpeg", "image/svg+xml"];
       if (file.size > maxFileSize) {
@@ -59,25 +65,67 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
 
       const reader = new FileReader();
       reader.onload = () => {
-        setUploadedImage(reader.result as string);
+        setImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const handleBannerFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setBannerImage: React.Dispatch<React.SetStateAction<string | null>>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const maxFileSize = 100 * 1024 * 1024;
+      const allowedExtensions = ["image/png", "image/jpeg", "image/svg+xml"];
+      if (file.size > maxFileSize) {
+        setAlertMsg("파일 용량은 100MB 를 초과할 수 없습니다.");
+        setAlertVisible(true);
+        return;
+      }
+      if (!allowedExtensions.includes(file.type)) {
+        setAlertMsg("png, jpg, svg 파일만 업로드 가능합니다.");
+        setAlertVisible(true);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        setBannerImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // 동아리 배너 이미지
+  const triggerBannerFileInput = () => {
+    if (bannerFileInputRef.current) {
+      bannerFileInputRef.current.click();
+    }
+    setModify(true);
+  };
+
+  // 동아리 대표 이미지
   const triggerFileInput = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
+    setModify(true);
   };
 
+  // 수정하기
   const handleSubmit = () => {
     onSubmit();
-    onClose();
   };
 
+  // 닫기
   const handleClose = () => {
-    onClose();
+    if (modify) {
+      setSubmit(true);
+    } else {
+      onClose();
+    }
   };
 
   useEffect(() => {
@@ -132,6 +180,13 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
             />
           </div>
           <div className="relative">
+            <input
+              ref={bannerFileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => handleBannerFileChange(e, setBannerImage)}
+            />
             <Image
               src={test_image}
               alt={"Test Image"}
@@ -158,7 +213,7 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={handleFileChange}
+                onChange={(e) => handleFileChange(e, setUploadedImage)}
               />
               <Image
                 src={uploadedImage || defaultImg}
@@ -177,7 +232,7 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
           </h3>
           <CustomInput
             value={clubName}
-            onChange={handleClubNameChange}
+            onChange={() => {}}
             placeholder={""}
             disable={true}
           />
@@ -217,6 +272,27 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
       {alertVisible && <Alert text={alertMsg} />}
+      {submit && (
+        <NotiPopUp
+          onClose={() => {
+            setSubmit(false);
+          }}
+          icon={"not"}
+          title={"수정사항을 삭제할까요?"}
+          description={
+            "현재 수정 중이던 항목이 있어요. <br/> 해당 항목의 변경된 내용을 삭제할까요?"
+          }
+          modalType={"button"}
+          firstButton={() => {
+            onClose();
+          }}
+          firstButtonText={"삭제하기"}
+          secondButton={() => {
+            setSubmit(false);
+          }}
+          secondButtonText={"수정하기"}
+        />
+      )}
     </div>
   );
 };
