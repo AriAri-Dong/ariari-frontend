@@ -26,6 +26,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           className={`flex-grow flex justify-center items-center 
             ${isBgComponent && "bg-sub_bg"} 
             ${isBgComponentOnlyMobileComponent && "md:bg-sub_bg"}`}
+          }
         >
           <div
             className={`w-full ${
