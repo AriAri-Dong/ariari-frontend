@@ -19,6 +19,7 @@ import AcceptanceReviewBottomSheet from "@/components/bottomSheet/acceptanceRevi
 import Alert from "@/components/alert/alert";
 import useResponsive from "../../../../../hooks/useResponsive";
 import AcceptanceReviewModal from "@/components/modal/review/acceptanceReviewModal";
+import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
 
 const ReviewPage = () => {
   const router = useRouter();
@@ -137,6 +138,7 @@ const ReviewPage = () => {
         {alertMessage && (
           <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
+        {!openReview && <ReviewFloatingBtn onClick={handleWrite} />}
       </div>
     </>
   );
