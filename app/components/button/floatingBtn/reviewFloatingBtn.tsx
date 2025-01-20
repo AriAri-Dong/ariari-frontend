@@ -13,7 +13,7 @@ interface ReviewFloatingBtnProp {
 const ReviewFloatingBtn = ({ onClick }: ReviewFloatingBtnProp) => {
   const pathname = usePathname();
 
-  const imageVisible = pathname === "/club/review/acceptance";
+  const imageVisible = pathname.includes("/club/review");
 
   return (
     <div
