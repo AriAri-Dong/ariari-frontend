@@ -15,7 +15,7 @@ const PointList = ({
       }`}
     >
       <div className="flex flex-row gap-7">
-        <p className="text-subtext2 text-mobile_body4_r md:text-body4_r content-center">
+        <p className="text-unselected text-mobile_body4_r md:text-body4_r content-center">
           {date}
         </p>
         <h3 className="text-subtext1 text-mobile_body1_m md:text-body1_m">

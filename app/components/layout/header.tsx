@@ -36,6 +36,7 @@ const Header = () => {
     "/myPage/interestClub",
     "/myPage/interestRecruitment",
     "/withdrawal",
+    "/club/create",
     "/notification",
   ].includes(pathname);
 

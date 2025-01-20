@@ -72,6 +72,7 @@ const config: Config = {
         60: "60px",
       },
       fontSize: {
+        8: "8px",
         28: "28px",
         19: "19px",
         15: "15px",

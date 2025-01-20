@@ -7,7 +7,7 @@ export interface ButtonProps {
 export interface ButtonWithTextProps {
   title: string;
   onClick: () => void;
-  className?: string;
   imageSize?: number;
   round?: boolean;
+  className?: string;
 }
