@@ -25,6 +25,7 @@ import ActivityReviewModal from "@/components/modal/review/activityReviewModal";
 import ActivityReviewDropdown from "@/components/dropdown/activityReviewDropdown";
 import ReviewPercentList from "@/components/list/reviewPercentList";
 import MobileReviewPercentList from "@/components/list/mobileReviewPercentList";
+import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
 
 const ReviewPage = () => {
   const router = useRouter();
@@ -159,6 +160,7 @@ const ReviewPage = () => {
         {alertMessage && (
           <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
+        {!openReview && <ReviewFloatingBtn onClick={handleWrite} />}
       </div>
     </>
   );
