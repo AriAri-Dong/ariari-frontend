@@ -39,16 +39,14 @@ const WithdrawalCard = ({ info }: WithdrawalCardProps) => {
           </div>
         ))}
       </div>
-      <div>
-        {info.button && (
-          <button
-            onClick={() => info.button?.onClick(router)}
-            className="bg-transparent px-1.5 py-1 bg-blue-500 text-subtext2 text-body3_m"
-          >
-            {info.button.label}
-          </button>
-        )}
-      </div>
+      {info.button && (
+        <button
+          onClick={() => info.button?.onClick(router)}
+          className="w-fit bg-transparent px-1.5 py-1 text-subtext2 text-body3_m"
+        >
+          {info.button.label}
+        </button>
+      )}
     </div>
   );
 };

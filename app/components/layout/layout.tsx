@@ -12,7 +12,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
   const isSpecialComponent = pathname.includes("recruitment/detail");
   const isBgComponent = pathname.includes("application");
-  const isBgComponentOnlyMobile = pathname.includes("/club/create");
+
+  const isBgComponentOnlyMobilePaths = ["/club/create", "/withdrawal"];
+  const isBgComponentOnlyMobileComponent = isBgComponentOnlyMobilePaths.some(
+    (path) => pathname.includes(path)
+  );
 
   return (
     <SearchTermContext.Provider value={{ searchTerm, setSearchTerm }}>
@@ -21,8 +25,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <main
           className={`flex-grow flex justify-center items-center 
             ${isBgComponent && "bg-sub_bg"} 
-            ${isBgComponentOnlyMobile && "md:bg-sub_bg"}`
-          }
+            ${isBgComponentOnlyMobileComponent && "md:bg-sub_bg"}`}
         >
           <div
             className={`w-full ${

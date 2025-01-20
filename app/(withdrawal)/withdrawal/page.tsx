@@ -104,7 +104,7 @@ const WithDrawal = () => {
           Ariari 탈퇴 진행 전, 관련 사항들을 확인해주세요.
         </p>
       </div>
-      <div className="flex flex-col gap-7 rounded-8 bg-background mt-5 md:mt-[22px] md:px-6 md:py-[26px] md:gap-10">
+      <div className="flex flex-col gap-7 rounded-8 bg-background mt-5 mb-20 md:mb-[124px] md:mt-[22px] md:px-6 md:py-[26px] md:gap-10">
         <div className="flex flex-col gap-10 md:gap-12">
           {WITHDRAWAL_INFO.map((info, index) => (
             <div key={index}>
@@ -128,13 +128,16 @@ const WithDrawal = () => {
                 value={inputValue}
                 placeholder={`'${withdrawalMessage}'라고 입력해 주세요.`}
                 onChange={handleInputChange}
-                maxLength={withdrawalMessage.length}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
                 className="grow shrink basis-0 bg-searchbar border-none outline-none"
               />
-              <div>{`${inputValue.length}/${withdrawalMessage.length}`}</div>
             </div>
             {isSubmitted && !isInputValid && (
-              <div className="mt-1 ml-4 text-mobile_body3_r text-primary">
+              <div className="mt-1 ml-4 text-mobile_body3_r text-noti">
                 올바른 내용이 아닙니다.
               </div>
             )}
