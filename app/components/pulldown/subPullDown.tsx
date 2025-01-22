@@ -61,8 +61,8 @@ const SubPullDown = ({
       <button
         ref={buttonRef}
         onClick={toggleDropdown}
-        className={`relative flex items-center justify-between text-subtext2 text-[13px]
-          pl-2.5 py-1 cursor-pointer gap-1 md:gap-2 md:text-[15px]
+        className={`relative flex items-center justify-between text-subtext2 text-mobile_body2_m
+          pl-2.5 py-1 cursor-pointer gap-1 md:gap-2 md:text-body1_m
         `}
       >
         <span>{selectedOption}</span>
