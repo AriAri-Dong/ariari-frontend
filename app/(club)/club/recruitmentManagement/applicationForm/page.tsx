@@ -14,6 +14,9 @@ import RadioBtn from "@/components/button/radioBtn";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import TransparentSmallBtn from "@/components/button/basicBtn/transparentSmallBtn";
+import ApplicationFromPreviewModal from "@/components/modal/club/preview/applicationFormPreviewModal";
+import { BADGE_ITEMS } from "@/data/club";
+import MobileApplicationFromPreviewModal from "@/components/modal/club/preview/mobileApplicationFormPreviewModal";
 
 const ApplicationFormPage = () => {
   const isMdUp = useResponsive("md");
@@ -25,11 +28,12 @@ const ApplicationFormPage = () => {
   // ToggleBadge state management
   const [selectedBadges, setSelectedBadges] = useState<string[]>([]);
   const [documentQuestions, setDocumentQuestions] = useState<
-    { question: string; answer: string }[]
-  >([{ question: "", answer: "" }]);
+    { question: string }[]
+  >([{ question: "" }]);
   const [portfolioCollection, setPortfolioCollection] = useState<string>("");
   const [isPortfolioCollected, setIsPortfolioCollected] =
     useState<boolean>(true);
+  const [openPreview, setOpenPreview] = useState<boolean>(false);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -62,7 +66,7 @@ const ApplicationFormPage = () => {
   // 문항 입력값 변경 처리
   const handleDocumentQuestionChange = (
     index: number,
-    field: "question" | "answer",
+    field: "question",
     value: string
   ) => {
     const updatedQuestions = [...documentQuestions];
@@ -75,6 +79,10 @@ const ApplicationFormPage = () => {
     if (!isCollected) {
       setPortfolioCollection("");
     }
+  };
+
+  const handlePreview = () => {
+    setOpenPreview(true);
   };
 
   const badgeItems = [
@@ -140,7 +148,7 @@ const ApplicationFormPage = () => {
                     setName("");
                     setNameError(null);
                     setSelectedBadges([]);
-                    setDocumentQuestions([{ question: "", answer: "" }]);
+                    setDocumentQuestions([{ question: "" }]);
                   }}
                 />
               </div>
@@ -221,7 +229,7 @@ const ApplicationFormPage = () => {
                 <LargeBtn title={"저장하기"} onClick={() => {}} />
                 <button
                   className="flex justify-center items-center p-1 pt-[14px] w-full text-subtext2 text-mobile_body3_m"
-                  onClick={() => {}}
+                  onClick={handlePreview}
                 >
                   미리보기
                 </button>
@@ -230,7 +238,7 @@ const ApplicationFormPage = () => {
               <div className="hidden md:flex justify-center mt-12 gap-4">
                 <TransparentSmallBtn
                   title={"미리보기"}
-                  onClick={() => {}}
+                  onClick={handlePreview}
                   round={true}
                 />
                 <SmallBtn title={"저장하기"} onClick={() => {}} round={true} />
@@ -238,7 +246,45 @@ const ApplicationFormPage = () => {
             </div>
           </div>
         </div>
-
+        {isMdUp
+          ? openPreview && (
+              <ApplicationFromPreviewModal
+                onClose={() => setOpenPreview(false)}
+                portfolioCollected={isPortfolioCollected}
+                selectedFields={selectedBadges.map((badgeName) => {
+                  const field = BADGE_ITEMS.find(
+                    (item) => item.name === badgeName
+                  );
+                  return (
+                    field || {
+                      name: badgeName,
+                      type: "text",
+                      placeholder: `${badgeName}을(를) 입력해주세요.`,
+                    }
+                  );
+                })}
+                documentQuestions={documentQuestions}
+              />
+            )
+          : openPreview && (
+              <MobileApplicationFromPreviewModal
+                onClose={() => setOpenPreview(false)}
+                portfolioCollected={isPortfolioCollected}
+                selectedFields={selectedBadges.map((badgeName) => {
+                  const field = BADGE_ITEMS.find(
+                    (item) => item.name === badgeName
+                  );
+                  return (
+                    field || {
+                      name: badgeName,
+                      type: "text",
+                      placeholder: `${badgeName}을(를) 입력해주세요.`,
+                    }
+                  );
+                })}
+                documentQuestions={documentQuestions}
+              />
+            )}
         {alertMessage && (
           <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
