@@ -7,11 +7,11 @@ import defaultImg from "@/images/icon/defaultAriari.svg";
 import { ModalProps } from "@/types/components/modal";
 import TextInputWithCounter from "@/components/input/textInputWithCounter";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
-import Noti from "@/images/icon/noti.svg";
 import test_image from "@/images/test/test_image.jpg";
 import CustomInput from "@/components/input/customInput";
 import NotiPopUp from "../notiPopUp";
 import trash from "@/images/icon/delete.svg";
+import NoticeBanner from "@/components/banner/noticeBanner";
 
 const OPTIONS = [
   { label: "동아리 소속", value: "아리아리" },
@@ -173,13 +173,12 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
 
         {/* content 영역 (스크롤 가능한 영역) */}
         <div className="flex-1 overflow-y-auto custom-scrollbar">
-          <div className="flex bg-sub_bg items-center gap-5 py-4 px-5 rounded-12 mt-[22px]">
-            <Image src={Noti} alt="공지" width={32} height={32} />
-            <p className="text-body2_m text-icon">
-              동아리 이름과 세부 카테고리 수정은 아리아리 고객센터로
-              문의해주세요.
-            </p>
-          </div>
+          <NoticeBanner
+            text={
+              "동아리 이름과 세부 카테고리 수정은 아리아리 고객센터로 문의해주세요."
+            }
+            className="mt-[22px]"
+          />
           {/* 동아리 배너 이미지 */}
           <h3 className="flex text-text1 text-h3 mt-7 mb-[18px]">
             동아리 배너 이미지
