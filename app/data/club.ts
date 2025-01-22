@@ -147,3 +147,118 @@ export const PERCENT_DATA = [
   { type: "selfDevelopment", percent: 50 },
   { type: "skill", percent: 70 },
 ];
+
+export const BADGE_ITEMS: {
+  name: string;
+  type: "radio" | "text" | "textarea" | "date";
+  options?: string[];
+  maxLength?: number;
+  placeholder?: string;
+}[] = [
+  { name: "성별", type: "radio", options: ["남자", "여자"] },
+  { name: "생년월일", type: "date" },
+  {
+    name: "연락처",
+    type: "text",
+    placeholder: "연락처를 입력해 주세요.",
+  },
+  { name: "이메일", type: "text", placeholder: "이메일 주소를 입력해 주세요." },
+  {
+    name: "학력",
+    type: "radio",
+    options: ["중학교 졸업", "고등학교 졸업", "대학교 재학", "대학교 졸업"],
+  },
+  { name: "MBTI", type: "text", placeholder: "MBTI를 입력해주세요." },
+  {
+    name: "직업",
+    type: "radio",
+    options: [
+      "학생",
+      "직장인",
+      "무직",
+      "프리랜서",
+      // "창업가",
+      // "연구원",
+      // "공무원",
+      // "디자이너",
+      // "마케터",
+      // "기획자",
+      // "교육자",
+      // "의료인",
+      // "엔지니어",
+      // "군인",
+      // "운동선수",
+      // "크리에이터",
+      // "예술인",
+      // "전업주부",
+      // "자영업자",
+      "기타",
+    ],
+  },
+  {
+    name: "전공",
+    type: "text",
+    maxLength: 20,
+    placeholder: "주 전공학과를 입력해 주세요.",
+  },
+  {
+    name: "특기",
+    type: "text",
+    maxLength: 30,
+    placeholder: "특기를 입력해주세요.",
+  },
+  {
+    name: "취미",
+    type: "text",
+    maxLength: 30,
+    placeholder: "취미를 입력해주세요.",
+  },
+  {
+    name: "희망 활동 분야",
+    type: "text",
+    maxLength: 30,
+    placeholder: "희망 활동 분야를 입력해주세요.",
+  },
+  {
+    name: "SNS",
+    type: "text",
+    maxLength: 50,
+    placeholder: "SNS를 입력해주세요.",
+  },
+  {
+    name: "동아리를 알게된 경로",
+    type: "text",
+    maxLength: 50,
+    placeholder: "동아리를 알게된 경로를 입력해주세요.",
+  },
+  {
+    name: "활동 가능 기간",
+    type: "text",
+    maxLength: 50,
+    placeholder: "활동 가능 기간을 입력해주세요.",
+  },
+  {
+    name: "참여 가능 시간대",
+    type: "textarea",
+    maxLength: 100,
+    placeholder: "참여 가능 시간대를 입력해주세요.",
+  },
+  {
+    name: "지원 동기",
+    type: "textarea",
+    maxLength: 300,
+    placeholder: "지원동기를 입력해주세요.",
+  },
+  {
+    name: "포부",
+    type: "textarea",
+    maxLength: 300,
+    placeholder: "포부를 입력해주세요.",
+  },
+  {
+    name: "활동 경력",
+    type: "textarea",
+    maxLength: 300,
+    placeholder: "활동경력을 입력해주세요.",
+  },
+];
