@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import CustomInput from "@/components/input/customInput";
 import { BADGE_ITEMS } from "@/data/club";
-import { renderField } from "@/(club)/club/components/renderField";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import close from "@/images/icon/close.svg";
 import FileBadge from "@/components/badge/fileBadge";
 import TextareaWithCounter from "@/components/textArea/textareaWithCounter";
+import RenderField from "@/(club)/club/components/renderField";
 
 interface ModalProps {
   onClose: () => void;
@@ -80,7 +80,9 @@ const ApplicationFromPreviewModal = ({
                 onChange={() => {}}
               />
             </div>
-            {sortedFields.map((field, index) => renderField(field, index))}
+            {sortedFields.map((field, index) => (
+              <RenderField key={index} field={field} index={index} />
+            ))}
             {portfolioCollected && (
               <div className="flex flex-col">
                 <h3 className="flex text-text1 text-h3 mb-2.5">포트폴리오</h3>
