@@ -6,9 +6,13 @@ import CustomInput from "@/components/input/customInput";
 import useResponsive from "../../../../hooks/useResponsive";
 import TextareaWithCounter from "@/components/textArea/textareaWithCounter";
 
-export const renderField = (field: (typeof BADGE_ITEMS)[0], index: number) => {
-  const isMdUp = useResponsive("md");
+interface RenderFieldProps {
+  field: (typeof BADGE_ITEMS)[0];
+  index: number;
+}
 
+const RenderField: React.FC<RenderFieldProps> = ({ field, index }) => {
+  const isMdUp = useResponsive("md");
   const [inputValues, setInputValues] = useState<Record<string, string>>({});
 
   const handleInputChange = (fieldName: string, value: string) => {
@@ -158,3 +162,5 @@ export const renderField = (field: (typeof BADGE_ITEMS)[0], index: number) => {
       return null;
   }
 };
+
+export default RenderField;
