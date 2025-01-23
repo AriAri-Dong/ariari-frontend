@@ -10,7 +10,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
 
-  const specialPaths = ["recruitment/detail", "/club/review"];
+  const specialPaths = [
+    "recruitment/detail",
+    "/club/review",
+    "club/management",
+  ];
   const bgPaths = ["application"];
   const mobileBgPaths = ["/club/create"];
 
