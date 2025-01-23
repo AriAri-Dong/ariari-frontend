@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import vector from "@/images/icon/backVector.svg";
 import CustomInput from "@/components/input/customInput";
-import { BADGE_ITEMS } from "@/data/club";
-import { renderField } from "@/(club)/club/components/renderField";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import close from "@/images/icon/close.svg";
 import FileBadge from "@/components/badge/fileBadge";
+import RenderField from "@/(club)/club/components/renderField";
+import { BADGE_ITEMS } from "@/data/club";
 
 interface ModalProps {
   onClose: () => void;
@@ -94,7 +94,9 @@ const MobileApplicationFromPreviewModal = ({
             <CustomInput value={""} placeholder={"이름"} onChange={() => {}} />
           </div>
           {/* 선택 필드 */}
-          {sortedFields.map((field, index) => renderField(field, index))}
+          {sortedFields.map((field, index) => (
+            <RenderField key={index} field={field} index={index} />
+          ))}
           {/* 포트폴리오 */}
           {portfolioCollected && (
             <div className="flex flex-col">
