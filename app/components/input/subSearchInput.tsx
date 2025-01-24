@@ -10,6 +10,13 @@ interface SubSearchInputProps {
   className?: string;
 }
 
+/**
+ * 조회 영역 검색 컴포넌트
+ * @param onSearch 검색 핸들러
+ * @param placeholder
+ * @param className 추가 스타일
+ * @returns
+ */
 const SubSearchInput = ({
   onSearch,
   placeholder,
@@ -20,7 +27,7 @@ const SubSearchInput = ({
   return (
     <div
       className={`relative w-full bg-background focus-within:border-searchbarborder border 
-        border-menuborder rounded-3xl h-10 md:h-12 md:max-w-[270px] ${className}`}
+        border-menuborder rounded-3xl h-[42px] md:h-[46px] md:max-w-[270px] ${className}`}
     >
       <Image
         src={searchIcon}
