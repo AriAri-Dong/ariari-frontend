@@ -34,7 +34,7 @@ const SingleSelectOptions = ({
     {optionData.map((item, index) => (
       <div
         key={item.id}
-        className={`relative flex justify-center items-center text-base 
+        className={`relative flex justify-center items-center text-body1_m 
           text-subtext1 cursor-pointer pressed:bg-pressed
             ${index === 0 ? "rounded-t-lg" : ""}
             ${index === optionData.length - 1 ? "rounded-b-lg" : ""}
@@ -49,7 +49,7 @@ const SingleSelectOptions = ({
         onClick={() => handleMenuClick(item.label)}
       >
         <span
-          className={`relative w-full py-2.5 text-center text-[15px] ${
+          className={`relative w-full py-2.5 text-center text-body1_m text-subtext1 ${
             selectedOption === item.label && "text-primary"
           }`}
         >
