@@ -7,8 +7,8 @@ import { ButtonProps } from "@/types/components/button";
 const InvitationBtn = ({ onClick, className }: ButtonProps) => {
   return (
     <button
-      className={`flex justify-center items-center p-[3px] border border-menuborder
-    bg-background focus:bg-hover rounded-full cursor-pointer md:p-2.5 ${className}`}
+      className={`flex justify-center items-center border border-menuborder
+    bg-background active:bg-hover rounded-full cursor-pointer md:p-2.5 ${className}`}
       onClick={onClick}
     >
       <Image
