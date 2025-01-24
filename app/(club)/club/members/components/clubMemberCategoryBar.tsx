@@ -29,15 +29,15 @@ const ClubMemberCategoryBar = ({
         <p>전체 선택</p>
       </div>
       <div className="flex-[4] flex justify-end md:justify-center">
-        <div className="flex-[2]" />
-        <div className="flex-[2] flex justify-center">
+        <div className="md:flex-[2]" />
+        <div className="md:flex-[2] flex justify-center">
           <SubPullDown
             optionData={MEMBER_STATUS_TYPE.slice(1)}
             selectedOption={"활동상태 변경"}
             handleOption={() => {}}
           />
         </div>
-        <div className="flex-[1]" />
+        <div className="md:flex-[1]" />
       </div>
     </div>
   );
