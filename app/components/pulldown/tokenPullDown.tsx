@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import useResponsive from "../../../hooks/useResponsive";
 
 import Image from "next/image";
@@ -8,20 +8,28 @@ import keyboardArrowDown from "@/images/icon/arrow.svg";
 import keyboardArrowUp from "@/images/icon/arrow-up.svg";
 import SingleSelectOptions from "./singleSelectOptions";
 import BottomSheet from "./bottomSheet";
-import MemberStatusToken from "../token/memberStatusToken";
-import { MAP_STATUS_TO_EN } from "@/(club)/club/members/util/mapStatus";
-import { clubMemberStatusType } from "@/model/member";
+import { OptionType } from "@/types/components/pulldown";
 
 interface TokenPullDownProps {
-  optionData: { id: number; label: string }[];
-  selectedOption: clubMemberStatusType;
+  optionData: OptionType[];
+  selectedOption: string;
   handleOption: (label: string) => void;
+  ImageTokenComponent: ReactNode;
 }
+
+/**
+ *
+ * @param optionData 드롭다운에 표시될 옵션 데이터의 배열.
+ * @param selectedOption 선택된 옵션
+ * @param handleOption 옵션을 선택 핸들러
+ * @param ImageTokenComponent 선택된 항목으로 보여질 토큰 컴포넌트
+ */
 
 const TokenPullDown = ({
   optionData,
   selectedOption,
   handleOption,
+  ImageTokenComponent,
 }: TokenPullDownProps) => {
   const tokenPullDownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -68,11 +76,11 @@ const TokenPullDown = ({
           pl-2.5 py-0 md:py-1 cursor-pointer gap-1 md:gap-0 md:text-body1_m
         `}
       >
-        <MemberStatusToken status={selectedOption} />
+        {ImageTokenComponent}
 
         <Image
           src={isDropdownOpen ? keyboardArrowUp : keyboardArrowDown}
-          alt={isDropdownOpen ? "keyboardArrowUp" : "keyboardArrowDown"}
+          alt={"arrow"}
           className="w-[20px] h-[20px] md:w-[28px] md:h-[28px]"
         />
       </button>
