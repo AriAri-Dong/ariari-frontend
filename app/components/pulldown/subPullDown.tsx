@@ -5,6 +5,7 @@ import useResponsive from "../../../hooks/useResponsive";
 
 import Image from "next/image";
 import keyboardArrowDown from "@/images/icon/arrow.svg";
+import keyboardArrowUp from "@/images/icon/arrow-up.svg";
 import SingleSelectOptions from "./singleSelectOptions";
 
 import BottomSheet from "./bottomSheet";
@@ -57,7 +58,7 @@ const SubPullDown = ({
   }, []);
 
   return (
-    <div ref={SubPullDownRef} className="relative flex items-center">
+    <div ref={SubPullDownRef} className="w-fit relative flex items-center">
       <button
         ref={buttonRef}
         onClick={toggleDropdown}
@@ -68,8 +69,8 @@ const SubPullDown = ({
         <span>{selectedOption}</span>
 
         <Image
-          src={keyboardArrowDown}
-          alt="keyboardArrowDown"
+          src={isDropdownOpen ? keyboardArrowUp : keyboardArrowDown}
+          alt={isDropdownOpen ? "keyboardArrowUp" : "keyboardArrowDown"}
           className="w-[20px] h-[20px] md:w-[28px] md:h-[28px]"
         />
       </button>
