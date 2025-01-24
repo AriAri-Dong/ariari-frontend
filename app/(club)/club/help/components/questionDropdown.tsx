@@ -23,16 +23,25 @@ interface QuestionDropdownProps {
   data: ClubQuestionData | ClubFaqData;
   myRoleType: clubMemberRoleType | null | undefined;
   myProfileType: profileType | null | undefined;
+  isOpen: boolean;
+  setSelected: (value: number | null) => void;
 }
 /**
  *
  * @param data QNA 데이터 or FAQ 데이터
+ * @param myRoleType 로그인 유저 role - "GENERAL":일반, "MANAGER":매니저, "ADMIN":관리자
+ * @param myProfileType 유저 이미지타입
+ * @param isOpen 답변 open 여부
+ * @param setSelected set 열린 답변
  * @returns
  */
+
 const QuestionDropdown = ({
   data,
   myRoleType,
   myProfileType,
+  isOpen,
+  setSelected,
 }: QuestionDropdownProps) => {
   let bg, text, label;
   const isFaq = "clubFaqColorType" in data;
@@ -50,10 +59,13 @@ const QuestionDropdown = ({
     text = data.clubAnswerData ? "text-primary" : "text-subtext2";
     label = data.clubAnswerData ? "답변완료" : "미답변";
   }
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const onClick = () => {
-    setIsOpen((prev) => !prev);
+  const onClick = (id: number) => {
+    if (isOpen) {
+      setSelected(null);
+    } else {
+      setSelected(id);
+    }
   };
 
   return (
@@ -82,7 +94,7 @@ const QuestionDropdown = ({
             )}
             <button
               className="flex justify-center items-center p-0.5 cursor-pointer"
-              onClick={onClick}
+              onClick={() => onClick(data.id)}
             >
               <Image
                 src={isOpen ? keyboardArrowUp : keyboardArrowDown}

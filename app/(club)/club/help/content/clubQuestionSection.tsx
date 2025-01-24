@@ -48,6 +48,9 @@ const ClubQuestionSection = () => {
   const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
 
+  const [selectedFaq, setSelectedFaq] = useState<number | null>(null);
+  const [selectedQna, setSelectedQna] = useState<number | null>(null);
+
   const [clubMember, setClubMember] = useState<ClubMemberData | null>(
     CLUM_MEMBER_DATA[0]
   ); // 멤버타입 (null - 미소속회원)
@@ -110,6 +113,8 @@ const ClubQuestionSection = () => {
                   data={item}
                   myRoleType={clubMember?.clubMemberRoleType}
                   myProfileType={clubMember?.profileType}
+                  isOpen={item.id == selectedFaq}
+                  setSelected={setSelectedFaq}
                 />
               </div>
             ))
@@ -119,6 +124,8 @@ const ClubQuestionSection = () => {
                   data={item}
                   myRoleType={clubMember?.clubMemberRoleType}
                   myProfileType={clubMember?.profileType}
+                  isOpen={item.id == selectedQna}
+                  setSelected={setSelectedQna}
                 />
               </div>
             ))}
