@@ -10,9 +10,10 @@ import MultiSelectOptions from "./multiSelectOptions";
 
 import BottomSheet from "./bottomSheet";
 import NotiPopUp from "../modal/notiPopUp";
+import { OptionType } from "@/types/components/pulldown";
 
 interface PulldownProps {
-  optionData: { id: number; label: string }[];
+  optionData: OptionType[];
   multiple?: boolean;
   selectedOption: string[];
   handleOption: (label: string[]) => void;
