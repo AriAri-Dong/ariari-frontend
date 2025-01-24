@@ -45,7 +45,7 @@ const SubSearchBar = ({
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         placeholder={placeholder}
-        className="flex-grow bg-background text-text1 md:text-body1_r focus:outline-none"
+        className="flex-grow bg-background text-mobile_body2_r text-text1 md:text-body1_r focus:outline-none"
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             handleSearch(e.currentTarget.value);
