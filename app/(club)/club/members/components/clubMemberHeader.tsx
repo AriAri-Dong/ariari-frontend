@@ -1,23 +1,14 @@
 "use client";
 
+import { useState } from "react";
+
 import InvitationBtn from "@/components/button/iconBtn/invitationBtn";
 import SubSearchBar from "@/components/input/subSearchBar";
 import PullDown from "@/components/pulldown/pullDown";
 import SubTap from "@/components/tab/subTap";
-import { useState } from "react";
+import InvitaionForm from "./invitationForm";
 
-import Image from "next/image";
-
-import checkIcon from "@/images/icon/checkBox.svg";
-import uncheckIcon from "@/images/icon/emptyCheckBox.svg";
-import SubPullDown from "@/components/pulldown/subPullDown";
-import { MEMBER_STATUS_TYPE, ROLE_TYPE } from "@/data/pulldown";
-import { CLUB_MEMBER_DATA } from "@/data/clubMember";
-import DeleteBtn from "@/components/button/iconBtn/deleteBtn";
-import TokenPullDown from "@/components/pulldown/tokenPullDown";
-import { MAP_ROLE_TO_KO } from "../util/mapRole";
-import ClubMemberList from "../components/clubMemberList";
-import ClubMemberCategoryBar from "../components/clubMemberCategoryBar";
+import { MEMBER_STATUS_TYPE } from "@/data/pulldown";
 interface ClubMemberHeaderProps {
   searchTerm: string;
   setSearchTerm: (searchTerm: string) => void;
@@ -32,6 +23,8 @@ const ClubMemberHeader = ({
   selectedOption,
   setSelectedOption,
 }: ClubMemberHeaderProps) => {
+  const [isInvitationModalOpen, setIsInvitationModalOpen] =
+    useState<boolean>(false);
   return (
     <div>
       <SubSearchBar
@@ -53,7 +46,12 @@ const ClubMemberHeader = ({
             optionSize="small"
           />
         </div>
-        <InvitationBtn onClick={() => {}} className="p-2.5" />
+        <InvitationBtn
+          onClick={() => {
+            setIsInvitationModalOpen(true);
+          }}
+          className="p-[10px]"
+        />
       </div>
       <div className="flex justify-between items-center mb-4 md:mb-[22px]">
         <p className="text-subtext2 text-mobile_body2_m md:text-h4">
@@ -67,6 +65,14 @@ const ClubMemberHeader = ({
           className="hidden md:flex md:w-[270px]"
         />
       </div>
+      {isInvitationModalOpen && (
+        <InvitaionForm
+          onClose={() => {
+            setIsInvitationModalOpen(false);
+          }}
+          onSubmit={() => {}}
+        />
+      )}
     </div>
   );
 };
