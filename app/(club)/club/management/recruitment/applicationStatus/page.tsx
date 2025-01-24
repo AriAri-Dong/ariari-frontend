@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { MONILE_MENU_OPTIONS } from "@/data/club";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
@@ -19,7 +19,8 @@ import NotiPopUp from "@/components/modal/notiPopUp";
 import Tabs from "@/(club)/club/components/tabs/mobileTabs";
 import PullDown from "@/components/pulldown/pullDown";
 import SubSearchInput from "@/components/input/subSearchInput";
-import CustomCalendar from "@/components/calendar/customCalendar";
+import RangeCalendar from "@/components/calendar/rangeCalendar";
+import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
 
 const OPTIONS = [
   { id: 0, label: "전체", number: 14 },
@@ -39,6 +40,7 @@ const MOBILE_OPTIONS = [
 
 const ApplicationStatusPage = () => {
   const isMdUp = useResponsive("md");
+  const optionsRef = useRef<HTMLDivElement | null>(null);
 
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -74,15 +76,27 @@ const ApplicationStatusPage = () => {
   };
 
   const handleStatusChange = () => {
-    console.log(
-      `선택된 지원서 ID: ${selectedApplications}, 상태: ${selectedOption}`
-    );
     setIsModalOpen(false);
   };
 
   const handleOpenForm = () => {
     setOpenForm(true);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        optionsRef.current &&
+        !optionsRef.current.contains(event.target as Node)
+      ) {
+        setIsOptionsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -123,38 +137,47 @@ const ApplicationStatusPage = () => {
               </div>
               <Tabs />
 
-              <div className="lg:hidden flex items-center">
-                <PullDown
-                  optionData={MOBILE_OPTIONS}
-                  multiple={false}
-                  selectedOption={selectedSortOption}
-                  handleOption={setSelectedSortOption}
-                  optionSize={"small"}
-                />
-              </div>
-              <div className="flex justify-between items-center mb-4 mt-4 md:mb-[22px] md:mt-[22px]">
+              <div
+                className="flex gap-4 flex-col-reverse md:flex-row justify-between items-start
+              lg:items-center mb-4 mt-4 md:mb-[22px] md:mt-[22px] md:gap-0"
+              >
                 <p className="text-subtext2 text-mobile_body2_m md:text-h4">
                   총 nnn개의 지원서가 있어요.
                 </p>
-                <div className="flex gap-5">
+                <div className="flex flex-row-reverse md:flex-row gap-2.5 md:gap-5">
                   <IconBtn
                     type={"reset"}
                     size={"small"}
-                    title={"초기화"}
+                    title={isMdUp ? "초기화" : ""}
                     onClick={() => {}}
                     className="whitespace-nowrap"
                   />
-                  <CustomCalendar />
+                  <div className="lg:hidden flex items-center">
+                    <PullDown
+                      optionData={MOBILE_OPTIONS}
+                      multiple={false}
+                      selectedOption={selectedSortOption}
+                      handleOption={setSelectedSortOption}
+                      optionSize={"small"}
+                    />
+                  </div>
+                  <RangeCalendar />
                   <SubSearchInput
                     onSearch={() => {}}
                     placeholder={"이름 또는 공고 제목"}
+                    className="lg:block hidden"
                   />
                 </div>
+                <SubSearchInput
+                  onSearch={() => {}}
+                  placeholder={"이름 또는 공고 제목"}
+                  className="lg:hidden"
+                />
               </div>
               {isMdUp ? (
                 <div
                   className="flex-row justify-between items-center w-full my-2.5 hidden md:flex
-              py-1.5 pl-6 pr-[150px] rounded-lg bg-white70 text-subtext2 text-body1_m"
+                  py-2.5 pl-6 pr-[150px] rounded-lg bg-white70 text-subtext2 text-body1_m"
                 >
                   <AllCheckBox
                     isChecked={
@@ -176,7 +199,10 @@ const ApplicationStatusPage = () => {
                     <p>지원상태 변경</p>
                     <Image alt={"버튼"} src={vector} width={28} height={28} />
                     {isOptionsOpen && (
-                      <div className="absolute top-full mt-2 z-50 left-12">
+                      <div
+                        ref={optionsRef}
+                        className="absolute top-full mt-2 z-50 left-12"
+                      >
                         <SingleSelectOptions
                           selectedOption={selectedOption}
                           optionData={[
@@ -209,7 +235,7 @@ const ApplicationStatusPage = () => {
                   />
                   <div
                     className="flex gap-1 items-center"
-                    onClick={() => setIsOptionsOpen(!isOptionsOpen)}
+                    onClick={() => setIsOptionsOpen(true)}
                   >
                     <p className="text-subtext2 text-mobile_body2_m">
                       지원상태 변경
@@ -242,6 +268,19 @@ const ApplicationStatusPage = () => {
           </div>
         </div>
         {isMdUp ? openForm && null : openForm && null}
+        {isOptionsOpen && !isMdUp && (
+          <CommonBottomSheet
+            optionData={OPTIONS}
+            selectedOption={selectedStatus}
+            handleMenuClick={(label: string) => {
+              setSelectedStatus(label);
+              setIsOptionsOpen(false);
+              setIsModalOpen(true);
+            }}
+            onClose={() => setIsOptionsOpen(false)}
+          />
+        )}
+
         {isModalOpen && (
           <NotiPopUp
             onClose={() => setIsModalOpen(false)}
