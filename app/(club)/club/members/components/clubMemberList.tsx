@@ -14,7 +14,7 @@ import NotiPopUp from "@/components/modal/notiPopUp";
 import { MEMBER_STATUS_TYPE, ROLE_TYPE } from "@/data/pulldown";
 import { MAP_ROLE_TO_KO } from "../util/mapRole";
 import { ClubMemberData } from "@/model/member";
-import { MAP_STATUS_STYLES } from "../util/mapStatus";
+import { MAP_STATUS_STYLES, MAP_STATUS_TO_KO } from "../util/mapStatus";
 
 interface ClubMemberListProps {
   data: ClubMemberData;
@@ -34,7 +34,6 @@ const ClubMemberList = ({
       <div className="w-full md:flex md:justify-start md:items-center md:flex-[6]">
         <div className="w-full flex justify-between pl-2.5 mb-2.5 md:w-fit md:justify-start md:mb-0 md:mr-5  items-center md:p-0">
           <Image
-            // src={selectedMember?.includes(data.id) ? checkIcon : uncheckIcon}
             src={isSelected ? checkIcon : uncheckIcon}
             alt="checkbox"
             width={16}
@@ -70,7 +69,7 @@ const ClubMemberList = ({
         </div>
       </div>
       <div className="w-full flex justify-between md:flex-[4] ">
-        <div className="md:flex-1">
+        <div className="md:flex-[2]">
           <SubPullDown
             optionData={ROLE_TYPE}
             selectedOption={MAP_ROLE_TO_KO[data.clubMemberRoleType]}
@@ -81,10 +80,10 @@ const ClubMemberList = ({
             }}
           />
         </div>
-        <div className="hidden flex-1 md:flex justify-center">
+        <div className="hidden flex-[2] md:flex justify-center">
           <TokenPullDown
             optionData={MEMBER_STATUS_TYPE.slice(2)}
-            selectedOption={data.clubMemberStatusType}
+            selectedOption={MAP_STATUS_TO_KO[data.clubMemberStatusType]}
             handleOption={() => {}}
             ImageTokenComponent={
               <ImageToken
@@ -98,7 +97,7 @@ const ClubMemberList = ({
             }
           />
         </div>
-        <div className="flex-1 flex justify-end items-center">
+        <div className="flex-[1] flex justify-end items-center">
           <DeleteBtn
             onClick={() => {
               setIsDeleteModalOpen(true);
@@ -106,7 +105,7 @@ const ClubMemberList = ({
           />
         </div>
       </div>
-      {/* / */}
+      {/* modal */}
       {(isManagerModalOpen || isDeleteModalOpen) && (
         <NotiPopUp
           modalType="button"
