@@ -49,7 +49,7 @@ const ClubQuestionSection = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
 
   const [clubMember, setClubMember] = useState<ClubMemberData | null>(
-    CLUM_MEMBER_DATA[1]
+    CLUM_MEMBER_DATA[0]
   ); // 멤버타입 (null - 미소속회원)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true); // 로그인여부 임시값
   const isTapOver = useResponsive("md");
@@ -145,10 +145,15 @@ const ClubQuestionSection = () => {
       )}
 
       {/* ====== 모바일 해상도에서만 보이는 하단 버튼 ======  */}
-
-      <div className="fixed bottom-5 left-4  md:hidden">
-        <DarkBtn title={"모집공고 보기"} onClick={handleRouter} />
-      </div>
+      {(clubMember == null || !isLoggedIn) && (
+        <div
+          className={`fixed bottom-5 md:hidden  ${
+            type == "FAQ" ? "left-50% translate-1/2" : "left-4 "
+          }`}
+        >
+          <DarkBtn title={"모집공고 보기"} onClick={handleRouter} />
+        </div>
+      )}
 
       {/* ====== 공통 작성버튼 : FAQ - 관리자, 매니저, QNA - 일반회원 ======*/}
       {((type == "Q&A" &&
