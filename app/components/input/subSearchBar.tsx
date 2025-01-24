@@ -14,9 +14,11 @@ interface SubSearchBarProps {
 
 /**
  *
- * @param onSearch 검색 핸들러
+ * @param searchTerm 검색어
+ * @param setSearchTerm set검색어
+ * @param handleSearch 검색 핸들러
+ * @param placeholder
  * @param className 추가 style 코드
- * @param showRecentSearches 최근 검색어 표출 여부
  * @returns
  */
 
