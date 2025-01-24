@@ -4,6 +4,7 @@ import CustomInput from "@/components/input/customInput";
 import { BADGE_ITEMS } from "@/data/club";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import close from "@/images/icon/close.svg";
+import eye from "@/images/icon/eye.svg";
 import FileBadge from "@/components/badge/fileBadge";
 import TextareaWithCounter from "@/components/textArea/textareaWithCounter";
 import RenderField from "@/(club)/club/components/renderField";
@@ -62,11 +63,17 @@ const ApplicationFromPreviewModal = ({
     <div
       id="background"
       className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
-      onClick={(e) =>
-        (e.target as HTMLDivElement).id === "background" && handleClose()
-      }
+      // onClick={(e) =>
+      //   (e.target as HTMLDivElement).id === "background" && handleClose()
+      // }
     >
-      <div className="bg-white py-[26px] px-6 shadow-modal rounded-2xl w-[900px] max-h-[90vh] flex flex-col">
+      <div
+        className="absolute top-4 right-4 cursor-pointer bg-white p-2 border border-menuborder rounded-full"
+        onClick={handleClose}
+      >
+        <Image src={close} alt={"닫기"} width={24} height={24} />
+      </div>
+      <div className="bg-white py-[26px] px-6 shadow-modal rounded-2xl w-[900px] max-h-[80vh] flex flex-col">
         <div className="flex-1 overflow-y-auto custom-scrollbar">
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-[18px]">
@@ -145,6 +152,12 @@ const ApplicationFromPreviewModal = ({
               ))}
           </div>
         </div>
+      </div>
+      <div className="absolute bottom-10 flex items-center py-3 px-4 gap-3 rounded-36 bg-black_50">
+        <Image src={eye} alt="눈" width={24} height={24} />
+        <p className="text-background text-body1_sb">
+          동아리 지원서 양식 미리보기
+        </p>
       </div>
     </div>
   );
