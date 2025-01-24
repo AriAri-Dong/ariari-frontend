@@ -22,7 +22,7 @@ const ApplicationFormCard = ({
   onCheck,
 }: ApplicationFormCardProps) => {
   return (
-    <div className="w-full bg-background py-[14px] px-4 md:py-[18px] md:px-6">
+    <div className="w-full bg-background py-[14px] px-4 md:py-[18px] md:px-6 rounded-lg">
       <div className="flex justify-between gap-3 md:gap-8">
         <div className="flex flex-col gap-4 w-full">
           <div className="flex justify-between md:py-2">
