@@ -16,7 +16,9 @@
   border: none;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  padding: 16px !important;
+  padding: 16px 16px 0px 16px !important;
+  font-family: "Pretendard", sans-serif;
+  font-size: 15px;
 }
 
 .react-datepicker__current-month {
@@ -31,7 +33,7 @@
   background-color: white;
   border-radius: 0.375rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-top: 0; /* 화살표 제거 후 간격 조정 */
+  margin-top: 0;
 }
 
 /* Popper 화살표 제거 */
@@ -40,14 +42,16 @@
 }
 
 .react-datepicker__day-name {
-  font-size: 12px; /* 폰트 크기 */
-  color: #999; /* 글자 색상 */
-  margin: 22px 4px 8px 4px; /* 가로 간격 추가 */
-  line-height: 1.5; /* 세로 정렬을 위한 줄 높이 */
+  font-family: "Pretendard", sans-serif;
+  font-size: 12px;
+  color: #999;
+  margin: 22px 4px 8px 4px;
+  line-height: 1.5;
   text-align: center;
 }
 
 .react-datepicker__day {
+  font-family: "Pretendard", sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #333;
