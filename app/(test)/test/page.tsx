@@ -9,12 +9,15 @@ import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
 import MobileProfileSettingModal from "@/components/modal/profileSetting/mobile/mobileProfileSettingModal";
+import InviteDialog from "@/components/modal/invite/inviteDialog";
 
 const TestPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
   const [isButtonVisible, setIsButtonVisible] = useState<boolean>(true);
   const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(true);
+  const [isInvitationModalOpen, setIsInvitationModalOpen] =
+    useState<boolean>(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -57,7 +60,14 @@ const TestPage = () => {
           ? "Hidden Profile Setting Components"
           : "Show Profile Setting Components"}
       </button>
-
+      <button
+        className="py-2 px-4 mb-3 bg-token_1_bg text-white rounded-lg hover:bg-token_1"
+        onClick={() => setIsInvitationModalOpen(!isInvitationModalOpen)}
+      >
+        {isInvitationModalOpen
+          ? "Hidden invitation modal"
+          : "Show invitation modal"}
+      </button>
       {/* Login Modal */}
       {isModalOpen && (
         <>
@@ -72,6 +82,12 @@ const TestPage = () => {
           <ProfileSettingModal onClose={() => setIsProfileOpen(false)} />
           <MobileProfileSettingModal onClose={() => setIsProfileOpen(false)} />
         </>
+      )}
+      {isInvitationModalOpen && (
+        <InviteDialog
+          clubName={"아리아리"}
+          onClose={() => setIsInvitationModalOpen(false)}
+        />
       )}
 
       {/* Button Components */}
