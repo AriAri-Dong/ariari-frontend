@@ -13,3 +13,8 @@ export interface MainRecruitmentCardProps {
   };
   isScrap: boolean;
 }
+
+export interface GuideData {
+  title: string; // 제목
+  instructions: string[]; // 가이드 내용 리스트
+}
