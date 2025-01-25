@@ -18,9 +18,8 @@ interface QnaFormProps {
 const QnaForm = ({ onClose, onSubmit }: QnaFormProps) => {
   const isTapOver = useResponsive("md");
 
-  const [detail, setDetail] = useState<string>("");
   const [title, setTitle] = useState<string>("");
-  const [isContentVisible, setIsContentVisible] = useState(false); //주의사항
+  const [detail, setDetail] = useState<string>("");
   const [isClosing, setIsClosing] = useState<boolean>(false);
   const startY = useRef(0);
   const currentY = useRef(0);
@@ -85,8 +84,6 @@ const QnaForm = ({ onClose, onSubmit }: QnaFormProps) => {
           setTitle={setTitle}
           detail={detail}
           setDetail={setDetail}
-          isContentVisible={isContentVisible}
-          setIsContentVisible={setIsContentVisible}
           onClose={onClose}
           onSubmit={onSubmit}
         />
@@ -104,8 +101,6 @@ const QnaForm = ({ onClose, onSubmit }: QnaFormProps) => {
           setTitle={setTitle}
           detail={detail}
           setDetail={setDetail}
-          isContentVisible={isContentVisible}
-          setIsContentVisible={setIsContentVisible}
           onClose={onClose}
           onSubmit={onSubmit}
         />
