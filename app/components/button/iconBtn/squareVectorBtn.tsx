@@ -8,7 +8,7 @@ const SquareVectorBtn = ({ onClick }: ButtonProps) => {
   return (
     <button
       className="flex justify-center items-center p-[10px] border border-menuborder
-    bg-background hover:bg-hover focus:bg-pressed rounded-lg cursor-pointer"
+    bg-background hover:bg-hover active:bg-pressed rounded-lg cursor-pointer"
       onClick={onClick}
     >
       <Image src={vector} alt={"vector"} width={24} height={24} />

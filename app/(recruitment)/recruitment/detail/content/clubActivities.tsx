@@ -1,50 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import RecruitmentCard from "@/components/card/recruitmentCard";
 import AcceptanceReviewDropdown from "@/components/dropdown/acceptanceReviewDropdown";
-
-const ACCEPTANCE_REVIEWS = [
-  {
-    id: 0,
-    title: "2024년 봄학기 동아리 모집",
-    date: "2024.12.31",
-  },
-  {
-    id: 1,
-    title: "가을학기 동아리 모집 후기",
-    date: "2024.10.15",
-  },
-  {
-    id: 2,
-    title: "여름방학 동아리 모집 후기",
-    date: "2024.07.20",
-  },
-];
-
-const RECRUITMENT_CARDS = [
-  {
-    id: 0,
-    title: "2024년 봄학기 동아리 모집",
-    date: "2024.12.31",
-    status: "모집중",
-  },
-  {
-    id: 1,
-    title: "가을학기 동아리 모집 공고",
-    date: "2024.10.15",
-    status: "모집중",
-  },
-  {
-    id: 2,
-    title: "여름방학 동아리 모집 안내",
-    date: "2024.07.20",
-    status: "모집마감",
-  },
-];
+import { ACCEPTANCE_REVIEWS, RECRUITMENT_CARDS } from "@/data/club";
 
 const ClubActivities = () => {
+  const [openDropdowns, setOpenDropdowns] = useState<boolean[]>(
+    new Array(ACCEPTANCE_REVIEWS.length).fill(false)
+  );
+
+  const handleDropdownToggle = (index: number) => {
+    setOpenDropdowns((prevState) => {
+      return prevState.map((_, idx) => idx === index);
+    });
+  };
+
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full">
       <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5">
@@ -56,13 +28,18 @@ const ClubActivities = () => {
           동아리 합격 후기
         </h1>
         <div className="flex flex-col mt-5 gap-3 md:gap-[14px]">
-          {ACCEPTANCE_REVIEWS.map((item) => {
+          {ACCEPTANCE_REVIEWS.map((item, index) => {
             return (
               <AcceptanceReviewDropdown
                 key={item.id}
                 title={item.title}
                 date={item.date}
                 onClick={() => {}}
+                onBtnClick={() => {}}
+                document={0}
+                interview={0}
+                isOpen={openDropdowns[index]}
+                onToggle={() => handleDropdownToggle(index)}
               />
             );
           })}

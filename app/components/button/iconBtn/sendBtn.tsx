@@ -8,7 +8,7 @@ const SendBtn = ({ onClick }: ButtonProps) => {
   return (
     <button
       className="flex justify-center items-center w-8 h-8 md:w-9 md:h-9
-    bg-primary focus:bg-primary_hover md:hover:bg-primary_hover md:focus:bg-primary_pressed
+    bg-primary active:bg-primary_hover md:hover:bg-primary_hover md:active:bg-primary_pressed
     rounded-full  border border-menuborder cursor-pointer"
       onClick={onClick}
     >

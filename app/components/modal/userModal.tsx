@@ -11,6 +11,12 @@ interface UserModalProps {
   onClose: () => void;
 }
 
+/**
+ *
+ * @param {string} username 유저 이름
+ * @param onClose 모달 닫기 핸들러
+ * @returns
+ */
 const UserModal = ({ onClose }: UserModalProps) => {
   const router = useRouter();
   const username = "Suyoooi";
@@ -23,10 +29,12 @@ const UserModal = ({ onClose }: UserModalProps) => {
   return (
     <div className="fixed inset-0 bg-white z-50 px-4">
       <div className="flex flex-col">
-        <div className="flex justify-between mt-10 mb-10">
+        <div className="flex justify-between mt-10 mb-4">
           <div className="flex items-center gap-3">
             <div className="rounded-full w-9 h-9 bg-[#CBCBCB]" />
-            <span className="text-subtext2 text-base">{username}</span>
+            <span className="text-subtext2  text-mobile_body1_m">
+              {username}
+            </span>
           </div>
           <Image
             src={closeIcon}
@@ -36,26 +44,34 @@ const UserModal = ({ onClose }: UserModalProps) => {
             onClick={onClose}
           />
         </div>
-        <div className="w-full">
-          <div className="mt-5">
-            <ul className="flex flex-col space-y-9">
-              {USER_MENU.map((item, index) => (
-                <li key={index} className="">
-                  <span
-                    className={`cursor-pointer
-                    ${
-                      index === 5
-                        ? `text-subtext2 text-15 font-normal`
-                        : `text-text1 text-lg font-semibold`
-                    }`}
-                    onClick={() => handleMenuClick(item.path)}
-                  >
-                    {item.label}
-                  </span>
-                </li>
-              ))}
-            </ul>
+        <div
+          className="flex items-center justify-between w-full bg-selectedoption_default
+          rounded-lg max-w-[1248px] px-5 h-[55px]"
+        >
+          <h3 className="text-body1_sb text-primary">내 포인트 현황</h3>
+          <div className="flex items-center gap-1.5 text-primary">
+            <div className="text-h4_sb">20</div>
+            <p className="text-body3_r">p</p>
           </div>
+        </div>
+        <div className="w-full mt-5">
+          <ul className="flex flex-col gap-y-8">
+            {USER_MENU.map((item, index) => (
+              <li key={index} className="">
+                <span
+                  className={`cursor-pointer
+        ${
+          index === USER_MENU.length - 1
+            ? `text-subtext2 text-mobile_body1_r`
+            : `text-text1 text-mobile_h1_contents_title`
+        }`}
+                  onClick={() => handleMenuClick(item.path)}
+                >
+                  {item.label}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
         <Image
           src={logo}

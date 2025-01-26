@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import useResponsive from "../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 
 import Image from "next/image";
 import keyboardArrowDown from "@/images/icon/arrow.svg";
+import keyboardArrowUp from "@/images/icon/arrow-up.svg";
 import SingleSelectOptions from "./singleSelectOptions";
 
 import BottomSheet from "./bottomSheet";
@@ -12,13 +13,15 @@ import BottomSheet from "./bottomSheet";
 interface SubPullDownProps {
   optionData: { id: number; label: string }[];
   selectedOption: string;
-  handleOption: (label: string) => void;
+  handleOption?: (label: string) => void;
+  handleOptionWithId?: (label: string, id: number) => void;
 }
 
 const SubPullDown = ({
   optionData,
   selectedOption,
   handleOption,
+  handleOptionWithId,
 }: SubPullDownProps) => {
   const SubPullDownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -35,7 +38,17 @@ const SubPullDown = ({
   };
 
   const handleMenuClick = (label: string) => {
-    handleOption(label);
+    if (handleOption) {
+      handleOption(label);
+    }
+
+    toggleDropdown();
+  };
+  const handleMenuClickWithId = (label: string, id: number) => {
+    if (handleOptionWithId) {
+      console.log(label, id);
+      handleOptionWithId(label, id);
+    }
     toggleDropdown();
   };
 
@@ -57,19 +70,19 @@ const SubPullDown = ({
   }, []);
 
   return (
-    <div ref={SubPullDownRef} className="relative flex items-center">
+    <div ref={SubPullDownRef} className="w-fit relative flex items-center">
       <button
         ref={buttonRef}
         onClick={toggleDropdown}
-        className={`relative flex items-center justify-between text-subtext2 text-[13px]
-          pl-2.5 py-1 cursor-pointer gap-1 md:gap-2 md:text-[15px]
+        className={`relative flex items-center justify-between text-subtext2 text-mobile_body2_m
+          pl-2.5 py-1 cursor-pointer gap-1 md:gap-2 md:text-body1_m
         `}
       >
         <span>{selectedOption}</span>
 
         <Image
-          src={keyboardArrowDown}
-          alt="keyboardArrowDown"
+          src={isDropdownOpen ? keyboardArrowUp : keyboardArrowDown}
+          alt={isDropdownOpen ? "keyboardArrowUp" : "keyboardArrowDown"}
           className="w-[20px] h-[20px] md:w-[28px] md:h-[28px]"
         />
       </button>
@@ -77,16 +90,24 @@ const SubPullDown = ({
       {isDropdownOpen &&
         (isTabOver ? (
           <SingleSelectOptions
-            optionData={optionData.slice(1)}
+            optionData={optionData}
             selectedOption={selectedOption}
-            handleMenuClick={handleMenuClick}
+            {...(handleOption
+              ? { handleMenuClick }
+              : handleOptionWithId
+              ? { handleMenuClickWithId: handleMenuClickWithId }
+              : {})}
             size="small"
           />
         ) : (
           <BottomSheet
-            optionData={optionData.slice(1)}
+            optionData={optionData}
             selectedOptions={selectedOption}
-            handleMenuClick={handleMenuClick}
+            {...(handleOption
+              ? { handleMenuClick }
+              : handleOptionWithId
+              ? { handleMenuClickWithId: handleMenuClickWithId }
+              : {})}
             onClose={() => setIsDropdownOpen(false)}
           />
         ))}

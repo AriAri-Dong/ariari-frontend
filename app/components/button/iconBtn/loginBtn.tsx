@@ -8,7 +8,7 @@ const LoginBtn = ({ onClick }: ButtonProps) => {
   return (
     <button
       className="flex justify-center items-center p-0.5
-     focus:bg-hover rounded-full cursor-pointer"
+     active:bg-hover rounded-full cursor-pointer"
       onClick={onClick}
     >
       <Image src={login} alt={"login"} width={24} height={24} />
