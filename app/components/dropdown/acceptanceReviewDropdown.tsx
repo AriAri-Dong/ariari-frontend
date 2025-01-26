@@ -147,7 +147,13 @@ const AcceptanceReviewDropdown = ({
                       className={`${questionIdx === 0 ? "" : "mt-6"}`}
                     >
                       <p
-                        className={`md:text-h4 text-mobile_body1_sb text-text1 mb-4 md:mb-[18px]`}
+                        className={`md:text-h4 text-mobile_body1_sb text-text1 mb-4 md:mb-[18px]
+                          ${
+                            section.subDescription === "질문" &&
+                            question.id === 1
+                              ? "md:mt-0 mt-7"
+                              : ""
+                          }`}
                       >
                         {section.subDescription}-{question.id}
                       </p>
