@@ -1,12 +1,24 @@
 import { MainRecruitmentCardProps } from "@/types/components/card";
 import test_image from "@/images/test/test_image.jpg";
+import test1 from "@/images/test/test1.png";
+import test2 from "@/images/test/test2.png";
+import test3 from "@/images/test/test3.png";
+import test4 from "@/images/test/test4.png";
+import test5 from "@/images/test/test5.png";
+import test6 from "@/images/test/test6.png";
+import test7 from "@/images/test/test7.png";
+import test8 from "@/images/test/test8.png";
+import test9 from "@/images/test/test9.png";
+import test10 from "@/images/test/test10.png";
 
 export const MAIN_RECRUITMENT_CARD: MainRecruitmentCardProps[] = [
   {
+    id: 1,
     date: "2025-01-04",
     clubName: "아리아리",
+    clubImageUrl: test5,
     title: "원하는 웹 페이지를 만들어봐",
-    imageUrl: test_image,
+    imageUrl: test10,
     tag: {
       affiliation: "아리아리",
       field: "웹개발",
@@ -16,10 +28,12 @@ export const MAIN_RECRUITMENT_CARD: MainRecruitmentCardProps[] = [
     isScrap: true,
   },
   {
-    date: "2024-12-31",
+    id: 2,
+    date: "2025-03-01",
     clubName: "Coding Club",
+    clubImageUrl: test10,
     title: "Frontend Developer Wanted",
-    imageUrl: test_image,
+    imageUrl: test2,
     tag: {
       affiliation: "University",
       field: "IT",
@@ -29,10 +43,12 @@ export const MAIN_RECRUITMENT_CARD: MainRecruitmentCardProps[] = [
     isScrap: false,
   },
   {
-    date: "2024-11-30",
+    id: 3,
+    date: "2025-05-30",
     clubName: "미술 동아리",
+    clubImageUrl: test10,
     title: "Graphic Designer Internship",
-    imageUrl: test_image,
+    imageUrl: test3,
     tag: {
       affiliation: "스타트업",
       field: "개발",
@@ -42,10 +58,12 @@ export const MAIN_RECRUITMENT_CARD: MainRecruitmentCardProps[] = [
     isScrap: false,
   },
   {
-    date: "2024-12-25",
+    id: 4,
+    date: "2025-04-01",
     clubName: "Design Club",
+    clubImageUrl: test2,
     title: "Graphic Designer Internship",
-    imageUrl: test_image,
+    imageUrl: test1,
     tag: {
       affiliation: "스타트업",
       field: "디자인",
@@ -55,10 +73,11 @@ export const MAIN_RECRUITMENT_CARD: MainRecruitmentCardProps[] = [
     isScrap: false,
   },
   {
-    date: "2024-12-30",
+    id: 1,
+    date: "2025-02-10",
     clubName: "프로그래밍밍밍",
     title: "같이 코딩 하자",
-    imageUrl: test_image,
+    imageUrl: test5,
     tag: {
       affiliation: "스타트업",
       field: "개발",
@@ -68,10 +87,12 @@ export const MAIN_RECRUITMENT_CARD: MainRecruitmentCardProps[] = [
     isScrap: false,
   },
   {
+    id: 5,
     date: "2025-01-04",
     clubName: "아리아리",
+    clubImageUrl: test8,
     title: "원하는 웹 페이지를 만들어봐",
-    imageUrl: test_image,
+    imageUrl: test4,
     tag: {
       affiliation: "아리아리",
       field: "웹개발",
@@ -84,6 +105,7 @@ export const MAIN_RECRUITMENT_CARD: MainRecruitmentCardProps[] = [
 
 export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
   {
+    id: 1,
     date: "2025-01-04",
     clubName: "아리아리",
     title: "원하는 웹 페이지를 만들어봐",
@@ -97,10 +119,11 @@ export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
     isScrap: true,
   },
   {
+    id: 2,
     date: "2025-01-04",
     clubName: "아리아리",
     title: "원하는 웹 페이지를 만들어봐",
-    imageUrl: test_image,
+    imageUrl: test8,
     tag: {
       affiliation: "아리아리",
       field: "웹개발",
@@ -110,8 +133,10 @@ export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
     isScrap: true,
   },
   {
-    date: "2024-12-31",
+    id: 3,
+    date: "2025-04-12",
     clubName: "Coding Club",
+    clubImageUrl: test10,
     title: "Frontend Developer Wanted",
     imageUrl: test_image,
     tag: {
@@ -123,7 +148,8 @@ export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
     isScrap: false,
   },
   {
-    date: "2024-12-31",
+    id: 4,
+    date: "2025-04-01",
     clubName: "Coding Club",
     title: "Frontend Developer Wanted",
     imageUrl: test_image,
@@ -137,7 +163,8 @@ export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
   },
 
   {
-    date: "2024-11-30",
+    id: 5,
+    date: "2025-03-30",
     clubName: "미술 동아리",
     title: "Graphic Designer Internship",
     imageUrl: test_image,
@@ -150,10 +177,11 @@ export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
     isScrap: false,
   },
   {
-    date: "2024-11-30",
+    id: 6,
+    date: "2025-11-30",
     clubName: "미술 동아리",
     title: "Graphic Designer Internship",
-    imageUrl: test_image,
+    imageUrl: test6,
     tag: {
       affiliation: "스타트업",
       field: "개발",
@@ -163,8 +191,10 @@ export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
     isScrap: false,
   },
   {
-    date: "2024-12-25",
+    id: 7,
+    date: "2025-02-25",
     clubName: "Design Club",
+    clubImageUrl: test7,
     title: "Graphic Designer Internship",
     imageUrl: test_image,
     tag: {
@@ -176,10 +206,12 @@ export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
     isScrap: false,
   },
   {
-    date: "2024-12-25",
+    id: 8,
+    date: "2025-01-30",
     clubName: "Design Club",
+    clubImageUrl: test1,
     title: "Graphic Designer Internship",
-    imageUrl: test_image,
+    imageUrl: test5,
     tag: {
       affiliation: "스타트업",
       field: "디자인",
@@ -189,10 +221,11 @@ export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
     isScrap: false,
   },
   {
-    date: "2024-12-30",
+    id: 9,
+    date: "2025-04-30",
     clubName: "프로그래밍밍밍",
     title: "같이 코딩 하자",
-    imageUrl: test_image,
+    imageUrl: test10,
     tag: {
       affiliation: "스타트업",
       field: "개발",
@@ -202,10 +235,11 @@ export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
     isScrap: false,
   },
   {
-    date: "2024-12-30",
+    id: 10,
+    date: "2025-04-21",
     clubName: "프로그래밍밍밍",
     title: "같이 코딩 하자",
-    imageUrl: test_image,
+    imageUrl: test9,
     tag: {
       affiliation: "스타트업",
       field: "개발",
@@ -215,6 +249,115 @@ export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
     isScrap: false,
   },
   {
+    id: 11,
+    date: "2025-01-04",
+    clubName: "아리아리",
+    clubImageUrl: test10,
+    title: "원하는 웹 페이지를 만들어봐",
+    imageUrl: test7,
+    tag: {
+      affiliation: "아리아리",
+      field: "웹개발",
+      region: "서울",
+      target: "대학생",
+    },
+    isScrap: false,
+  },
+  {
+    id: 12,
+    date: "2025-02-04",
+    clubName: "아리아리",
+    clubImageUrl: test5,
+    title: "원하는 웹 페이지를 만들어봐",
+    imageUrl: test1,
+    tag: {
+      affiliation: "아리아리",
+      field: "웹개발",
+      region: "서울",
+      target: "대학생",
+    },
+    isScrap: false,
+  },
+];
+
+export const RECRUITMENT_CARD: MainRecruitmentCardProps[] = [
+  {
+    id: 1,
+    date: "2025-01-04",
+    clubName: "아리아리",
+    clubImageUrl: test5,
+    title: "원하는 웹 페이지를 만들어봐",
+    imageUrl: test10,
+    tag: {
+      affiliation: "아리아리",
+      field: "웹개발",
+      region: "서울",
+      target: "대학생",
+    },
+    isScrap: true,
+  },
+  {
+    id: 2,
+    date: "2025-03-01",
+    clubName: "Coding Club",
+    clubImageUrl: test10,
+    title: "Frontend Developer Wanted",
+    imageUrl: test2,
+    tag: {
+      affiliation: "University",
+      field: "IT",
+      region: "Seoul",
+      target: "Students",
+    },
+    isScrap: false,
+  },
+  {
+    id: 3,
+    date: "2025-05-30",
+    clubName: "미술 동아리",
+    clubImageUrl: test10,
+    title: "Graphic Designer Internship",
+    imageUrl: test3,
+    tag: {
+      affiliation: "스타트업",
+      field: "개발",
+      region: "서울",
+      target: "대학생",
+    },
+    isScrap: false,
+  },
+  {
+    id: 4,
+    date: "2025-04-01",
+    clubName: "Design Club",
+    clubImageUrl: test2,
+    title: "Graphic Designer Internship",
+    imageUrl: test1,
+    tag: {
+      affiliation: "스타트업",
+      field: "디자인",
+      region: "부산",
+      target: "직장인",
+    },
+    isScrap: false,
+  },
+  {
+    id: 5,
+    date: "2025-01-04",
+    clubName: "아리아리",
+    clubImageUrl: test8,
+    title: "원하는 웹 페이지를 만들어봐",
+    imageUrl: test4,
+    tag: {
+      affiliation: "아리아리",
+      field: "웹개발",
+      region: "서울",
+      target: "대학생",
+    },
+    isScrap: false,
+  },
+  {
+    id: 6,
     date: "2025-01-04",
     clubName: "아리아리",
     title: "원하는 웹 페이지를 만들어봐",
@@ -225,13 +368,160 @@ export const MAIN_RECRUITMENT_CARD_12: MainRecruitmentCardProps[] = [
       region: "서울",
       target: "대학생",
     },
-    isScrap: false,
+    isScrap: true,
   },
   {
+    id: 7,
     date: "2025-01-04",
     clubName: "아리아리",
     title: "원하는 웹 페이지를 만들어봐",
+    imageUrl: test8,
+    tag: {
+      affiliation: "아리아리",
+      field: "웹개발",
+      region: "서울",
+      target: "대학생",
+    },
+    isScrap: true,
+  },
+  {
+    id: 8,
+    date: "2025-04-12",
+    clubName: "Coding Club",
+    clubImageUrl: test10,
+    title: "Frontend Developer Wanted",
     imageUrl: test_image,
+    tag: {
+      affiliation: "University",
+      field: "IT",
+      region: "Seoul",
+      target: "Students",
+    },
+    isScrap: false,
+  },
+  {
+    id: 9,
+    date: "2025-04-01",
+    clubName: "Coding Club",
+    title: "Frontend Developer Wanted",
+    imageUrl: test_image,
+    tag: {
+      affiliation: "University",
+      field: "IT",
+      region: "Seoul",
+      target: "Students",
+    },
+    isScrap: false,
+  },
+
+  {
+    id: 10,
+    date: "2025-03-30",
+    clubName: "미술 동아리",
+    title: "Graphic Designer Internship",
+    imageUrl: test_image,
+    tag: {
+      affiliation: "스타트업",
+      field: "개발",
+      region: "서울",
+      target: "대학생",
+    },
+    isScrap: false,
+  },
+  {
+    id: 11,
+    date: "2025-11-30",
+    clubName: "미술 동아리",
+    title: "Graphic Designer Internship",
+    imageUrl: test6,
+    tag: {
+      affiliation: "스타트업",
+      field: "개발",
+      region: "서울",
+      target: "대학생",
+    },
+    isScrap: false,
+  },
+  {
+    id: 12,
+    date: "2025-02-25",
+    clubName: "Design Club",
+    clubImageUrl: test7,
+    title: "Graphic Designer Internship",
+    imageUrl: test_image,
+    tag: {
+      affiliation: "스타트업",
+      field: "디자인",
+      region: "부산",
+      target: "직장인",
+    },
+    isScrap: false,
+  },
+  {
+    id: 13,
+    date: "2025-01-30",
+    clubName: "Design Club",
+    clubImageUrl: test1,
+    title: "Graphic Designer Internship",
+    imageUrl: test5,
+    tag: {
+      affiliation: "스타트업",
+      field: "디자인",
+      region: "부산",
+      target: "직장인",
+    },
+    isScrap: false,
+  },
+  {
+    id: 14,
+    date: "2025-04-30",
+    clubName: "프로그래밍밍밍",
+    title: "같이 코딩 하자",
+    imageUrl: test10,
+    tag: {
+      affiliation: "스타트업",
+      field: "개발",
+      region: "인천",
+      target: "Graduates",
+    },
+    isScrap: false,
+  },
+  {
+    id: 15,
+    date: "2025-04-21",
+    clubName: "프로그래밍밍밍",
+    title: "같이 코딩 하자",
+    imageUrl: test9,
+    tag: {
+      affiliation: "스타트업",
+      field: "개발",
+      region: "인천",
+      target: "Graduates",
+    },
+    isScrap: false,
+  },
+  {
+    id: 16,
+    date: "2025-01-04",
+    clubName: "아리아리",
+    clubImageUrl: test10,
+    title: "원하는 웹 페이지를 만들어봐",
+    imageUrl: test7,
+    tag: {
+      affiliation: "아리아리",
+      field: "웹개발",
+      region: "서울",
+      target: "대학생",
+    },
+    isScrap: false,
+  },
+  {
+    id: 17,
+    date: "2025-02-04",
+    clubName: "아리아리",
+    clubImageUrl: test5,
+    title: "원하는 웹 페이지를 만들어봐",
+    imageUrl: test1,
     tag: {
       affiliation: "아리아리",
       field: "웹개발",

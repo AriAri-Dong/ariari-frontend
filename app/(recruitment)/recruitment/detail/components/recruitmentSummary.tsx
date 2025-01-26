@@ -35,10 +35,10 @@ const RecruitmentSummary = ({
           {startDate} ~ {endDate}
         </p>
       </div>
-      <div className="flex flex-row gap-[65px]">
+      {/* <div className="flex flex-row gap-[65px]">
         <p className="w-[56px] text-mobile_body2_sb md:text-body1_m">이메일</p>
         <p className="text-mobile_body2_r md:text-body1_m">{email}</p>
-      </div>
+      </div> */}
     </div>
   );
 };

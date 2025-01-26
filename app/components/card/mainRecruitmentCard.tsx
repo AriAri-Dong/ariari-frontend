@@ -30,9 +30,8 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
     return null;
   }
 
-  const handleRouter = () => {
-    // 경로 임시 설정
-    router.push("/");
+  const handleRouter = (id: number) => {
+    router.push(`/recruitment/detail?id=${id}`);
   };
 
   return (
@@ -45,20 +44,21 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
             className={`flex gap-4 md:gap-5 md:flex-col cursor-pointer ${
               isExpired ? "opacity-50 backdrop-filter backdrop-blur-md" : ""
             }`}
-            onClick={handleRouter}
+            onClick={() => handleRouter(item.id)}
           >
-            <div className="relative min-w-[114px] md:w-full">
+            <div className="relative min-w-[114px] md:w-full aspect-square">
               <Image
                 src={item.imageUrl}
                 alt={item.title}
-                width={114}
-                height={114}
-                className="rounded-3xl md:w-full shadow-default"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-3xl shadow-default"
               />
               <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 md:bottom-5">
                 <DdayBadge date={item.date} />
               </div>
             </div>
+
             <div className="flex flex-col w-full md:px-2 md:mt-2.5 md:mb-6">
               <div className="flex justify-between">
                 <p className="text-subtext1 text-mobile_body3_m mb-[6px] md:text-h4">
