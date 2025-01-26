@@ -262,3 +262,85 @@ export const BADGE_ITEMS: {
     placeholder: "활동경력을 입력해주세요.",
   },
 ];
+
+export const BADGE_TITLES = [
+  "성별",
+  "생년월일",
+  "연락처",
+  "이메일",
+  "학력",
+  "전공",
+  "직업",
+  "MBTI",
+  "활동 가능 기간",
+  "희망 활동 분야",
+  "취미",
+  "SNS",
+  "지원 동기",
+  "활동 경력",
+  "특기",
+  "포부",
+  "참여 가능 시간대",
+  "동아리를 알게 된 경로",
+];
+
+export const CLUB_LEFT_MENU = [
+  {
+    id: 1,
+    label: "활동내역",
+    url: "/club/management/recruitment/applicationStatus",
+    subUrl: [
+      {
+        id: 1,
+        label: "모집공고",
+        url: "/club",
+      },
+      {
+        id: 2,
+        label: "지원서 양식 작성",
+        url: "/club/management/recruitment/applicationForm",
+      },
+      {
+        id: 2,
+        label: "지원현황",
+        url: "/club/management/recruitment/applicationStatus",
+      },
+    ],
+  },
+  {
+    id: 2,
+    label: "공지사항 (미구현)",
+    url: "/",
+    subUrl: [],
+  },
+  {
+    id: 3,
+    label: "모집공고 (미구현)",
+    url: "/club/create",
+    subUrl: [],
+  },
+  {
+    id: 4,
+    label: "활동후기",
+    url: "/club/review/activity",
+    subUrl: [],
+  },
+  {
+    id: 5,
+    label: "합격후기",
+    url: "/club/review/acceptance",
+    subUrl: [],
+  },
+  {
+    id: 6,
+    label: "FAQ / Q&A",
+    url: "/club/help",
+    subUrl: [],
+  },
+  {
+    id: 7,
+    label: "동아리 멤버 관리",
+    url: "/club/members",
+    subUrl: [],
+  },
+];

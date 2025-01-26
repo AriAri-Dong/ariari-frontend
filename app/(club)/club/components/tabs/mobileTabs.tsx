@@ -2,8 +2,12 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const TABS = [
-  { id: 1, label: "모집공고", url: "/club" },
-  { id: 2, label: "지원서 양식 작성", url: "/club/create" },
+  { id: 1, label: "모집공고", url: "/club/create" },
+  {
+    id: 2,
+    label: "지원서 양식 작성",
+    url: "/club/management/recruitment/applicationForm",
+  },
   {
     id: 3,
     label: "지원현황",

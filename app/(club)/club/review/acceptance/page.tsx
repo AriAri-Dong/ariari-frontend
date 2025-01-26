@@ -20,6 +20,7 @@ import Alert from "@/components/alert/alert";
 import useResponsive from "@/hooks/useResponsive";
 import AcceptanceReviewModal from "@/components/modal/review/acceptanceReviewModal";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
+import LeftMenu from '../../components/menu/leftMenu';
 
 const ReviewPage = () => {
   const router = useRouter();
@@ -86,7 +87,7 @@ const ReviewPage = () => {
 
           <div className="flex gap-9">
             {/* 임시 메뉴 */}
-            <div className="w-[256px] h-[536px] bg-white hidden lg:block" />
+            <LeftMenu />
             <div className="w-full">
               <p className="text-subtext2 text-mobile_body2_m md:text-h4 mb-4 md:mb-[22px]">
                 총 {ACCEPTANCE_REVIEWS.length}개의 합격후기가 있어요.

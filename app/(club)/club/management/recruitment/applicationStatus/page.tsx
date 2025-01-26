@@ -21,6 +21,7 @@ import PullDown from "@/components/pulldown/pullDown";
 import SubSearchInput from "@/components/input/subSearchInput";
 import RangeCalendar from "@/components/calendar/rangeCalendar";
 import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
+import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 
 const OPTIONS = [
   { id: 0, label: "전체", number: 14 },
@@ -136,9 +137,7 @@ const ApplicationStatusPage = () => {
 
           <div className="flex lg:gap-9">
             {/* 임시 메뉴 */}
-            <div className="flex flex-col">
-              <div className="w-[256px] h-[536px] bg-white hidden lg:block" />
-            </div>
+            <LeftMenu />
             <div className="w-full">
               <div className="overflow-x-auto no-scrollbar hidden lg:block">
                 <SubTap
@@ -150,19 +149,19 @@ const ApplicationStatusPage = () => {
               <Tabs />
 
               <div
-                className="flex gap-4 flex-col-reverse md:flex-row justify-between items-start
-              lg:items-center mb-4 mt-4 md:mb-[22px] md:mt-[22px] md:gap-0"
+                className="flex gap-4 flex-col-reverse lg:flex-row justify-between items-start
+              lg:items-center mb-4 mt-4 lg:mb-[22px] lg:mt-[22px] lg:gap-0"
               >
                 <p className="text-subtext2 text-mobile_body2_m md:text-h4">
                   총 nnn개의 지원서가 있어요.
                 </p>
-                <div className="flex flex-row-reverse md:flex-row gap-2.5 md:gap-5">
+                <div className="flex items-center flex-row-reverse md:flex-row gap-2.5 md:gap-5">
                   <IconBtn
                     type={"reset"}
                     size={"small"}
                     title={isMdUp ? "초기화" : ""}
                     onClick={() => {}}
-                    className="whitespace-nowrap"
+                    className="whitespace-nowrap lg:mr-3.5"
                   />
                   <div className="lg:hidden flex items-center">
                     <PullDown
@@ -173,12 +172,17 @@ const ApplicationStatusPage = () => {
                       optionSize={"small"}
                     />
                   </div>
-                  <RangeCalendar />
+                  <div className="smm:block hidden">
+                    <RangeCalendar />
+                  </div>
                   <SubSearchInput
                     onSearch={() => {}}
                     placeholder={"이름 또는 공고 제목"}
                     className="lg:block hidden"
                   />
+                </div>
+                <div className="smm:hidden block">
+                  <RangeCalendar />
                 </div>
                 <SubSearchInput
                   onSearch={() => {}}

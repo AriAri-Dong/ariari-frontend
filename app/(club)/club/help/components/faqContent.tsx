@@ -68,7 +68,7 @@ const QnaFormContent = ({
           </h2>
           <button
             onClick={onClose}
-            className="md:w-5 md:h-5 flex justify-center items-center md:w-7 md:h-7"
+            className="w-5 h-5 flex justify-center items-center md:w-7 md:h-7"
           >
             <Image
               src={close}

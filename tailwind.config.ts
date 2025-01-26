@@ -69,6 +69,7 @@ const config: Config = {
       },
       screens: {
         sm: "360px",
+        smm: "400px",
         sm_md: "668px",
         md: "768px",
         lg: "1024px",
@@ -104,6 +105,7 @@ const config: Config = {
         body1_r: ["15px", { fontWeight: 400, lineHeight: "150%" }],
         body1_m: ["15px", { fontWeight: 500, lineHeight: "22.5px" }],
         body1_sb: ["14px", { fontWeight: 600, lineHeight: "21px" }],
+        body2_r: ["14px", { fontWeight: 400, lineHeight: "21px" }],
         body2_m: ["14px", { fontWeight: 500, lineHeight: "21px" }],
         body3_r: ["12px", { fontWeight: 400, lineHeight: "18px" }],
         body3_m: ["13px", { fontWeight: 500, lineHeight: "19.5px" }],

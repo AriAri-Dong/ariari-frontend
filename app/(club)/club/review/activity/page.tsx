@@ -26,6 +26,7 @@ import ActivityReviewDropdown from "@/components/dropdown/activityReviewDropdown
 import ReviewPercentList from "@/components/list/reviewPercentList";
 import MobileReviewPercentList from "@/components/list/mobileReviewPercentList";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
+import LeftMenu from "../../components/menu/leftMenu";
 
 const ReviewPage = () => {
   const router = useRouter();
@@ -84,7 +85,7 @@ const ReviewPage = () => {
           <div className="flex lg:gap-9">
             {/* 임시 메뉴 */}
             <div className="flex flex-col">
-              <div className="w-[256px] h-[536px] bg-white hidden lg:block" />
+              <LeftMenu />
               <ReviewPercentList badges={PERCENT_DATA} className="mt-10" />
             </div>
             <div className="w-full">

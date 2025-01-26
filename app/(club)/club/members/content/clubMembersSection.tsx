@@ -7,6 +7,7 @@ import { CLUB_MEMBER_DATA } from "@/data/clubMember";
 import ClubMemberList from "../components/clubMemberList";
 import ClubMemberCategoryBar from "../components/clubMemberCategoryBar";
 import ClubMemberHeader from "../components/clubMemberHeader";
+import LeftMenu from "../../components/menu/leftMenu";
 
 const ClubMembersSection = () => {
   const [selectedOption, setSelectedOption] = useState<string[]>([
@@ -46,34 +47,39 @@ const ClubMembersSection = () => {
 
   return (
     <div className="pt-6 pb-20 md:pt-8 md:pb-[124px]">
-      <section>
-        <ClubMemberHeader
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          handleSearch={handleSearch}
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-        />
-      </section>
-
-      <section>
-        <ClubMemberCategoryBar
-          isAllSelected={isAllSelected}
-          toggleSelectAll={toggleSelectAll}
-        />
-      </section>
-
-      <section className="flex flex-col gap-2.5 md:gap-4 md:py-2.5 md:rounded-[4px] md:bg-background">
-        {CLUB_MEMBER_DATA.map((member, index) => (
-          <div key={index}>
-            <ClubMemberList
-              data={member}
-              isSelected={selectedMember?.includes(member.id)}
-              toggleMember={toggleMember}
+      <div className="flex lg:gap-9">
+        <LeftMenu />
+        <div className="w-full">
+          <section>
+            <ClubMemberHeader
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              handleSearch={handleSearch}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
             />
-          </div>
-        ))}
-      </section>
+          </section>
+
+          <section>
+            <ClubMemberCategoryBar
+              isAllSelected={isAllSelected}
+              toggleSelectAll={toggleSelectAll}
+            />
+          </section>
+
+          <section className="flex flex-col gap-2.5 md:gap-4 md:py-2.5 md:rounded-[4px] md:bg-background">
+            {CLUB_MEMBER_DATA.map((member, index) => (
+              <div key={index}>
+                <ClubMemberList
+                  data={member}
+                  isSelected={selectedMember?.includes(member.id)}
+                  toggleMember={toggleMember}
+                />
+              </div>
+            ))}
+          </section>
+        </div>
+      </div>
     </div>
   );
 };

@@ -30,6 +30,7 @@ import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import { ClubMemberData } from "@/models/member";
 import { CLUB_MEMBER_DATA } from "@/data/clubMember";
+import LeftMenu from "../../components/menu/leftMenu";
 
 const ClubQuestionSection = () => {
   const [type, setType] = useState<string>(QUESTION_TYPE[0].label);
@@ -87,59 +88,65 @@ const ClubQuestionSection = () => {
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
       <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:px-5">
-        <div className="flex items-center justify-between mb-[22px]">
-          <p className="text-subtext2">
-            총 {type == "FAQ" ? faqPageInfo.totalSize : qnaPageInfo.totalSize}
-            개의 FAQ가 있어요
-          </p>
-          <SubTap
-            optionData={QUESTION_TYPE}
-            selectedOption={type}
-            handleOption={setType}
-          />
-        </div>
-        <div className="hidden pl-6 pr-[114px] py-1.5 mb-2.5 justify-between bg-white70 text-subtext2 rounded-[4px] text-body1_m md:flex">
-          <div className="flex gap-[42px]">
-            <div className="px-[19px]">분류</div>
-            <div>제목</div>
-          </div>
-          <div className={type == "FAQ" ? "hidden" : ""}>작성일</div>
-        </div>
-
-        {type == "FAQ"
-          ? faqData.map((item, index) => (
-              <div key={index} className="mb-2.5">
-                <QuestionDropdown
-                  data={item}
-                  myRoleType={clubMember?.clubMemberRoleType}
-                  myProfileType={clubMember?.profileType}
-                  isOpen={item.id == selectedFaq}
-                  setSelected={setSelectedFaq}
-                />
+        <div className="flex lg:gap-9">
+          <LeftMenu />
+          <div className="w-full">
+            <div className="flex items-center justify-between mb-[22px]">
+              <p className="text-subtext2">
+                총{" "}
+                {type == "FAQ" ? faqPageInfo.totalSize : qnaPageInfo.totalSize}
+                개의 FAQ가 있어요
+              </p>
+              <SubTap
+                optionData={QUESTION_TYPE}
+                selectedOption={type}
+                handleOption={setType}
+              />
+            </div>
+            <div className="hidden pl-6 pr-[114px] py-1.5 mb-2.5 justify-between bg-white70 text-subtext2 rounded-[4px] text-body1_m md:flex">
+              <div className="flex gap-[42px]">
+                <div className="px-[19px]">분류</div>
+                <div>제목</div>
               </div>
-            ))
-          : qnaData.map((item, index) => (
-              <div key={index} className="mb-2.5">
-                <QuestionDropdown
-                  data={item}
-                  myRoleType={clubMember?.clubMemberRoleType}
-                  myProfileType={clubMember?.profileType}
-                  isOpen={item.id == selectedQna}
-                  setSelected={setSelectedQna}
-                />
-              </div>
-            ))}
+              <div className={type == "FAQ" ? "hidden" : ""}>작성일</div>
+            </div>
 
-        {type == "FAQ" && faqPageInfo.totalPages > faqCurrentPage && (
-          <div className="flex justify-center mt-9 md:mt-10">
-            <PlusBtn title={"더보기"} onClick={handleLoadMoreFaq} />
+            {type == "FAQ"
+              ? faqData.map((item, index) => (
+                  <div key={index} className="mb-2.5">
+                    <QuestionDropdown
+                      data={item}
+                      myRoleType={clubMember?.clubMemberRoleType}
+                      myProfileType={clubMember?.profileType}
+                      isOpen={item.id == selectedFaq}
+                      setSelected={setSelectedFaq}
+                    />
+                  </div>
+                ))
+              : qnaData.map((item, index) => (
+                  <div key={index} className="mb-2.5">
+                    <QuestionDropdown
+                      data={item}
+                      myRoleType={clubMember?.clubMemberRoleType}
+                      myProfileType={clubMember?.profileType}
+                      isOpen={item.id == selectedQna}
+                      setSelected={setSelectedQna}
+                    />
+                  </div>
+                ))}
+
+            {type == "FAQ" && faqPageInfo.totalPages > faqCurrentPage && (
+              <div className="flex justify-center mt-9 md:mt-10">
+                <PlusBtn title={"더보기"} onClick={handleLoadMoreFaq} />
+              </div>
+            )}
+            {type == "Q&A" && qnaPageInfo.totalPages > qnaCurrentPage && (
+              <div className="flex justify-center  mt-9 md:mt-10">
+                <PlusBtn title={"더보기"} onClick={handleLoadMoreQna} />
+              </div>
+            )}
           </div>
-        )}
-        {type == "Q&A" && qnaPageInfo.totalPages > qnaCurrentPage && (
-          <div className="flex justify-center  mt-9 md:mt-10">
-            <PlusBtn title={"더보기"} onClick={handleLoadMoreQna} />
-          </div>
-        )}
+        </div>
       </div>
       {/* ====== PC 해상도에서만 보이는 하단 버튼 ======  */}
       {/* 모집안내 바 : 로그인 x or 동아리 가입 x */}
@@ -170,7 +177,7 @@ const ClubQuestionSection = () => {
         (type == "FAQ" &&
           (clubMember?.clubMemberRoleType == "ADMIN" ||
             clubMember?.clubMemberRoleType == "MANAGER"))) && (
-        <div className="fixed w-full fixed bottom-[20px] px-5 flex justify-end md:bottom-[44px] md:max-w-[1248px] md:px-5">
+        <div className="fixed w-full bottom-5 px-5 flex justify-end md:bottom-[44px] md:max-w-[1248px] md:px-5">
           <WriteBtn onClick={handleOpenForm} />
         </div>
       )}

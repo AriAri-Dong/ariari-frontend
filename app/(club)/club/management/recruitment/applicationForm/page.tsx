@@ -15,8 +15,9 @@ import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import TransparentSmallBtn from "@/components/button/basicBtn/transparentSmallBtn";
 import ApplicationFromPreviewModal from "@/components/modal/club/preview/applicationFormPreviewModal";
-import { BADGE_ITEMS } from "@/data/club";
+import { BADGE_ITEMS, BADGE_TITLES } from "@/data/club";
 import MobileApplicationFromPreviewModal from "@/components/modal/club/preview/mobileApplicationFormPreviewModal";
+import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 
 const ApplicationFormPage = () => {
   const isMdUp = useResponsive("md");
@@ -24,8 +25,6 @@ const ApplicationFormPage = () => {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [name, setName] = useState<string>("");
   const [nameError, setNameError] = useState<string | null>(null);
-
-  // ToggleBadge state management
   const [selectedBadges, setSelectedBadges] = useState<string[]>([]);
   const [documentQuestions, setDocumentQuestions] = useState<
     { question: string }[]
@@ -85,27 +84,6 @@ const ApplicationFormPage = () => {
     setOpenPreview(true);
   };
 
-  const badgeItems = [
-    "성별",
-    "생년월일",
-    "연락처",
-    "이메일",
-    "학력",
-    "전공",
-    "직업",
-    "MBTI",
-    "활동 가능 기간",
-    "희망 활동 분야",
-    "취미",
-    "SNS",
-    "지원 동기",
-    "활동 경력",
-    "특기",
-    "포부",
-    "참여 가능 시간대",
-    "동아리를 알게 된 경로",
-  ];
-
   return (
     <>
       <div className="bg-background flex justify-center items-center w-full">
@@ -117,7 +95,7 @@ const ApplicationFormPage = () => {
         <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:pt-8 md:px-5">
           <div className="flex lg:gap-9">
             {/* 임시 메뉴 */}
-            <div className="w-[256px] h-[536px] bg-white hidden lg:block" />
+            <LeftMenu />
             <div className="w-full bg-white rounded-lg p-5 md:px-6 md:py-[26px]">
               <NoticeBanner
                 text={"모집공고 게시 중에는 지원서 양식 수정이 불가능합니다."}
@@ -154,7 +132,7 @@ const ApplicationFormPage = () => {
               </div>
               <Contour className={"mt-2.5 mb-[14px]"} />
               <div className="flex flex-wrap gap-2.5">
-                {badgeItems.map((item) => (
+                {BADGE_TITLES.map((item) => (
                   <ToggleBadge
                     key={item}
                     text={item}
