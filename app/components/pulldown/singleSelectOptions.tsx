@@ -35,7 +35,7 @@ const SingleSelectOptions = ({
     <div
       className={`z-50 absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-background
       rounded-lg border border-menuborder shadow-default ${
-         size === "small"
+        size === "small"
           ? "w-[116px]"
           : size === "medium"
           ? "w-[160px]"
@@ -47,7 +47,7 @@ const SingleSelectOptions = ({
       {optionData.map((item, index) => (
         <div
           key={item.id}
-        className={`relative flex justify-center items-center md:text-15 text-mobile_body2_m
+          className={`relative flex justify-center items-center md:text-15 text-mobile_body2_m
           text-subtext1 cursor-pointer pressed:bg-pressed
             ${index === 0 ? "rounded-t-lg" : ""}
             ${index === optionData.length - 1 ? "rounded-b-lg" : ""}

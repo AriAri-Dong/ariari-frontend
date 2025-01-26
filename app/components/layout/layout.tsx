@@ -11,12 +11,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
 
   const specialPaths = [
-    "recruitment/detail",
+    "/recruitment/detail",
     "/club/review",
-    "club/management",
+    "/club/management",
   ];
-  const bgPaths = ["application"];
-  const mobileBgPaths = ["/club/create"];
+  const bgPaths = ["/application"];
+  const mobileBgPaths = ["/club/create", "/withdrawal"];
 
   const isSpecialComponent = specialPaths.some((path) =>
     pathname.includes(path)
