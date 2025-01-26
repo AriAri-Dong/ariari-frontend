@@ -31,7 +31,7 @@ const Application = () => {
   return (
     <div>
       <div className="w-full inline-flex flex-col gap-4 mt-6 md:mt-8 md:gap-[22px]">
-        <div className="md:flex md:justify-between">
+        <div className="md:flex md:items-center md:justify-between">
           <h1 className="text-text1 text-mobile_h1_contents_title mb-4 md:text-h1_contents_title md:mb-0">
             동아리 지원
           </h1>
