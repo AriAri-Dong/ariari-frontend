@@ -14,6 +14,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/recruitment/detail",
     "/club/review",
     "/club/management",
+    "/club/help",
   ];
   const bgPaths = ["/application"];
   const mobileBgPaths = ["/club/create", "/withdrawal"];
@@ -26,7 +27,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
     pathname.includes(path)
   );
 
-
   return (
     <SearchTermContext.Provider value={{ searchTerm, setSearchTerm }}>
       <div className="flex flex-col min-h-screen">
@@ -37,7 +37,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
             ${isBgComponent && "bg-sub_bg"} 
             ${isBgComponentOnlyMobile && "md:bg-sub_bg"}`}
         >
-
           <div
             className={`w-full ${
               !isSpecialComponent
