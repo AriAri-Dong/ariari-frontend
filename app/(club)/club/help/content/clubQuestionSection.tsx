@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import useResponsive from "../../../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 
 import { FAQ_DATA } from "@/data/faq";
 import { QUESTION_TYPE } from "@/data/pulldown";

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import no_image from "@/images/noImage/no-image.jpg";
-import useResponsive from "../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 
 interface Club {
   id: number;

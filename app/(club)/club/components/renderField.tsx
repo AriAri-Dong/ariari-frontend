@@ -3,7 +3,7 @@ import RadioBtn from "@/components/button/radioBtn";
 import TextInputWithCounter from "@/components/input/textInputWithCounter";
 import { BADGE_ITEMS } from "@/data/club";
 import CustomInput from "@/components/input/customInput";
-import useResponsive from "../../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 import TextareaWithCounter from "@/components/textArea/textareaWithCounter";
 
 interface RenderFieldProps {

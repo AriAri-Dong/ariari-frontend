@@ -4,7 +4,7 @@ import Image from "next/image";
 import loginAriari from "@/images/icon/loginAriari.svg";
 import kakoBtn from "@/images/kakao/complete/ko/kakao_login_large_wide.png";
 import close from "@/images/icon/close.svg";
-import useScreenHeight from "../../../../hooks/useScreenHeight";
+import useScreenHeight from "@/hooks/useScreenHeight";
 
 interface LoginDialogProps {
   onClose: () => void;

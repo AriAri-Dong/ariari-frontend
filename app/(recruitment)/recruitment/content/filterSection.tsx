@@ -1,6 +1,6 @@
 import SubPullDown from "@/components/pulldown/subPullDown";
 import { Popularity_Sort_Type } from "@/data/pulldown";
-import useResponsive from "../../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 
 interface FilterSectionProps {
   sortType: string;

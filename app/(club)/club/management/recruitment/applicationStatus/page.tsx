@@ -7,7 +7,7 @@ import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import SubTap from "@/components/tab/subTap";
 import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound";
 import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
-import useResponsive from "../../../../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 import ClubInfoSection from "@/(club)/club/content/clubInfoSection";
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import AllCheckBox from "@/components/checkBox/allCheckBox";

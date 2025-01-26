@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import useResponsive from "../../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 import Step2Content from "./step2Content";
 
 export type ShareType = "clubJoin" | "ariAriJoin";

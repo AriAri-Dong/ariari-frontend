@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import useResponsive from "../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 
 import Image from "next/image";
 import keyboardArrowDown from "@/images/icon/keyboardArrowDown.svg";

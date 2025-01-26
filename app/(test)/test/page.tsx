@@ -10,7 +10,7 @@ import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
 import MobileProfileSettingModal from "@/components/modal/profileSetting/mobile/mobileProfileSettingModal";
-import useResponsive from "../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 import ModifyClubInfoModal from "@/components/modal/club/modifyClubInfoModal";
 import ModifyClubInfoBottomSheet from "@/components/bottomSheet/modifyClubInfoBottomSheet";
 import Alert from "@/components/alert/alert";

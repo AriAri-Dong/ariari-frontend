@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import ClubInfoSection from "../../../content/clubInfoSection";
 import Alert from "@/components/alert/alert";
-import useResponsive from "../../../../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 import NoticeBanner from "@/components/banner/noticeBanner";
 import CustomInput from "@/components/input/customInput";
 import IconBtn from "@/components/button/withIconBtn/IconBtn";

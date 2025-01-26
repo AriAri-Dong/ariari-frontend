@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import useResponsive from "../../../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 import FaqContent from "./faqContent";
 
 interface FaqFormProps {

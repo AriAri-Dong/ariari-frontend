@@ -7,7 +7,7 @@ import ClubRankingList from "@/components/card/clubLankingList";
 
 import { Affiliation_Type, Area_Type, Field_Type } from "@/data/pulldown";
 import { useState } from "react";
-import useResponsive from "../../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 import FilterBtn from "@/components/button/iconBtn/filterBtn";
 import NotiPopUp from "@/components/modal/notiPopUp";
 

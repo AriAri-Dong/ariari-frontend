@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
 
-import useResponsive from "../../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 

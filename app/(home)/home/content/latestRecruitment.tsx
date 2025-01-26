@@ -6,7 +6,7 @@ import { MAIN_RECRUITMENT_CARD, MAIN_RECRUITMENT_CARD_12 } from "@/data/main";
 import { Affiliation_Type } from "@/data/pulldown";
 import { MainRecruitmentCardProps } from "@/types/components/card";
 import { useState } from "react";
-import useResponsive from "../../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 import MainRecruitmentCardWithCarousel from "@/components/card/mainRecruitmentCardWithCarousel";
 import { flushAllTraces } from "next/dist/trace";
 import NotiPopUp from "@/components/modal/notiPopUp";

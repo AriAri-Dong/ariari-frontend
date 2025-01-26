@@ -3,7 +3,7 @@ import ResultBadge from "../badge/resultBadge";
 import TransparentSmallBtn from "../button/basicBtn/transparentSmallBtn";
 import CheckBox from "../checkBox/checkBox";
 import InterviewNoticeModal from "../modal/club/interviewNoticeModal";
-import useResponsive from "../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 import InterviewNoticeBottomSheet from "../bottomSheet/interviewNoticeBottomSheet";
 import Alert from "../alert/alert";
 import ApplicationFromViewModal from "../modal/club/applicationFormViewModal";
