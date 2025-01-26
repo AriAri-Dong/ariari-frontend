@@ -29,8 +29,8 @@ import NotiPopUp from "@/components/modal/notiPopUp";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import { ClubMemberData } from "@/models/member";
-import { CLUB_MEMBER_DATA } from "@/data/clubMember";
 import LeftMenu from "../../components/menu/leftMenu";
+import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
 
 const ClubQuestionSection = () => {
   const [type, setType] = useState<string>(QUESTION_TYPE[0].label);
