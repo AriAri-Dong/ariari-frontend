@@ -29,7 +29,7 @@ import NotiPopUp from "@/components/modal/notiPopUp";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import { ClubMemberData } from "@/models/member";
-import { CLUM_MEMBER_DATA } from "@/data/clubmember";
+import { CLUB_MEMBER_DATA } from "@/data/clubMember";
 
 const ClubQuestionSection = () => {
   const [type, setType] = useState<string>(QUESTION_TYPE[0].label);
@@ -52,7 +52,7 @@ const ClubQuestionSection = () => {
   const [selectedQna, setSelectedQna] = useState<number | null>(null);
 
   const [clubMember, setClubMember] = useState<ClubMemberData | null>(
-    CLUM_MEMBER_DATA[0]
+    CLUB_MEMBER_DATA[0]
   ); // 멤버타입 (null - 미소속회원)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true); // 로그인여부 임시값
   const isTapOver = useResponsive("md");

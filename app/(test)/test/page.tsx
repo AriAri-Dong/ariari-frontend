@@ -102,6 +102,12 @@ const TestPage = () => {
           <MobileProfileSettingModal onClose={() => setIsProfileOpen(false)} />
         </>
       )}
+      {isInvitationModalOpen && (
+        <InviteDialog
+          clubName={"아리아리"}
+          onClose={() => setIsInvitationModalOpen(false)}
+        />
+      )}
 
       {/* Button Components */}
       {isButtonVisible && (
