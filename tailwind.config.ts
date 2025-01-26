@@ -59,6 +59,7 @@ const config: Config = {
         lx: "1288px",
       },
       borderRadius: {
+        8: "8px",
         12: "12px",
         20: "20px",
         28: "28px",
