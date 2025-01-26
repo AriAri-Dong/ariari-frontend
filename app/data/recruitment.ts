@@ -17,7 +17,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: 2,
-    title: "사진 동아리 신입 모집",
+    title: "사진 동아리 신입 모집 사진 동아리 신입 모집 사진 동아리 신입 모집",
     body: "사진 촬영 및 편집에 관심 있는 분들을 환영합니다!",
     posterUri: noimage,
     procedureType: "DOCUMENT",
@@ -94,7 +94,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     isMyBookmark: false,
   },
   {
-    id: 1,
+    id: 8,
     title: "프로그래밍 동아리 신입 모집",
     body: "코딩에 관심 있는 열정적인 신입 회원을 모집합니다!",
     posterUri: noimage,
@@ -107,7 +107,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     isMyBookmark: false,
   },
   {
-    id: 2,
+    id: 9,
     title: "사진 동아리 신입 모집",
     body: "사진 촬영 및 편집에 관심 있는 분들을 환영합니다!",
     posterUri: noimage,
@@ -120,7 +120,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     isMyBookmark: true,
   },
   {
-    id: 3,
+    id: 10,
     title: "연극 동아리 신입 모집",
     body: "연기에 열정 있는 분들을 위한 동아리입니다. 함께 무대를 만들어보아요!",
     posterUri: noimage,
@@ -133,7 +133,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     isMyBookmark: false,
   },
   {
-    id: 4,
+    id: 11,
     title: "봉사 동아리 신입 모집",
     body: "봉사를 통해 따뜻한 마음을 나누고 싶으신 분들을 모집합니다.",
     posterUri: noimage,
@@ -146,7 +146,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     isMyBookmark: false,
   },
   {
-    id: 5,
+    id: 12,
     title: "댄스 동아리 신입 모집",
     body: "춤을 사랑하고 열정을 가진 분들을 모집합니다. 장르는 자유!",
     posterUri: noimage,
@@ -159,7 +159,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     isMyBookmark: true,
   },
   {
-    id: 6,
+    id: 13,
     title: "음악 동아리 신입 모집",
     body: "보컬, 악기 연주 등 음악을 사랑하는 분들을 모집합니다.",
     posterUri: noimage,
@@ -172,7 +172,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     isMyBookmark: false,
   },
   {
-    id: 7,
+    id: 14,
     title: "영화 동아리 신입 모집",
     body: "영화를 보고 토론하며 작품을 만드는 재미를 느껴보세요!",
     posterUri: noimage,
