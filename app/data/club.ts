@@ -1,18 +1,18 @@
 export const ACCEPTANCE_REVIEWS = [
   {
     id: 0,
-    title: "2024년 봄학기 동아리 모집",
-    date: "2024.12.31",
+    title: "2025년 봄학기 동아리 모집",
+    date: "2025.12.31",
   },
   {
     id: 1,
     title: "가을학기 동아리 모집 후기",
-    date: "2024.10.15",
+    date: "2025.10.15",
   },
   {
     id: 2,
     title: "여름방학 동아리 모집 후기",
-    date: "2024.07.20",
+    date: "2025.07.20",
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ export const ACTIVITY_REVIEWS = [
   {
     id: 0,
     title: "아리아리 활동 후기",
-    date: "2024.12.31",
+    date: "2025.12.31",
     username: "아리아리",
     detail: "아리아리 활동 후기 상세 내용",
     badgeType: ["selfDevelopment", "relationship", "skill"],
@@ -46,7 +46,7 @@ export const ACTIVITY_REVIEWS = [
   {
     id: 2,
     title: "활동 후기를 적어볼까나",
-    date: "2024.07.20",
+    date: "2025.07.20",
     username: "수여니",
     detail: "룰루랄라룰라랄",
     badgeType: ["employment", "interest", "health"],
@@ -79,8 +79,8 @@ export const ACTIVITY_REVIEWS = [
 export const RECRUITMENT_CARDS = [
   {
     id: 0,
-    title: "2024년 봄학기 동아리 모집",
-    date: "2024.12.31",
+    title: "2025년 봄학기 동아리 모집",
+    date: "2025.12.31",
     status: "모집마감",
   },
   {
@@ -92,7 +92,7 @@ export const RECRUITMENT_CARDS = [
   {
     id: 2,
     title: "여름방학 동아리 모집 안내",
-    date: "2024.07.20",
+    date: "2025.07.20",
     status: "모집마감",
   },
   {
@@ -110,10 +110,10 @@ export const RECRUITMENT_CARDS = [
 ];
 
 export const CATEGORY = [
-  { id: 0, label: "동아리 소속", type: "affiliation", value: "아리아리" },
-  { id: 1, label: "활동 분야", type: "field", value: "프로그래밍" },
+  { id: 0, label: "동아리 소속", type: "affiliation", value: "대학 동아리" },
+  { id: 1, label: "활동 분야", type: "field", value: "봉사" },
   { id: 2, label: "활동 지역", type: "region", value: "서울" },
-  { id: 3, label: "활동 대상", type: "target", value: "대학생 및 직장인" },
+  { id: 3, label: "활동 대상", type: "target", value: "대학생" },
 ];
 
 // export const MENU_DATA = [
