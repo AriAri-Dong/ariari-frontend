@@ -12,7 +12,7 @@ import SelectAdministrator from "@/components/card/selectAdministrator";
 import LeaveDialog from "@/components/modal/leave/leaveDialog";
 
 import { WITHDRAWAL_INFO } from "@/data/withdrawal";
-import { Club_Data } from "@/data/joinedClub";
+import { CLUB_DATA } from "@/data/joinedClub";
 import { Delegator, JoinedClub } from "@/types/components/delegate";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
 
@@ -20,7 +20,7 @@ const WithDrawal = () => {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState<number>(1);
 
-  const [clubs, setClubs] = useState<JoinedClub[]>(Club_Data);
+  const [clubs, setClubs] = useState<JoinedClub[]>(CLUB_DATA);
   const [selectedDelegates, setSelectedDelegates] = useState<
     Record<number, Delegator>
   >({}); // 클럽id, 위임자
@@ -150,7 +150,7 @@ const WithDrawal = () => {
                 다른 사용자에게 위임해주세요.
               </div>
               <div className="flex flex-col gap-4 mb-5">
-                {Club_Data.map((club) => (
+                {CLUB_DATA.map((club) => (
                   <div key={club.id}>
                     <SelectAdministrator
                       club={club}

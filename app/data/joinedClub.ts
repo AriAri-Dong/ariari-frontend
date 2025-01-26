@@ -1,6 +1,6 @@
 import test_image from "@/images/logo/ariari.svg";
 
-export const Club_Data = [
+export const CLUB_DATA = [
   {
     id: 1,
     name: "Club 1",
