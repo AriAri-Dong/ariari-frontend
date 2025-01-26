@@ -6,7 +6,7 @@ import close from "@/images/icon/close.svg";
 import Alert from "../../../../components/alert/alert";
 import LargeBtn from "../../../../components/button/basicBtn/largeBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
-import { colorMapping, tokenBg } from "../../util/colorMapping";
+import { colorMapping, tokenBg } from "../../../../utils/colorMapping";
 
 interface FaqFormContentProps {
   title: string;

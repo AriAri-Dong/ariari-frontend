@@ -11,7 +11,7 @@ import Q from "@/images/icon/Q.svg";
 import A from "@/images/icon/A.svg";
 
 import { profileImageMap } from "@/utils/mappingProfile";
-import { tokenColorMapping } from "../../util/colorMapping";
+import { tokenColorMapping } from "../../../../utils/colorMapping";
 import { ClubFaqData, ClubQuestionData } from "@/models/club";
 import { clubMemberRoleType, profileType } from "@/models/member";
 
