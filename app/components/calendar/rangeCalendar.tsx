@@ -58,7 +58,7 @@ const RangeCalendar = ({
         selectsRange={true}
         placeholderText={placeholder}
         dateFormat="yyyy.MM.dd"
-        popperPlacement="bottom-center"
+        popperPlacement="bottom-end"
         customInput={
           <button
             className="flex items-center justify-between w-full bg-white rounded-30 
