@@ -45,7 +45,7 @@ const ClubMembersSection = () => {
   }
 
   return (
-    <div className="w-full m-auto max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx pt-6 pb-20 md:pt-8 md:pb-[124px] px-4 md:px-5">
+    <div className="pt-6 pb-20 md:pt-8 md:pb-[124px]">
       <section>
         <ClubMemberHeader
           searchTerm={searchTerm}

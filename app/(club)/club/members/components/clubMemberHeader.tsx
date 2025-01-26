@@ -25,6 +25,10 @@ const ClubMemberHeader = ({
 }: ClubMemberHeaderProps) => {
   const [isInvitationModalOpen, setIsInvitationModalOpen] =
     useState<boolean>(false);
+  const [type, setType] = useState<string>(
+    MEMBER_STATUS_TYPE.slice(1)[0].label
+  );
+
   return (
     <div>
       <SubSearchBar
@@ -36,7 +40,11 @@ const ClubMemberHeader = ({
       />
       <div className="flex justify-between items-center mb-4 md:mb-[22px] ">
         <div className="hidden mb-2 md:block">
-          <SubTap optionData={MEMBER_STATUS_TYPE.slice(1)} />
+          <SubTap
+            optionData={MEMBER_STATUS_TYPE.slice(1)}
+            selectedOption={type}
+            handleOption={setType}
+          />
         </div>
         <div className="md:hidden">
           <PullDown
