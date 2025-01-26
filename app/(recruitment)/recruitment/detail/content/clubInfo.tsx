@@ -16,12 +16,28 @@ import ClubProfileCard from "@/components/card/clubProfileCard";
 import ReportBottomSheet from "@/components/bottomSheet/reportBottomSheet";
 import Alert from "@/components/alert/alert";
 import ReportModal from "@/components/modal/reportModal";
+import { MainRecruitmentCardProps } from "@/types/components/card";
 
-const ClubInfo = () => {
+interface ClubInfoProps {
+  recruitmentId?: number;
+  recruitmentData?: MainRecruitmentCardProps;
+}
+
+const ClubInfo = ({ recruitmentId, recruitmentData }: ClubInfoProps) => {
   const [isHeart, setIsHeart] = useState<boolean>(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
   const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const clubImageSrc =
+    typeof recruitmentData?.clubImageUrl === "string"
+      ? recruitmentData?.clubImageUrl
+      : recruitmentData?.clubImageUrl?.src || test_image;
+
+  const imageSrc =
+    typeof recruitmentData?.imageUrl === "string"
+      ? recruitmentData?.imageUrl
+      : recruitmentData?.imageUrl?.src || test_image;
 
   const onHeartClick = () => {
     setIsHeart(!isHeart);
@@ -45,7 +61,7 @@ const ClubInfo = () => {
       <div className="flex flex-col mt-2 sm_md:flex-row sm_md:gap-[27px] md:pb-10 md:pt-8 md:flex-row md:gap-14 w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5">
         <div className="w-full max-w-[792px]">
           <Image
-            src={test_image}
+            src={clubImageSrc}
             alt={"test_image"}
             width={792}
             height={792}
@@ -74,11 +90,11 @@ const ClubInfo = () => {
                 <div className="flex justify-between items-center">
                   <div className="flex gap-3 items-center">
                     <Image
-                      src={test_image}
+                      src={imageSrc}
                       alt={"Test Image"}
                       width={68}
                       height={68}
-                      className="rounded-full object-cover"
+                      className="relative w-[68px] h-[68px] rounded-full overflow-hidden"
                     />
                     <ClubProfileCard
                       clubName={"동아리 이름"}
@@ -110,11 +126,11 @@ const ClubInfo = () => {
               <div className="flex items-center md:gap-5">
                 <div className="relative w-[60px] h-[60px]">
                   <Image
-                    src={test_image}
+                    src={imageSrc}
                     alt={"Test Image"}
                     width={60}
                     height={60}
-                    className="rounded-full object-cover"
+                    className="relative w-[60px] h-[60px] rounded-full overflow-hidden"
                   />
                   <div
                     className="absolute bottom-0 right-0 cursor-pointer"

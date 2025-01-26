@@ -5,8 +5,17 @@ import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import RecruitmentCard from "@/components/card/recruitmentCard";
 import AcceptanceReviewDropdown from "@/components/dropdown/acceptanceReviewDropdown";
 import { ACCEPTANCE_REVIEWS, RECRUITMENT_CARDS } from "@/data/club";
+import { MainRecruitmentCardProps } from "@/types/components/card";
 
-const ClubActivities = () => {
+interface ClubActivitiesProps {
+  recruitmentId?: number;
+  recruitmentData?: MainRecruitmentCardProps;
+}
+
+const ClubActivities = ({
+  recruitmentId,
+  recruitmentData,
+}: ClubActivitiesProps) => {
   const [openDropdowns, setOpenDropdowns] = useState<boolean[]>(
     new Array(ACCEPTANCE_REVIEWS.length).fill(false)
   );
