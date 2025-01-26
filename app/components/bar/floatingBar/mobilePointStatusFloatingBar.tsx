@@ -1,8 +1,7 @@
 "use client";
 
-import { DayFloatingBarProps } from '@/data/point';
-import React from "react";
 import { DayFloatingBarProps } from "@/types/components/point";
+import React from "react";
 
 // 추후 수정 필요!
 // 양쪽 패딩 값 없음 (추가해야함.)
