@@ -22,7 +22,7 @@ const FilterSection = ({ sortType, setSortType }: FilterSectionProps) => {
             총 nnn개의 모집공고가 있어요.
           </p>
           <SubPullDown
-            optionData={Popularity_Sort_Type}
+            optionData={Popularity_Sort_Type.slice(1)}
             selectedOption={sortType}
             handleOption={setSortType}
           />
@@ -34,7 +34,7 @@ const FilterSection = ({ sortType, setSortType }: FilterSectionProps) => {
               총 nnn개의 모집공고가 있어요.
             </p>
             <SubPullDown
-              optionData={Popularity_Sort_Type}
+              optionData={Popularity_Sort_Type.slice(1)}
               selectedOption={sortType}
               handleOption={setSortType}
             />

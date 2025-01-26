@@ -37,10 +37,10 @@ const ClubRankingCard = ({ clubs }: ClubRankingCardProps) => {
               </div>
 
               <div className="flex-1 overflow-hidden">
-                <div className="text-base truncate mb-2 md:text-[22px]">
+                <div className="text-mobile_h3 truncate mb-2 md:text-h2">
                   {club.title}
                 </div>
-                <p className="text-xs truncate text-white md:text-base">
+                <p className="text-mobile_body3_m truncate text-background md:text-body1_r">
                   {club.description}
                 </p>
               </div>

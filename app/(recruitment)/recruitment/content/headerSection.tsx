@@ -58,25 +58,25 @@ const HeaderSection = () => {
         </div>
         <div className="flex gap-2 mt-4 md:mt-0 md:gap-4">
           <PullDown
-            optionData={Affiliation_Type}
+            optionData={Affiliation_Type.slice(1)}
             optionSize="small"
             handleOption={setAffiliationType}
             selectedOption={affiliationType}
           />
           <PullDown
-            optionData={Field_Type}
+            optionData={Field_Type.slice(1)}
             optionSize="small"
             handleOption={setFieldType}
             selectedOption={fieldType}
           />
           <PullDown
-            optionData={Area_Type}
+            optionData={Area_Type.slice(1)}
             optionSize="small"
             handleOption={setAreaType}
             selectedOption={areaType}
           />
           <PullDown
-            optionData={Target_Type}
+            optionData={Target_Type.slice(1)}
             optionSize="small"
             handleOption={setTargetType}
             selectedOption={targetType}

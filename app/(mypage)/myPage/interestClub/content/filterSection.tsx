@@ -36,7 +36,7 @@ const FilterSection = ({
               onClick={toggleCheck}
             />
             <SubPullDown
-              optionData={Popularity_Sort_Type}
+              optionData={Popularity_Sort_Type.slice(1)}
               selectedOption={sortType}
               handleOption={setSortType}
             />
@@ -49,7 +49,7 @@ const FilterSection = ({
               총 nnn개의 관심 동아리가 있어요.
             </p>
             <SubPullDown
-              optionData={Popularity_Sort_Type}
+              optionData={Popularity_Sort_Type.slice(1)}
               selectedOption={sortType}
               handleOption={setSortType}
             />

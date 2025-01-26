@@ -45,7 +45,7 @@ const FilterSection = ({
               onClick={toggleRecruitmentCheck}
             />
             <SubPullDown
-              optionData={Popularity_Sort_Type}
+              optionData={Popularity_Sort_Type.slice(1)}
               selectedOption={sortType}
               handleOption={setSortType}
             />
@@ -58,7 +58,7 @@ const FilterSection = ({
               총 nnn개의 관심 모집공고가 있어요.
             </p>
             <SubPullDown
-              optionData={Popularity_Sort_Type}
+              optionData={Popularity_Sort_Type.slice(1)}
               selectedOption={sortType}
               handleOption={setSortType}
             />

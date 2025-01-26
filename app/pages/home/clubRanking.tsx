@@ -67,14 +67,14 @@ const ClubRanking = () => {
   return (
     <section className="mt-5 mb-12 md:mt-8 md:mb-[68px]">
       <div className="flex justify-between items-center">
-        <div className="text-[18px] font-bold md:text-[28px]">
+        <div className="text-mobile_h1_contents_title md:text-h1_contents_title">
           실시간 동아리 랭킹
         </div>
         <div className=" md:flex md:gap-[16px]">
           {isTab ? (
             <>
               <PullDown
-                optionData={Field_Type}
+                optionData={Field_Type.slice(1)}
                 optionSize="small"
                 handleOption={setFieldType}
                 selectedOption={fieldType}
@@ -90,13 +90,13 @@ const ClubRanking = () => {
         <div className="flex mt-[16px] gap-[10px] md:hidden ">
           <>
             <PullDown
-              optionData={Affiliation_Type}
+              optionData={Affiliation_Type.slice(1)}
               optionSize="small"
               handleOption={setAffiliationType}
               selectedOption={affiliationType}
             />
             <PullDown
-              optionData={Field_Type}
+              optionData={Field_Type.slice(1)}
               optionSize="small"
               handleOption={setFieldType}
               selectedOption={fieldType}
