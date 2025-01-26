@@ -4,11 +4,13 @@ import React from "react";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import Image from "next/image";
-import helpText from "@/images/icon/point_helpText.svg";
+import helpText from "@/images/icon/helptextFaqMobile.svg";
 import { usePathname } from "next/navigation";
 
 interface DayFloatingBarProps {
   deadline: Date;
+  isWriteButtonVisible: boolean;
+  handleWrite?: () => void;
 }
 
 /**
@@ -16,7 +18,11 @@ interface DayFloatingBarProps {
  * @param deadline 마감일
  * @returns
  */
-const RecruitmentGuideFloatingBar = ({ deadline }: DayFloatingBarProps) => {
+const RecruitmentGuideFloatingBar = ({
+  deadline,
+  isWriteButtonVisible,
+  handleWrite = () => {},
+}: DayFloatingBarProps) => {
   const pathname = usePathname();
 
   const imageVisible = pathname === "/club/review/acceptance";
@@ -27,10 +33,6 @@ const RecruitmentGuideFloatingBar = ({ deadline }: DayFloatingBarProps) => {
     .getMinutes()
     .toString()
     .padStart(2, "0")} 모집 마감`;
-
-  const handleWrite = () => {
-    console.log("handleWrite Click");
-  };
 
   const handleView = () => {
     console.log("모집 공고 보기");
@@ -71,13 +73,14 @@ const RecruitmentGuideFloatingBar = ({ deadline }: DayFloatingBarProps) => {
               </div>
             </div>
           </div>
-          <div className="flex items-center">
-            <WriteBtn onClick={handleWrite} />
-          </div>
+          {isWriteButtonVisible && (
+            <div className="flex items-center">
+              <WriteBtn onClick={handleWrite} />
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
-
 export default RecruitmentGuideFloatingBar;

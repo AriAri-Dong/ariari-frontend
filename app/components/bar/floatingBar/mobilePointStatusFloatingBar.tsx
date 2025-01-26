@@ -1,5 +1,6 @@
 "use client";
 
+import { DayFloatingBarProps } from '@/data/point';
 import React from "react";
 import { DayFloatingBarProps } from "@/types/components/point";
 

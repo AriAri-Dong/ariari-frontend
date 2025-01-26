@@ -43,8 +43,13 @@ const NotiPopUp = (props: NotiPopUpProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-      <div className="absolute inset-0" onClick={onClose} />
+
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+      style={{ zIndex: 1000 }}
+    >
+      <div className="absolute inset-0" onClick={onClose}></div>
+
 
       <div className="relative w-[306px] p-5 pt-[52px] bg-white rounded-2xl md:w-[430px] md:pt-[72px] md:pb-[26px] md:px-5">
         <div className="flex justify-center mb-8 md:mb-[46px]">

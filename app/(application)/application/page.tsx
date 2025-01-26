@@ -20,6 +20,9 @@ const ITEMS_PER_PAGE = 20;
 
 const Application = () => {
   const [visibleItems, setVisibleItems] = useState<number>(ITEMS_PER_PAGE);
+  const [selectedOption, setSelectedOption] = useState<string[]>([
+    options[0].label,
+  ]);
 
   const handleLoadMore = () => {
     setVisibleItems((prev) => prev + ITEMS_PER_PAGE);
@@ -33,7 +36,11 @@ const Application = () => {
             동아리 지원
           </h1>
           <div className="overflow-x-auto no-scrollbar">
-            <SubTap optionData={options} />
+            <SubTap
+              optionData={options}
+              selectedOption={selectedOption[0]}
+              handleOption={(value) => setSelectedOption([value])}
+            />
           </div>
         </div>
         <p className="text-subtext2 text-mobile_body2_m mb-5 md:text-h4 md:mb-[22px]">

@@ -37,7 +37,7 @@ const IconBtn = ({ title, onClick, type, size, className }: BtnType) => {
   return (
     <button
       className={`py-1 px-[6px] text-icon rounded-lg
-      active:bg-hover md:hover:bg-hover md:active:bg-pressed ${className}`}
+      focus:bg-hover md:hover:bg-hover md:focus:bg-pressed ${className}`}
       onClick={onClick}
     >
       <div

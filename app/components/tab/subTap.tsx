@@ -1,30 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import NotiPopUp from "../modal/notiPopUp";
 
 interface SubTapProps {
   optionData: { id: number; label: string; number?: number }[];
+  selectedOption: string;
+  handleOption: (value: string) => void;
 }
 
-const SubTap = ({ optionData }: SubTapProps) => {
-  const [selectedOption, setSelectedOption] = useState<number>(0);
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
-
-  const schoolCertification = false; // 학교 인증 여부 임시값
-
-  const handleValue = (index: number) => {
-    if (
-      !schoolCertification &&
-      optionData[index].label == "교내" &&
-      !isModalOpen
-    ) {
-      setModalOpen(true);
-    } else {
-      setSelectedOption(index);
-    }
-  };
-
+const SubTap = ({ optionData, selectedOption, handleOption }: SubTapProps) => {
   return (
     <div
       className={`w-fit h-10 p-[2px] flex items-center gap-1.5 bg-searchbar rounded-28 whitespace-nowrap md:h-12 md:rounded-28 md:gap-2.5`}
@@ -36,17 +20,17 @@ const SubTap = ({ optionData }: SubTapProps) => {
         <div
           key={index}
           className={`flex-shrink-0 px-4 h-9 flex items-center justify-center gap-1 text-center rounded-28 cursor-pointer truncate transition-all duration-500 md:px-5 md:h-11 ${
-            selectedOption === index
+            selectedOption === option.label
               ? "text-primary bg-background shadow-default"
               : "text-unselected"
           }`}
-          onClick={() => handleValue(index)}
+          onClick={() => handleOption(option.label)}
         >
           <p className="text-body1_sb md:text-h4_sb">{option.label}</p>
           {option.number && (
             <p
               className={`w-5 h-5 flex items-center justify-center rounded-full text-8 transition-all duration-500 md:w-6 md:h-6 md:text-10 ${
-                selectedOption === index
+                selectedOption === option.label
                   ? "bg-selectedoption_default"
                   : "bg-token_bg"
               }`}
@@ -56,20 +40,6 @@ const SubTap = ({ optionData }: SubTapProps) => {
           )}
         </div>
       ))}
-
-      {isModalOpen && (
-        <NotiPopUp
-          onClose={() => setModalOpen(false)}
-          icon="school"
-          title="학교 등록이 필요합니다"
-          description={`교내 인기 동아리를 확인하기 위해서는\n학교 등록이 필요합니다.`}
-          firstButton={() => {}}
-          firstButtonText="학교 등록하기"
-          secondButton={() => setModalOpen(false)}
-          secondButtonText="다음에 할게요"
-          modalType="button"
-        />
-      )}
     </div>
   );
 };

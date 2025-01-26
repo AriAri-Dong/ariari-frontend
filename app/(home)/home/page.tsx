@@ -1,4 +1,4 @@
-import ClubRanking from "@/pages/home/clubRanking";
+import ClubRanking from "./content/clubRanking";
 import LatestRecruitment from "./content/latestRecruitment";
 import PopularRecruitment from "./content/popularRecruitment";
 

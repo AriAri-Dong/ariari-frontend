@@ -42,6 +42,10 @@ const ApplicationStatusPage = () => {
   const isMdUp = useResponsive("md");
   const optionsRef = useRef<HTMLDivElement | null>(null);
 
+  const [option, setOption] = useState<string>(OPTIONS[0].label);
+  const [mobileOption, setMobileOption] = useState<string>(
+    MONILE_MENU_OPTIONS[0].label
+  );
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [openForm, setOpenForm] = useState<boolean>(false);
@@ -113,7 +117,11 @@ const ApplicationStatusPage = () => {
             </div>
             <div className="flex overflow-x-auto no-scrollbar ml-2 relative">
               <div className="flex whitespace-nowrap">
-                <SubTap optionData={MONILE_MENU_OPTIONS} />
+                <SubTap
+                  optionData={MONILE_MENU_OPTIONS}
+                  selectedOption={mobileOption}
+                  handleOption={setMobileOption}
+                />
               </div>
             </div>
             <div className="flex items-center">
@@ -133,7 +141,11 @@ const ApplicationStatusPage = () => {
             </div>
             <div className="w-full">
               <div className="overflow-x-auto no-scrollbar hidden lg:block">
-                <SubTap optionData={OPTIONS} />
+                <SubTap
+                  optionData={OPTIONS}
+                  selectedOption={option}
+                  handleOption={setOption}
+                />
               </div>
               <Tabs />
 

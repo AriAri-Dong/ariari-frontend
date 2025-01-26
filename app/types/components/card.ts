@@ -13,3 +13,7 @@ export interface MainRecruitmentCardProps {
   };
   isScrap: boolean;
 }
+export interface GuideData {
+  title: string;
+  instructions: string[];
+}

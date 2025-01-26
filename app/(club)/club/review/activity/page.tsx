@@ -31,6 +31,7 @@ const ReviewPage = () => {
   const router = useRouter();
   const isMdUp = useResponsive("md");
 
+  const [option, setOption] = useState<string>(MONILE_MENU_OPTIONS[0].label);
   const [openReview, setOpenReview] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
@@ -63,7 +64,11 @@ const ReviewPage = () => {
             </div>
             <div className="flex overflow-x-auto no-scrollbar ml-2 relative">
               <div className="flex whitespace-nowrap">
-                <SubTap optionData={MONILE_MENU_OPTIONS} />
+                <SubTap
+                  optionData={MONILE_MENU_OPTIONS}
+                  selectedOption={option}
+                  handleOption={setOption}
+                />
               </div>
             </div>
             <div className="flex items-center">
