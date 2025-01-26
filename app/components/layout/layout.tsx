@@ -14,7 +14,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "recruitment/detail",
     "/club/review",
     "club/management",
-    "/recruitmentManagement",
   ];
   const bgPaths = ["application"];
   const mobileBgPaths = ["/club/create"];

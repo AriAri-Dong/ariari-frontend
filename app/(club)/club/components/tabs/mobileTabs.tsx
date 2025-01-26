@@ -23,9 +23,8 @@ const Tabs = () => {
   return (
     <div className="flex gap-3 overflow-x-auto no-scrollbar whitespace-nowrap lg:hidden">
       {TABS.map((tab) => (
-        <div className="flex flex-col gap-[6px]">
+        <div key={tab.id} className="flex flex-col gap-[6px]">
           <div
-            key={tab.id}
             onClick={() => handleTabClick(tab.id, tab.url)}
             className={`flex-nowrap cursor-pointer text-mobile_body1_m ${
               activeTab === tab.id ? "text-primary" : "text-unselected"

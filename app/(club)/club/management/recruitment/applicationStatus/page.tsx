@@ -248,6 +248,7 @@ const ApplicationStatusPage = () => {
                 {APPLICATION_FORM_DATA.map((item) => {
                   return (
                     <ApplicationFormCard
+                      key={item.id}
                       clubName={item.activityName}
                       serviceNickname={item.nickname}
                       status={item.status}
