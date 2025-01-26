@@ -19,7 +19,7 @@ const TextInputWithCounter: React.FC<TextInputWithCounterProps> = ({
     <div className={`w-full relative ${className}`}>
       <input
         className="w-full bg-searchbar text-mobile_body1_r text-text1 py-3 px-4 rounded-xl 
-        focus:border-blue-500 focus:outline-none placeholder-subtext2"
+        focus:border focus:border-blue-500 focus:outline-none placeholder-subtext2"
         placeholder={placeholder}
         maxLength={maxLength}
         value={value}
