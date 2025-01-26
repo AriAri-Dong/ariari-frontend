@@ -15,6 +15,9 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: "Ariari",
   description: "Ariari",
+  icons: {
+    icon: "/ariari_logo.svg",
+  },
 };
 
 export default function RootLayout({
