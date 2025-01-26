@@ -155,7 +155,7 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
         {/* 제목 영역 */}
         <div className="flex justify-between mt-[22px] mb-4">
           <h1 className="text-text1 text-mobile_h1_contents_title">
-            활동후기 작성하기
+            동아리 정보 수정
           </h1>
           <Image
             src={close}
