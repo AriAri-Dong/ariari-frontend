@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import error from "@/images/icon/error.svg";
 import RadioBtn from "../button/radioBtn";
 import formatDateToDot from "@/utils/formatDateToDot";
 
@@ -14,6 +13,19 @@ interface RecruitmentCard2Props {
   onClick: () => void;
   className?: string;
 }
+
+/**
+ *
+ * @param title 모집공고 제목
+ * @param image 모집공고 이미지
+ * @param startDate 시작 날짜
+ * @param endDate 마감 날짜
+ * @param isSelected 선택되었는지 여부
+ * @param onClick 클릭 핸들러
+ * @param className 추가 스타일링
+ *
+ * @returns
+ */
 
 const RecruitmentCard2 = ({
   title,
