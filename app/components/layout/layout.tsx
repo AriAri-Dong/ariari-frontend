@@ -13,6 +13,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const specialPaths = [
     "recruitment/detail",
     "/club/review",
+    "club/management",
     "/recruitmentManagement",
   ];
   const bgPaths = ["application"];
