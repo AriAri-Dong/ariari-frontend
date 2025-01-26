@@ -27,10 +27,12 @@ const ReviewPage = () => {
 
   const [openReview, setOpenReview] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [openDropdowns, setOpenDropdowns] = useState<boolean[]>(
+    new Array(ACCEPTANCE_REVIEWS.length).fill(false)
+  );
 
   const handleRouter = () => {
-    // 모집 공고 임시 경로
-    router.push("/");
+    router.push("/"); // 모집 공고 임시 경로
   };
 
   const handleWrite = () => {
@@ -40,6 +42,13 @@ const ReviewPage = () => {
   const handleSubmitSuccess = () => {
     setAlertMessage("합격후기가 등록되었습니다.");
     setOpenReview(false);
+  };
+
+  // 드롭다운 상태 변경 함수
+  const handleDropdownToggle = (index: number) => {
+    setOpenDropdowns((prevState) => {
+      return prevState.map((_, idx) => idx === index);
+    });
   };
 
   return (
@@ -75,7 +84,7 @@ const ReviewPage = () => {
             <div className="w-[256px] h-[536px] bg-white hidden lg:block" />
             <div className="w-full">
               <p className="text-subtext2 text-mobile_body2_m md:text-h4 mb-4 md:mb-[22px]">
-                총 nnn개의 합격후기가 있어요.
+                총 {ACCEPTANCE_REVIEWS.length}개의 합격후기가 있어요.
               </p>
               <PointStatusBar deductionPoint={0} currentPoint={0} />
               <MobilePointStatusBar
@@ -91,16 +100,18 @@ const ReviewPage = () => {
                 <p>작성일</p>
               </div>
               <div className="flex flex-col gap-3 md:gap-2.5">
-                {ACCEPTANCE_REVIEWS.map((item) => {
+                {ACCEPTANCE_REVIEWS.map((item, index) => {
                   return (
                     <AcceptanceReviewDropdown
                       key={item.id}
                       title={item.title}
                       date={item.date}
-                      onClick={() => {}}
-                      onBtnClick={() => console.log("열람하기")}
                       document={0}
                       interview={0}
+                      onClick={() => {}}
+                      onBtnClick={() => {}}
+                      isOpen={openDropdowns[index]}
+                      onToggle={() => handleDropdownToggle(index)}
                     />
                   );
                 })}

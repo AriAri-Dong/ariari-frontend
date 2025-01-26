@@ -16,6 +16,8 @@ interface AcceptanceReviewDropdownProps {
   date: string;
   document: number;
   interview: number;
+  isOpen: boolean;
+  onToggle: () => void;
 }
 
 const SECTIONS = [
@@ -45,15 +47,12 @@ const AcceptanceReviewDropdown = ({
   date,
   document,
   interview,
+  isOpen,
+  onToggle,
 }: AcceptanceReviewDropdownProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
   const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-
-  const handleToggleDropdown = () => {
-    setIsOpen((prev) => !prev);
-  };
 
   const toggleBottomModal = () => {
     setIsBottomModalOpen((prev) => !prev);
@@ -68,12 +67,11 @@ const AcceptanceReviewDropdown = ({
     <div
       className="w-full max-w-[1248px] p-4 md:pt-[18px] md:pb-[22px] md:pl-9 md:pr-[34px]
     rounded-lg bg-background cursor-pointer"
-      // focus:bg-hover md:hover:bg-hover md:focus:bg-pressed
     >
-      {/* default */}
+      {/* 기본 내용 */}
       <div
         className="flex flex-col items-start gap-3 md:gap-0 md:flex-row md:justify-between md:items-center"
-        onClick={handleToggleDropdown}
+        onClick={onToggle}
       >
         <div className="flex flex-col items-start md:flex-row gap-3 md:gap-12">
           <div className="flex flex-col gap-4 md:gap-5">
@@ -129,16 +127,13 @@ const AcceptanceReviewDropdown = ({
               <ProgressBar disabled={true} initialStep={2} />
             </div>
           </div>
-          {/* PC */}
-
-          {/* mobile */}
+          {/* 모바일 */}
           <div className="flex md:hidden flex-col gap-2.5 mb-8 mt-[26px]">
             <h3 className="text-mobile_body1_sb md:text-h4_sb text-text1">
               면접분위기
             </h3>
             <ProgressBar disabled={true} initialStep={2} />
           </div>
-          {/* mobile */}
           <div className="flex flex-col w-full max-w-[669px] md:gap-10 md:max-h-none">
             {SECTIONS.map((section, sectionIdx) => (
               <div key={sectionIdx}>
@@ -152,12 +147,7 @@ const AcceptanceReviewDropdown = ({
                       className={`${questionIdx === 0 ? "" : "mt-6"}`}
                     >
                       <p
-                        className={`md:text-h4 text-mobile_body1_sb text-text1 mb-4 md:mb-[18px] 
-                        ${
-                          section.subDescription === "질문" &&
-                          question.id === 1 &&
-                          "mt-7 md:mt-0"
-                        }`}
+                        className={`md:text-h4 text-mobile_body1_sb text-text1 mb-4 md:mb-[18px]`}
                       >
                         {section.subDescription}-{question.id}
                       </p>
