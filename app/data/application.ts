@@ -175,3 +175,34 @@ export const APPLICATION_DATA_LIST = [
     date: "2024-01-25",
   },
 ];
+
+export const APPLICATION_FORM_DATA = [
+  {
+    id: 1,
+    activityName: "동아리 활동 이름 1",
+    nickname: "서비스 닉네임 1",
+    status: "면접중" as const,
+    jobTitle: "모집공고 제목 1",
+  },
+  {
+    id: 2,
+    activityName: "동아리 활동 이름 2",
+    nickname: "서비스 닉네임 2",
+    status: "합격" as const,
+    jobTitle: "모집공고 제목 2",
+  },
+  {
+    id: 3,
+    activityName: "동아리 활동 이름 3",
+    nickname: "서비스 닉네임 3",
+    status: "불합격" as const,
+    jobTitle: "모집공고 제목 3",
+  },
+  {
+    id: 4,
+    activityName: "동아리 활동 이름 4",
+    nickname: "서비스 닉네임 4",
+    status: "대기중" as const,
+    jobTitle: "모집공고 제목 4",
+  },
+];
