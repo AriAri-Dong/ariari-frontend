@@ -19,7 +19,7 @@ const ReviewFloatingBtn = ({ onClick }: ReviewFloatingBtnProp) => {
     <div
       className="hidden md:flex fixed bottom-0 w-full max-w-[1248px] mb-9
       justify-center left-1/2 transform -translate-x-1/2 px-5"
-      style={{ zIndex: 1000 }}
+      style={{ zIndex: 10 }}
     >
       <div className="flex flex-col w-full">
         {imageVisible && (

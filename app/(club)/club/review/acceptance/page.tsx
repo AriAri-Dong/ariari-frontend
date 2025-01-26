@@ -115,7 +115,7 @@ const ReviewPage = () => {
           src={helpText}
           alt={"helpText"}
           className="fixed bottom-[125px] right-1.5 md:hidden"
-          style={{ zIndex: 1000 }}
+          style={{ zIndex: 10 }}
         />
         <div className="fixed bottom-[77px] right-5 md:hidden">
           <WriteBtn onClick={handleWrite} />

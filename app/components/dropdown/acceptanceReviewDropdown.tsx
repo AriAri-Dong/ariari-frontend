@@ -21,17 +21,19 @@ interface AcceptanceReviewDropdownProps {
 const SECTIONS = [
   {
     title: "서류문항",
+    subDescription: "문항",
     questions: [
       { id: 1, question: "작성된 문항 1", answer: "작성된 답변 1" },
       { id: 2, question: "작성된 문항 2", answer: "작성된 답변 2" },
     ],
   },
   {
-    title: "면접문항",
+    title: "면접질문",
+    subDescription: "질문",
     questions: [
-      { id: 1, question: "작성된 문항 1", answer: "작성된 답변 1" },
-      { id: 2, question: "작성된 문항 2", answer: "작성된 답변 2" },
-      { id: 3, question: "작성된 문항 3", answer: "작성된 답변 3" },
+      { id: 1, question: "작성된 질문 1", answer: "작성된 답변 1" },
+      { id: 2, question: "작성된 질문 2", answer: "작성된 답변 2" },
+      { id: 3, question: "작성된 질문 3", answer: "작성된 답변 3" },
     ],
   },
 ];
@@ -100,7 +102,7 @@ const AcceptanceReviewDropdown = ({
       {/* 드롭다운 */}
       <div
         className={`transition-all duration-300 ease-in-out overflow-hidden ${
-          isOpen ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
+          isOpen ? "opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div className="flex flex-col md:flex-row w-full justify-between mb-4 mt-7 md:mt-9 md:mb-2">
@@ -149,8 +151,15 @@ const AcceptanceReviewDropdown = ({
                       key={questionIdx}
                       className={`${questionIdx === 0 ? "" : "mt-6"}`}
                     >
-                      <p className="md:text-h4 text-mobile_body1_sb text-text1 mb-4 md:mb-[18px]">
-                        문항-{question.id}
+                      <p
+                        className={`md:text-h4 text-mobile_body1_sb text-text1 mb-4 md:mb-[18px] 
+                        ${
+                          section.subDescription === "질문" &&
+                          question.id === 1 &&
+                          "mt-7 md:mt-0"
+                        }`}
+                      >
+                        {section.subDescription}-{question.id}
                       </p>
                       <div className="flex flex-col gap-[14px]">
                         <CustomInput
