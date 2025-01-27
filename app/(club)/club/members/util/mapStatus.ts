@@ -1,7 +1,7 @@
-import { clubMemberStatusType } from "@/model/member";
 import activeImg from "@/images/icon/token/on.svg";
 import chillImg from "@/images/icon/token/bye.svg"; //이미지 교체 예정
 import byeImg from "@/images/icon/token/bye.svg";
+import { clubMemberStatusType } from "@/models/member";
 
 export const MAP_STATUS_STYLES: Record<
   clubMemberStatusType,

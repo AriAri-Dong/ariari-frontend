@@ -1,4 +1,4 @@
-import { ClubMemberData } from "@/model/member";
+import { ClubMemberData } from "@/models/member";
 
 export const CLUB_MEMBER_DATA: ClubMemberData[] = [
   {
