@@ -5,7 +5,7 @@ import SubTap from "@/components/tab/subTap";
 import ClubRankingCard from "@/components/card/clubRankingCard";
 import ClubRankingList from "@/components/card/clubLankingList";
 
-import { Affiliation_Type, Area_Type, Field_Type } from "@/data/pulldown";
+import { AFFILIATION_TYPE, AREA_TYPE, FIELD_TYPE } from "@/data/pulldown";
 import { useState } from "react";
 import useResponsive from "@/hooks/useResponsive";
 import FilterBtn from "@/components/button/iconBtn/filterBtn";
@@ -63,7 +63,7 @@ const ClubRanking = () => {
   const isDesktop = useResponsive("lg");
   const [fieldType, setFieldType] = useState<string[]>([]);
   const [affiliationType, setAffiliationType] = useState<string[]>([
-    Affiliation_Type[1].label,
+    AFFILIATION_TYPE[1].label,
   ]);
   const [showFilter, setShowFilter] = useState<boolean>(false);
 
@@ -88,13 +88,13 @@ const ClubRanking = () => {
           {isTab ? (
             <>
               <PullDown
-                optionData={Field_Type.slice(1)}
+                optionData={FIELD_TYPE.slice(1)}
                 optionSize="small"
                 handleOption={setFieldType}
                 selectedOption={fieldType}
               />
               <SubTap
-                optionData={Affiliation_Type.slice(1, 3)}
+                optionData={AFFILIATION_TYPE.slice(1, 3)}
                 selectedOption={affiliationType[0]}
                 handleOption={handleOption}
               />
@@ -108,13 +108,13 @@ const ClubRanking = () => {
         <div className="flex mt-[16px] gap-[10px] md:hidden ">
           <>
             <PullDown
-              optionData={Affiliation_Type.slice(1)}
+              optionData={AFFILIATION_TYPE.slice(1)}
               optionSize="small"
               handleOption={setAffiliationType}
               selectedOption={affiliationType}
             />
             <PullDown
-              optionData={Field_Type.slice(1)}
+              optionData={FIELD_TYPE.slice(1)}
               optionSize="small"
               handleOption={setFieldType}
               selectedOption={fieldType}
