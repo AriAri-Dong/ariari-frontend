@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import checkIcon from "@/images/icon/checkBox.svg";
-import uncheckIcon from "@/images/icon/emptyCheckBox.svg";
-
+import checkIcon from "@/images/icon/checkBox_checked.svg";
+import uncheckIcon from "@/images/icon/checkBox_unchecked.svg";
 import SubPullDown from "@/components/pulldown/subPullDown";
 import DeleteBtn from "@/components/button/iconBtn/deleteBtn";
 import ImageToken from "@/components/token/imageToken";
@@ -13,7 +12,7 @@ import NotiPopUp from "@/components/modal/notiPopUp";
 
 import { MEMBER_STATUS_TYPE, ROLE_TYPE } from "@/data/pulldown";
 import { MAP_ROLE_TO_KO } from "../util/mapRole";
-import { ClubMemberData } from "@/model/member";
+import { ClubMemberData } from "@/models/member";
 import { MAP_STATUS_STYLES, MAP_STATUS_TO_KO } from "../util/mapStatus";
 
 interface ClubMemberListProps {
