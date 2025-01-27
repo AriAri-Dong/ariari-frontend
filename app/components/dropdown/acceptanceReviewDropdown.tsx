@@ -8,6 +8,8 @@ import ReportModal from "../modal/reportModal";
 import Alert from "../alert/alert";
 import ProgressBar from "../bar/progressBar";
 import CustomInput from "../input/customInput";
+import useResponsive from "@/hooks/useResponsive";
+import ReportBottomSheet from "../bottomSheet/reportBottomSheet";
 
 interface AcceptanceReviewDropdownProps {
   onClick: () => void;
@@ -50,16 +52,17 @@ const AcceptanceReviewDropdown = ({
   isOpen,
   onToggle,
 }: AcceptanceReviewDropdownProps) => {
-  const [inputValue, setInputValue] = useState<string>("");
-  const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
+  const isMdUp = useResponsive("md");
+
+  const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const toggleBottomModal = () => {
-    setIsBottomModalOpen((prev) => !prev);
+  const handleOpenReport = () => {
+    setIsReportOpen(!isReportOpen);
   };
 
   const handleReportSubmit = () => {
-    setIsBottomModalOpen(false);
+    setIsReportOpen(false);
     setAlertMessage("신고가 정상적으로 접수되었습니다.");
   };
 
@@ -197,16 +200,22 @@ const AcceptanceReviewDropdown = ({
           type={"declaration"}
           size={"large"}
           title={"신고하기"}
-          onClick={toggleBottomModal}
+          onClick={handleOpenReport}
         />
       </div>
+      {isReportOpen &&
+        (isMdUp ? (
+          <ReportModal
+            onClose={() => setIsReportOpen(false)}
+            onSubmit={handleReportSubmit}
+          />
+        ) : (
+          <ReportBottomSheet
+            onClose={() => setIsReportOpen(false)}
+            onSubmit={handleReportSubmit}
+          />
+        ))}
 
-      {isBottomModalOpen && (
-        <ReportModal
-          onClose={() => setIsBottomModalOpen(false)}
-          onSubmit={handleReportSubmit}
-        />
-      )}
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}

@@ -17,6 +17,7 @@ import ReportBottomSheet from "@/components/bottomSheet/report/reportBottomSheet
 import Alert from "@/components/alert/alert";
 import ReportModal from "@/components/modal/reportModal";
 import { MainRecruitmentCardProps } from "@/types/components/card";
+import useResponsive from "@/hooks/useResponsive";
 
 interface ClubInfoProps {
   recruitmentId?: number;
@@ -24,18 +25,11 @@ interface ClubInfoProps {
   isPreview?: boolean;
 }
 
-/**
- * @param isPreview 미리보기 페이지인지 여부
- */
+const ClubInfo = ({ recruitmentId, recruitmentData }: ClubInfoProps) => {
+  const isMdUp = useResponsive("md");
 
-const ClubInfo = ({
-  recruitmentId,
-  recruitmentData,
-  isPreview = false,
-}: ClubInfoProps) => {
   const [isHeart, setIsHeart] = useState<boolean>(false);
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
-  const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
+  const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const clubImageSrc =
@@ -51,17 +45,13 @@ const ClubInfo = ({
   const onHeartClick = () => {
     setIsHeart(!isHeart);
   };
-  const toggleBottomSheet = () => {
-    setIsBottomSheetOpen((prev) => !prev);
-  };
 
-  const toggleBottomModal = () => {
-    setIsBottomModalOpen((prev) => !prev);
+  const handleOpenReport = () => {
+    setIsReportOpen(!isReportOpen);
   };
 
   const handleReportSubmit = () => {
-    setIsBottomSheetOpen(false);
-    setIsBottomModalOpen(false);
+    setIsReportOpen(false);
     setAlertMessage("신고가 정상적으로 접수되었습니다.");
   };
 
@@ -89,7 +79,7 @@ const ClubInfo = ({
               type={"declaration"}
               size={"large"}
               title={""}
-              onClick={toggleBottomSheet}
+              onClick={handleOpenReport}
             />
           </div>
           <div className="h-0.5 bg-menuborder sm_md:w-[350px] mt-6 mb-6 md:hidden" />
@@ -182,7 +172,7 @@ const ClubInfo = ({
                 type={"declaration"}
                 size={"large"}
                 title={"신고하기"}
-                onClick={toggleBottomModal}
+                onClick={handleOpenReport}
               />
             </div>
           </div>
@@ -191,18 +181,19 @@ const ClubInfo = ({
         {/* <DayFloatingBar deadline={new Date("2024-12-31T23:59:59")} /> */}
         {/* <PointStatusFloatingBar /> */}
         {/* <MobilePointStatusFloatingBar /> */}
-        {isBottomSheetOpen && (
-          <ReportBottomSheet
-            onClose={() => setIsBottomSheetOpen(false)}
-            onSubmit={handleReportSubmit}
-          />
-        )}
-        {isBottomModalOpen && (
-          <ReportModal
-            onClose={() => setIsBottomModalOpen(false)}
-            onSubmit={handleReportSubmit}
-          />
-        )}
+
+        {isReportOpen &&
+          (isMdUp ? (
+            <ReportModal
+              onClose={() => setIsReportOpen(false)}
+              onSubmit={handleReportSubmit}
+            />
+          ) : (
+            <ReportBottomSheet
+              onClose={() => setIsReportOpen(false)}
+              onSubmit={handleReportSubmit}
+            />
+          ))}
         {alertMessage && (
           <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
