@@ -166,11 +166,7 @@ const QnaFormContent = ({
           <LargeBtn onClick={handleSubmit} title={"등록하기"} />
         </div>
         <div className="hidden md:block">
-          <SmallBtn
-            onClick={handleSubmit}
-            title={"등록하기"}
-            className="hidden"
-          />
+          <SmallBtn onClick={handleSubmit} title={"등록하기"} />
         </div>
       </div>
       {alertMessage && (
