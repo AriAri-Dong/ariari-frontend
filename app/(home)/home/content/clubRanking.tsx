@@ -61,7 +61,7 @@ const dummyCardData = [
 const ClubRanking = () => {
   const isTab = useResponsive("md");
   const isDesktop = useResponsive("lg");
-  const [fieldType, setFieldType] = useState<string[]>([]);
+  const [fieldType, setFieldType] = useState<string[]>([FIELD_TYPE[0].label]);
   const [affiliationType, setAffiliationType] = useState<string[]>([
     AFFILIATION_TYPE[1].label,
   ]);

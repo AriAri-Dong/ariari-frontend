@@ -21,7 +21,6 @@ interface PulldownProps {
   forceDropdown?: boolean;
 }
 /**
- * Pulldown 컴포넌트에
  *
  * @property optionData - 선택 가능한 옵션 데이터 배열
  * @property multiple - 여러 개 옵션 선택 여부. 기본값은 false

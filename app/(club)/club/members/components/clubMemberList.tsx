@@ -70,7 +70,7 @@ const ClubMemberList = ({
       <div className="w-full flex justify-between md:flex-[4] ">
         <div className="md:flex-[2]">
           <SubPullDown
-            optionData={ROLE_TYPE}
+            optionData={ROLE_TYPE.slice(1)}
             selectedOption={MAP_ROLE_TO_KO[data.clubMemberRoleType]}
             handleOption={(value) => {
               if (value == "관리자") {
