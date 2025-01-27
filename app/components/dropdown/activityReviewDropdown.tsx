@@ -6,6 +6,8 @@ import IconBtn from "../button/withIconBtn/IconBtn";
 import ReportModal from "../modal/reportModal";
 import Alert from "../alert/alert";
 import ReviewBadge from "../badge/review/reviewBadge";
+import useResponsive from "@/hooks/useResponsive";
+import ReportBottomSheet from "../bottomSheet/reportBottomSheet";
 
 interface ActivityReviewDropdownProps {
   onClick: () => void;
@@ -34,20 +36,22 @@ const ActivityReviewDropdown = ({
   detail,
   badgeType,
 }: ActivityReviewDropdownProps) => {
+  const isMdUp = useResponsive("md");
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
+  const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const handleToggleDropdown = () => {
-    setIsOpen((prev) => !prev);
+    setIsOpen(!isOpen);
   };
 
-  const toggleBottomModal = () => {
-    setIsBottomModalOpen((prev) => !prev);
+  const handleOpenReport = () => {
+    setIsReportOpen(!isReportOpen);
   };
 
   const handleReportSubmit = () => {
-    setIsBottomModalOpen(false);
+    setIsReportOpen(false);
     setAlertMessage("신고가 정상적으로 접수되었습니다.");
   };
 
@@ -100,16 +104,22 @@ const ActivityReviewDropdown = ({
             type={"declaration"}
             size={"small"}
             title={"신고하기"}
-            onClick={toggleBottomModal}
+            onClick={handleOpenReport}
           />
         </div>
       </div>
-      {isBottomModalOpen && (
-        <ReportModal
-          onClose={() => setIsBottomModalOpen(false)}
-          onSubmit={handleReportSubmit}
-        />
-      )}
+      {isReportOpen &&
+        (isMdUp ? (
+          <ReportModal
+            onClose={() => setIsReportOpen(false)}
+            onSubmit={handleReportSubmit}
+          />
+        ) : (
+          <ReportBottomSheet
+            onClose={() => setIsReportOpen(false)}
+            onSubmit={handleReportSubmit}
+          />
+        ))}
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
