@@ -11,7 +11,16 @@ interface BtnType extends ButtonWithTextProps {
   size: "large" | "small";
 }
 
-const IconBtn = ({ title, onClick, type, size }: BtnType) => {
+/**
+ *
+ * @param title 버튼 타이틀
+ * @param onClick 클릭 핸들러
+ * @param type 아이콘 타입
+ * @param size 버튼 사이즈
+ * @param className 추가 className
+ * @returns
+ */
+const IconBtn = ({ title, onClick, type, size, className }: BtnType) => {
   const getIcon = () => {
     switch (type) {
       case "reset":
@@ -27,8 +36,8 @@ const IconBtn = ({ title, onClick, type, size }: BtnType) => {
 
   return (
     <button
-      className="py-1 px-[6px] text-icon rounded-lg
-      focus:bg-hover md:hover:bg-hover md:focus:bg-pressed"
+      className={`py-1 px-[6px] text-icon rounded-lg
+      focus:bg-hover md:hover:bg-hover md:focus:bg-pressed ${className}`}
       onClick={onClick}
     >
       <div
@@ -36,7 +45,7 @@ const IconBtn = ({ title, onClick, type, size }: BtnType) => {
           ${
             size === "large"
               ? `${"text-13 md:text-15"}`
-              : `${"text-xs md:text-13"}`
+              : `${"text-mobile_body3_r md:text-13"}`
           }`}
       >
         {getIcon() && (

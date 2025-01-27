@@ -7,7 +7,8 @@ import uncheckIcon from "@/images/icon/radio_button_unchecked.svg";
 interface BottomSheetProps {
   optionData: { id: number; label: string }[];
   selectedOptions: string[] | string;
-  handleMenuClick: (label: string) => void;
+  handleMenuClick?: (label: string) => void;
+  handleMenuClickWithId?: (label: string, id: number) => void;
   onClose: () => void;
   multiple?: boolean;
 }
@@ -16,6 +17,7 @@ const BottomSheet = ({
   optionData,
   selectedOptions,
   handleMenuClick,
+  handleMenuClickWithId,
   onClose,
   multiple = false,
 }: BottomSheetProps) => {
@@ -58,7 +60,12 @@ const BottomSheet = ({
                 !multiple && `justify-center`
               } focus:bg-hover focus:text-subtext1`}
               onClick={() => {
-                handleMenuClick(item.label);
+                if (handleMenuClickWithId) {
+                  handleMenuClickWithId(item.label, item.id);
+                }
+                if (handleMenuClick) {
+                  handleMenuClick(item.label);
+                }
                 if (!multiple) {
                   onClose();
                 }

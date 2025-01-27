@@ -8,7 +8,7 @@ const SearchBtn = ({ onClick }: ButtonProps) => {
   return (
     <button
       className="flex justify-center items-center p-[10px] border border-menuborder
-    bg-background focus:bg-hover md:hover:bg-hover md:focus:bg-pressed rounded-full cursor-pointer"
+    bg-background active:bg-hover md:hover:bg-hover md:active:bg-pressed rounded-full cursor-pointer"
       onClick={onClick}
     >
       <Image src={search} alt={"vector"} width={24} height={24} />

@@ -3,8 +3,9 @@
 interface SingleSelectOptionsProps {
   selectedOption: string;
   optionData: { id: number; label: string }[];
-  size: "small" | "medium" | "large";
-  handleMenuClick: (label: string) => void;
+  size: "small" | "medium" | "large" | "mobile";
+  handleMenuClick?: (label: string) => void;
+  handleMenuClickWithId?: (label: string, id: number) => void;
 }
 
 /**
@@ -20,21 +21,33 @@ const SingleSelectOptions = ({
   optionData,
   size,
   handleMenuClick,
-}: SingleSelectOptionsProps) => (
-  <div
-    className={`z-50 absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-background
+  handleMenuClickWithId,
+}: SingleSelectOptionsProps) => {
+  const handleClick = (item: { id: number; label: string }) => {
+    if (handleMenuClickWithId) {
+      handleMenuClickWithId(item.label, item.id);
+    }
+    if (handleMenuClick) {
+      handleMenuClick(item.label);
+    }
+  };
+  return (
+    <div
+      className={`z-50 absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-background
       rounded-lg border border-menuborder shadow-default ${
-        size == "small"
+        size === "small"
           ? "w-[116px]"
-          : size == "medium"
+          : size === "medium"
           ? "w-[160px]"
+          : size === "mobile"
+          ? "w-[80px]"
           : "w-[190px]"
       } `}
-  >
-    {optionData.map((item, index) => (
-      <div
-        key={item.id}
-        className={`relative flex justify-center items-center text-base 
+    >
+      {optionData.map((item, index) => (
+        <div
+          key={item.id}
+          className={`relative flex justify-center items-center md:text-15 text-mobile_body2_m
           text-subtext1 cursor-pointer pressed:bg-pressed
             ${index === 0 ? "rounded-t-lg" : ""}
             ${index === optionData.length - 1 ? "rounded-b-lg" : ""}
@@ -45,19 +58,20 @@ const SingleSelectOptions = ({
                 : `mx-[5px] hover:bg-hover hover:mx-0 hover:text-subtext1`
             }          
             `}
-        onMouseDown={(e) => e.preventDefault()}
-        onClick={() => handleMenuClick(item.label)}
-      >
-        <span
-          className={`relative w-full py-2.5 text-center text-[15px] ${
-            selectedOption === item.label && "text-primary"
-          }`}
+          onMouseDown={(e) => e.preventDefault()}
+          onClick={() => handleClick(item)}
         >
-          {item.label}
-        </span>
-      </div>
-    ))}
-  </div>
-);
+          <span
+            className={`relative w-full py-2.5 text-center text-[15px] ${
+              selectedOption === item.label && "text-primary"
+            }`}
+          >
+            {item.label}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default SingleSelectOptions;

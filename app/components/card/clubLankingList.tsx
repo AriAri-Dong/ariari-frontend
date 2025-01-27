@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import no_image from "@/images/noImage/no-image.jpg";
-import useResponsive from "../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 
 interface Club {
   id: number;
@@ -39,10 +39,10 @@ const ClubRankingList = ({ clubs }: ClubRankingListProps) => {
                 </div>
               </div>
               <div className="flex-1 overflow-hidden">
-                <div className="text-[15px] font-semibold truncate mb-1 md:text-xl md:mb-2">
+                <div className="text-mobile_h4_sb truncate mb-1 md:text-h3 md:mb-2">
                   {club.title}
                 </div>
-                <p className="w-[80%] text-xs truncate text-subtext2 md:text-base">
+                <p className="w-[80%] text-mobile_body3_r truncate text-subtext2 md:text-body1_r">
                   {club.description}
                 </p>
               </div>

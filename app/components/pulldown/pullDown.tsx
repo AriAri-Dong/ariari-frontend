@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import useResponsive from "../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 
 import Image from "next/image";
 import keyboardArrowDown from "@/images/icon/keyboardArrowDown.svg";
@@ -10,13 +10,15 @@ import MultiSelectOptions from "./multiSelectOptions";
 
 import BottomSheet from "./bottomSheet";
 import NotiPopUp from "../modal/notiPopUp";
+import { OptionType } from "@/types/components/pulldown";
 
 interface PulldownProps {
-  optionData: { id: number; label: string }[];
+  optionData: OptionType[];
   multiple?: boolean;
   selectedOption: string[];
   handleOption: (label: string[]) => void;
-  optionSize: "small" | "medium" | "large";
+  optionSize: "small" | "medium" | "large" | "mobile";
+  forceDropdown?: boolean;
 }
 
 const PullDown = ({
@@ -25,16 +27,16 @@ const PullDown = ({
   multiple = false,
   selectedOption,
   handleOption,
+  forceDropdown = false,
 }: PulldownProps) => {
   const pulldownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const isTabOver = useResponsive("md");
-
   const isSelected = selectedOption.length > 0;
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false); //옵션메뉴
-  const [isModalOpen, setModalOpen] = useState<boolean>(false); // ex) 학교 인증 모달
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   const schoolCertification = false; // 학교 인증 여부 임시값
 
@@ -112,7 +114,7 @@ const PullDown = ({
           md:pl-5 md:pr-[14px] md:py-2
           ${
             isSelected
-              ? `bg-selectedoption_default border-selectedoptionborder hover:bg-selectedoption_hover focus:bg-selectedoption_pressed`
+              ? `bg-selectedoption_default border-selectedoption_border hover:bg-selectedoption_hover focus:bg-selectedoption_pressed`
               : `bg-white border-menuborder hover:bg-hover focus:bg-pressed`
           }
         `}
@@ -134,32 +136,32 @@ const PullDown = ({
       </button>
       {isDropdownOpen &&
         (!multiple ? (
-          isTabOver ? (
+          isTabOver || forceDropdown ? (
             <SingleSelectOptions
-              optionData={optionData.slice(1)}
+              optionData={optionData}
               selectedOption={selectedOption[0]}
               handleMenuClick={handleMenuClick}
               size={optionSize}
             />
           ) : (
             <BottomSheet
-              optionData={optionData.slice(1)}
+              optionData={optionData}
               selectedOptions={selectedOption}
               handleMenuClick={handleMenuClick}
               onClose={() => setIsDropdownOpen(false)}
               multiple={false}
             />
           )
-        ) : isTabOver ? (
+        ) : isTabOver || forceDropdown ? (
           <MultiSelectOptions
-            optionData={optionData.slice(1)}
+            optionData={optionData}
             selectedOptions={selectedOption}
             handleMenuClick={handleMenuClick}
             size={optionSize}
           />
         ) : (
           <BottomSheet
-            optionData={optionData.slice(1)}
+            optionData={optionData}
             selectedOptions={selectedOption}
             handleMenuClick={handleMenuClick}
             onClose={() => setIsDropdownOpen(false)}

@@ -23,7 +23,7 @@ const Header = () => {
   };
 
   const handleButtonClick = () => {
-    router.push("/management");
+    router.push("/club");
   };
 
   const handleSearch = (searchTerm: string) => {
@@ -35,6 +35,7 @@ const Header = () => {
     "/myPage/myPoint",
     "/myPage/interestClub",
     "/myPage/interestRecruitment",
+    "/withdrawal",
     "/club/create",
     "/club/recruitment/create",
     "/notification",

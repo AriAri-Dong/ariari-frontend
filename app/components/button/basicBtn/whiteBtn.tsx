@@ -6,7 +6,7 @@ const WhiteButton = ({ title, onClick }: ButtonWithTextProps) => {
   return (
     <button
       className="py-1 px-2 text-icon text-15 font-medium rounded-lg
-      focus:bg-hover md:hover:bg-hover md:focus:bg-pressed"
+      active:bg-hover md:hover:bg-hover md:active:bg-pressed"
       onClick={onClick}
     >
       {title}

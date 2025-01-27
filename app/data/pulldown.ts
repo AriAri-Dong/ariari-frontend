@@ -50,3 +50,23 @@ export const Popularity_Sort_Type = [
   { id: 1, label: "조회수순" },
   { id: 2, label: "즐겨찾기순" },
 ];
+
+export const QUESTION_TYPE = [
+  { id: 0, label: "FAQ" },
+  { id: 1, label: "Q&A" },
+]
+
+export const MEMBER_STATUS_TYPE = [
+  { id: 0, label: "활동상태 변경" },
+  { id: 1, label: "전체" },
+  { id: 2, label: "활동중" },
+  { id: 3, label: "휴식중" },
+  { id: 4, label: "활동 종료" },
+];
+
+export const ROLE_TYPE = [
+  { id: 0, label: "권한" },
+  { id: 1, label: "일반회원" },
+  { id: 2, label: "매니저" },
+  { id: 3, label: "관리자" },
+];

@@ -6,7 +6,7 @@ import HeaderSection from "./content/headerSection";
 import FilterSection from "./content/filterSection";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MainRecruitmentCard from "@/components/card/mainRecruitmentCard";
-import { MAIN_RECRUITMENT_CARD } from "@/data/main";
+import { RECRUITMENT_CARD } from "@/data/main";
 
 const InterestRecruitmentPage = () => {
   const [isDeadlineChecked, setIsDeadlineChecked] = useState<boolean>(false);
@@ -42,7 +42,7 @@ const InterestRecruitmentPage = () => {
           className="flex flex-col gap-5 md:gap-x-4 md:gap-y-7 md:flex-row md:flex-wrap
     md:grid md:grid-cols-3 lx:grid-cols-4"
         >
-          <MainRecruitmentCard data={MAIN_RECRUITMENT_CARD} />
+          <MainRecruitmentCard data={RECRUITMENT_CARD} />
         </div>
         <div className="self-center mt-9 mb-[80px] md:mt-10 md:mb-[124px]">
           <PlusBtn title={"더보기"} onClick={() => {}} />

@@ -46,13 +46,14 @@ const ReportModal = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
   return (
     <div
       id="background"
-      className="fixed backdrop-blur-sm inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-end"
+      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
       onClick={(e) =>
         (e.target as HTMLDivElement).id === "background" && onClose()
       }
     >
       <div
-        className={`bg-white p-5 shadow-modal rounded-t-2xl w-[950px] mt-[130px]`}
+        className={`bg-white p-5 shadow-modal rounded-2xl w-[826px] max-h-[90vh] flex flex-col`}
+        style={{ zIndex: 1000 }}
       >
         <div className="flex justify-between items-center pb-5 border-b">
           <h2 className="text-h1_contents_title">신고하기</h2>
@@ -60,48 +61,50 @@ const ReportModal = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
             <Image src={close} alt="닫기" width={20} height={20} />
           </button>
         </div>
-        <div className="mt-[22px]">
-          <h3 className="flex text-h3 mb-[18px]">
-            신고 사유
-            <span className="text-noti text-body3_m pl-1">*</span>
-          </h3>
-          <ul className="space-y-6 pl-2.5">
-            {REPORT_REASONS.map((reason, index) => (
-              <li key={index}>
-                <label
-                  className="flex items-center cursor-pointer text-body1_m text-subtext2"
-                  onClick={() => handleReasonChange(reason)}
-                >
-                  <Image
-                    src={selectedReason === reason ? checkIcon : uncheckIcon}
-                    alt={selectedReason === reason ? "Checked" : "Unchecked"}
-                    width={20}
-                    height={20}
-                    className="mr-2.5"
-                  />
-                  {reason}
-                </label>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="mt-[38px]">
-          <h3 className="text-h3 mb-[18px]">신고 사유 상세</h3>
-          <textarea
-            placeholder="신고 사유를 상세히 작성해 주세요."
-            value={details}
-            onChange={(e) => setDetails(e.target.value)}
-            maxLength={1000}
-            className="w-full p-1 h-[310px] border-0 rounded-md resize-none text-body1_r 
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <div className="mt-[22px]">
+            <h3 className="flex text-h3 mb-[18px]">
+              신고 사유
+              <span className="text-noti text-body3_m pl-1">*</span>
+            </h3>
+            <ul className="space-y-6 pl-2.5">
+              {REPORT_REASONS.map((reason, index) => (
+                <li key={index}>
+                  <label
+                    className="flex items-center cursor-pointer text-body1_m text-subtext2"
+                    onClick={() => handleReasonChange(reason)}
+                  >
+                    <Image
+                      src={selectedReason === reason ? checkIcon : uncheckIcon}
+                      alt={selectedReason === reason ? "Checked" : "Unchecked"}
+                      width={20}
+                      height={20}
+                      className="mr-2.5"
+                    />
+                    {reason}
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="mt-[38px]">
+            <h3 className="text-h3 mb-[18px]">신고 사유 상세</h3>
+            <textarea
+              placeholder="신고 사유를 상세히 작성해 주세요."
+              value={details}
+              onChange={(e) => setDetails(e.target.value)}
+              maxLength={1000}
+              className="w-full p-1.5 h-[310px] border-0 rounded-md resize-none text-body1_r 
             text-subtext1  focus:outline-none focus:ring-[1px]
             focus:ring-searchbarborder placeholder:text-unselected"
-          />
-        </div>
-        <div className="mt-6 flex justify-end items-center gap-[33px]">
-          <p className="text-right text-unselected text-h4">
-            {details.length}/1000
-          </p>
-          <SmallBtn onClick={handleSubmit} title={"신고하기"} />
+            />
+          </div>
+          <div className="mt-6 flex justify-end items-center gap-[33px]">
+            <p className="text-right text-unselected text-h4">
+              {details.length}/1000
+            </p>
+            <SmallBtn onClick={handleSubmit} title={"신고하기"} />
+          </div>
         </div>
       </div>
       {alertMessage && (

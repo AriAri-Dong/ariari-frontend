@@ -1,6 +1,6 @@
 "use client";
 
-import ReviewBadgeList from "@/components/badge/reviewBadgeList";
+import ReviewBadgeList from "@/components/badge/review/reviewBadgeList";
 import { REVIEW_BADGE_LIST } from "@/data/reviewBadge";
 import { useState } from "react";
 

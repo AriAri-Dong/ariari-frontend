@@ -21,8 +21,8 @@ const WriteBtn = ({ onClick, size = "default" }: WriteBtnProps) => {
   return (
     <button
       className={`flex justify-center items-center ${buttonClasses} 
-        bg-primary focus:bg-primary_hover md:hover:bg-primary_hover 
-        md:focus:bg-primary_pressed rounded-full border border-menuborder cursor-pointer`}
+        bg-primary active:bg-primary_hover md:hover:bg-primary_hover 
+        md:active:bg-primary_pressed rounded-full border border-menuborder cursor-pointer`}
       onClick={onClick}
     >
       <Image

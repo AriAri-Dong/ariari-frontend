@@ -74,7 +74,7 @@ const ClubInfoCard = ({
           </p>
         </div>
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 md:mr-[6px]">
         <div className="cursor-pointer" onClick={onHeartClick}>
           {isHeart ? (
             <MdFavorite className="text-[#D1F75D] text-[20px] md:text-[28px]" />

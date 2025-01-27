@@ -1,8 +1,10 @@
 import { StaticImageData } from "next/image";
 
 export interface MainRecruitmentCardProps {
+  id: number;
   date: string;
   clubName: string;
+  clubImageUrl?: string | StaticImageData;
   title: string;
   imageUrl: string | StaticImageData;
   tag: {
@@ -13,8 +15,7 @@ export interface MainRecruitmentCardProps {
   };
   isScrap: boolean;
 }
-
 export interface GuideData {
-  title: string; // 제목
-  instructions: string[]; // 가이드 내용 리스트
+  title: string;
+  instructions: string[];
 }

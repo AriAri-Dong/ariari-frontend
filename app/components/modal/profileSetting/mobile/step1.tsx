@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { PROFILE_SETTING } from "@/data/profileSetting";
 import check from "@/images/icon/check.svg";
-import useScreenHeight from "../../../../../hooks/useScreenHeight";
 import { useProfileContext } from "@/context/profileConetxt";
+import useScreenHeight from "@/hooks/useScreenHeight";
 
 const Step1 = () => {
   const { updateProfileData } = useProfileContext();

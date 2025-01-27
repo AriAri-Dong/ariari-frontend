@@ -41,6 +41,22 @@ const config: Config = {
         noti: "#FF3E3E",
         black_50: "rgba(0, 0, 0, 0.5)",
         token_bg: "rgba(166, 166, 166, 0.2)",
+        token_1: "#FA6B48",
+        token_1_bg: "rgba(250, 107, 72, 0.2)",
+        token_2: "#FABB48",
+        token_2_bg: "rgba(250, 187, 72, 0.2)",
+        token_3: "#36BBB6",
+        token_3_bg: "rgba(54, 187, 182, 0.2)",
+        token_4: "#58BBF8",
+        token_4_bg: "rgba(88, 187, 248, 0.2)",
+        // token - sub2와 동일
+        sub2_bg: "rgba(138, 132, 254, 0.2)",
+        // token - primary과 동일
+        // token_bg -selecteoption_hover와 동일
+        token_6: "#BE69F6",
+        token_6_bg: "rgba(190, 105, 246, 0.2)",
+        token_7: "#FF93FB",
+        token_7_bg: "rgba(255, 147, 251, 0.2)",
         selectedoption_default: "rgba(88, 155, 255, 0.1)",
         selectedoption_hover: "rgba(88, 155, 255, 0.2)",
         selectedoption_pressed: "rgba(88, 155, 255, 0.26)",
@@ -53,6 +69,7 @@ const config: Config = {
       },
       screens: {
         sm: "360px",
+        smm: "400px",
         sm_md: "668px",
         md: "768px",
         lg: "1024px",
@@ -61,7 +78,9 @@ const config: Config = {
       borderRadius: {
         8: "8px",
         12: "12px",
+        16: "16px",
         20: "20px",
+        24: "24px",
         28: "28px",
         30: "30px",
         36: "36px",
@@ -86,6 +105,7 @@ const config: Config = {
         body1_r: ["15px", { fontWeight: 400, lineHeight: "150%" }],
         body1_m: ["15px", { fontWeight: 500, lineHeight: "22.5px" }],
         body1_sb: ["14px", { fontWeight: 600, lineHeight: "21px" }],
+        body2_r: ["14px", { fontWeight: 400, lineHeight: "21px" }],
         body2_m: ["14px", { fontWeight: 500, lineHeight: "21px" }],
         body3_r: ["12px", { fontWeight: 400, lineHeight: "18px" }],
         body3_m: ["13px", { fontWeight: 500, lineHeight: "19.5px" }],
