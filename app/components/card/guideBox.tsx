@@ -13,7 +13,7 @@ interface GuidBoxProps {
   className?: string;
 }
 const GuidBox = ({ data, className }: GuidBoxProps) => {
-  const [isContentVisible, setIsContentVisible] = useState<boolean>(false);
+  const [isContentVisible, setIsContentVisible] = useState<boolean>(true);
 
   return (
     <div
