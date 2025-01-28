@@ -222,12 +222,12 @@ const CreateSection = () => {
           <TextareaWithErrortext
             value={body}
             onChange={(e) => setBody(e)}
-            maxLength={100}
+            maxLength={2000}
             className="md:h-[680px]"
             counter={isMdUp ? true : false}
             placeholder="활동내용을 입력해주세요"
             errorMessage={
-              body.length === 100 ? "최대 2000자까지 작성 가능합니다." : ""
+              body.length === 2000 ? "최대 2000자까지 작성 가능합니다." : ""
             }
           />
         </div>
