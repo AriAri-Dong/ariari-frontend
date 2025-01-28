@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import useResponsive from "../../../../../../hooks/useResponsive";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -12,6 +11,7 @@ import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 
 import { RecruitmentData } from "@/model/recruitment";
+import useResponsive from "@/hooks/useResponsive";
 
 interface RecruitmentContainerProps {
   previousRecruitmentList: RecruitmentData[];
