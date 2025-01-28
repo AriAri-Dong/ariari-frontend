@@ -320,7 +320,11 @@ const CreateSection = () => {
         <NotiPopUp
           onClose={() => setIsModalOpen(false)}
           title="모집공고를 등록할까요?"
-          description={`모집공고 등록 후에는 지원서 양식 수정이 불가능해요.\n이대로 모집공고를 등록할까요?`}
+          description={
+            isMdUp
+              ? `모집공고 등록 후에는 지원서 양식 수정이 불가능해요.\n이대로 모집공고를 등록할까요?`
+              : `모집공고 등록 후에는\n지원서 양식 수정이 불가능해요.`
+          }
           icon="registration"
           modalType="button"
           firstButton={handleSubmit}
