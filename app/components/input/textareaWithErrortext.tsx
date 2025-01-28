@@ -42,7 +42,7 @@ const TextareaWithErrortext = ({
       <div
         className={`w-full min-h-[161px] flex flex-col justify-between px-4 py-3 bg-searchbar 
           rounded-xl focus-within:border focus-within:border-indigo-300 
-          md:py-[13px] md:px-[22px] ${className}`}
+          md:py-[13px] md:px-[22px] md:text-body1_r ${className}`}
       >
         <textarea
           className="w-full flex-grow bg-searchbar text-mobile_body1_r text-text1  
