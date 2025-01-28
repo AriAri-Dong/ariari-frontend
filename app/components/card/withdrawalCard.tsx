@@ -16,7 +16,7 @@ const WithdrawalCard = ({ info }: WithdrawalCardProps) => {
   return (
     <div className="flex flex-col gap-[14px] md:gap-[18px] ">
       <div className="text-text1 text-mobile_h3 md:text-h3">{info.title}</div>
-      <div className="px-2.5 py-4 md:p-4 bg-hover rounded-12 items-center gap-2 flex">
+      <div className="px-2.5 py-4 md:p-4 items-start md:items-center bg-hover rounded-12 gap-2 flex">
         <Image
           src={error}
           alt="error"

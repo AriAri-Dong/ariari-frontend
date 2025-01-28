@@ -1,21 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { MEMBER_STATUS_TYPE, ROLE_TYPE } from "@/data/pulldown";
 import ClubMemberList from "../components/clubMemberList";
 import ClubMemberCategoryBar from "../components/clubMemberCategoryBar";
 import ClubMemberHeader from "../components/clubMemberHeader";
 import LeftMenu from "../../components/menu/leftMenu";
+import { MEMBER_STATUS_TYPE } from "@/data/pulldown";
 import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
+import { ClubMemberData } from "@/models/member";
 
 const ClubMembersSection = () => {
   const [selectedOption, setSelectedOption] = useState<string[]>([
     MEMBER_STATUS_TYPE[0].label,
   ]);
+  const [clubMember, setClubMember] =
+    useState<ClubMemberData[]>(CLUB_MEMBER_DATA);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
-  const [selectedMember, setSelectedMember] = useState<number[]>([1, 3, 5]);
+  const [selectedMember, setSelectedMember] = useState<number[]>([]);
 
   const handleSearch = () => {
     if (searchTerm.trim()) {
@@ -30,6 +33,8 @@ const ClubMembersSection = () => {
       if (prevSelected.includes(memberId)) {
         return prevSelected.filter((id) => id !== memberId);
       } else {
+        if (selectedMember.length + 1 == clubMember.length) {
+        }
         return [...prevSelected, memberId];
       }
     });
@@ -40,10 +45,18 @@ const ClubMembersSection = () => {
     if (isAllSelected) {
       setSelectedMember([]);
     } else {
-      const allMemberIds = CLUB_MEMBER_DATA.map((member) => member.id);
+      const allMemberIds = clubMember.map((member) => member.id);
       setSelectedMember(allMemberIds);
     }
   }
+
+  useEffect(() => {
+    if (clubMember.length == selectedMember.length) {
+      setIsAllSelected(true);
+    } else {
+      setIsAllSelected(false);
+    }
+  }, [selectedMember, clubMember]);
 
   return (
     <div className="pt-6 pb-20 md:pt-8 md:pb-[124px]">
@@ -68,7 +81,7 @@ const ClubMembersSection = () => {
           </section>
 
           <section className="flex flex-col gap-2.5 md:gap-4 md:py-2.5 md:rounded-[4px] md:bg-background">
-            {CLUB_MEMBER_DATA.map((member, index) => (
+            {clubMember.map((member, index) => (
               <div key={index}>
                 <ClubMemberList
                   data={member}
