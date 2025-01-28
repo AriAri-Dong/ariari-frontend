@@ -31,7 +31,7 @@ const LoginModal = ({ onClose }: LoginDialogProps) => {
     window.location.href = requestUrl;
   };
   return (
-    <div className="hidden md:flex fixed left-0 inset-0 ml-[-20px] z-50 items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="hidden md:flex fixed inset-0 !ml-[-20px] z-50 items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
       <div className="absolute inset-0" onClick={onClose} />
       <div className="relative justify-items-center w-[430px] px-5 pb-9 pt-[72px] bg-background rounded-2xl">
         <Image
