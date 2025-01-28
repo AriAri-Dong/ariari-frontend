@@ -13,14 +13,15 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const specialPaths = [
     "/recruitment/detail",
     "/club/review",
-    "/club/management",
+    "/club/management/recruitment/applicationForm",
+    "/club/management/recruitment/applicationStatus",
     "/club/help",
   ];
   const bgPaths = ["/application", "/club/members"];
   const mobileBgPaths = [
     "/club/create",
     "/withdrawal",
-    "/club/recruitment/create",
+    "/club/management/recruitment/create",
   ];
 
   const isSpecialComponent = specialPaths.some((path) =>
