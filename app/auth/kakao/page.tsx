@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { getTokenWithCode } from "@/api/apis.ts";
 import { useUserStore } from "@/providers/user-store-provider";
+import HeaderToken from "@/api/headerToken";
 
 export default function SignIn() {
   const router = useRouter();
@@ -13,18 +14,16 @@ export default function SignIn() {
   useEffect(() => {
     const kakaoCode = searchParams.get("code") || "";
 
-    getTokenWithCode(kakaoCode)
-      .then((res) => {
-        console.log("-------------------------getTokenWithCode");
-        console.log(res);
-        signIn({
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
-        });
-      })
-      .finally(() => {
-        router.replace("/");
+    getTokenWithCode(kakaoCode).then((res) => {
+      signIn({
+        accessToken: res.accessToken,
+        refreshToken: res.refreshToken,
+        isFirstLogin: res.isFirstLogin,
       });
+      HeaderToken.set(res.accessToken);
+      router.replace(`/${res.isFirstLogin ? "?firstLogin=1" : ""}`);
+    });
+    router.replace("/");
   }, [router, searchParams, signIn]);
 
   return (
