@@ -4,7 +4,7 @@ import MainRecruitmentCard from "@/components/card/mainRecruitmentCard";
 import NotiPopUp from "@/components/modal/notiPopUp";
 import SubTap from "@/components/tab/subTap";
 import { MAIN_RECRUITMENT_CARD } from "@/data/main";
-import { Affiliation_Type } from "@/data/pulldown";
+import { AFFILIATION_TYPE } from "@/data/pulldown";
 import { MainRecruitmentCardProps } from "@/types/components/card";
 import { useState } from "react";
 
@@ -14,7 +14,7 @@ const PopularRecruitment = () => {
   >(MAIN_RECRUITMENT_CARD);
 
   const [affiliationType, setAffiliationType] = useState<string[]>([
-    Affiliation_Type[1].label,
+    AFFILIATION_TYPE[1].label,
   ]);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const schoolCertification = false; // 학교 인증 여부 임시값
@@ -34,7 +34,7 @@ const PopularRecruitment = () => {
           인기 모집공고
         </h2>
         <SubTap
-          optionData={Affiliation_Type.slice(1, 3)}
+          optionData={AFFILIATION_TYPE.slice(1, 3)}
           selectedOption={affiliationType[0]}
           handleOption={handleOption}
         />

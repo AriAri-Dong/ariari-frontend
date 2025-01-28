@@ -1,5 +1,6 @@
 import { ClubMemberData } from "@/types/member";
 
+
 export const CLUB_MEMBER_DATA: ClubMemberData[] = [
   {
     id: 1,
