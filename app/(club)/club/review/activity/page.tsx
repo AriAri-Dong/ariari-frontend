@@ -20,13 +20,13 @@ import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound"
 import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import Alert from "@/components/alert/alert";
 import useResponsive from "@/hooks/useResponsive";
-import ActivityReviewBottomSheet from "@/components/bottomSheet/activityReviewBottomSheet";
 import ActivityReviewModal from "@/components/modal/review/activityReviewModal";
 import ActivityReviewDropdown from "@/components/dropdown/activityReviewDropdown";
 import ReviewPercentList from "@/components/list/reviewPercentList";
 import MobileReviewPercentList from "@/components/list/mobileReviewPercentList";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
 import LeftMenu from "../../components/menu/leftMenu";
+import ActivityReviewBottomSheet from "@/components/bottomSheet/review/activityReviewBottomSheet";
 
 const ReviewPage = () => {
   const router = useRouter();

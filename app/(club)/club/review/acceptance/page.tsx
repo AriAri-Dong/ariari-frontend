@@ -15,12 +15,12 @@ import helpText from "@/images/icon/mobile_point_Helptext.svg";
 import SubTap from "@/components/tab/subTap";
 import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound";
 import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
-import AcceptanceReviewBottomSheet from "@/components/bottomSheet/acceptanceReviewBottomSheet";
 import Alert from "@/components/alert/alert";
 import useResponsive from "@/hooks/useResponsive";
 import AcceptanceReviewModal from "@/components/modal/review/acceptanceReviewModal";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
-import LeftMenu from '../../components/menu/leftMenu';
+import LeftMenu from "../../components/menu/leftMenu";
+import AcceptanceReviewBottomSheet from "@/components/bottomSheet/review/acceptanceReviewBottomSheet";
 
 const ReviewPage = () => {
   const router = useRouter();
