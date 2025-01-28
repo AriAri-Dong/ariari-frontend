@@ -4,10 +4,10 @@ import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import PullDown from "@/components/pulldown/pullDown";
 import {
-  Affiliation_Type,
-  Area_Type,
-  Field_Type,
-  Target_Type,
+  AFFILIATION_TYPE,
+  AREA_TYPE,
+  FIELD_TYPE,
+  TARGET_TYPE,
 } from "@/data/pulldown";
 import TextInputWithCounter from "@/components/input/textInputWithCounter";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
@@ -20,10 +20,10 @@ import Alert from "@/components/alert/alert";
 import NotiPopUp from "@/components/modal/notiPopUp";
 
 const OPTIONS = [
-  { label: "동아리 소속", key: "affiliationType", data: Affiliation_Type },
-  { label: "동아리 분야", key: "fieldType", data: Field_Type },
-  { label: "동아리 지역", key: "areaType", data: Area_Type },
-  { label: "동아리 대상", key: "targetType", data: Target_Type },
+  { label: "동아리 소속", key: "affiliationType", data: AFFILIATION_TYPE },
+  { label: "동아리 분야", key: "fieldType", data: FIELD_TYPE },
+  { label: "동아리 지역", key: "areaType", data: AREA_TYPE },
+  { label: "동아리 대상", key: "targetType", data: TARGET_TYPE },
 ];
 
 const CreateClubPage = () => {

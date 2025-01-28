@@ -48,8 +48,12 @@ const ClubMemberHeader = ({
         </div>
         <div className="md:hidden">
           <PullDown
-            optionData={MEMBER_STATUS_TYPE}
-            selectedOption={selectedOption}
+            optionData={MEMBER_STATUS_TYPE.slice(1)}
+            selectedOption={
+              selectedOption[0] == "활동상태 변경"
+                ? ["활동상태"]
+                : selectedOption
+            }
             handleOption={([value]) => setSelectedOption([value])}
             optionSize="small"
           />
