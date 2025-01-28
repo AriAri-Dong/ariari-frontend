@@ -1,4 +1,4 @@
-import { ClubFaqData } from "@/models/club";
+import { ClubFaqData } from "@/types/club";
 
 export const FAQ_DATA: ClubFaqData[] = [
   {

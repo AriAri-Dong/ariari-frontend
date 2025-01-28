@@ -8,7 +8,7 @@ import ClubMemberHeader from "../components/clubMemberHeader";
 import LeftMenu from "../../components/menu/leftMenu";
 import { MEMBER_STATUS_TYPE } from "@/data/pulldown";
 import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
-import { ClubMemberData } from "@/models/member";
+import { ClubMemberData } from "@/types/member";
 
 const ClubMembersSection = () => {
   const [selectedOption, setSelectedOption] = useState<string[]>([

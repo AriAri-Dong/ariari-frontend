@@ -21,9 +21,18 @@ import { MainRecruitmentCardProps } from "@/types/components/card";
 interface ClubInfoProps {
   recruitmentId?: number;
   recruitmentData?: MainRecruitmentCardProps;
+  isPreview?: boolean;
 }
 
-const ClubInfo = ({ recruitmentId, recruitmentData }: ClubInfoProps) => {
+/**
+ * @param isPreview 미리보기 페이지인지 여부
+ */
+
+const ClubInfo = ({
+  recruitmentId,
+  recruitmentData,
+  isPreview = false,
+}: ClubInfoProps) => {
   const [isHeart, setIsHeart] = useState<boolean>(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
   const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
@@ -160,11 +169,13 @@ const ClubInfo = ({ recruitmentId, recruitmentData }: ClubInfoProps) => {
                 email={"123Sysys@gamil.com"}
               />
             </div>
-            <div className="fixed bottom-0 left-0 right-0 md:static mt-10">
-              <div className="bg-background px-4 pt-2 pb-6 md:px-0 md:pt-0 md:pb-0">
-                <RecruitmentBottomBar />
+            {!isPreview && (
+              <div className="fixed bottom-0 left-0 right-0 md:static mt-10">
+                <div className="bg-background px-4 pt-2 pb-6 md:px-0 md:pt-0 md:pb-0">
+                  <RecruitmentBottomBar />
+                </div>
               </div>
-            </div>
+            )}
             <div className="h-5" />
             <div className="hidden md:flex">
               <IconBtn
