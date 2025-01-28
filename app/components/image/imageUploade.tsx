@@ -1,10 +1,11 @@
 "use client";
 
+import { useRef, useState } from "react";
+
 import Image from "next/image";
 import uploadIcon from "@/images/icon/upload.svg";
-
 import x from "@/images/icon/x.svg";
-import { useRef, useState } from "react";
+
 import Alert from "../alert/alert";
 interface ImageUploadProps {
   uploadedImage: string | null;
@@ -37,14 +38,9 @@ const ImageUpload = ({ uploadedImage, setUploadedImage }: ImageUploadProps) => {
     }
   };
 
-  const triggerFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
   return (
-    <div className="w-full bg-selectedoption_default hover:bg-selectedoption_hover active:bg-selectedoption_pressed py-3 md:py-6 relative rounded-20">
-      <label className="">
+    <div className="w-full bg-selectedoption_default cursor-pointer hover:bg-selectedoption_hover active:bg-selectedoption_pressed py-3 md:py-6 relative rounded-20">
+      <label className="cursor-pointer">
         <input
           ref={fileInputRef}
           type="file"
@@ -58,11 +54,9 @@ const ImageUpload = ({ uploadedImage, setUploadedImage }: ImageUploadProps) => {
             alt="Uploaded or Default"
             width={48}
             height={48}
-            className="mx-auto md:w-[64px] md:h-[64px] "
+            className="mx-auto md:w-[64px] md:h-[64px]   "
           />
-          <p className="text-center text-primary md:text-body2_m">
-            이미지 업로드
-          </p>
+          <p className="text-center text-primary text-body2_m">이미지 업로드</p>
         </div>
       </label>
       {uploadedImage && (
