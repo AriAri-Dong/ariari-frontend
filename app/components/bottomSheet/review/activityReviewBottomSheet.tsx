@@ -1,12 +1,13 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import close from "@/images/icon/close.svg";
-import CustomInput from "../input/customInput";
-import LargeBtn from "../button/basicBtn/largeBtn";
-import Alert from "../alert/alert";
-import ReviewBadgeContainer from "../badge/review/reviewBadgeContainer";
+
 import { REVIEW_BADGE_LIST } from "@/data/reviewBadge";
 import { ActivityReviewProps } from "@/types/components/review";
+import Alert from "@/components/alert/alert";
+import ReviewBadgeContainer from "@/components/badge/review/reviewBadgeContainer";
+import LargeBtn from "@/components/button/basicBtn/largeBtn";
+import CustomInput from "@/components/input/customInput";
 
 const ActivityReviewBottomSheet = ({
   onClose,

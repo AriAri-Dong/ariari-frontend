@@ -1,15 +1,16 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import close from "@/images/icon/close.svg";
-import CustomInput from "../input/customInput";
-import RadioBtn from "../button/radioBtn";
-import DeleteBtn from "../button/iconBtn/deleteBtn";
-import LargeBtn from "../button/basicBtn/largeBtn";
-import PullDown from "../pulldown/pullDown";
-import ProgressBar from "../bar/progressBar";
-import Alert from "../alert/alert";
+
 import { INTERVIEWE_STYLE, INTERVIEWER } from "@/data/review";
 import { AcceptanceReviewProps } from "@/types/components/review";
+import Alert from "@/components/alert/alert";
+import ProgressBar from "@/components/bar/progressBar";
+import LargeBtn from "@/components/button/basicBtn/largeBtn";
+import DeleteBtn from "@/components/button/iconBtn/deleteBtn";
+import RadioBtn from "@/components/button/radioBtn";
+import CustomInput from "@/components/input/customInput";
+import PullDown from "@/components/pulldown/pullDown";
 
 const AcceptanceReviewBottomSheet = ({
   onClose,

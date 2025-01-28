@@ -5,9 +5,9 @@ import Image from "next/image";
 import checkIcon from "@/images/icon/radio_button_checked.svg";
 import uncheckIcon from "@/images/icon/radio_button_unchecked.svg";
 import close from "@/images/icon/close.svg";
-import Alert from "../alert/alert";
-import LargeBtn from "../button/basicBtn/largeBtn";
 import { REPORT_REASONS } from "@/data/report";
+import Alert from "@/components/alert/alert";
+import LargeBtn from "@/components/button/basicBtn/largeBtn";
 
 interface ReportBottomSheetProps {
   onClose: () => void;
@@ -18,7 +18,7 @@ interface ReportBottomSheetProps {
  * 신고하기 바텀 시트 컴포넌트
  * @param onClose 바텀시트 닫는 함수
  * @param onSubmit 신고 제출 함수
- * @returns 
+ * @returns
  */
 const ReportBottomSheet = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
   const [selectedReason, setSelectedReason] = useState<string | null>(null);
