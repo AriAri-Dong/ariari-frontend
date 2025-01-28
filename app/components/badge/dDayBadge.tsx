@@ -15,7 +15,7 @@ const DdayBadge = ({ date }: DayBadgeProps) => {
       } md:py-[6px]`}
     >
       <p
-        className={`text-mobile_body3_sb md:text-body1_sb ${
+        className={`text-mobile_body3_sb md:text-body1_sb whitespace-nowrap ${
           isExpired ? "text-white" : "text-background"
         }`}
       >

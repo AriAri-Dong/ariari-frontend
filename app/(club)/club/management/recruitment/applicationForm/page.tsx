@@ -18,6 +18,7 @@ import ApplicationFromPreviewModal from "@/components/modal/club/preview/applica
 import { BADGE_ITEMS, BADGE_TITLES } from "@/data/club";
 import MobileApplicationFromPreviewModal from "@/components/modal/club/preview/mobileApplicationFormPreviewModal";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
+import ApplicationFormPeviewBottomSheet from "@/components/bottomSheet/preview/applicationPreviewBottomSheet";
 
 const ApplicationFormPage = () => {
   const isMdUp = useResponsive("md");
@@ -245,7 +246,7 @@ const ApplicationFormPage = () => {
               />
             )
           : openPreview && (
-              <MobileApplicationFromPreviewModal
+              <ApplicationFormPeviewBottomSheet
                 onClose={() => setOpenPreview(false)}
                 portfolioCollected={isPortfolioCollected}
                 selectedFields={selectedBadges.map((badgeName) => {

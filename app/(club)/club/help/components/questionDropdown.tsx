@@ -15,7 +15,7 @@ import { tokenColorMapping } from "../../../../utils/colorMapping";
 import { ClubFaqData, ClubQuestionData } from "@/models/club";
 import { clubMemberRoleType, profileType } from "@/models/member";
 
-import ReportBottomSheet from "@/components/bottomSheet/reportBottomSheet";
+import ReportBottomSheet from "@/components/bottomSheet/report/reportBottomSheet";
 import ReportModal from "@/components/modal/reportModal";
 import SendBtn from "@/components/button/iconBtn/sendBtn";
 
