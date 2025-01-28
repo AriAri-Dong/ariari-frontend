@@ -1,4 +1,4 @@
-import { RecruitmentData } from "@/model/recruitment";
+import { RecruitmentData } from "@/types/recruitment";
 import noimage from "@/images/test/test.svg";
 
 export const RECRUITMENT_DATA: RecruitmentData[] = [

@@ -10,7 +10,7 @@ import RecruitmentCard2 from "@/components/card/recruitmentCard2";
 import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 
-import { RecruitmentData } from "@/model/recruitment";
+import { RecruitmentData } from "@/types/recruitment";
 import useResponsive from "@/hooks/useResponsive";
 
 interface RecruitmentContainerProps {

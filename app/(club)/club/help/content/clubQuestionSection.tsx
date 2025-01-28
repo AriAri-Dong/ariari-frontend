@@ -7,8 +7,8 @@ import useResponsive from "@/hooks/useResponsive";
 import { FAQ_DATA } from "@/data/faq";
 import { QUESTION_TYPE } from "@/data/pulldown";
 import { pageInfo, QNA_DATA } from "@/data/qna";
-import { ClubFaqData, ClubQuestionData } from "@/models/club";
-import { PageInfo } from "@/models/pageInfo";
+import { ClubFaqData, ClubQuestionData } from "@/types/club";
+import { PageInfo } from "@/types/pageInfo";
 
 import SubTap from "@/components/tab/subTap";
 import QuestionDropdown from "../components/questionDropdown";
@@ -28,7 +28,7 @@ import FaqForm from "../components/faqForm";
 import NotiPopUp from "@/components/modal/notiPopUp";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
-import { ClubMemberData } from "@/models/member";
+import { ClubMemberData } from "@/types/member";
 import LeftMenu from "../../components/menu/leftMenu";
 import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
 

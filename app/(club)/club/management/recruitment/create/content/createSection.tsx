@@ -20,7 +20,7 @@ import {
   RECRUITMENT_GUIDE_DATA_PC,
 } from "@/data/guideBox";
 import { RECRUITMENT_DATA } from "@/data/recruitment";
-import { RecruitmentData } from "@/model/recruitment";
+import { RecruitmentData } from "@/types/recruitment";
 import DeleteBtn from "@/components/button/iconBtn/deleteBtn";
 import CustomInput from "@/components/input/customInput";
 import CustomTextArea from "@/components/textArea/customTextArea";
