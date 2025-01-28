@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 
-import { MEMBER_STATUS_TYPE, ROLE_TYPE } from "@/data/pulldown";
+import { MEMBER_STATUS_TYPE } from "@/data/pulldown";
 import ClubMemberList from "../components/clubMemberList";
 import ClubMemberCategoryBar from "../components/clubMemberCategoryBar";
 import ClubMemberHeader from "../components/clubMemberHeader";
 import LeftMenu from "../../components/menu/leftMenu";
 import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
+import { ClubMemberData } from "@/types/member";
 
 const ClubMembersSection = () => {
   const [selectedOption, setSelectedOption] = useState<string[]>([
