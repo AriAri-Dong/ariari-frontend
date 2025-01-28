@@ -38,7 +38,7 @@ const RecruitmentCard2 = ({
 }: RecruitmentCard2Props) => {
   return (
     <div
-      className={`w-full flex flex-row md:flex-col ${className}`}
+      className={`w-full flex flex-row md:flex-col cursor-pointer ${className}`}
       onClick={onClick}
     >
       <RadioBtn isChecked={isSelected} label={""} onClick={onClick} />
