@@ -18,12 +18,17 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import vector from "@/images/icon/backVector.svg";
 import Alert from "@/components/alert/alert";
 import NotiPopUp from "@/components/modal/notiPopUp";
+import { createClub } from "@/api/club/clubService";
 
 const OPTIONS = [
-  { label: "동아리 소속", key: "affiliationType", data: AFFILIATION_TYPE },
-  { label: "동아리 분야", key: "fieldType", data: FIELD_TYPE },
-  { label: "동아리 지역", key: "areaType", data: AREA_TYPE },
-  { label: "동아리 대상", key: "targetType", data: TARGET_TYPE },
+  {
+    label: "동아리 소속",
+    key: "affiliationType",
+    data: Affiliation_Type.slice(1, 3),
+  },
+  { label: "동아리 분야", key: "fieldType", data: Field_Type.slice(1, 10) },
+  { label: "동아리 지역", key: "areaType", data: Area_Type.slice(1, 11) },
+  { label: "동아리 대상", key: "targetType", data: Target_Type.slice(1, 6) },
 ];
 
 const CreateClubPage = () => {
@@ -43,7 +48,6 @@ const CreateClubPage = () => {
   });
 
   const handleGoBack = () => {
-    // 임시 경로
     router.push("/club");
   };
 
@@ -106,7 +110,7 @@ const CreateClubPage = () => {
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       setAlertVisible(false);
       setTimeout(() => {
@@ -115,8 +119,36 @@ const CreateClubPage = () => {
       }, 0);
       return;
     }
+
     setSubmit(true);
     setAlertVisible(false);
+
+    // FormData 객체 생성
+    const formData = new FormData();
+    formData.append("name", clubName);
+    formData.append("body", clubIntroduction);
+    formData.append("affiliationType", selections.affiliationType[0]);
+    formData.append("categoryType", selections.fieldType[0]);
+    formData.append("regionType", selections.areaType[0]);
+    formData.append("participantType", selections.targetType[0]);
+
+    // 이미지가 업로드 되어 있다면 FormData에 추가
+    if (uploadedImage) {
+      const imageBlob = await fetch(uploadedImage).then((res) => res.blob());
+      formData.append("image", imageBlob, "clubImage.jpg");
+    }
+
+    // API 호출 (동아리 생성)
+    try {
+      console.log("데이터 전송>>>", formData);
+      await createClub(formData);
+      setSubmit(false);
+      router.push("/club");
+    } catch (error) {
+      console.error("동아리 생성 실패:", error);
+      setAlertMessage("동아리 생성에 실패했습니다.");
+      setAlertVisible(true);
+    }
   };
 
   const handleWritePosting = () => {
