@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import MobileButtons from "../components/buttons/mobile_Buttons";
 import PcButtons from "../components/buttons/PC_Buttons";
@@ -17,6 +17,11 @@ import Alert from "@/components/alert/alert";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import helpText from "@/images/icon/mobile_point_Helptext.svg";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
+import {
+  getAllClubsInfo,
+  getClubDetails,
+  getMyClubs,
+} from "@/api/club/clubService";
 
 const TestPage = () => {
   const isMdUp = useResponsive("md");
@@ -27,6 +32,48 @@ const TestPage = () => {
   const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(true);
   const [openReview, setOpenReview] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchClubsInfo = async () => {
+      try {
+        const data = await getAllClubsInfo();
+        console.log(data);
+      } catch (err) {
+        console.log;
+      } finally {
+      }
+    };
+
+    fetchClubsInfo(); // 동아리 정보 가져오기
+  }, []);
+
+  useEffect(() => {
+    const fetchClubsInfo = async () => {
+      try {
+        const data = await getClubDetails("672334995007643413");
+        console.log("동아리 상세 정보 >>", data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+      }
+    };
+
+    fetchClubsInfo();
+  }, []);
+
+  useEffect(() => {
+    const fetchClubsInfo = async () => {
+      try {
+        const data = await getMyClubs(1, 10, ["name"]);
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+      }
+    };
+
+    fetchClubsInfo();
+  }, []);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
