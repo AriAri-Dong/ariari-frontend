@@ -13,8 +13,8 @@ export const getAllClubsInfo = async () => {
 };
 
 // 동아리 등록
-export const postClub = async (clubData: any) => {
-  try { 
+export const createClub = async (clubData: any) => {
+  try {
     const response = await axiosInstance.post(CLUBS, clubData);
     return response.data;
   } catch (error) {
@@ -30,6 +30,39 @@ export const getClubsInfo = async () => {
     return response.data;
   } catch (error) {
     console.error("Error fetching user info:", error);
+    throw error;
+  }
+};
+
+// 내 동아리 조회
+export const getMyClubs = async (
+  page: number = 0,
+  size: number = 1,
+  sort: string[] = ["name"]
+) => {
+  try {
+    const params = {
+      page,
+      size,
+      sort: sort.join(","),
+    };
+
+    // 요청 보내기
+    const response = await axiosInstance.get(CLUBS_SEARCH, { params });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching my clubs info:", error);
+    throw error;
+  }
+};
+
+// 동아리 상세 조회
+export const getClubDetails = async (clubId: string) => {
+  try {
+    const response = await axiosInstance.get(`${CLUBS}/${clubId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching club details:", error);
     throw error;
   }
 };
