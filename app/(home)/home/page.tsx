@@ -10,12 +10,17 @@ import useResponsive from "../../../hooks/useResponsive";
 import MobileProfileSettingModal from "@/components/modal/profileSetting/mobile/mobileProfileSettingModal";
 import { useEffect, useState } from "react";
 import { getUserData } from "@/api/apis";
+import HeaderToken from "@/api/headerToken";
 
 const Home = () => {
   const router = useRouter();
   const isMdUp = useResponsive("md");
   const searchParams = useSearchParams();
   const firstLogin = searchParams.get("firstLogin");
+  const { setUserData, accessToken, memberData } = useUserStore(
+    (state) => state
+  );
+
   const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] = useState(
     firstLogin === "1"
   );
@@ -26,10 +31,18 @@ const Home = () => {
   };
 
   useEffect(() => {
+    if (!!accessToken) {
+      HeaderToken.set(accessToken);
+    }
     getUserData().then((res) => {
-      console.log(res);
+      setUserData(res);
     });
-  }, []);
+  }, [accessToken, setUserData]);
+
+  useEffect(() => {
+    console.log("----------------- memberData");
+    console.log(memberData);
+  }, [memberData]);
 
   return (
     <div className="w-full ">
