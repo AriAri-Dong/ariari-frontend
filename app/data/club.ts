@@ -388,7 +388,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 2,
     label: "동아리 멤버 관리",
-    url: "/club/members",
+    url: "/club/management/members",
     subUrl: [],
   },
   {
