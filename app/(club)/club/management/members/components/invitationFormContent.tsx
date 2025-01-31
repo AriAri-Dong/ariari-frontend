@@ -1,16 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
-import Alert from "../../../../components/alert/alert";
-import LargeBtn from "../../../../components/button/basicBtn/largeBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 
 import checkIcon from "@/images/icon/radio_button_checked.svg";
 import uncheckIcon from "@/images/icon/radio_button_unchecked.svg";
 import copy from "@/images/icon/copy.svg";
 import { ShareType } from "./invitationForm";
+import Alert from "@/components/alert/alert";
 interface InvitationFormContentProps {
   nickname: string;
   setNickname: (value: string) => void;

@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import { MEMBER_STATUS_TYPE } from "@/data/pulldown";
 import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
 import { ClubMemberData } from "@/models/member";
-import LeftMenu from "../components/menu/leftMenu";
-import MobileMenu from "../components/menu/mobileMenu";
 import ClubMemberCategoryBar from "./components/clubMemberCategoryBar";
 import ClubMemberHeader from "./components/clubMemberHeader";
 import ClubMemberList from "./components/clubMemberList";
+import MobileMenu from "../../components/menu/mobileMenu";
+import LeftMenu from "../../components/menu/leftMenu";
 
 const ClubMemberPage = () => {
   const [selectedOption, setSelectedOption] = useState<string[]>([
