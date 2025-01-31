@@ -22,10 +22,9 @@ const LeftMenu = () => {
   const pathname = usePathname();
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState<number | null>(null);
+
   // 임시 권한 설정 (API 연동 전)
   const [authority, setAuthority] = useState<"USER" | "MEMBER" | "ADMIN">(
-    // "USER"
-    // "MEMBER"
     "ADMIN"
   );
 
@@ -37,8 +36,10 @@ const LeftMenu = () => {
       ? CLUB_LEFT_MENU_MEMBER
       : CLUB_LEFT_MENU_USER;
 
-  // URL이 현재 페이지의 URL과 일치하는지 확인하는 함수
   const isActive = (url: string) => pathname === url;
+
+  const isParentActive = (menu: any) =>
+    isActive(menu.url) || menu.subUrl?.some((sub: any) => isActive(sub.url));
 
   // 메뉴 클릭 시 동작
   const handleMenuClick = (menuId: number, url: string, subUrl?: any[]) => {
@@ -56,8 +57,8 @@ const LeftMenu = () => {
   // 서브 메뉴 클릭 시 URL로 이동 + 부모 메뉴 활성화
   const handleSubMenuClick = (subUrl: string, parentMenuId: number) => {
     router.push(subUrl);
-    setActiveMenu(parentMenuId); // 부모 메뉴 활성화
-    setIsSubMenuOpen(parentMenuId); // 서브 메뉴 펼침 유지
+    setActiveMenu(parentMenuId);
+    setIsSubMenuOpen(parentMenuId);
   };
 
   useEffect(() => {
@@ -110,8 +111,7 @@ const LeftMenu = () => {
         {/* 메뉴 항목 */}
         {CLUB_LEFT_MENU.map((menu) => (
           <div className="flex items-center mt-6" key={menu.id}>
-            {/* ✅ 메뉴가 활성화된 경우만 active 아이콘 표시 */}
-            {isActive(menu.url) || activeMenu === menu.id ? (
+            {isParentActive(menu) ? (
               <Image
                 src={active}
                 alt={"active"}
@@ -126,13 +126,8 @@ const LeftMenu = () => {
             <div className="flex w-full flex-col items-center">
               <div
                 className={`flex w-full items-center justify-between cursor-pointer ml-[16px] 
-          ${
-            isActive(menu.url) ||
-            (activeMenu === menu.id && !menu.subUrl?.length)
-              ? "text-primary"
-              : "text-unselected"
-          }
-        `}
+                  ${isParentActive(menu) ? "text-primary" : "text-unselected"}
+                `}
                 onClick={() => handleMenuClick(menu.id, menu.url, menu.subUrl)}
               >
                 <div className="flex gap-3 items-center">
@@ -145,17 +140,15 @@ const LeftMenu = () => {
                   />
                   <h3 className="text-h4_sb">{menu.label}</h3>
                 </div>
-                {/* 서브 메뉴 토글 화살표 */}
                 <Image
                   src={vector}
                   alt={"profile"}
                   width={20}
                   height={20}
-                  className={`
-            transition-transform duration-300 
-            ${(menu.subUrl?.length ?? 0) > 0 ? "block" : "hidden"} 
-            ${isSubMenuOpen === menu.id ? "rotate-180" : "rotate-0"}
-          `}
+                  className={`transition-transform duration-300 
+                    ${(menu.subUrl?.length ?? 0) > 0 ? "block" : "hidden"} 
+                    ${isSubMenuOpen === menu.id ? "rotate-180" : "rotate-0"}
+                  `}
                 />
               </div>
 
