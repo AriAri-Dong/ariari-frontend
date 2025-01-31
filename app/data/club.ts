@@ -129,13 +129,17 @@ export const MENU_DATA = [
 ];
 
 export const MONILE_MENU_OPTIONS = [
-  { id: 0, label: "모집관리" },
-  { id: 1, label: "동아리 멤버 관리" },
-  { id: 2, label: "활동관리" },
-  { id: 3, label: "활동내역" },
-  { id: 4, label: "FAQ/Q&A" },
-  { id: 5, label: "활동후기" },
-  { id: 6, label: "합격후기" },
+  { id: 0, label: "모집관리", url: "/" },
+  { id: 1, label: "동아리 멤버 관리", url: "/club/members" },
+  { id: 2, label: "활동관리", url: "/" },
+  {
+    id: 3,
+    label: "활동내역",
+    url: "/club/management/recruitment/applicationStatus",
+  },
+  { id: 4, label: "FAQ/Q&A", url: "/club/help" },
+  { id: 5, label: "활동후기", url: "/club/review/activity" },
+  { id: 6, label: "합격후기", url: "/club/review/acceptance" },
 ];
 
 export const PERCENT_DATA = [
@@ -284,16 +288,104 @@ export const BADGE_TITLES = [
   "동아리를 알게 된 경로",
 ];
 
-export const CLUB_LEFT_MENU = [
+export const CLUB_LEFT_MENU_USER = [
   {
     id: 1,
     label: "활동내역",
     url: "/club/management/recruitment/applicationStatus",
+  },
+  {
+    id: 2,
+    label: "모집공고",
+    url: "/",
+    subUrl: [],
+  },
+  {
+    id: 3,
+    label: "FAQ / Q&A",
+    url: "/club/help",
+    subUrl: [],
+  },
+  {
+    id: 4,
+    label: "활동후기",
+    url: "/club/review/activity",
+    subUrl: [],
+  },
+  {
+    id: 5,
+    label: "합격후기",
+    url: "/club/review/acceptance",
+    subUrl: [],
+  },
+];
+
+export const CLUB_LEFT_MENU_MEMBER = [
+  {
+    id: 1,
+    label: "활동내역",
+    url: "/club/management/recruitment/applicationStatus",
+  },
+  {
+    id: 2,
+    label: "공지사항 (미구현)",
+    url: "/",
+    subUrl: [],
+  },
+  {
+    id: 3,
+    label: "일정 (미구현)",
+    url: "/club/create",
+    subUrl: [],
+  },
+  {
+    id: 4,
+    label: "회계내역",
+    url: "/club/review/activity",
+    subUrl: [],
+  },
+  {
+    id: 5,
+    label: "모집공고",
+    url: "/club/review/acceptance",
+    subUrl: [],
+  },
+  {
+    id: 6,
+    label: "활동후기",
+    url: "/club/review/activity",
+    subUrl: [],
+  },
+  {
+    id: 7,
+    label: "합격후기",
+    url: "/club/review/acceptance",
+    subUrl: [],
+  },
+  {
+    id: 8,
+    label: "FAQ / Q&A",
+    url: "/club/help",
+    subUrl: [],
+  },
+  {
+    id: 9,
+    label: "동아리 탈퇴 ",
+    url: "/club/leave",
+    subUrl: [],
+  },
+];
+
+export const CLUB_LEFT_MENU_ADMIN = [
+  {
+    id: 1,
+    label: "모집관리",
+    url: "/club/management/recruitment/announcement",
     subUrl: [
       {
         id: 1,
         label: "모집공고",
-        url: "/club",
+        url: "/club/management/recruitment/announcement",
       },
       {
         id: 2,
@@ -309,38 +401,66 @@ export const CLUB_LEFT_MENU = [
   },
   {
     id: 2,
-    label: "공지사항 (미구현)",
+    label: "동아리 멤버 관리",
     url: "/",
     subUrl: [],
   },
   {
     id: 3,
-    label: "모집공고 (미구현)",
+    label: "활동관리",
     url: "/club/create",
-    subUrl: [],
+    subUrl: [
+      {
+        id: 1,
+        label: "공지사항",
+        url: "/club/management/activity/notice",
+      },
+      {
+        id: 2,
+        label: "일정",
+        url: "/club/management/activity/schedule",
+      },
+      {
+        id: 2,
+        label: "회계내역",
+        url: "/club/management/activity/accounting",
+      },
+    ],
   },
   {
     id: 4,
-    label: "활동후기",
+    label: "활동내역",
     url: "/club/review/activity",
     subUrl: [],
   },
   {
     id: 5,
-    label: "합격후기",
-    url: "/club/review/acceptance",
-    subUrl: [],
-  },
-  {
-    id: 6,
     label: "FAQ / Q&A",
     url: "/club/help",
     subUrl: [],
   },
   {
+    id: 6,
+    label: "활동후기",
+    url: "/club/review/activity",
+    subUrl: [],
+  },
+  {
     id: 7,
-    label: "동아리 멤버 관리",
-    url: "/club/members",
+    label: "합격후기",
+    url: "/club/review/acceptance",
+    subUrl: [],
+  },
+  {
+    id: 8,
+    label: "동아리 탈퇴",
+    url: "/club/leave",
+    subUrl: [],
+  },
+  {
+    id: 9,
+    label: "동아리 폐쇠",
+    url: "/club/close",
     subUrl: [],
   },
 ];
