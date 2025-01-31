@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { MONILE_MENU_OPTIONS } from "@/data/club";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import SubTap from "@/components/tab/subTap";
 import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound";
@@ -46,9 +45,6 @@ const ApplicationStatusPage = () => {
   const optionsRef = useRef<HTMLDivElement | null>(null);
 
   const [option, setOption] = useState<string>(OPTIONS[0].label);
-  const [mobileOption, setMobileOption] = useState<string>(
-    MONILE_MENU_OPTIONS[0].label
-  );
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [openForm, setOpenForm] = useState<boolean>(false);
@@ -121,7 +117,6 @@ const ApplicationStatusPage = () => {
                   handleOption={setOption}
                 />
               </div>
-              <Tabs />
 
               <div
                 className="flex gap-4 flex-col-reverse lg:flex-row justify-between items-start
