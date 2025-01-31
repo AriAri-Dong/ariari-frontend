@@ -135,7 +135,7 @@ export const MONILE_MENU_OPTIONS = [
   {
     id: 3,
     label: "활동내역",
-    url: "/club/management/recruitment/applicationStatus",
+    url: "/club/activityHistory",
   },
   { id: 4, label: "FAQ/Q&A", url: "/club/help" },
   { id: 5, label: "활동후기", url: "/club/review/activity" },
@@ -292,7 +292,7 @@ export const CLUB_LEFT_MENU_USER = [
   {
     id: 1,
     label: "활동내역",
-    url: "/club/management/recruitment/applicationStatus",
+    url: "/club/activityHistory",
   },
   {
     id: 2,
@@ -324,7 +324,7 @@ export const CLUB_LEFT_MENU_MEMBER = [
   {
     id: 1,
     label: "활동내역",
-    url: "/club/management/recruitment/applicationStatus",
+    url: "/club/activityHistory",
   },
   {
     id: 2,
@@ -402,7 +402,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 2,
     label: "동아리 멤버 관리",
-    url: "/",
+    url: "/club/members",
     subUrl: [],
   },
   {
@@ -430,7 +430,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 4,
     label: "활동내역",
-    url: "/club/review/activity",
+    url: "/club/activityHistory",
     subUrl: [],
   },
   {
