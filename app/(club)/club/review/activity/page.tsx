@@ -1,12 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import ClubInfoSection from "../../content/clubInfoSection";
-import {
-  ACTIVITY_REVIEWS,
-  MONILE_MENU_OPTIONS,
-  PERCENT_DATA,
-} from "@/data/club";
+import { ACTIVITY_REVIEWS, PERCENT_DATA } from "@/data/club";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import PointStatusBar from "@/components/bar/pointStatusBar";
 import MobilePointStatusBar from "@/components/bar/mobilePointStatusBar";
@@ -15,9 +10,6 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import Image from "next/image";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import helpText from "@/images/icon/mobile_point_Helptext.svg";
-import SubTap from "@/components/tab/subTap";
-import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound";
-import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import Alert from "@/components/alert/alert";
 import useResponsive from "@/hooks/useResponsive";
 import ActivityReviewModal from "@/components/modal/review/activityReviewModal";
