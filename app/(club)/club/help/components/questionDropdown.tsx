@@ -18,6 +18,8 @@ import { clubMemberRoleType, profileType } from "@/models/member";
 import ReportBottomSheet from "@/components/bottomSheet/report/reportBottomSheet";
 import ReportModal from "@/components/modal/reportModal";
 import SendBtn from "@/components/button/iconBtn/sendBtn";
+import useResponsive from "@/hooks/useResponsive";
+import Alert from "@/components/alert/alert";
 
 interface QuestionDropdownProps {
   data: ClubQuestionData | ClubFaqData;
@@ -43,10 +45,14 @@ const QuestionDropdown = ({
   isOpen,
   setSelected,
 }: QuestionDropdownProps) => {
+  const isMdUp = useResponsive("md");
+
   let bg, text, label;
   const isFaq = "clubFaqColorType" in data;
   const [reportIsOpen, setReportIsOpen] = useState<boolean>(false);
   const [answer, setAnswer] = useState<string>("");
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
   if (isFaq) {
     // faq의 경우
     const color = tokenColorMapping[data.clubFaqColorType];
@@ -66,6 +72,11 @@ const QuestionDropdown = ({
     } else {
       setSelected(id);
     }
+  };
+
+  const handleReportSubmit = () => {
+    setReportIsOpen(false);
+    setAlertMessage("신고가 정상적으로 접수되었습니다.");
   };
 
   return (
@@ -222,22 +233,23 @@ const QuestionDropdown = ({
           )}
         </div>
       )}
-
       {reportIsOpen && (
         <div style={{ zIndex: 1000 }}>
-          <div className="md:hidden">
-            <ReportBottomSheet
-              onClose={() => setReportIsOpen(false)}
-              onSubmit={() => {}}
-            />
-          </div>
-          <div className="hidden md:block">
+          {isMdUp ? (
             <ReportModal
               onClose={() => setReportIsOpen(false)}
-              onSubmit={() => {}}
+              onSubmit={handleReportSubmit}
             />
-          </div>
+          ) : (
+            <ReportBottomSheet
+              onClose={() => setReportIsOpen(false)}
+              onSubmit={handleReportSubmit}
+            />
+          )}
         </div>
+      )}
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
     </div>
   );
