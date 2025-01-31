@@ -128,20 +128,6 @@ export const MENU_DATA = [
   { id: 2, label: "동아리 탈퇴하기" },
 ];
 
-export const MONILE_MENU_OPTIONS = [
-  { id: 0, label: "모집관리", url: "/" },
-  { id: 1, label: "동아리 멤버 관리", url: "/club/members" },
-  { id: 2, label: "활동관리", url: "/" },
-  {
-    id: 3,
-    label: "활동내역",
-    url: "/club/activityHistory",
-  },
-  { id: 4, label: "FAQ/Q&A", url: "/club/help" },
-  { id: 5, label: "활동후기", url: "/club/review/activity" },
-  { id: 6, label: "합격후기", url: "/club/review/acceptance" },
-];
-
 export const PERCENT_DATA = [
   { type: "employment", percent: 80 },
   { type: "experience", percent: 90 },
@@ -380,7 +366,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 1,
     label: "모집관리",
-    url: "/club/management/recruitment/announcement",
+    url: "/",
     subUrl: [
       {
         id: 1,
@@ -393,7 +379,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
         url: "/club/management/recruitment/applicationForm",
       },
       {
-        id: 2,
+        id: 3,
         label: "지원현황",
         url: "/club/management/recruitment/applicationStatus",
       },
@@ -408,7 +394,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 3,
     label: "활동관리",
-    url: "/club/create",
+    url: "/",
     subUrl: [
       {
         id: 1,
@@ -421,7 +407,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
         url: "/club/management/activity/schedule",
       },
       {
-        id: 2,
+        id: 3,
         label: "회계내역",
         url: "/club/management/activity/accounting",
       },
