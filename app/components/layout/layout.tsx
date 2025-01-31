@@ -17,6 +17,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/management",
     "/club/help",
     "/club/members",
+    "/club/close",
+    "/club/leave",
+    "/club/activityHistory",
   ];
   const bgPaths = ["/application"];
   const mobileBgPaths = ["/club/create", "/withdrawal"];
@@ -25,6 +28,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/management",
     "/club/help",
     "/club/members",
+    "/club/close",
+    "/club/leave",
+    "/club/activityHistory",
   ];
 
   const isSpecialComponent = specialPaths.some((path) =>
