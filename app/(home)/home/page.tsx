@@ -8,7 +8,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ProfileSettingModal from "@/components/modal/profileSetting/profileSettingModal";
 import useResponsive from "../../../hooks/useResponsive";
 import MobileProfileSettingModal from "@/components/modal/profileSetting/mobile/mobileProfileSettingModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUserData } from "@/api/apis";
 
 const Home = () => {
   const router = useRouter();
@@ -23,6 +24,12 @@ const Home = () => {
     setIsFirstLoginModalOpen(false);
     router.replace("/", undefined);
   };
+
+  useEffect(() => {
+    getUserData().then((res) => {
+      console.log(res);
+    });
+  }, []);
 
   return (
     <div className="w-full ">
