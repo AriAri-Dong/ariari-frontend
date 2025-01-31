@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import AcceptanceReviewDropdown from "@/components/dropdown/acceptanceReviewDropdown";
-import { ACCEPTANCE_REVIEWS, MONILE_MENU_OPTIONS } from "@/data/club";
+import { ACCEPTANCE_REVIEWS } from "@/data/club";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import PointStatusBar from "@/components/bar/pointStatusBar";
 import MobilePointStatusBar from "@/components/bar/mobilePointStatusBar";
