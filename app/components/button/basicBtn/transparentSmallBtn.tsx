@@ -1,6 +1,11 @@
 "use client";
 
-import { ButtonWithTextProps } from "@/types/components/button";
+interface ButtonProps {
+  title: string;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  round?: boolean;
+  className?: string;
+}
 
 /**
  *
@@ -13,14 +18,18 @@ const TransparentSmallBtn = ({
   title,
   onClick,
   round = false,
-}: ButtonWithTextProps) => {
+  className,
+}: ButtonProps) => {
   return (
     <button
-      className={`py-2 px-[18px] md:py-3 md:px-[21px] text-13 md:text-15
-        font-medium text-primary border border-primary focus:bg-selectedoption_hover
-        bg-selectedoption_default md:hover:bg-selectedoption_hover md:focus:bg-selectedoption_pressed
-        ${round ? "rounded-full" : "rounded-lg"}`}
-      onClick={onClick}
+      className={`flex text-nowrap items-center h-9 px-[18px] md:h-[44px] md:px-[22px]
+        text-mobile_body2_sb md:text-body1_sb text-primary border border-primary active:bg-selectedoption_hover
+        bg-selectedoption_default md:hover:bg-selectedoption_hover md:active:bg-selectedoption_pressed
+        ${round ? "rounded-full" : "rounded-lg"} ${className}`}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick(e);
+      }}
     >
       {title}
     </button>

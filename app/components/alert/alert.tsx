@@ -4,10 +4,18 @@ import React, { useEffect, useState } from "react";
 
 interface AlertProps {
   text: string;
+  subText?: string;
   onClose?: () => void;
 }
 
-const Alert = ({ text, onClose }: AlertProps) => {
+/**
+ * Alert component
+ * @param text main 텍스트
+ * @param subText sub 텍스트
+ * @param onClose 닫기 핸들러
+ * @returns
+ */
+const Alert = ({ text, subText, onClose }: AlertProps) => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -20,19 +28,21 @@ const Alert = ({ text, onClose }: AlertProps) => {
 
     return () => clearTimeout(timeout);
   }, [onClose]);
-
   return (
-    <div
-      className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-500 ${
-        isVisible ? "opacity-100" : "opacity-0"
-      }`}
-    >
-      <div className="backdrop-blur-sm bg-black_50 py-2.5 px-7 rounded-lg">
-        <span className="text-mobile_body1_m text-background md:text-body1_m">
-          {text}
-        </span>
-      </div>
-    </div>
+    <>
+      {isVisible && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-500">
+          <div className="flex flex-col gap-0.5 py-2.5 px-7 bg-black_50 rounded-lg text-center">
+            <h1 className="text-mobile_body1_m text-background md:text-body1_m">
+              {text}
+            </h1>
+            <p className="text-mobile_body3_m text-white70 md:text-body3_m">
+              {subText}
+            </p>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

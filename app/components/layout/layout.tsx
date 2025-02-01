@@ -10,14 +10,33 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
 
-  const isSpecialComponent = pathname.includes("recruitment/detail");
-  console.log(isSpecialComponent);
+  const specialPaths = [
+    "/recruitment/detail",
+    "/club/review",
+    "/club/management",
+    "/club/help",
+  ];
+  const bgPaths = ["/application", "/club/members"];
+  const mobileBgPaths = ["/club/create", "/withdrawal"];
+
+  const isSpecialComponent = specialPaths.some((path) =>
+    pathname.includes(path)
+  );
+  const isBgComponent = bgPaths.some((path) => pathname.includes(path));
+  const isBgComponentOnlyMobile = mobileBgPaths.some((path) =>
+    pathname.includes(path)
+  );
 
   return (
     <SearchTermContext.Provider value={{ searchTerm, setSearchTerm }}>
       <div className="flex flex-col min-h-screen">
         <Header />
-        <main className="flex-grow flex justify-center items-center">
+
+        <main
+          className={`flex-grow flex justify-center items-center 
+            ${isBgComponent && "bg-sub_bg"} 
+            ${isBgComponentOnlyMobile && "md:bg-sub_bg"}`}
+        >
           <div
             className={`w-full ${
               !isSpecialComponent

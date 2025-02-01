@@ -3,3 +3,9 @@ export interface ListSectionProps {
   title: string;
   point: number;
 }
+
+export interface DayFloatingBarProps {
+  deductionPoint: number;
+  currentPoint: number;
+  className?: string;
+}

@@ -5,10 +5,11 @@ import SubTap from "@/components/tab/subTap";
 import ClubRankingCard from "@/components/card/clubRankingCard";
 import ClubRankingList from "@/components/card/clubLankingList";
 
-import { Affiliation_Type, Area_Type, Field_Type } from "@/data/pulldown";
+import { AFFILIATION_TYPE, AREA_TYPE, FIELD_TYPE } from "@/data/pulldown";
 import { useState } from "react";
-import useResponsive from "../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 import FilterBtn from "@/components/button/iconBtn/filterBtn";
+import NotiPopUp from "@/components/modal/notiPopUp";
 
 const dummyCardData = [
   { id: 1, rank: 1, title: "Card 1", description: "짧은 동아리 소개." },
@@ -60,26 +61,43 @@ const dummyCardData = [
 const ClubRanking = () => {
   const isTab = useResponsive("md");
   const isDesktop = useResponsive("lg");
-  const [fieldType, setFieldType] = useState<string[]>([]);
-  const [affiliationType, setAffiliationType] = useState<string[]>([]);
+  const [fieldType, setFieldType] = useState<string[]>([FIELD_TYPE[0].label]);
+  const [affiliationType, setAffiliationType] = useState<string[]>([
+    AFFILIATION_TYPE[1].label,
+  ]);
   const [showFilter, setShowFilter] = useState<boolean>(false);
+
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const schoolCertification = false; // 학교 인증 여부 임시값
+
+  const handleOption = (value: string) => {
+    if (!schoolCertification && value == "교내" && !isModalOpen) {
+      setModalOpen(true);
+    } else {
+      setAffiliationType([value]);
+    }
+  };
 
   return (
     <section className="mt-5 mb-12 md:mt-8 md:mb-[68px]">
       <div className="flex justify-between items-center">
-        <div className="text-[18px] font-bold md:text-[28px]">
+        <div className="text-mobile_h1_contents_title md:text-h1_contents_title">
           실시간 동아리 랭킹
         </div>
         <div className=" md:flex md:gap-[16px]">
           {isTab ? (
             <>
               <PullDown
-                optionData={Field_Type}
+                optionData={FIELD_TYPE.slice(1)}
                 optionSize="small"
                 handleOption={setFieldType}
                 selectedOption={fieldType}
               />
-              <SubTap optionData={Affiliation_Type.slice(1, 3)} />
+              <SubTap
+                optionData={AFFILIATION_TYPE.slice(1, 3)}
+                selectedOption={affiliationType[0]}
+                handleOption={handleOption}
+              />
             </>
           ) : (
             <FilterBtn onClick={() => setShowFilter(!showFilter)} />
@@ -90,13 +108,13 @@ const ClubRanking = () => {
         <div className="flex mt-[16px] gap-[10px] md:hidden ">
           <>
             <PullDown
-              optionData={Affiliation_Type}
+              optionData={AFFILIATION_TYPE.slice(1)}
               optionSize="small"
               handleOption={setAffiliationType}
               selectedOption={affiliationType}
             />
             <PullDown
-              optionData={Field_Type}
+              optionData={FIELD_TYPE.slice(1)}
               optionSize="small"
               handleOption={setFieldType}
               selectedOption={fieldType}
@@ -116,6 +134,20 @@ const ClubRanking = () => {
           )}
         />
       </div>
+
+      {isModalOpen && (
+        <NotiPopUp
+          onClose={() => setModalOpen(false)}
+          icon="school"
+          title="학교 등록이 필요합니다"
+          description={`교내 인기 동아리를 확인하기 위해서는\n학교 등록이 필요합니다.`}
+          firstButton={() => {}}
+          firstButtonText="학교 등록하기"
+          secondButton={() => setModalOpen(false)}
+          secondButtonText="다음에 할게요"
+          modalType="button"
+        />
+      )}
     </section>
   );
 };

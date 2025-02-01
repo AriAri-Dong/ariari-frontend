@@ -7,7 +7,7 @@ import uncheckIcon from "@/images/icon/radio_button_unchecked.svg";
 interface MultiSelectOptionsProps {
   optionData: { id: number; label: string }[];
   selectedOptions: string[];
-  size: "small" | "medium" | "large";
+  size: "small" | "medium" | "large" | "mobile";
   handleMenuClick: (label: string) => void;
 }
 

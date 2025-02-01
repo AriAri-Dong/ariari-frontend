@@ -1,9 +1,9 @@
-export const Affiliation_Type = [
+export const AFFILIATION_TYPE = [
   { id: 0, label: "소속" },
   { id: 1, label: "연합" },
   { id: 2, label: "교내" },
 ];
-export const Field_Type = [
+export const FIELD_TYPE = [
   { id: 0, label: "분야" },
   { id: 1, label: "전체" },
   { id: 2, label: "문화예술" },
@@ -16,7 +16,7 @@ export const Field_Type = [
   { id: 9, label: "기타" },
 ];
 
-export const Area_Type = [
+export const AREA_TYPE = [
   { id: 0, label: "지역" },
   { id: 1, label: "전체" },
   { id: 2, label: "수도권" },
@@ -30,7 +30,7 @@ export const Area_Type = [
   { id: 10, label: "해외" },
 ];
 
-export const Target_Type = [
+export const TARGET_TYPE = [
   { id: 0, label: "대상" },
   { id: 1, label: "전체" },
   { id: 2, label: "대학생" },
@@ -39,14 +39,34 @@ export const Target_Type = [
   { id: 5, label: "기타" },
 ];
 
-export const Date_Sort_Type = [
+export const DATE_SORT_TYPE = [
   { id: 0, label: "정렬 기준" },
   { id: 1, label: "최신순" },
   { id: 2, label: "오래된 순" },
 ];
 
-export const Popularity_Sort_Type = [
+export const POPULARITY_SORT_TYPE = [
   { id: 0, label: "정렬 기준" },
   { id: 1, label: "조회수순" },
   { id: 2, label: "즐겨찾기순" },
+];
+
+export const QUESTION_TYPE = [
+  { id: 0, label: "FAQ" },
+  { id: 1, label: "Q&A" },
+];
+
+export const MEMBER_STATUS_TYPE = [
+  { id: 0, label: "활동상태 변경" },
+  { id: 1, label: "전체" },
+  { id: 2, label: "활동중" },
+  { id: 3, label: "휴식중" },
+  { id: 4, label: "활동 종료" },
+];
+
+export const ROLE_TYPE = [
+  { id: 0, label: "권한" },
+  { id: 1, label: "일반회원" },
+  { id: 2, label: "매니저" },
+  { id: 3, label: "관리자" },
 ];

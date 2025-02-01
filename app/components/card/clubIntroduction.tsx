@@ -1,4 +1,4 @@
-import ReviewBadge from "../badge/reviewBadge";
+import ReviewBadge from "../badge/review/reviewBadge";
 
 interface ClubIntroductionProps {
   introductionText: string;

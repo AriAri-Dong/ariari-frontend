@@ -18,8 +18,7 @@ export const USER_MENU = [
   { id: 0, label: "관심 모집공고", path: "/myPage/interestRecruitment" },
   { id: 1, label: "관심 동아리", path: "/myPage/interestClub" },
   { id: 2, label: "내 포인트", path: "/myPage/myPoint" },
-  { id: 3, label: "동아리 만들기", path: "/myPage" },
-  { id: 4, label: "회원정보 수정", path: "/myPage" },
-  { id: 5, label: "차단 관리", path: "/" },
-  { id: 6, label: "로그아웃", path: "/" },
+  { id: 3, label: "동아리 만들기", path: "/club/create" },
+  { id: 4, label: "회원정보 수정", path: "/" },
+  { id: 5, label: "로그아웃", path: "/" },
 ];

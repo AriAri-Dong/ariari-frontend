@@ -1,20 +1,21 @@
 import test_image from "@/images/logo/ariari.svg";
 import test_image2 from "@/images/icon/region.svg";
 import test_image3 from "@/images/icon/target.svg";
+import baby from "@/images/test/baby.png";
 
 export const CLUB_PROFILE_DATA = [
   {
     id: 1,
-    clubName: "동아리 A",
-    clubImage: test_image,
+    clubName: "유쥬니",
+    clubImage: baby,
     affiliation: "대학 동아리",
-    field: "프로그래밍",
+    field: "봉사",
     region: "서울",
     target: "대학생",
     heartNumber: 25,
-    introductionText: "introductionText",
+    introductionText: "해당 동아리만 활성화 되었습니다. 여기서 확인해주세요.",
     badgeType: "skill" as const,
-    clubPageUrl: "/",
+    clubPageUrl: "/club/management/recruitment/applicationStatus",
   },
   {
     id: 2,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import useResponsive from "../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 
 import Image from "next/image";
 import keyboardArrowDown from "@/images/icon/keyboardArrowDown.svg";
@@ -10,14 +10,25 @@ import MultiSelectOptions from "./multiSelectOptions";
 
 import BottomSheet from "./bottomSheet";
 import NotiPopUp from "../modal/notiPopUp";
+import { OptionType } from "@/types/components/pulldown";
 
 interface PulldownProps {
-  optionData: { id: number; label: string }[];
+  optionData: OptionType[];
   multiple?: boolean;
   selectedOption: string[];
   handleOption: (label: string[]) => void;
-  optionSize: "small" | "medium" | "large";
+  optionSize: "small" | "medium" | "large" | "mobile";
+  forceDropdown?: boolean;
 }
+/**
+ *
+ * @property optionData - 선택 가능한 옵션 데이터 배열
+ * @property multiple - 여러 개 옵션 선택 여부. 기본값은 false
+ * @property selectedOption - 선택된 옵션 배열, 선택되지 않은 경우 기본값(ex-["분야"])
+ * @property handleOption - 선택된 옵션을 처리 *(문자열로 처리)
+ * @property optionSize - 옵션 드롭다운의 크기. {"small" | "medium" | "large" | "mobile"}
+ * @property forceDropdown- 드롭다운이 강제로 열려 있도록 할지 여부. 기본값은 false
+ */
 
 const PullDown = ({
   optionData,
@@ -25,16 +36,18 @@ const PullDown = ({
   multiple = false,
   selectedOption,
   handleOption,
+  forceDropdown = false,
 }: PulldownProps) => {
   const pulldownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const isTabOver = useResponsive("md");
+  const isSelected =
+    selectedOption.length > 0 &&
+    optionData.some((option) => option.label === selectedOption[0]);
 
-  const isSelected = selectedOption.length > 0;
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false); //옵션메뉴
-  const [isModalOpen, setModalOpen] = useState<boolean>(false); // ex) 학교 인증 모달
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   const schoolCertification = false; // 학교 인증 여부 임시값
 
@@ -112,7 +125,7 @@ const PullDown = ({
           md:pl-5 md:pr-[14px] md:py-2
           ${
             isSelected
-              ? `bg-selectedoption_default border-selectedoptionborder hover:bg-selectedoption_hover focus:bg-selectedoption_pressed`
+              ? `bg-selectedoption_default border-selectedoption_border hover:bg-selectedoption_hover focus:bg-selectedoption_pressed`
               : `bg-white border-menuborder hover:bg-hover focus:bg-pressed`
           }
         `}
@@ -134,32 +147,32 @@ const PullDown = ({
       </button>
       {isDropdownOpen &&
         (!multiple ? (
-          isTabOver ? (
+          isTabOver || forceDropdown ? (
             <SingleSelectOptions
-              optionData={optionData.slice(1)}
+              optionData={optionData}
               selectedOption={selectedOption[0]}
               handleMenuClick={handleMenuClick}
               size={optionSize}
             />
           ) : (
             <BottomSheet
-              optionData={optionData.slice(1)}
+              optionData={optionData}
               selectedOptions={selectedOption}
               handleMenuClick={handleMenuClick}
               onClose={() => setIsDropdownOpen(false)}
               multiple={false}
             />
           )
-        ) : isTabOver ? (
+        ) : isTabOver || forceDropdown ? (
           <MultiSelectOptions
-            optionData={optionData.slice(1)}
+            optionData={optionData}
             selectedOptions={selectedOption}
             handleMenuClick={handleMenuClick}
             size={optionSize}
           />
         ) : (
           <BottomSheet
-            optionData={optionData.slice(1)}
+            optionData={optionData}
             selectedOptions={selectedOption}
             handleMenuClick={handleMenuClick}
             onClose={() => setIsDropdownOpen(false)}

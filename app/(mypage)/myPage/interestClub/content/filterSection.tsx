@@ -1,7 +1,7 @@
 import RadioBtn from "@/components/button/radioBtn";
 import SubPullDown from "@/components/pulldown/subPullDown";
-import { Popularity_Sort_Type } from "@/data/pulldown";
-import useResponsive from "../../../../../hooks/useResponsive";
+import { POPULARITY_SORT_TYPE } from "@/data/pulldown";
+import useResponsive from "@/hooks/useResponsive";
 
 interface FilterSectionProps {
   isChecked: boolean;
@@ -36,7 +36,7 @@ const FilterSection = ({
               onClick={toggleCheck}
             />
             <SubPullDown
-              optionData={Popularity_Sort_Type}
+              optionData={POPULARITY_SORT_TYPE.slice(1)}
               selectedOption={sortType}
               handleOption={setSortType}
             />
@@ -49,7 +49,7 @@ const FilterSection = ({
               총 nnn개의 관심 동아리가 있어요.
             </p>
             <SubPullDown
-              optionData={Popularity_Sort_Type}
+              optionData={POPULARITY_SORT_TYPE.slice(1)}
               selectedOption={sortType}
               handleOption={setSortType}
             />

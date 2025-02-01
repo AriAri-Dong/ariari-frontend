@@ -6,7 +6,7 @@ import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import ClubInfoCard from "@/components/card/clubInfoCard";
 import ClubIntroduction from "@/components/card/clubIntroduction";
 import { CLUB_PROFILE_DATA } from "@/data/clubProfile";
-import { Popularity_Sort_Type } from "@/data/pulldown";
+import { POPULARITY_SORT_TYPE } from "@/data/pulldown";
 import FilterSection from "./content/filterSection";
 import HeaderSection from "./content/headerSection";
 
@@ -15,7 +15,7 @@ const InterestClub = () => {
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [sortType, setSortType] = useState<string>(
-    Popularity_Sort_Type[0].label
+    POPULARITY_SORT_TYPE[0].label
   );
 
   const toggleCheck = () => {

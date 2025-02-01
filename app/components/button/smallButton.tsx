@@ -12,7 +12,8 @@ interface ButtonProps {
 const SmallButton = ({ title, onClick }: ButtonProps) => {
   return (
     <button
-      className="py-3 px-[22px] text-base rounded-lg bg-primary text-background hover:bg-primary_hover focus:bg-primary_pressed"
+      className="py-3 px-[22px] text-base rounded-lg bg-primary text-background 
+      hover:bg-primary_hover active:bg-primary_pressed"
       onClick={onClick}
     >
       {title}

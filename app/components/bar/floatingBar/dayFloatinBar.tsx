@@ -37,7 +37,7 @@ const DayFloatingBar = ({ deadline }: DayFloatingBarProps) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [deadline]);
+  }, []);
 
   const formattedDeadline = `${
     deadline.getMonth() + 1

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import HeaderSection from "./content/headerSection";
-import { POINT_DATA_LIST } from "@/data/myPoint";
+import { POINT_DATA_LIST } from "@/data/point";
 import ListSection from "./content/listSection";
 import PointStatusCard from "@/components/card/pointStatusCard";
 
