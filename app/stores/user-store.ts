@@ -1,4 +1,4 @@
-import { UserDataResponseType } from "@/api/types";
+import { UserDataResponseType } from "@/types/api";
 import { devtools, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 

@@ -1,5 +1,5 @@
 import api from "@/api";
-import { AuthResponseType, UserDataResponseType } from "@/api/types";
+import { AuthResponseType, UserDataResponseType } from "@/types/api";
 
 export const getTokenWithCode = async (code: string) => {
   const url = `/login/kakao?code=${code}`;
