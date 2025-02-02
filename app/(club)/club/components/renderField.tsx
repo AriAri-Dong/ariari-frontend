@@ -5,6 +5,7 @@ import { BADGE_ITEMS } from "@/data/club";
 import CustomInput from "@/components/input/customInput";
 import useResponsive from "@/hooks/useResponsive";
 import TextareaWithCounter from "@/components/textArea/textareaWithCounter";
+import SingleDateCalendar from "@/components/calendar/singleDateCalendar";
 
 interface RenderFieldProps {
   field: (typeof BADGE_ITEMS)[0];
@@ -154,7 +155,7 @@ const RenderField: React.FC<RenderFieldProps> = ({ field, index }) => {
       return (
         <div key={index} className="flex flex-col gap-[14px] md:gap-[18px]">
           <h3 className="text-text1 text-mobile_h3 md:text-h3">{field.name}</h3>
-          <input type="date" className="date-input-class" />
+          <SingleDateCalendar />
         </div>
       );
 
