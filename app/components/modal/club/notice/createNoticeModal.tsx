@@ -139,6 +139,7 @@ const CreateNoticeModal = ({ onClose, onSubmit }: CreateNoticeModalProps) => {
             isChecked={pin}
             label={"공지사항 상단에 고정하기"}
             onClick={() => setPin(!pin)}
+            className={"py-1 px-[6px]"}
           />
 
           {/* 이미지 업로드 섹션 */}
