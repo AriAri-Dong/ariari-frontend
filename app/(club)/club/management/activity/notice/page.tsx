@@ -39,6 +39,8 @@ const NoticePage = () => {
     setOpenNotice(false);
   };
 
+  const pinnedNotices = NOTICE_DATA.filter((notice) => notice.pin);
+
   return (
     <>
       <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
@@ -70,18 +72,22 @@ const NoticePage = () => {
                       고정된 공지사항
                     </h1>
                   </div>
-                  <>
+                  <div className="md:mb-0 mb-4">
                     {NOTICE_DATA.filter((notice) => notice.pin).map(
-                      (notice) => (
+                      (notice, index) => (
                         <ClubNoticeDropdown
                           key={notice.id}
                           notice={notice}
                           isOpen={openDropdownId === notice.id}
                           setOpenDropdownId={setOpenDropdownId}
+                          pin={true}
+                          isFirstPin={index === 0}
+                          isLastPin={index === pinnedNotices.length - 1}
+                          isSinglePin={pinnedNotices.length === 1}
                         />
                       )
                     )}
-                  </>
+                  </div>
                 </div>
               </div>
               <ClubNoticeHeader />
@@ -92,6 +98,7 @@ const NoticePage = () => {
                     notice={notice}
                     isOpen={openDropdownId === notice.id}
                     setOpenDropdownId={setOpenDropdownId}
+                    pin={false}
                   />
                 ))}
               </div>
