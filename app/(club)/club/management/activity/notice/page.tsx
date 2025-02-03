@@ -25,7 +25,16 @@ const NoticePage = () => {
 
   const [openNotice, setOpenNotice] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+  const [openDropdown, setOpenDropdown] = useState<{
+    id: string;
+    isPinned: boolean;
+  } | null>(null);
+
+  const handleDropdownToggle = (id: string, isPinned: boolean) => {
+    setOpenDropdown((prev) =>
+      prev?.id === id && prev?.isPinned === isPinned ? null : { id, isPinned }
+    );
+  };
 
   const handleRouter = () => {
     // 모집 공고 임시 경로
@@ -78,10 +87,15 @@ const NoticePage = () => {
                     {NOTICE_DATA.filter((notice) => notice.pin).map(
                       (notice, index) => (
                         <ClubNoticeDropdown
-                          key={notice.id}
+                          key={`pinned-${notice.id}`}
                           notice={notice}
-                          isOpen={openDropdownId === notice.id}
-                          setOpenDropdownId={setOpenDropdownId}
+                          isOpen={
+                            openDropdown?.id === notice.id &&
+                            openDropdown?.isPinned
+                          }
+                          setOpenDropdownId={() =>
+                            handleDropdownToggle(notice.id, true)
+                          }
                           pin={true}
                           isFirstPin={index === 0}
                           isLastPin={index === pinnedNotices.length - 1}
@@ -96,10 +110,14 @@ const NoticePage = () => {
               <div className="flex flex-col gap-2.5">
                 {NOTICE_DATA.map((notice) => (
                   <ClubNoticeDropdown
-                    key={notice.id}
+                    key={`normal-${notice.id}`}
                     notice={notice}
-                    isOpen={openDropdownId === notice.id}
-                    setOpenDropdownId={setOpenDropdownId}
+                    isOpen={
+                      openDropdown?.id === notice.id && !openDropdown?.isPinned
+                    }
+                    setOpenDropdownId={() =>
+                      handleDropdownToggle(notice.id, false)
+                    }
                     pin={false}
                   />
                 ))}
