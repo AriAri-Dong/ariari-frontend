@@ -56,7 +56,7 @@ const ClubNoticeDropdown = ({
   };
 
   return (
-    <div className="bg-background p-4 md:py-[26px] md:px-6 border-b border-gray-300">
+    <div className="bg-background p-4 md:py-[26px] md:px-6">
       <div className="flex flex-col gap-3.5 md:flex-row justify-between">
         <div className="flex w-full justify-between">
           <div className="flex items-center gap-6">
