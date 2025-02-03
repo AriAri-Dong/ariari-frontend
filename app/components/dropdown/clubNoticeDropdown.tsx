@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import vector from "@/images/icon/pullDown.svg";
 import dotMenu from "@/images/icon/dotMenu.svg";
@@ -73,13 +73,21 @@ const ClubNoticeDropdown = ({
   const handlers = useSwipeable({
     onSwipedLeft: () =>
       setCurrentImageIndex((prev) =>
-        prev < notice.imageUrls.length - 1 ? prev + 1 : 0
+        prev < notice.imageUrls.length - 1 ? prev + 1 : prev
       ),
     onSwipedRight: () =>
-      setCurrentImageIndex((prev) =>
-        prev > 0 ? prev - 1 : notice.imageUrls.length - 1
-      ),
+      setCurrentImageIndex((prev) => (prev > 0 ? prev - 1 : prev)),
+    preventScrollOnSwipe: true,
+    trackTouch: true,
+    trackMouse: true,
+    delta: 10,
   });
+
+  useEffect(() => {
+    if (!isOpen) {
+      setCurrentImageIndex(0);
+    }
+  }, [isOpen]);
 
   const handleSliderPrevClick = () => {
     if (!isFirstSlide) setCurrentImageIndex((prev) => prev - 1);
