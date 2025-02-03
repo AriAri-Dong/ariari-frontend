@@ -12,13 +12,10 @@ const RoundPlusBtn = ({
   imageSize = 36,
   className,
   onClick,
-  btnSize = "large",
 }: RoundVectorBtnProp) => {
   return (
     <button
-      className={`${className} flex justify-center items-center ${
-        btnSize === "large" ? "p-3" : "p-0"
-      } border border-menuborder
+      className={`${className} flex justify-center items-center border border-menuborder
     bg-background hover:bg-hover active:bg-pressed rounded-full cursor-pointer`}
       onClick={onClick}
     >
