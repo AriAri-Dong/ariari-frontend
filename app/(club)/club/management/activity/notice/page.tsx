@@ -16,6 +16,8 @@ import ClubNoticeHeader from "./components/clubNoticeHeader";
 import ClubNoticeDropdown from "@/components/dropdown/clubNoticeDropdown";
 import { NOTICE_DATA } from "@/data/clubNotice";
 import pin from "@/images/icon/pin.svg";
+import CreateNoticeModal from "@/components/modal/club/notice/createNoticeModal";
+import CreateNoticeBottomSheet from "@/components/bottomSheet/notice/createNoticeBottomsheet";
 
 const NoticePage = () => {
   const router = useRouter();
@@ -35,7 +37,7 @@ const NoticePage = () => {
   };
 
   const handleSubmitSuccess = () => {
-    setAlertMessage("활동후기가 등록되었습니다.");
+    setAlertMessage("공지사항이 등록되었습니다.");
     setOpenNotice(false);
   };
 
@@ -113,13 +115,13 @@ const NoticePage = () => {
         </div>
         {isMdUp
           ? openNotice && (
-              <ActivityReviewModal
+              <CreateNoticeModal
                 onClose={() => setOpenNotice(false)}
                 onSubmit={handleSubmitSuccess}
               />
             )
           : openNotice && (
-              <ActivityReviewBottomSheet
+              <CreateNoticeBottomSheet
                 onClose={() => setOpenNotice(false)}
                 onSubmit={handleSubmitSuccess}
               />
