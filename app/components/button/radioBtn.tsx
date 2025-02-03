@@ -8,6 +8,7 @@ interface RadioButtonProps {
   isChecked: boolean;
   label: string;
   onClick: () => void;
+  className?: string;
 }
 
 /**
@@ -17,10 +18,15 @@ interface RadioButtonProps {
  * @param onClick 클릭 핸들러
  * @returns
  */
-const RadioBtn = ({ isChecked, label, onClick }: RadioButtonProps) => {
+const RadioBtn = ({
+  isChecked,
+  label,
+  onClick,
+  className,
+}: RadioButtonProps) => {
   return (
     <div
-      className={`flex items-center gap-1 md:gap-[6px] cursor-pointer py-1 pr-[6px]`}
+      className={`${className} flex items-center gap-1 md:gap-[6px] cursor-pointer py-1 pr-[6px]`}
       onClick={onClick}
     >
       <Image
