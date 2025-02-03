@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
-import Alert from "../../../../../components/alert/alert";
-import LargeBtn from "../../../../../components/button/basicBtn/largeBtn";
+import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 
 import checkIcon from "@/images/icon/radio_button_checked.svg";

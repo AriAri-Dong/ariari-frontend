@@ -1,12 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import ClubInfoSection from "../../content/clubInfoSection";
-import {
-  ACTIVITY_REVIEWS,
-  MONILE_MENU_OPTIONS,
-  PERCENT_DATA,
-} from "@/data/club";
+import { ACTIVITY_REVIEWS, PERCENT_DATA } from "@/data/club";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import PointStatusBar from "@/components/bar/pointStatusBar";
 import MobilePointStatusBar from "@/components/bar/mobilePointStatusBar";
@@ -15,24 +10,22 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import Image from "next/image";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import helpText from "@/images/icon/mobile_point_Helptext.svg";
-import SubTap from "@/components/tab/subTap";
-import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound";
-import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import Alert from "@/components/alert/alert";
 import useResponsive from "@/hooks/useResponsive";
-import ActivityReviewBottomSheet from "@/components/bottomSheet/activityReviewBottomSheet";
 import ActivityReviewModal from "@/components/modal/review/activityReviewModal";
 import ActivityReviewDropdown from "@/components/dropdown/activityReviewDropdown";
 import ReviewPercentList from "@/components/list/reviewPercentList";
 import MobileReviewPercentList from "@/components/list/mobileReviewPercentList";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
 import LeftMenu from "../../components/menu/leftMenu";
+import ActivityReviewBottomSheet from "@/components/bottomSheet/review/activityReviewBottomSheet";
+import MobileMenu from "../../components/menu/mobileMenu";
+import ClubInfoWrapper from "../../content/clubInfoWrapper";
 
 const ReviewPage = () => {
   const router = useRouter();
   const isMdUp = useResponsive("md");
 
-  const [option, setOption] = useState<string>(MONILE_MENU_OPTIONS[0].label);
   const [openReview, setOpenReview] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
@@ -52,36 +45,9 @@ const ReviewPage = () => {
 
   return (
     <>
-      <div className="bg-background flex justify-center items-center w-full">
-        <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5">
-          <ClubInfoSection />
-        </div>
-      </div>
       <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
-        <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:pt-8 md:px-5">
-          <div className="flex mb-4 mt-6 md:mt-0 lg:hidden">
-            <div className="w-10 h-10">
-              <NotificationRoundBtn onClick={() => {}} />
-            </div>
-            <div className="flex overflow-x-auto no-scrollbar ml-2 relative">
-              <div className="flex whitespace-nowrap">
-                <SubTap
-                  optionData={MONILE_MENU_OPTIONS}
-                  selectedOption={option}
-                  handleOption={setOption}
-                />
-              </div>
-            </div>
-            <div className="flex items-center">
-              <RoundVectorBtn
-                imageSize={20}
-                className="md:hidden w-7 h-7 rotate-90"
-                btnSize="small"
-                onClick={() => {}}
-              />
-            </div>
-          </div>
-
+        <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
+          <MobileMenu />
           <div className="flex lg:gap-9">
             {/* 임시 메뉴 */}
             <div className="flex flex-col">

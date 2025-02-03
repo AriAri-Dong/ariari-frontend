@@ -13,7 +13,7 @@ import RecruitmentBottomBar from "@/components/bar/floatingBar/recruitmentBottom
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import RecruitmentSummary from "../components/recruitmentSummary";
 import ClubProfileCard from "@/components/card/clubProfileCard";
-import ReportBottomSheet from "@/components/bottomSheet/reportBottomSheet";
+import ReportBottomSheet from "@/components/bottomSheet/report/reportBottomSheet";
 import Alert from "@/components/alert/alert";
 import ReportModal from "@/components/modal/reportModal";
 import { MainRecruitmentCardProps } from "@/types/components/card";
