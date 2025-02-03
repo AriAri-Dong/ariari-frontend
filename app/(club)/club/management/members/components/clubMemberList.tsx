@@ -12,8 +12,9 @@ import NotiPopUp from "@/components/modal/notiPopUp";
 
 import { MEMBER_STATUS_TYPE, ROLE_TYPE } from "@/data/pulldown";
 import { MAP_ROLE_TO_KO } from "../util/mapRole";
-import { ClubMemberData } from "@/models/member";
+
 import { MAP_STATUS_STYLES, MAP_STATUS_TO_KO } from "../util/mapStatus";
+import { ClubMemberData } from "@/types/member";
 
 interface ClubMemberListProps {
   data: ClubMemberData;

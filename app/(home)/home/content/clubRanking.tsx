@@ -3,7 +3,7 @@
 import PullDown from "@/components/pulldown/pullDown";
 import SubTap from "@/components/tab/subTap";
 import ClubRankingCard from "@/components/card/clubRankingCard";
-import ClubRankingList from "@/components/card/clubLankingList";
+import ClubRankingList from "@/components/card/clubRankingList";
 
 import { AFFILIATION_TYPE, AREA_TYPE, FIELD_TYPE } from "@/data/pulldown";
 import { useState } from "react";

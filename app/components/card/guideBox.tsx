@@ -10,12 +10,15 @@ import { GuideData } from "@/types/components/card";
 
 interface GuidBoxProps {
   data: GuideData;
+  className?: string;
 }
-const GuidBox = ({ data }: GuidBoxProps) => {
-  const [isContentVisible, setIsContentVisible] = useState<boolean>(false);
+const GuidBox = ({ data, className }: GuidBoxProps) => {
+  const [isContentVisible, setIsContentVisible] = useState<boolean>(true);
 
   return (
-    <div className="py-4 pr-[18px] pl-2.5 bg-slate-100 rounded-xl flex-col justify-start items-start gap-2.5 flex  md:p-4">
+    <div
+      className={`py-4 pr-[18px] pl-2.5 bg-slate-100 rounded-xl flex-col justify-start items-start gap-2.5 flex  md:p-4 ${className}`}
+    >
       <div className="w-full flex-col justify-start items-start gap-2.5 flex">
         <div className="w-full justify-between items-center flex">
           <div className="items-center gap-2 flex">

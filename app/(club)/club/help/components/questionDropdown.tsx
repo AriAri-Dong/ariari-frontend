@@ -12,8 +12,8 @@ import A from "@/images/icon/A.svg";
 
 import { profileImageMap } from "@/utils/mappingProfile";
 import { tokenColorMapping } from "../../../../utils/colorMapping";
-import { ClubFaqData, ClubQuestionData } from "@/models/club";
-import { clubMemberRoleType, profileType } from "@/models/member";
+import { ClubFaqData, ClubQuestionData } from "@/types/club";
+import { clubMemberRoleType, profileType } from "@/types/member";
 
 import ReportBottomSheet from "@/components/bottomSheet/report/reportBottomSheet";
 import ReportModal from "@/components/modal/reportModal";

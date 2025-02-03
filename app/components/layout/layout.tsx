@@ -14,7 +14,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const specialPaths = [
     "/recruitment/detail",
     "/club/review",
-    "/club/management",
+    "/club/management/recruitment/applicationForm",
+    "/club/management/recruitment/applicationStatus",
     "/club/help",
     "/club/close",
     "/club/leave",

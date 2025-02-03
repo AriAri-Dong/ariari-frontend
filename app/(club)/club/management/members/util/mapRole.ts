@@ -1,4 +1,5 @@
-import { clubMemberRoleType } from "@/models/member";
+import { clubMemberRoleType } from "@/types/member";
+
 
 export const MAP_ROLE_TO_KO: Record<clubMemberRoleType, string> = {
   ADMIN: "관리자",

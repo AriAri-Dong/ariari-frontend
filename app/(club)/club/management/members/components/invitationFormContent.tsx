@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
