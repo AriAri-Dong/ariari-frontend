@@ -107,7 +107,7 @@ const config: Config = {
         body1_sb: ["14px", { fontWeight: 600, lineHeight: "21px" }],
         body2_r: ["14px", { fontWeight: 400, lineHeight: "21px" }],
         body2_m: ["14px", { fontWeight: 500, lineHeight: "21px" }],
-        body3_r: ["12px", { fontWeight: 400, lineHeight: "18px" }],
+        body3_r: ["13px", { fontWeight: 400, lineHeight: "18px" }],
         body3_m: ["13px", { fontWeight: 500, lineHeight: "19.5px" }],
         body4_r: ["11px", { fontWeight: 400 }],
         mobile_h1_contents_title: ["18px", { fontWeight: 600 }],
