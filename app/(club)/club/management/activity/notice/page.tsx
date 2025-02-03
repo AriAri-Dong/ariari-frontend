@@ -1,25 +1,95 @@
 "use client";
 
+import React, { useState } from "react";
+import PlusBtn from "@/components/button/withIconBtn/plusBtn";
+import { useRouter } from "next/navigation";
+import WriteBtn from "@/components/button/iconBtn/writeBtn";
+import Alert from "@/components/alert/alert";
+import useResponsive from "@/hooks/useResponsive";
+import ActivityReviewModal from "@/components/modal/review/activityReviewModal";
+import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
+import ActivityReviewBottomSheet from "@/components/bottomSheet/review/activityReviewBottomSheet";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
+import ClubNoticeHeader from "./components/clubNoticeHeader";
+import ClubNoticeDropdown from "@/components/dropdown/clubNoticeDropdown";
+import { NOTICE_DATA } from "@/data/clubNotice";
 
 const NoticePage = () => {
+  const router = useRouter();
+  const isMdUp = useResponsive("md");
+
+  const [openNotice, setOpenNotice] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+
+  const handleRouter = () => {
+    // 모집 공고 임시 경로
+    router.push("/");
+  };
+
+  const handleWrite = () => {
+    setOpenNotice(true);
+  };
+
+  const handleSubmitSuccess = () => {
+    setAlertMessage("활동후기가 등록되었습니다.");
+    setOpenNotice(false);
+  };
+
   return (
-    <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
-      <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
-        <MobileMenu />
-        <div className="flex lg:gap-9">
-          {/* 임시 메뉴 */}
-          <div className="flex flex-col">
-            <LeftMenu />
-          </div>
-          <div className="flex text-h3 text-text1">
-            공지사항 페이지
-            <p className="text-subtext1 text-h4_sb">관리자만 볼수 있습니다.</p>
+    <>
+      <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
+        <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
+          <MobileMenu />
+          <div className="flex lg:gap-9">
+            {/* 임시 메뉴 */}
+            <div className="flex flex-col">
+              <LeftMenu />
+            </div>
+            <div className="w-full">
+              <p className="text-subtext2 text-mobile_body2_m md:text-h4 mb-4 md:mb-[22px]">
+                총 {NOTICE_DATA.length}개의 공지사항이 있어요.
+              </p>
+              <ClubNoticeHeader />
+              <div className="flex flex-col gap-2.5">
+                {NOTICE_DATA.map((notice) => (
+                  <ClubNoticeDropdown
+                    key={notice.id}
+                    notice={notice}
+                    isOpen={openDropdownId === notice.id}
+                    setOpenDropdownId={setOpenDropdownId}
+                  />
+                ))}
+              </div>
+              <div className="flex justify-center mt-9 md:mt-10">
+                <PlusBtn title={"더보기"} onClick={() => {}} />
+              </div>
+            </div>
           </div>
         </div>
+        <div className="fixed bottom-[77px] right-5 md:hidden">
+          <WriteBtn onClick={handleWrite} />
+        </div>
+        {isMdUp
+          ? openNotice && (
+              <ActivityReviewModal
+                onClose={() => setOpenNotice(false)}
+                onSubmit={handleSubmitSuccess}
+              />
+            )
+          : openNotice && (
+              <ActivityReviewBottomSheet
+                onClose={() => setOpenNotice(false)}
+                onSubmit={handleSubmitSuccess}
+              />
+            )}
+        {alertMessage && (
+          <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+        )}
+        {!openNotice && <ReviewFloatingBtn onClick={handleWrite} />}
       </div>
-    </div>
+    </>
   );
 };
 
