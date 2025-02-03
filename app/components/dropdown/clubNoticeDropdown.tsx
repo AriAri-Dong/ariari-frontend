@@ -6,7 +6,16 @@ import { useSwipeable } from "react-swipeable";
 import vector from "@/images/icon/pullDown.svg";
 import dotMenu from "@/images/icon/dotMenu.svg";
 import noti from "@/images/icon/notice.svg";
+import empty from "@/images/icon/empty_img.svg";
 import RoundVectorBtn from "../button/iconBtn/roundVectorBtn";
+import CommonBottomSheet from "../bottomSheet/commonBottomSheet";
+import NotiPopUp from "../modal/notiPopUp";
+import Alert from "../alert/alert";
+
+const OPTION = [
+  { id: 1, label: "수정하기" },
+  { id: 2, label: "삭제하기" },
+];
 
 interface ClubNoticeDropdownProps {
   notice: {
@@ -18,23 +27,49 @@ interface ClubNoticeDropdownProps {
   };
   isOpen: boolean;
   setOpenDropdownId: (id: string | null) => void;
+  pin: boolean;
+  isFirstPin?: boolean;
+  isLastPin?: boolean;
+  isSinglePin?: boolean;
 }
 
 const ClubNoticeDropdown = ({
   notice,
   isOpen,
   setOpenDropdownId,
+  pin,
+  isFirstPin,
+  isLastPin,
+  isSinglePin,
 }: ClubNoticeDropdownProps) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+  const [openWrite, setOpenWrite] = useState<boolean>(false);
+  const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState<boolean>(false);
+  const [modifyOpen, setModifyOpen] = useState<boolean>(false);
+  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const handleVectorClick = useCallback(() => {
     setOpenDropdownId(isOpen ? null : notice.id);
   }, [isOpen, notice.id, setOpenDropdownId]);
 
+  const handleMenuClick = () => {
+    setOpenWrite(!openWrite);
+  };
+
+  const handleDelete = () => {
+    setIsNotiPopUpOpen(false);
+    // 임시 구현 (api)
+    if (true) {
+      setAlertMessage("삭제 되었습니다.");
+    } else {
+      setAlertMessage(`에러가 발생했습니다.<br /> 잠시 후 다시 시도해주세요.`);
+    }
+  };
+
   const isFirstSlide = currentImageIndex === 0;
   const isLastSlide = currentImageIndex === notice.imageUrls.length - 1;
 
-  // 마우스 스와이프 이벤트 핸들러 (md 이하에서만 작동)
   const handlers = useSwipeable({
     onSwipedLeft: () =>
       setCurrentImageIndex((prev) =>
@@ -46,7 +81,6 @@ const ClubNoticeDropdown = ({
       ),
   });
 
-  // md 이상에서만 버튼 클릭으로 이미지 넘기기
   const handleSliderPrevClick = () => {
     if (!isFirstSlide) setCurrentImageIndex((prev) => prev - 1);
   };
@@ -56,16 +90,41 @@ const ClubNoticeDropdown = ({
   };
 
   return (
-    <div className="bg-background p-4 md:py-[26px] md:px-6">
+    <div
+      className={`bg-background p-4 md:py-[26px] md:px-6 
+    ${
+      pin
+        ? isSinglePin
+          ? "rounded-lg"
+          : isFirstPin
+          ? "rounded-t-lg"
+          : isLastPin
+          ? "rounded-b-lg"
+          : ""
+        : "rounded-lg"
+    }
+  `}
+    >
       <div className="flex flex-col gap-3.5 md:flex-row justify-between">
         <div className="flex w-full justify-between">
           <div className="flex items-center gap-6">
             <p className="w-[66px] text-center md:block hidden text-subtext2 text-mobile_body3_r">
               {notice.id}
             </p>
-            <h1 className="text-text1 text-mobile_body1_m md:text-h4">
-              {notice.title}
-            </h1>
+            <div className="flex items-center gap-1 md:gap-2">
+              <h1 className="text-text1 text-mobile_body1_m md:text-h4">
+                {notice.title}
+              </h1>
+              <Image
+                src={empty}
+                alt="empty"
+                width={16}
+                height={16}
+                className={`md:w-5 md:h-5 ${
+                  notice.imageUrls.length > 0 ? "" : "hidden"
+                }`}
+              />
+            </div>
           </div>
           <div className="flex items-center gap-[22px]">
             <p className="text-subtext2 hidden md:flex text-mobile_body3_r">
@@ -88,7 +147,7 @@ const ClubNoticeDropdown = ({
                 width={20}
                 height={20}
                 className="md:w-6 md:h-6 cursor-pointer"
-                onClick={() => console.log("menu 클릭!")}
+                onClick={handleMenuClick}
               />
             </div>
           </div>
@@ -162,6 +221,40 @@ const ClubNoticeDropdown = ({
             </div>
           )}
         </div>
+      )}
+      {openWrite && (
+        <CommonBottomSheet
+          optionData={OPTION}
+          selectedOption={""}
+          handleMenuClick={(label: string) => {
+            setSelectedOption(label);
+            setOpenWrite(true);
+            if (label === "삭제하기") {
+              setIsNotiPopUpOpen(true);
+            } else if (label === "수정하기") {
+              setModifyOpen(true);
+            }
+          }}
+          onClose={() => {
+            setOpenWrite(false);
+          }}
+        />
+      )}
+      {isNotiPopUpOpen && (
+        <NotiPopUp
+          onClose={() => setIsNotiPopUpOpen(false)}
+          icon={"delete"}
+          title="공지사항 삭제"
+          description={`공지사항을 정말 삭제하시겠습니까? `}
+          modalType={"button"}
+          firstButton={handleDelete}
+          firstButtonText="삭제하기"
+          secondButton={() => setIsNotiPopUpOpen(false)}
+          secondButtonText="취소하기"
+        />
+      )}
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
     </div>
   );
