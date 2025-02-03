@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import PlusBtn from "@/components/button/withIconBtn/plusBtn";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import Alert from "@/components/alert/alert";
 import useResponsive from "@/hooks/useResponsive";
@@ -14,6 +15,7 @@ import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import ClubNoticeHeader from "./components/clubNoticeHeader";
 import ClubNoticeDropdown from "@/components/dropdown/clubNoticeDropdown";
 import { NOTICE_DATA } from "@/data/clubNotice";
+import pin from "@/images/icon/pin.svg";
 
 const NoticePage = () => {
   const router = useRouter();
@@ -48,9 +50,40 @@ const NoticePage = () => {
               <LeftMenu />
             </div>
             <div className="w-full">
-              <p className="text-subtext2 text-mobile_body2_m md:text-h4 mb-4 md:mb-[22px]">
-                총 {NOTICE_DATA.length}개의 공지사항이 있어요.
-              </p>
+              <div className="flex flex-col md:flex-col-reverse">
+                <p
+                  className="text-subtext2 text-mobile_body2_m md:text-h4
+              mb-4 mt-[22px] md:mt-9 md:mb-[22px]"
+                >
+                  총 {NOTICE_DATA.length}개의 공지사항이 있어요.
+                </p>
+                <div>
+                  <div className="flex items-center gap-3 md:gap-4 md:mb-4 mb-3">
+                    <Image
+                      src={pin}
+                      alt={"pin"}
+                      width={24}
+                      height={24}
+                      className="md:w-8 md:h-8"
+                    />
+                    <h1 className="text-text1 text-body1_sb md:text-h3">
+                      고정된 공지사항
+                    </h1>
+                  </div>
+                  <>
+                    {NOTICE_DATA.filter((notice) => notice.pin).map(
+                      (notice) => (
+                        <ClubNoticeDropdown
+                          key={notice.id}
+                          notice={notice}
+                          isOpen={openDropdownId === notice.id}
+                          setOpenDropdownId={setOpenDropdownId}
+                        />
+                      )
+                    )}
+                  </>
+                </div>
+              </div>
               <ClubNoticeHeader />
               <div className="flex flex-col gap-2.5">
                 {NOTICE_DATA.map((notice) => (
