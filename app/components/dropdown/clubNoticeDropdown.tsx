@@ -31,6 +31,7 @@ interface ClubNoticeDropdownProps {
   isFirstPin?: boolean;
   isLastPin?: boolean;
   isSinglePin?: boolean;
+  role?: string;
 }
 
 const ClubNoticeDropdown = ({
@@ -41,6 +42,7 @@ const ClubNoticeDropdown = ({
   isFirstPin,
   isLastPin,
   isSinglePin,
+  role,
 }: ClubNoticeDropdownProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [openWrite, setOpenWrite] = useState<boolean>(false);
@@ -154,7 +156,9 @@ const ClubNoticeDropdown = ({
                 alt="menu"
                 width={20}
                 height={20}
-                className="md:w-6 md:h-6 cursor-pointer"
+                className={`md:w-6 md:h-6 cursor-pointer ${
+                  role === "ADMIN" && "hidden"
+                }`}
                 onClick={handleMenuClick}
               />
             </div>
