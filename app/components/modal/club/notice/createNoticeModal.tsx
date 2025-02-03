@@ -179,7 +179,7 @@ const CreateNoticeModal = ({ onClose, onSubmit }: CreateNoticeModalProps) => {
                   className="hidden"
                   onChange={handleFileChange}
                 />
-                <RoundPlusBtn onClick={triggerFileInput} />
+                <RoundPlusBtn onClick={triggerFileInput} className="p-3" />
               </label>
             )}
           </div>
