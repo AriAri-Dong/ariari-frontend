@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import ClubMemberList from "../components/clubMemberList";
 import ClubMemberCategoryBar from "../components/clubMemberCategoryBar";
 import ClubMemberHeader from "../components/clubMemberHeader";
-import LeftMenu from "../../components/menu/leftMenu";
+import LeftMenu from "../../../components/menu/leftMenu";
 import { MEMBER_STATUS_TYPE } from "@/data/pulldown";
 import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
 import { ClubMemberData } from "@/types/member";
