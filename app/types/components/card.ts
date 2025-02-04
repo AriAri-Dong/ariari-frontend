@@ -17,8 +17,12 @@ export interface MainRecruitmentCardProps {
     region: ClubRegionType;
     target: ParticipantType;
   };
-  isScrap: boolean;
+  isMyRecruitmentScrap: boolean;
   procedureType: ProcedureType;
+  recruitmentBookmarks: number;
+  isMyClub: boolean;
+  isMyApply: boolean;
+  isMyClubBookmark: boolean;
 }
 export interface GuideData {
   title: string;
