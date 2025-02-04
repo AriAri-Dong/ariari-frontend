@@ -1,5 +1,15 @@
-import { CLUBS, CLUBS_SEARCH } from "../apiUrl";
+import { CLUBS, CLUBS_MY, CLUBS_SEARCH } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
+
+interface Pageable {
+  page: number;
+  size: number;
+  sort?: string[];
+}
+
+interface ClubInfoResponse {
+  data: any;
+}
 
 // 전체 동아리 검색 조회
 export const getAllClubsInfo = async () => {
@@ -23,32 +33,52 @@ export const createClub = async (clubData: any) => {
   }
 };
 
-// 동아리 검색 조회
-export const getClubsInfo = async () => {
+/**
+ * 동아리 검색 조회 API 호출
+ * @param query 검색할 문자열
+ * @param pageable 페이지네이션 정보
+ * @returns 클럽 정보
+ */
+export const getClubsInfo = async (
+  query: string,
+  pageable: Pageable
+): Promise<ClubInfoResponse> => {
   try {
-    const response = await axiosInstance.get(CLUBS_SEARCH);
+    const params = {
+      query,
+      page: pageable.page,
+      size: pageable.size,
+      ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
+    };
+
+    const response = await axiosInstance.get<ClubInfoResponse>(CLUBS_SEARCH, {
+      params,
+    });
     return response.data;
   } catch (error) {
-    console.error("Error fetching user info:", error);
+    console.error("Error fetching club info:", error);
     throw error;
   }
 };
 
-// 내 동아리 조회
+/**
+ * 내 동아리 목록 조회 API 호출
+ * @param pageable 페이지네이션 정보
+ * @returns 내 동아리 목록
+ */
 export const getMyClubs = async (
-  page: number = 0,
-  size: number = 1,
-  sort: string[] = ["name"]
-) => {
+  pageable: Pageable
+): Promise<ClubInfoResponse> => {
   try {
     const params = {
-      page,
-      size,
-      sort: sort.join(","),
+      page: pageable.page,
+      size: pageable.size,
+      ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
     };
 
-    // 요청 보내기
-    const response = await axiosInstance.get(CLUBS_SEARCH, { params });
+    const response = await axiosInstance.get<ClubInfoResponse>(CLUBS_MY, {
+      params,
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching my clubs info:", error);
