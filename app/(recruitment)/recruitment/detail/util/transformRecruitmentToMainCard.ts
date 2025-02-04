@@ -1,10 +1,10 @@
-import { MainRecruitmentCardProps } from "@/types/components/card";
+import { ClubInfoCard } from "@/types/components/card";
 import { RecruitmentResponse } from "@/types/recruitment";
 import formatDateToDot from "@/utils/formatDateToDot";
 
 export function transformRecruitmentToMainCard(
   recruitmentResponse: RecruitmentResponse
-): MainRecruitmentCardProps {
+): ClubInfoCard {
   const { recruitmentData, clubData, bookmarks, isMyClub, isMyApply } =
     recruitmentResponse;
 

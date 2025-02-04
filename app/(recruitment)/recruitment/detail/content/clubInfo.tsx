@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import test_image from "@/images/test/test_image.jpg";
 import Keyword from "@/components/button/keyword";
@@ -16,18 +17,18 @@ import ClubProfileCard from "@/components/card/clubProfileCard";
 import ReportBottomSheet from "@/components/bottomSheet/report/reportBottomSheet";
 import Alert from "@/components/alert/alert";
 import ReportModal from "@/components/modal/reportModal";
-import { MainRecruitmentCardProps } from "@/types/components/card";
+import { ClubInfoCard } from "@/types/components/card";
 import {
   fieldMap,
   participantMap,
   regionMap,
 } from "@/utils/clubCategoryMapping";
-import { useSearchParams } from "next/navigation";
 import { deleteClubBookmark, postClubBookmark } from "@/api/api";
 
 interface ClubInfoProps {
   recruitmentId?: number;
-  recruitmentData: MainRecruitmentCardProps;
+  recruitmentData: ClubInfoCard;
+
   isPreview?: boolean;
 }
 

@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import ClubInfo from "./content/clubInfo";
 import ClubActivities from "./content/clubActivities";
 
-import { MainRecruitmentCardProps } from "@/types/components/card";
+import { ClubInfoCard } from "@/types/components/card";
 import { RecruitmentData, RecruitmentNoteData } from "@/types/recruitment";
 import { transformRecruitmentToMainCard } from "./util/transformRecruitmentToMainCard";
 
@@ -24,8 +24,9 @@ const RecruitmentDetailPage = () => {
     RecruitmentData[]
   >([]);
   // 변환된 모집 정보 정보
-  const [recruitmentData, setRecruitmentData] =
-    useState<MainRecruitmentCardProps | null>(null);
+  const [recruitmentData, setRecruitmentData] = useState<ClubInfoCard | null>(
+    null
+  );
   // 추가 질문 정보
   const [recruitmentNoteDataList, setRecruitmentNoteDataList] = useState<
     RecruitmentNoteData[] | null

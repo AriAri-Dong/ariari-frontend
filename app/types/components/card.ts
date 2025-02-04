@@ -1,8 +1,24 @@
 import { StaticImageData } from "next/image";
-import { ClubFieldType, ClubRegionType, ParticipantType } from "../club";
+import { ClubFieldType, ClubRegionType, ParticipantType } from "@/types/club";
 import { ProcedureType } from "@/types/recruitment";
 
 export interface MainRecruitmentCardProps {
+  id: number;
+  date: string;
+  clubName: string;
+  clubImageUrl?: string | StaticImageData;
+  title: string;
+  imageUrl: string | StaticImageData;
+  tag: {
+    affiliation: string;
+    field: string;
+    region: string;
+    target: string;
+  };
+  isScrap: boolean;
+}
+
+export interface ClubInfoCard {
   id: number;
   startDate: string;
   endDate: string;
@@ -24,6 +40,7 @@ export interface MainRecruitmentCardProps {
   isMyApply: boolean;
   isMyClubBookmark: boolean;
 }
+
 export interface GuideData {
   title: string;
   instructions: string[];

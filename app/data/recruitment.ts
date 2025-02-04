@@ -1,6 +1,8 @@
 import { RecruitmentData } from "@/types/recruitment";
 import noimage from "@/images/test/test.svg";
-import { MainRecruitmentCardProps } from "@/types/components/card";
+import {
+  ClubInfoCard,
+} from "@/types/components/card";
 
 export const RECRUITMENT_DATA: RecruitmentData[] = [
   {
@@ -187,7 +189,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
 ];
 
-export const MAIN_RECRUITMENT_CARD_DATA: MainRecruitmentCardProps = {
+export const MAIN_RECRUITMENT_CARD_DATA: ClubInfoCard = {
   id: 673127617679043209,
   startDate: "2025.03.01",
   endDate: "2025.03.31",
