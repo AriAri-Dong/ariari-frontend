@@ -1,3 +1,5 @@
+"use client";
+
 interface RecruitmentSummaryProps {
   members: number;
   startDate: string;

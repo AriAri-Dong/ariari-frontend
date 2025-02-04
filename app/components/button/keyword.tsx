@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import affiliation from "@/images/icon/affiliation.svg";
 import region from "@/images/icon/region.svg";
