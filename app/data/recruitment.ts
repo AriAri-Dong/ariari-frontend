@@ -1,5 +1,6 @@
 import { RecruitmentData } from "@/types/recruitment";
 import noimage from "@/images/test/test.svg";
+import { MainRecruitmentCardProps } from "@/types/components/card";
 
 export const RECRUITMENT_DATA: RecruitmentData[] = [
   {
@@ -185,3 +186,26 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     isMyBookmark: false,
   },
 ];
+
+export const MAIN_RECRUITMENT_CARD_DATA: MainRecruitmentCardProps = {
+  id: 673127617679043209,
+  startDate: "2025.03.01",
+  endDate: "2025.03.31",
+  clubName: "코딩 동아리",
+  clubImageUrl: noimage,
+  title: "2025년 봄 신입 동아리 모집",
+  imageUrl: noimage,
+  limits: 50,
+  tag: {
+    affiliation: "세종대학교",
+    field: "STUDY",
+    region: "SEOUL_GYEONGGI",
+    target: "UNIVERSITY_STUDENT",
+  },
+  isMyRecruitmentScrap: false,
+  procedureType: "DOCUMENT",
+  recruitmentBookmarks: 12,
+  isMyClub: true,
+  isMyApply: false,
+  isMyClubBookmark: true,
+};
