@@ -1,14 +1,8 @@
 "use client";
 
 import useResponsive from "@/hooks/useResponsive";
+import { MembershipBalance } from "@/types/club";
 import React from "react";
-
-export interface MembershipBalance {
-  date: string; // YYYY.MM.DD 형식
-  title: string;
-  amount: number; // 입금(양수) 또는 출금(음수)
-  balance: number; // 현재 잔액
-}
 
 interface MembershipBalanceListProps {
   transactions: MembershipBalance[];
