@@ -33,6 +33,7 @@ const TestPage = () => {
   const [openReview, setOpenReview] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
+  // 동아리 전체 조회
   useEffect(() => {
     const fetchClubsInfo = async () => {
       try {
@@ -44,13 +45,14 @@ const TestPage = () => {
       }
     };
 
-    fetchClubsInfo(); // 동아리 정보 가져오기
+    fetchClubsInfo();
   }, []);
 
+  // 동아리 상세 정보 조회
   useEffect(() => {
     const fetchClubsInfo = async () => {
       try {
-        const data = await getClubDetails("672334995007643413");
+        const data = await getClubDetails("674459337435096561");
         console.log("동아리 상세 정보 >>", data);
       } catch (err) {
         console.log(err);
@@ -61,10 +63,11 @@ const TestPage = () => {
     fetchClubsInfo();
   }, []);
 
+  // 나의 동아리 조회
   useEffect(() => {
     const fetchClubsInfo = async () => {
       try {
-        const data = await getMyClubs(1, 10, ["name"]);
+        const data = await getMyClubs({ page: 10, size: 1, sort: ["name"] });
         console.log(data);
       } catch (err) {
         console.log(err);
