@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import ClubInfo from "./content/clubInfo";
@@ -79,13 +79,13 @@ const RecruitmentDetailPage = () => {
   }
 
   return (
-    <>
+    <Suspense>
       <ClubInfo recruitmentData={recruitmentData} />
       <ClubActivities
         recruitmentNoteDataList={recruitmentNoteDataList}
         prevRecruitmentList={prevRecruitmentList || []}
       />
-    </>
+    </Suspense>
   );
 };
 
