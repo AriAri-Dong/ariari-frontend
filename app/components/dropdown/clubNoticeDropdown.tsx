@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSwipeable } from "react-swipeable";
 import vector from "@/images/icon/pullDown.svg";
 import dotMenu from "@/images/icon/dotMenu.svg";
@@ -11,6 +11,8 @@ import RoundVectorBtn from "../button/iconBtn/roundVectorBtn";
 import CommonBottomSheet from "../bottomSheet/commonBottomSheet";
 import NotiPopUp from "../modal/notiPopUp";
 import Alert from "../alert/alert";
+import useResponsive from "@/hooks/useResponsive";
+import DotMenuDropDown from "./option/dotMenuDropdown";
 
 const OPTION = [
   { id: 1, label: "수정하기" },
@@ -21,6 +23,7 @@ interface ClubNoticeDropdownProps {
   notice: {
     id: string;
     title: string;
+    date: string;
     text: string;
     userName: string;
     imageUrls: any[];
@@ -31,7 +34,6 @@ interface ClubNoticeDropdownProps {
   isFirstPin?: boolean;
   isLastPin?: boolean;
   isSinglePin?: boolean;
-  role?: string;
 }
 
 const ClubNoticeDropdown = ({
@@ -42,10 +44,13 @@ const ClubNoticeDropdown = ({
   isFirstPin,
   isLastPin,
   isSinglePin,
-  role,
 }: ClubNoticeDropdownProps) => {
+  const menuRef = useRef<HTMLDivElement>(null);
+  const isMdUp = useResponsive("md");
+
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
-  const [openWrite, setOpenWrite] = useState<boolean>(false);
+  const [openOption, setOpenOption] = useState<boolean>(false);
+  const [isOpenOption, setIsOpenOption] = useState<boolean>(false);
   const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState<boolean>(false);
   const [modifyOpen, setModifyOpen] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string>("");
@@ -56,7 +61,20 @@ const ClubNoticeDropdown = ({
   }, [isOpen, notice.id, setOpenDropdownId]);
 
   const handleMenuClick = () => {
-    setOpenWrite(!openWrite);
+    if (isMdUp) {
+      setIsOpenOption(!isOpenOption);
+    } else {
+      setOpenOption(!openOption);
+    }
+  };
+
+  const handleOptionClick = (label: string) => {
+    setIsOpenOption(false);
+    if (label === "삭제하기") {
+      setIsNotiPopUpOpen(true);
+    } else if (label === "수정하기") {
+      setModifyOpen(true);
+    }
   };
 
   const handleDelete = () => {
@@ -98,6 +116,21 @@ const ClubNoticeDropdown = ({
   const handleSliderNextClick = () => {
     if (!isLastSlide) setCurrentImageIndex((prev) => prev + 1);
   };
+
+  // 메뉴 영역 밖 클릭 시 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpenOption(false);
+      }
+    };
+    if (isOpenOption) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpenOption]);
 
   return (
     <div
@@ -151,21 +184,35 @@ const ClubNoticeDropdown = ({
                 }`}
                 onClick={handleVectorClick}
               />
-              <Image
-                src={dotMenu}
-                alt="menu"
-                width={20}
-                height={20}
-                className={`md:w-6 md:h-6 cursor-pointer ${
-                  role === "ADMIN" && "hidden"
-                }`}
-                onClick={handleMenuClick}
-              />
+              {isMdUp ? (
+                <div ref={menuRef} className="relative inline-block">
+                  <Image
+                    src={dotMenu}
+                    alt="menu"
+                    width={24}
+                    height={24}
+                    className="cursor-pointer"
+                    onClick={handleMenuClick}
+                  />
+                  {isOpenOption && (
+                    <DotMenuDropDown onClick={handleOptionClick} />
+                  )}
+                </div>
+              ) : (
+                <Image
+                  src={dotMenu}
+                  alt="menu"
+                  width={20}
+                  height={20}
+                  className="cursor-pointer"
+                  onClick={handleMenuClick}
+                />
+              )}
             </div>
           </div>
         </div>
         <p className="text-subtext2 text-mobile_body4_r md:hidden">
-          2024.03.04
+          {notice.date}
         </p>
       </div>
 
@@ -234,13 +281,13 @@ const ClubNoticeDropdown = ({
           )}
         </div>
       )}
-      {openWrite && (
+      {openOption && (
         <CommonBottomSheet
           optionData={OPTION}
           selectedOption={""}
           handleMenuClick={(label: string) => {
             setSelectedOption(label);
-            setOpenWrite(true);
+            setOpenOption(true);
             if (label === "삭제하기") {
               setIsNotiPopUpOpen(true);
             } else if (label === "수정하기") {
@@ -248,7 +295,7 @@ const ClubNoticeDropdown = ({
             }
           }}
           onClose={() => {
-            setOpenWrite(false);
+            setOpenOption(false);
           }}
         />
       )}
