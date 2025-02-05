@@ -67,7 +67,7 @@ const HelpPage = () => {
         >
           총 {NOTICE_DATA.length}개의 공지사항이 있어요.
         </p>
-        <ClubNoticeHeader role="ADMIN" />
+        <ClubNoticeHeader role="SERVICE_ADMIN" />
         <div className="flex flex-col gap-2.5">
           {NOTICE_DATA.map((notice) => (
             <ClubNoticeDropdown
@@ -76,7 +76,7 @@ const HelpPage = () => {
               isOpen={openDropdownId === notice.id}
               setOpenDropdownId={setOpenDropdownId}
               pin={false}
-              role="ADMIN"
+              role="SERVICE_ADMIN"
             />
           ))}
         </div>
