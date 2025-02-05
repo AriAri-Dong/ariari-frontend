@@ -32,7 +32,7 @@ const MembershipBalanceList: React.FC<MembershipBalanceListProps> = ({
             <div className="flex w-full md:flex-row flex-col md:gap-10 gap-[6px]">
               {/* 날짜 */}
               {isMdUp ? (
-                <div className="flex flex-col items-center md:w-[65px] place-items-start text-subtext2 md:ml-5">
+                <div className="flex flex-col md:w-[65px] items-start text-subtext2 md:ml-5">
                   <p className="md:text-body3_m">{`${year}.${month}`}</p>
                   <p className="md:text-h1_contents_title">{day}</p>
                 </div>
