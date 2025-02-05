@@ -1,5 +1,5 @@
 interface ClubNoticeHeaderProps {
-  role?: string;
+  role: string;
 }
 
 const ClubNoticeHeader = ({ role }: ClubNoticeHeaderProps) => {
@@ -7,7 +7,7 @@ const ClubNoticeHeader = ({ role }: ClubNoticeHeaderProps) => {
     <div
       className={`flex-row justify-between items-center w-full my-2.5 hidden md:flex
               py-2 pl-5 ${
-                role === "ADMIN" ? "pr-[96px]" : "pr-[125px]"
+                role === "ADMIN" ? "pr-[125px]" : "pr-[96px]"
               } rounded-lg bg-white70 text-subtext2 text-body1_m`}
     >
       <div className="flex gap-5">
