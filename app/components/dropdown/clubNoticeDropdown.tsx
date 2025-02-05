@@ -13,6 +13,9 @@ import NotiPopUp from "../modal/notiPopUp";
 import Alert from "../alert/alert";
 import useResponsive from "@/hooks/useResponsive";
 import DotMenuDropDown from "./option/dotMenuDropdown";
+import IconBtn from "../button/withIconBtn/IconBtn";
+import ReportModal from "../modal/reportModal";
+import ReportBottomSheet from "../bottomSheet/report/reportBottomSheet";
 
 const OPTION = [
   { id: 1, label: "수정하기" },
@@ -34,6 +37,7 @@ interface ClubNoticeDropdownProps {
   isFirstPin?: boolean;
   isLastPin?: boolean;
   isSinglePin?: boolean;
+  role: string;
 }
 
 const ClubNoticeDropdown = ({
@@ -44,6 +48,7 @@ const ClubNoticeDropdown = ({
   isFirstPin,
   isLastPin,
   isSinglePin,
+  role,
 }: ClubNoticeDropdownProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
@@ -52,6 +57,7 @@ const ClubNoticeDropdown = ({
   const [openOption, setOpenOption] = useState<boolean>(false);
   const [isOpenOption, setIsOpenOption] = useState<boolean>(false);
   const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState<boolean>(false);
+  const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
   const [modifyOpen, setModifyOpen] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -75,6 +81,15 @@ const ClubNoticeDropdown = ({
     } else if (label === "수정하기") {
       setModifyOpen(true);
     }
+  };
+
+  const handleReport = () => {
+    setIsReportOpen(true);
+  };
+
+  const handleReportSubmit = () => {
+    setIsReportOpen(false);
+    setAlertMessage("신고가 정상적으로 접수되었습니다.");
   };
 
   const handleDelete = () => {
@@ -184,29 +199,33 @@ const ClubNoticeDropdown = ({
                 }`}
                 onClick={handleVectorClick}
               />
-              {isMdUp ? (
-                <div ref={menuRef} className="relative inline-block">
-                  <Image
-                    src={dotMenu}
-                    alt="menu"
-                    width={24}
-                    height={24}
-                    className="cursor-pointer"
-                    onClick={handleMenuClick}
-                  />
-                  {isOpenOption && (
-                    <DotMenuDropDown onClick={handleOptionClick} />
+              {role === "ADMIN" && (
+                <>
+                  {isMdUp ? (
+                    <div ref={menuRef} className="relative inline-block">
+                      <Image
+                        src={dotMenu}
+                        alt="menu"
+                        width={24}
+                        height={24}
+                        className="cursor-pointer"
+                        onClick={handleMenuClick}
+                      />
+                      {isOpenOption && (
+                        <DotMenuDropDown onClick={handleOptionClick} />
+                      )}
+                    </div>
+                  ) : (
+                    <Image
+                      src={dotMenu}
+                      alt="menu"
+                      width={20}
+                      height={20}
+                      className="cursor-pointer"
+                      onClick={handleMenuClick}
+                    />
                   )}
-                </div>
-              ) : (
-                <Image
-                  src={dotMenu}
-                  alt="menu"
-                  width={20}
-                  height={20}
-                  className="cursor-pointer"
-                  onClick={handleMenuClick}
-                />
+                </>
               )}
             </div>
           </div>
@@ -231,9 +250,19 @@ const ClubNoticeDropdown = ({
               <h1 className="text-subtext1 text-mobile_body1_r md:text-body1_r">
                 {notice.text}
               </h1>
-              <p className="text-unselected text-mobile_body2_m md:text-body2_m">
-                {notice.userName}
-              </p>
+              <div className="flex justify-between items-center">
+                <p className="text-unselected text-mobile_body2_m md:text-body2_m">
+                  {notice.userName}
+                </p>
+                {role === "MEMBER" && (
+                  <IconBtn
+                    type={"declaration"}
+                    size={"small"}
+                    title={""}
+                    onClick={handleReport}
+                  />
+                )}
+              </div>
             </div>
           </div>
 
@@ -315,6 +344,19 @@ const ClubNoticeDropdown = ({
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
+      {isMdUp
+        ? isReportOpen && (
+            <ReportModal
+              onClose={() => setIsReportOpen(false)}
+              onSubmit={handleReportSubmit}
+            />
+          )
+        : isReportOpen && (
+            <ReportBottomSheet
+              onClose={() => setIsReportOpen(false)}
+              onSubmit={handleReportSubmit}
+            />
+          )}
     </div>
   );
 };
