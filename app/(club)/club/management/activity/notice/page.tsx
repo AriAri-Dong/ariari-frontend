@@ -7,9 +7,7 @@ import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import Alert from "@/components/alert/alert";
 import useResponsive from "@/hooks/useResponsive";
-import ActivityReviewModal from "@/components/modal/review/activityReviewModal";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
-import ActivityReviewBottomSheet from "@/components/bottomSheet/review/activityReviewBottomSheet";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import ClubNoticeHeader from "./components/clubNoticeHeader";
@@ -22,6 +20,11 @@ import CreateNoticeBottomSheet from "@/components/bottomSheet/notice/createNotic
 const NoticePage = () => {
   const router = useRouter();
   const isMdUp = useResponsive("md");
+
+  // 임시 권한 설정 (API 연동 전)
+  const [authority, setAuthority] = useState<
+    "USER" | "MEMBER" | "ADMIN" | "SERVICE_ADMIN"
+  >("ADMIN");
 
   const [openNotice, setOpenNotice] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -55,7 +58,7 @@ const NoticePage = () => {
   return (
     <>
       <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
-        <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
+        <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:mt-8 md:px-5">
           <MobileMenu />
           <div className="flex lg:gap-9">
             {/* 임시 메뉴 */}
@@ -66,7 +69,7 @@ const NoticePage = () => {
               <div className="flex flex-col md:flex-col-reverse">
                 <p
                   className="text-subtext2 text-mobile_body2_m md:text-h4
-              mb-4 mt-[22px] md:mt-9 md:mb-[22px]"
+              mb-4 md:mt-9 md:mb-[22px]"
                 >
                   총 {NOTICE_DATA.length}개의 공지사항이 있어요.
                 </p>
@@ -100,13 +103,14 @@ const NoticePage = () => {
                           isFirstPin={index === 0}
                           isLastPin={index === pinnedNotices.length - 1}
                           isSinglePin={pinnedNotices.length === 1}
+                          role={authority}
                         />
                       )
                     )}
                   </div>
                 </div>
               </div>
-              <ClubNoticeHeader />
+              <ClubNoticeHeader role={authority} />
               <div className="flex flex-col gap-2.5">
                 {NOTICE_DATA.map((notice) => (
                   <ClubNoticeDropdown
@@ -119,6 +123,7 @@ const NoticePage = () => {
                       handleDropdownToggle(notice.id, false)
                     }
                     pin={false}
+                    role={authority}
                   />
                 ))}
               </div>
