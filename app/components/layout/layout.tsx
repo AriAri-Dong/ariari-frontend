@@ -31,6 +31,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/close",
     "/club/leave",
     "/club/activityHistory",
+    "/club/management/members",
   ];
 
   const isSpecialComponent = specialPaths.some((path) =>
