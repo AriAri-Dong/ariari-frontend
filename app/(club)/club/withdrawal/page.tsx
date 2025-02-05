@@ -34,7 +34,7 @@ const WithDrawal = () => {
   const [clubMember, setClubMember] = useState<ClubMemberData | null>(
     CLUB_MEMBER_DATA[1]
   ); // 0 => 일반회원, 1 => 관리자로 테스트가능
-  const [clubLimits, setClubLimits] = useState<number>(2);
+  const [clubLimits, setClubLimits] = useState<number>(3);
 
   const isGeneral =
     clubMember == null || clubMember.clubMemberRoleType === "GENERAL";
@@ -56,9 +56,9 @@ const WithDrawal = () => {
     // 탈퇴 로직 추가
     setShowSuccessModal(true);
     // 3초 뒤 메인 페이지로 이동
-    setTimeout(() => {
-      router.push("/");
-    }, 3000);
+    // setTimeout(() => {
+    //   router.push("/");
+    // }, 3000);
   };
 
   return (
@@ -122,7 +122,7 @@ const WithDrawal = () => {
             onClose={() => {
               setShowConfirmModal(false);
             }}
-            icon={"school"}
+            icon={"leave"}
             title={"정말 동아리를 탈퇴할까요?"}
             description={`탈퇴 후에는 복구가 불가능하며,\n동아리 관련 일부 데이터는 유지될 수 있어요.`}
             modalType={"button"}
@@ -131,7 +131,7 @@ const WithDrawal = () => {
             secondButton={() => setShowConfirmModal(false)}
             secondButtonText={"취소하기"}
           />
-        ) : clubLimits >= 2 ? (
+        ) : clubLimits <= 2 ? (
           <NotiPopUp
             onClose={() => {
               setShowConfirmModal(false);
@@ -150,7 +150,7 @@ const WithDrawal = () => {
             onClose={() => {
               setShowConfirmModal(false);
             }}
-            icon={"school"}
+            icon={"warning"}
             title={"동아리원 수가 2명 이상이에요"}
             description={`동아리는 동아리 관리자가\n유일한 구성원일 때만 폐쇄가 가능해요.`}
             modalType={"x-button"}
@@ -164,7 +164,7 @@ const WithDrawal = () => {
             onClose={() => {
               setShowSuccessModal(false);
             }}
-            icon={"school"}
+            icon={isGeneral ? "check" : "closed"}
             title={`동아리 ${isGeneral ? "탈퇴" : "폐쇄"} 완료`}
             description="곧, 메인 페이지로 이동해요."
             modalType={"x-button"}
