@@ -8,4 +8,8 @@ export default class HeaderToken {
       delete api.defaults.headers.common.Authorization;
     }
   };
+
+  public static get = () => {
+    return api.defaults.headers.common.Authorization;
+  };
 }
