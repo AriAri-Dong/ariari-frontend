@@ -17,7 +17,7 @@ const Home = () => {
   const router = useRouter();
   const isMdUp = useResponsive("md");
   const searchParams = useSearchParams();
-  const firstLogin = searchParams.get("firstLogin");
+  const [firstLogin, setFirstLogin] = useState<string | null>(null);
   const { setUserData, accessToken } = useUserStore(
     useShallow((state) => ({
       setUserData: state.setUserData,
@@ -33,6 +33,10 @@ const Home = () => {
     setIsFirstLoginModalOpen(false);
     router.replace("/", undefined);
   };
+
+  useEffect(() => {
+    setFirstLogin(searchParams.get("firstLogin"));
+  }, [searchParams]);
 
   useEffect(() => {
     if (!!accessToken) {
