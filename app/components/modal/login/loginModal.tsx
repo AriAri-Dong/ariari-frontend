@@ -32,7 +32,7 @@ const LoginModal = ({ onClose }: LoginDialogProps) => {
   };
   return (
     <div
-      className="hidden md:flex fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+      className="hidden md:flex fixed inset-0 !ml-[-20px] z-50 items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
       style={{ zIndex: 1000 }}
     >
       <div className="absolute inset-0" onClick={onClose} />
