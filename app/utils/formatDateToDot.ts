@@ -7,3 +7,20 @@ function formatDateToDot(dateString: string): string {
   return `${year}. ${month}. ${day}`;
 }
 export default formatDateToDot;
+
+/**
+ *
+ * @param date Date 형식의 날짜
+ * @returns YYYY.MM.DD
+ */
+export const formatDate = (date: Date | null): string => {
+  return date
+    ? date
+        .toLocaleDateString("ko-KR", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+        })
+        .replace(/\.$/, "")
+    : "";
+};

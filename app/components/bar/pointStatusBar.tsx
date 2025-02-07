@@ -18,7 +18,7 @@ const PointStatusBar = ({
   return (
     <div className="hidden w-full lg:flex justify-center">
       <div
-        className="w-full bg-background rounded-56 border border-primary
+        className="w-full bg-background rounded-48 border border-primary
         max-w-[1248px] px-10 py-4"
       >
         <div className="flex justify-between">
