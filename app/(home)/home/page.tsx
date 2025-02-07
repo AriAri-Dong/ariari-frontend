@@ -1,16 +1,16 @@
 "use client";
 
-import ClubRanking from "@/pages/home/clubRanking";
 import LatestRecruitment from "./content/latestRecruitment";
 import PopularRecruitment from "./content/popularRecruitment";
 import { useUserStore } from "@/providers/user-store-provider";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProfileSettingModal from "@/components/modal/profileSetting/profileSettingModal";
-import useResponsive from "../../../hooks/useResponsive";
+import useResponsive from "@/hooks/useResponsive";
 import MobileProfileSettingModal from "@/components/modal/profileSetting/mobile/mobileProfileSettingModal";
 import { useEffect, useState } from "react";
 import { getUserData } from "@/api/apis";
 import HeaderToken from "@/api/headerToken";
+import ClubRanking from "@/(home)/home/content/clubRanking";
 
 const Home = () => {
   const router = useRouter();
