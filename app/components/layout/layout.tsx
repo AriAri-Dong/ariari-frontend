@@ -22,7 +22,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/activityHistory",
     "/club/management/activity/accounting",
   ];
-  const bgPaths = ["/application"];
+  const bgPaths = ["/application", "/help"];
   const mobileBgPaths = ["/club/create", "/withdrawal"];
   const clubDetailPaths = [
     "/club/review",
