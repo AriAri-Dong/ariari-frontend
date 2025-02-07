@@ -11,13 +11,17 @@ import rabbit from "@/images/profile/rabbit.svg";
 import NotificationModal from "../modal/notification/notificationModal";
 import LoginModal from "../modal/login/loginModal";
 import MobileLoginModal from "../modal/login/mobileLoginModal";
+import { useUserStore } from "@/providers/user-store-provider";
+import { useShallow } from "zustand/shallow";
 
 const User = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [username, setUsername] = useState<string>("백설공주");
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const nickname = useUserStore(
+    useShallow((state) => state.memberData.nickname)
+  );
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -50,7 +54,7 @@ const User = () => {
 
   return (
     <>
-      {isLoggedIn ? (
+      {isSignIn ? (
         <div className="relative flex items-center space-x-5" ref={dropdownRef}>
           <NotificationModal>
             <Notification size={"small"} onClick={() => {}} />
@@ -61,7 +65,7 @@ const User = () => {
             onClick={toggleDropdown}
           >
             <Image src={rabbit} alt={"profile"} width={40} height={40} />
-            <span className="text-subtext2 text-base">{username}님</span>
+            <span className="text-subtext2 text-base">{nickname}님</span>
             <Image src={arrow} alt="arrow" className="pr-2" />
           </button>
           {isDropdownOpen && (
