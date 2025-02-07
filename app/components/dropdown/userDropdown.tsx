@@ -1,6 +1,9 @@
 "use client";
 
+import HeaderToken from "@/api/headerToken";
+import { useUserStore } from "@/providers/user-store-provider";
 import { useRouter } from "next/navigation";
+import { useShallow } from "zustand/shallow";
 
 interface MenuProps {
   optionData: { id: number; label: string; path: string | null }[];
@@ -15,9 +18,14 @@ interface MenuProps {
  */
 const UserDropdown = ({ optionData, onClose }: MenuProps) => {
   const router = useRouter();
+  const { signOut } = useUserStore((state) => state);
 
   const handleMenuClick = (item: { label: string; path: string | null }) => {
     if (item.path) {
+      if (item.label === "로그아웃") {
+        HeaderToken.set("");
+        signOut();
+      }
       router.push(item.path);
     } else {
       console.log("No path available for:", item.label);
