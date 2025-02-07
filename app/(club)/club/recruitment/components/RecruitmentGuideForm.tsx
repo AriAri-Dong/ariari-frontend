@@ -84,7 +84,7 @@ const RecruitmentGuideForm = ({
       style={{ zIndex: 1000 }}
     >
       <div className="absolute inset-0" onClick={onClose}></div>
-      <div className="relative w-3/4 p-5 pt-8 pb-[26px] bg-white rounded-[16px]">
+      <div className="relative w-3/4 max-w-[680px] p-5 pt-8 pb-[26px] bg-white rounded-[16px]">
         <h1 className="mb-4 text-h1_contents_title text-center">
           모집공고 작성
         </h1>

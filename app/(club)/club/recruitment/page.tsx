@@ -54,18 +54,18 @@ const ClubRecruitmentPage = () => {
   const router = useRouter();
 
   const handleWrite = () => {
-    // 어떤 형식으로 넘겨주는지에 따라 수정가능성 o
-    if (!hasActivatedRecruitment(recruitmentData)) {
+    if (hasActivatedRecruitment(recruitmentData)) {
       setIsRecruitingModalOpen(true);
     } else {
       setIsRecruitmentGuideOpen(true);
     }
   };
 
+  // 모집 삭제 핸들러
   const handleDeleteRecruitment = (id: number) => {
     setRecruitmentData((prev) => prev.filter((item) => item.id !== id));
   };
-
+  // 모집 종료 핸들러
   const handleEndRecruitment = (id: number) => {
     setRecruitmentData((prev) =>
       prev.map((item) =>
@@ -73,7 +73,6 @@ const ClubRecruitmentPage = () => {
       )
     );
   };
-  useEffect(() => {}, [recruitmentData]);
 
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
