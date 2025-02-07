@@ -18,6 +18,9 @@ import ApplicationFromPreviewModal from "@/components/modal/club/preview/applica
 import { BADGE_ITEMS, BADGE_TITLES } from "@/data/club";
 import MobileApplicationFromPreviewModal from "@/components/modal/club/preview/mobileApplicationFormPreviewModal";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
+import ApplicationFormPeviewBottomSheet from "@/components/bottomSheet/preview/applicationPreviewBottomSheet";
+import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
+import ClubInfoWrapper from "@/(club)/club/content/clubInfoWrapper";
 
 const ApplicationFormPage = () => {
   const isMdUp = useResponsive("md");
@@ -86,13 +89,9 @@ const ApplicationFormPage = () => {
 
   return (
     <>
-      <div className="bg-background flex justify-center items-center w-full">
-        <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5">
-          <ClubInfoSection />
-        </div>
-      </div>
       <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
-        <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:pt-8 md:px-5">
+        <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:mt-8 md:px-5">
+          <MobileMenu />
           <div className="flex lg:gap-9">
             {/* 임시 메뉴 */}
             <LeftMenu />
@@ -245,7 +244,7 @@ const ApplicationFormPage = () => {
               />
             )
           : openPreview && (
-              <MobileApplicationFromPreviewModal
+              <ApplicationFormPeviewBottomSheet
                 onClose={() => setOpenPreview(false)}
                 portfolioCollected={isPortfolioCollected}
                 selectedFields={selectedBadges.map((badgeName) => {

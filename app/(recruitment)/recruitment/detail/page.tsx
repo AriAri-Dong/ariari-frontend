@@ -1,38 +1,19 @@
+"use client";
+
 import React from "react";
-import { RECRUITMENT_CARD } from "@/data/main";
-import { MainRecruitmentCardProps } from "@/types/components/card";
-import ClubActivities from "./content/clubActivities";
 import ClubInfo from "./content/clubInfo";
+import ClubActivities from "./content/clubActivities";
+import { RECRUITMENT_CARD } from "@/data/main";
 
-export async function generateStaticParams() {
-  const paths = RECRUITMENT_CARD.map((item) => ({
-    id: item.id.toString(),
-  }));
+const RecruitmentDetailPage = () => {
+  const recruitmentId = Math.floor(Math.random() * 17) + 1;
 
-  return paths.map((path) => ({
-    params: path,
-  }));
-}
-
-async function fetchRecruitmentData(
-  id: number
-): Promise<MainRecruitmentCardProps | null> {
-  return RECRUITMENT_CARD.find((item) => item.id === id) || null;
-}
-
-interface RecruitmentDetailPageProps {
-  recruitmentData: MainRecruitmentCardProps | null;
-}
-
-const RecruitmentDetailPage = async ({
-  params,
-}: {
-  params: { id: string };
-}) => {
-  const recruitmentData = await fetchRecruitmentData(Number(params.id));
+  const recruitmentData = RECRUITMENT_CARD.find(
+    (item) => item.id === recruitmentId
+  );
 
   if (!recruitmentData) {
-    return <h1>해당 모집 공고를 찾을 수 없습니다.</h1>;
+    return <div>데이터를 찾을 수 없습니다.</div>;
   }
 
   return (
