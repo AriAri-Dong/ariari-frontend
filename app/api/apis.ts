@@ -4,15 +4,28 @@ import { AuthResponseType, UserDataResponseType } from "@/types/api";
 export const getTokenWithCode = async (code: string) => {
   const url = `/login/kakao?code=${code}`;
 
-  const { data } = await api.get<AuthResponseType>(url);
+  try {
+    const { data } = await api.get<AuthResponseType>(url);
 
-  return data;
+    return data;
+  } catch (err) {
+    console.error(err);
+    return { accessToken: "", refreshToken: "", isFirstLogin: false };
+  }
 };
 
 export const getUserData = async () => {
   const url = `/member`;
 
-  const { data } = await api.get<UserDataResponseType>(url);
+  try {
+    const { data } = await api.get<UserDataResponseType>(url);
 
-  return data;
+    return data;
+  } catch (err) {
+    console.error(err);
+    return {
+      memberData: { id: "", nickname: "", profileType: "" },
+      schoolData: { name: "" },
+    };
+  }
 };

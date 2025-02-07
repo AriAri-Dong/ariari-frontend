@@ -38,9 +38,13 @@ const Home = () => {
     if (!!accessToken) {
       HeaderToken.set(accessToken);
     }
-    getUserData().then((res) => {
-      setUserData(res);
-    });
+    getUserData()
+      .then((res) => {
+        setUserData(res);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, [accessToken, setUserData]);
 
   return (
