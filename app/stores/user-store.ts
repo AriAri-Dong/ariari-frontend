@@ -23,10 +23,12 @@ export type UserActions = {
     accessToken,
     refreshToken,
     isFirstLogin,
+    isSignIn,
   }: {
     accessToken: string;
     refreshToken: string;
     isFirstLogin: boolean;
+    isSignIn: boolean;
   }) => void;
   signOut: () => void;
   setUserData: (userData: UserDataResponseType) => void;
@@ -60,23 +62,24 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
       persist(
         (set, get) => ({
           ...initState,
-          signIn: ({ accessToken, refreshToken, isFirstLogin }) =>
-            set((state) => ({
-              ...state,
-              accessToken: accessToken,
-              refreshToken: refreshToken,
-              isFirstLogin: isFirstLogin,
-            })),
+          signIn: ({ accessToken, refreshToken, isFirstLogin, isSignIn }) =>
+            set((state) => {
+              return {
+                ...state,
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+                isFirstLogin: isFirstLogin,
+                isSignIn: isSignIn,
+              };
+            }),
           signOut: () => set(() => initState),
           setUserData: (userData) =>
             set((state) => ({
               ...state,
               memberData: {
-                ...state.memberData,
                 ...userData.memberData,
               },
               schoolData: {
-                ...state.schoolData,
                 ...userData.schoolData,
               },
             })),
