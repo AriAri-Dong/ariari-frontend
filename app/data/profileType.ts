@@ -1,4 +1,4 @@
-import { profileType } from "@/models/member";
+import { profileType } from "@/types/member";
 
 export const PROFILE_TYPES: profileType[] = [
   "ARIARI_MOUSE",
