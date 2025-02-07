@@ -11,14 +11,18 @@ import { useEffect, useState } from "react";
 import { getUserData } from "@/api/apis";
 import HeaderToken from "@/api/headerToken";
 import ClubRanking from "@/(home)/home/content/clubRanking";
+import { useShallow } from "zustand/shallow";
 
 const Home = () => {
   const router = useRouter();
   const isMdUp = useResponsive("md");
   const searchParams = useSearchParams();
   const firstLogin = searchParams.get("firstLogin");
-  const { setUserData, accessToken, memberData } = useUserStore(
-    (state) => state
+  const { setUserData, accessToken } = useUserStore(
+    useShallow((state) => ({
+      setUserData: state.setUserData,
+      accessToken: state.accessToken,
+    }))
   );
 
   const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] = useState(
@@ -38,11 +42,6 @@ const Home = () => {
       setUserData(res);
     });
   }, [accessToken, setUserData]);
-
-  useEffect(() => {
-    console.log("----------------- memberData");
-    console.log(memberData);
-  }, [memberData]);
 
   return (
     <div className="w-full ">
