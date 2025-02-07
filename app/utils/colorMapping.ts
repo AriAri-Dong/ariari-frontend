@@ -1,4 +1,4 @@
-import { TokenType } from "@/models/club";
+import { TokenType } from "@/types/club";
 
 export const tokenBg: TokenType[] = [
   "C_TOKEN_1",

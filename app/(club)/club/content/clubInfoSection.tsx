@@ -13,16 +13,23 @@ import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
 import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
 import { CATEGORY, MENU_DATA } from "@/data/club";
+import useResponsive from "@/hooks/useResponsive";
+import ReportModal from "@/components/modal/reportModal";
+import ReportBottomSheet from "@/components/bottomSheet/report/reportBottomSheet";
 
 /**
  * Club 페이지에서 사용되는 clubInfo 공통 section
  * @returns
  */
 const ClubInfoSection = () => {
+  const isMdUp = useResponsive("md");
+
   const [isHeart, setIsHeart] = useState<boolean>(false);
   const [isCopy, setIsCopy] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
+  const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const onHeartClick = () => {
     setIsHeart(!isHeart);
@@ -30,6 +37,15 @@ const ClubInfoSection = () => {
 
   const handleModify = () => {
     console.log("동아리 정보 수정 핸들러");
+  };
+
+  const handleReport = () => {
+    setIsReportOpen(true);
+  };
+
+  const handleReportSubmit = () => {
+    setIsReportOpen(false);
+    setAlertMessage("신고가 정상적으로 접수되었습니다.");
   };
 
   // URL이 복사
@@ -120,7 +136,7 @@ const ClubInfoSection = () => {
               type={"declaration"}
               size={"large"}
               title={""}
-              onClick={() => {}}
+              onClick={handleReport}
               className="hidden md:block"
             />
             <Image
@@ -139,9 +155,11 @@ const ClubInfoSection = () => {
             아이들에게 애정이 있는 사람들만-
           </p>
         </div>
+        {/* === api 연동 과정에서 따로 분리할 가능성 있음 === */}
         <div className="block mt-4 mb-4 md:hidden">
           <LargeBtn title={"동아리 정보 수정"} onClick={handleModify} />
         </div>
+        {/* === === */}
         <div className="md:flex flex-row w-full md:justify-between md:max-w-[642px] hidden">
           {CATEGORY.map((item) => {
             return (
@@ -156,6 +174,22 @@ const ClubInfoSection = () => {
           })}
         </div>
       </div>
+      {isMdUp
+        ? isReportOpen && (
+            <ReportModal
+              onClose={() => setIsReportOpen(false)}
+              onSubmit={handleReportSubmit}
+            />
+          )
+        : isReportOpen && (
+            <ReportBottomSheet
+              onClose={() => setIsReportOpen(false)}
+              onSubmit={handleReportSubmit}
+            />
+          )}
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+      )}
       {isCopy && <Alert text={message} />}
       {/* <RecruitmentGuideFloatingBar deadline={new Date("2024-12-31T23:59:59")} /> */}
       {isBottomSheetOpen && (

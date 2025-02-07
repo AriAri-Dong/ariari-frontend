@@ -105,7 +105,7 @@ const HeaderTab = () => {
     <div className="relative w-full mt-[26px] md:mt-0">
       <nav
         ref={navRef}
-        className="flex space-x-4 md:justify-around lg:justify-start md:space-x-14
+        className="flex space-x-4 justify-between md:justify-around lg:justify-start md:space-x-14
         whitespace-nowrap overflow-x-auto no-scrollbar"
         style={{
           WebkitOverflowScrolling: "touch",
