@@ -73,9 +73,24 @@ const AcceptanceReviewDropdown = ({
         className="flex flex-col items-start gap-3 md:gap-0 md:flex-row md:justify-between md:items-center"
         onClick={onToggle}
       >
-        <div className="flex flex-col items-start md:flex-row gap-3 md:gap-12">
-          <div className="flex flex-col gap-4 md:gap-5">
-            <h3 className="text-body1_m md:text-h4_sb text-text1">{title}</h3>
+        <div className="flex flex-col w-full items-start md:flex-row gap-3 md:gap-12">
+          <div className="flex flex-col w-full gap-4 md:gap-5">
+            <div className="flex items-center justify-between">
+              <h3 className="text-body1_m md:text-h4_sb text-text1">{title}</h3>
+              <div
+                className="md:flex hidden sm:justify-between sm:items-center sm:w-full
+        md:w-auto md:self-startmd:m-w-[194px] md:gap-7"
+              >
+                <p className="text-subtext2 text-body4_r content-center md:text-body3_r">
+                  {date}
+                </p>
+                <TransparentSmallBtn
+                  title={"열람하기"}
+                  onClick={onBtnClick}
+                  round={true}
+                />
+              </div>
+            </div>
             <div className="flex flex-col gap-2 md:flex-row md:gap-[44px]">
               <IconBadge type={"서류"} text={`답변 문항 ${document}개`} />
               <IconBadge type={"면접"} text={`답변 문항 ${interview}개`} />
@@ -84,7 +99,7 @@ const AcceptanceReviewDropdown = ({
         </div>
         <div
           className="flex sm:justify-between sm:items-center sm:w-full
-        md:w-auto md:self-startmd:m-w-[194px] md:gap-7"
+        md:hidden"
         >
           <p className="text-subtext2 text-body4_r content-center md:text-body3_r">
             {date}

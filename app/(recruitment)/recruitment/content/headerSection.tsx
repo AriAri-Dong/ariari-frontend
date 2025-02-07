@@ -9,10 +9,10 @@ import { useRouter } from "next/navigation";
 import FilterBtn from "@/components/button/iconBtn/filterBtn";
 import PullDown from "@/components/pulldown/pullDown";
 import {
-  Affiliation_Type,
-  Area_Type,
-  Field_Type,
-  Target_Type,
+  AFFILIATION_TYPE,
+  AREA_TYPE,
+  FIELD_TYPE,
+  TARGET_TYPE,
 } from "@/data/pulldown";
 
 const HeaderSection = () => {
@@ -58,25 +58,25 @@ const HeaderSection = () => {
         </div>
         <div className="flex gap-2 mt-4 md:mt-0 md:gap-4">
           <PullDown
-            optionData={Affiliation_Type.slice(1)}
+            optionData={AFFILIATION_TYPE.slice(1)}
             optionSize="small"
             handleOption={setAffiliationType}
             selectedOption={affiliationType}
           />
           <PullDown
-            optionData={Field_Type.slice(1)}
+            optionData={FIELD_TYPE.slice(1)}
             optionSize="small"
             handleOption={setFieldType}
             selectedOption={fieldType}
           />
           <PullDown
-            optionData={Area_Type.slice(1)}
+            optionData={AREA_TYPE.slice(1)}
             optionSize="small"
             handleOption={setAreaType}
             selectedOption={areaType}
           />
           <PullDown
-            optionData={Target_Type.slice(1)}
+            optionData={TARGET_TYPE.slice(1)}
             optionSize="small"
             handleOption={setTargetType}
             selectedOption={targetType}

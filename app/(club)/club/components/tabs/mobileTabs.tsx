@@ -1,23 +1,29 @@
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+"use client";
 
-const TABS = [
-  { id: 1, label: "모집공고", url: "/club/create" },
-  {
-    id: 2,
-    label: "지원서 양식 작성",
-    url: "/club/management/recruitment/applicationForm",
-  },
-  {
-    id: 3,
-    label: "지원현황",
-    url: "/club/management/recruitment/applicationStatus",
-  },
-];
+import { useRouter, usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-const Tabs = () => {
+interface TabProps {
+  data: { id: number; label: string; url: string }[];
+}
+
+const Tabs = ({ data }: TabProps) => {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState(3);
+  const pathname = usePathname();
+
+  // URL과 일치하는 탭을 찾아 활성화
+  const currentTab = data.find((tab) => tab.url === pathname);
+  const [activeTab, setActiveTab] = useState<number>(
+    currentTab?.id || data[0].id
+  );
+
+  useEffect(() => {
+    // URL이 변경될 때 `activeTab`을 자동 업데이트
+    const matchedTab = data.find((tab) => tab.url === pathname);
+    if (matchedTab) {
+      setActiveTab(matchedTab.id);
+    }
+  }, [pathname, data]);
 
   const handleTabClick = (tabId: number, url: string) => {
     setActiveTab(tabId);
@@ -25,8 +31,8 @@ const Tabs = () => {
   };
 
   return (
-    <div className="flex gap-3 overflow-x-auto no-scrollbar whitespace-nowrap lg:hidden">
-      {TABS.map((tab) => (
+    <div className="flex gap-3 overflow-x-auto no-scrollbar whitespace-nowrap lg:hidden mb-5">
+      {data.map((tab) => (
         <div key={tab.id} className="flex flex-col gap-[6px]">
           <div
             onClick={() => handleTabClick(tab.id, tab.url)}
@@ -36,13 +42,7 @@ const Tabs = () => {
           >
             {tab.label}
           </div>
-          {activeTab === tab.id && (
-            <div
-              className={`h-0.5 ${
-                activeTab === tab.id ? "bg-primary" : "bg-unselected"
-              }`}
-            />
-          )}
+          {activeTab === tab.id && <div className="h-0.5 bg-primary" />}
         </div>
       ))}
     </div>

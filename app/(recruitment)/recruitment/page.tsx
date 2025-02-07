@@ -5,12 +5,12 @@ import FilterSection from "./content/filterSection";
 import MainRecruitmentCard from "@/components/card/mainRecruitmentCard";
 import HeaderSection from "./content/headerSection";
 import { RECRUITMENT_CARD } from "@/data/main";
-import { Popularity_Sort_Type } from "@/data/pulldown";
+import { POPULARITY_SORT_TYPE } from "@/data/pulldown";
 import { useState } from "react";
 
 const Recruitment = () => {
   const [sortType, setSortType] = useState<string>(
-    Popularity_Sort_Type[0].label
+    POPULARITY_SORT_TYPE[0].label
   );
 
   return (

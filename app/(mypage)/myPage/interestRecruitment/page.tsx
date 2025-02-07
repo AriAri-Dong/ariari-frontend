@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Popularity_Sort_Type } from "@/data/pulldown";
+import { POPULARITY_SORT_TYPE } from "@/data/pulldown";
 import HeaderSection from "./content/headerSection";
 import FilterSection from "./content/filterSection";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
@@ -13,7 +13,7 @@ const InterestRecruitmentPage = () => {
   const [isRecruitmentChecked, setIsRecruitmentChecked] =
     useState<boolean>(false);
   const [sortType, setSortType] = useState<string>(
-    Popularity_Sort_Type[0].label
+    POPULARITY_SORT_TYPE[0].label
   );
 
   const toggleDeadlineCheck = () => {

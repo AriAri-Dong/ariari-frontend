@@ -5,6 +5,7 @@ import SearchTermContext from "@/context/searchTermContext";
 import Footer from "./footer";
 import Header from "./header";
 import { usePathname } from "next/navigation";
+import ClubInfoWrapper from "@/(club)/club/content/clubInfoWrapper";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
@@ -13,11 +14,25 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const specialPaths = [
     "/recruitment/detail",
     "/club/review",
+    "/club/management/recruitment/applicationForm",
+    "/club/management/recruitment/applicationStatus",
+    "/club/help",
+    "/club/close",
+    "/club/leave",
+    "/club/activityHistory",
+    "/club/management/activity/accounting",
+  ];
+  const bgPaths = ["/application", "/help"];
+  const mobileBgPaths = ["/club/create", "/withdrawal"];
+  const clubDetailPaths = [
+    "/club/review",
     "/club/management",
     "/club/help",
+    "/club/close",
+    "/club/leave",
+    "/club/activityHistory",
+    "/club/management/members",
   ];
-  const bgPaths = ["/application", "/club/members"];
-  const mobileBgPaths = ["/club/create", "/withdrawal"];
 
   const isSpecialComponent = specialPaths.some((path) =>
     pathname.includes(path)
@@ -26,12 +41,15 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const isBgComponentOnlyMobile = mobileBgPaths.some((path) =>
     pathname.includes(path)
   );
+  const isClubDetailComponent = clubDetailPaths.some((path) =>
+    pathname.includes(path)
+  );
 
   return (
     <SearchTermContext.Provider value={{ searchTerm, setSearchTerm }}>
       <div className="flex flex-col min-h-screen">
         <Header />
-
+        {isClubDetailComponent && <ClubInfoWrapper />}
         <main
           className={`flex-grow flex justify-center items-center 
             ${isBgComponent && "bg-sub_bg"} 
