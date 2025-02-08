@@ -314,8 +314,8 @@ export const CLUB_LEFT_MENU_MEMBER = [
   },
   {
     id: 2,
-    label: "공지사항 (미구현)",
-    url: "/",
+    label: "공지사항",
+    url: "/club/notice",
     subUrl: [],
   },
   {

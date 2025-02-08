@@ -18,7 +18,7 @@ const ClubMemberCategoryBar = ({
   return (
     <div className="flex justify-between items-center mb-4 text-subtext2 text-mobile_body3_m rounded-[4px] md:text-body1_m  md:mb-5 md:px-6 md:py-1.5 md:bg-white70">
       <div
-        className="flex gap-1 md:gap-2.5 flex-[6] cursor-pointer"
+        className="flex items-center gap-1 md:gap-2.5 flex-[6] cursor-pointer"
         onClick={toggleSelectAll}
       >
         <Image

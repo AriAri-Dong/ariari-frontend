@@ -19,15 +19,18 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/management/recruitment/applicationStatus",
     "/club/help",
     "/club/activityHistory",
+    "/club/management/activity/accounting",
   ];
-  const bgPaths = ["/application"];
+  const bgPaths = ["/application","/help"];
   const mobileBgPaths = ["/club/create", "/withdrawal", "/club/close"];
+  
   // ClubInfo 컴포넌트 노출
   const clubDetailPaths = [
     "/club/review",
     "/club/management",
     "/club/help",
     "/club/activityHistory",
+    "/club/management/members",
   ];
   // Md 이상인 경우만 ClubInfo 컴포넌트 노출
   const clubDetailPathsOnlyMdUp = ["/club/withdrawal", "/club/close"];
