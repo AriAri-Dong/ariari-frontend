@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import affiliation from "@/images/icon/affiliation.svg";
 import region from "@/images/icon/region.svg";
@@ -11,14 +13,17 @@ const KEYWORD_LIST = [
   { id: 3, icon: target, title: "대상" },
 ];
 
-const Keyword = () => {
+interface KeyWordProps {
+  tags: string[];
+}
+const Keyword = ({ tags }: KeyWordProps) => {
   return (
     <div className="w-full flex justify-between">
-      {KEYWORD_LIST.map((item) => {
+      {KEYWORD_LIST.map((item, index) => {
         return (
           <div key={item.id} className="flex flex-col space-y-2 items-center">
             <Image src={item.icon} alt={item.title} width={56} height={56} />
-            <p className="text-subtext1 text-15 font-medium">{item.title}</p>
+            <p className="text-subtext1 text-15 font-medium">{tags[index]}</p>
           </div>
         );
       })}
