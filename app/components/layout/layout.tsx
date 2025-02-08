@@ -18,23 +18,19 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/management/recruitment/applicationForm",
     "/club/management/recruitment/applicationStatus",
     "/club/help",
-    "/club/close",
-    "/club/leave",
     "/club/activityHistory",
   ];
   const bgPaths = ["/application"];
-  const mobileBgPaths = ["/club/create", "/withdrawal"];
+  const mobileBgPaths = ["/club/create", "/withdrawal", "/club/close"];
   // ClubInfo 컴포넌트 노출
   const clubDetailPaths = [
     "/club/review",
     "/club/management",
     "/club/help",
-    "/club/close",
-    "/club/leave",
     "/club/activityHistory",
   ];
   // Md 이상인 경우만 ClubInfo 컴포넌트 노출
-  const clubDetailPathsOnlyMdUp = ["/club/withdrawal"];
+  const clubDetailPathsOnlyMdUp = ["/club/withdrawal", "/club/close"];
 
   const isSpecialComponent = specialPaths.some((path) =>
     pathname.includes(path)

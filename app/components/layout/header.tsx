@@ -40,6 +40,7 @@ const Header = () => {
     "/club/recruitment/create",
     "/notification",
     "/club/withdrawal",
+    "/club/close",
   ].includes(pathname);
 
   return (
