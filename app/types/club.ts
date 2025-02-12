@@ -1,5 +1,46 @@
 import { ClubMemberData, MemberData } from "./member";
 import { PageInfo } from "./pageInfo";
+export type ClubFieldType =
+  | "CULTURE"
+  | "VOLUNTEER"
+  | "STUDY"
+  | "STARTUP"
+  | "EMPLOYMENT"
+  | "SPORTS"
+  | "AMITY"
+  | "ETC";
+export type ClubRegionType =
+  | "SEOUL_GYEONGGI"
+  | "CHUNGCHEONG"
+  | "GYEONGNAM"
+  | "GYEONGBUK"
+  | "JEONNAM"
+  | "JEONBUK"
+  | "GANGWON"
+  | "JEJU"
+  | "FOREIGN";
+export type ParticipantType =
+  | "UNIVERSITY_STUDENT"
+  | "GRADUATE_STUDENT"
+  | "OFFICE_WORKER";
+
+export interface SchoolData {
+  name: string;
+}
+
+export interface ClubData {
+  id: number;
+  name: string;
+  profileUri: string;
+  body: string;
+  bannerUri: string;
+  clubCategoryType: ClubFieldType;
+  clubRegionType: ClubRegionType;
+  participantType: ParticipantType;
+  isMyBookmark: boolean;
+  schoolData: SchoolData;
+}
+
 export type TokenType =
   | "C_TOKEN_1"
   | "C_TOKEN_2"
@@ -48,4 +89,8 @@ export interface MembershipBalance {
   title: string;
   amount: number; // 입금(양수) 또는 출금(음수)
   balance: number; // 현재 잔액
+}
+export interface ClubDetailRes {
+  clubData: ClubData;
+  clubMemberData: ClubMemberData;
 }
