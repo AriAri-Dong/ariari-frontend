@@ -78,7 +78,7 @@ const SubPullDown = ({
           pl-2.5 py-1 cursor-pointer gap-1 md:gap-2 md:text-body1_m
         `}
       >
-        <span>{selectedOption}</span>
+        <span className="whitespace-nowrap ">{selectedOption}</span>
 
         <Image
           src={isDropdownOpen ? keyboardArrowUp : keyboardArrowDown}
