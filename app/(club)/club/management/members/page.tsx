@@ -1,61 +1,219 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { MEMBER_STATUS_TYPE } from "@/data/pulldown";
 import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
-import { ClubMemberData } from "@/types/member";
+import {
+  ClubMemberData,
+  clubMemberRoleType,
+  clubMemberStatusType,
+} from "@/types/member";
 import ClubMemberCategoryBar from "./components/clubMemberCategoryBar";
 import ClubMemberHeader from "./components/clubMemberHeader";
 import ClubMemberList from "./components/clubMemberList";
 import MobileMenu from "../../components/menu/mobileMenu";
 import LeftMenu from "../../components/menu/leftMenu";
+import {
+  deleteClubMember,
+  entrustAdmin,
+  getClubMembers,
+  putClubMembersRole,
+  putClubMembersStatus,
+} from "@/api/members";
+import { getClubDetail } from "@/api/club";
+import { MAP_STATUS_TO_EN } from "./util/mapStatus";
+import { PageInfo } from "@/types/pageInfo";
+import PlusBtn from "@/components/button/withIconBtn/plusBtn";
+
+const contentSize = 2;
 
 const ClubMemberPage = () => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId");
+
+  const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
+  const [page, setPage] = useState<number>(0);
+
   const [selectedOption, setSelectedOption] = useState<string[]>([
-    MEMBER_STATUS_TYPE[0].label,
+    MEMBER_STATUS_TYPE[1].label,
   ]);
-  const [clubMember, setClubMember] =
-    useState<ClubMemberData[]>(CLUB_MEMBER_DATA);
+  const [clubMember, setClubMember] = useState<ClubMemberData[] | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
-  const [selectedMember, setSelectedMember] = useState<number[]>([]);
+  const [selectedMember, setSelectedMember] = useState<string[]>([]);
 
-  const handleSearch = () => {
+  const [myMemberData, setMyMemberData] = useState<ClubMemberData | null>(null);
+  // 검색 핸들러
+  const handleSearch = (searchTerm: string) => {
     if (searchTerm.trim()) {
+      setSearchTerm(searchTerm);
       console.log(`검색어: ${searchTerm}`);
+      setPage(0);
+      setClubMember(null);
     }
   };
-
-  function toggleMember(memberId: number) {
+  const handleOption = (value: string) => {
+    setPage(0);
+    setClubMember(null);
+    setSelectedOption([value]);
+  };
+  // 멤버 선택 toggle
+  const toggleMember = (memberId: string) => {
     setSelectedMember((prevSelected) => {
       if (prevSelected.includes(memberId)) {
         return prevSelected.filter((id) => id !== memberId);
       } else {
-        if (selectedMember.length + 1 == clubMember.length) {
+        if (selectedMember.length + 1 == clubMember?.length) {
         }
         return [...prevSelected, memberId];
       }
     });
-  }
-
-  function toggleSelectAll() {
+  };
+  // 멤버 전체 선택 toggle
+  const toggleSelectAll = () => {
     setIsAllSelected(!isAllSelected);
     if (isAllSelected) {
       setSelectedMember([]);
     } else {
-      const allMemberIds = clubMember.map((member) => member.id);
-      setSelectedMember(allMemberIds);
+      const allMemberIds = clubMember?.map((member) => member.memberData.id);
+      setSelectedMember(allMemberIds!);
     }
-  }
+  };
+  const clearAllSelections = () => {
+    setSelectedMember([]);
+  };
 
+  // 동아리 회원 권한 수정
+  const handleRoleChange = (memberId: string, newRole: clubMemberRoleType) => {
+    // 최고 관리자 권한 위임
+    if (newRole === "ADMIN") {
+      entrustAdmin(memberId)
+        .then(() => {
+          setClubMember((prevMembers) =>
+            prevMembers!.map((member) =>
+              member.id == memberId
+                ? { ...member, clubMemberRoleType: newRole }
+                : member
+            )
+          );
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("변경에 실패했습니다.");
+        });
+    } else {
+      // ADMIN이 본인 권한 수정
+      if (
+        myMemberData?.clubMemberRoleType == "ADMIN" &&
+        memberId == myMemberData.id
+      ) {
+        alert("관리자는 본인의 권한을 변경할 수 없습니다.");
+        return;
+      }
+      // 권한 수정
+      putClubMembersRole(memberId, newRole)
+        .then(() => {
+          setClubMember((prevMembers) =>
+            prevMembers!.map((member) =>
+              member.id == memberId
+                ? { ...member, clubMemberRoleType: newRole }
+                : member
+            )
+          );
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("변경에 실패했습니다.");
+        });
+    }
+  };
+  // 동아리 회원 상태 수정
+  const handleStatusChange = (
+    memberIds: string[],
+    newStatus: clubMemberStatusType
+  ) => {
+    if (clubId) {
+      putClubMembersStatus(clubId, memberIds, newStatus)
+        .then(() => {
+          setClubMember((prevMembers) =>
+            prevMembers!.map((member) =>
+              memberIds.includes(member.memberData.id)
+                ? { ...member, clubMemberStatusType: newStatus }
+                : member
+            )
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("변경에 실패했습니다.");
+        });
+    }
+  };
+  // 동아리 회원 삭제
+  const handleDeleteMember = (memberId: string) => {
+    if (clubId) {
+      deleteClubMember(memberId)
+        .then(() => {
+          setClubMember((prevMembers) =>
+            prevMembers!.filter((member) => member.id !== memberId)
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("삭제에 실패했습니다.");
+        });
+    }
+  };
+
+  // 전체 선택 여부
   useEffect(() => {
-    if (clubMember.length == selectedMember.length) {
+    if (
+      clubMember?.length != 0 &&
+      clubMember?.length == selectedMember.length
+    ) {
       setIsAllSelected(true);
     } else {
       setIsAllSelected(false);
     }
   }, [selectedMember, clubMember]);
+
+  // 내 멤버 정보, 동아리 멤버 리스트
+  useEffect(() => {
+    if (clubId) {
+      const fetchClubDetail = async () => {
+        try {
+          const data = await getClubDetail(clubId);
+          setMyMemberData(data.clubMemberData);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      const handleLoadClubMembers = () => {
+        getClubMembers(
+          clubId!,
+          MAP_STATUS_TO_EN[selectedOption[0]],
+          searchTerm,
+          page,
+          contentSize
+        )
+          .then((res) => {
+            setClubMember((prevMembers) =>
+              prevMembers
+                ? [...prevMembers, ...res.clubMemberDataList]
+                : res.clubMemberDataList
+            );
+            setPageInfo(res.pageInfo);
+          })
+          .catch((err) => {
+            console.error("동아리 회원 목록을 불러오는 데 실패했습니다.", err);
+          });
+      };
+      handleLoadClubMembers();
+      fetchClubDetail();
+    }
+  }, [clubId, selectedOption, searchTerm, page]);
 
   return (
     <>
@@ -67,30 +225,60 @@ const ClubMemberPage = () => {
             <div className="w-full">
               <section>
                 <ClubMemberHeader
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
                   handleSearch={handleSearch}
                   selectedOption={selectedOption}
-                  setSelectedOption={setSelectedOption}
+                  handleOption={handleOption}
                 />
               </section>
               <section>
                 <ClubMemberCategoryBar
+                  selectedMember={selectedMember}
                   isAllSelected={isAllSelected}
                   toggleSelectAll={toggleSelectAll}
+                  handleStatusChange={handleStatusChange}
+                  clearAllSelections={clearAllSelections}
                 />
               </section>
               <section className="flex flex-col gap-2.5 md:gap-4 md:py-2.5 md:rounded-[4px] md:bg-background">
-                {clubMember.map((member, index) => (
-                  <div key={index}>
-                    <ClubMemberList
-                      data={member}
-                      isSelected={selectedMember?.includes(member.id)}
-                      toggleMember={toggleMember}
-                    />
+                {clubMember ? (
+                  clubMember.length > 0 ? (
+                    clubMember.map((member, index) => (
+                      <div key={index}>
+                        <ClubMemberList
+                          data={member}
+                          myMemberData={myMemberData!}
+                          isSelected={selectedMember?.includes(
+                            member.memberData.id
+                          )}
+                          toggleMember={toggleMember}
+                          handleRoleChange={handleRoleChange}
+                          handleStatusChange={handleStatusChange}
+                          handleDeleteMember={handleDeleteMember}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center p-10 text-subtext1">
+                      조건에 맞는 회원을 찾을 수 없습니다.
+                    </div>
+                  )
+                ) : (
+                  <div className="text-center p-10 text-subtext1">
+                    로딩중...
                   </div>
-                ))}
+                )}
               </section>
+
+              {pageInfo && pageInfo!.totalPages >= page + 1 && (
+                <div className="flex justify-center mt-9 md:mt-10">
+                  <PlusBtn
+                    title={"더보기"}
+                    onClick={() => {
+                      setPage((prev) => prev + 1);
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
