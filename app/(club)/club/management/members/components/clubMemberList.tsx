@@ -11,21 +11,40 @@ import TokenPullDown from "@/components/pulldown/tokenPullDown";
 import NotiPopUp from "@/components/modal/notiPopUp";
 
 import { MEMBER_STATUS_TYPE, ROLE_TYPE } from "@/data/pulldown";
-import { MAP_ROLE_TO_KO } from "../util/mapRole";
+import { MAP_ROLE_TO_EN, MAP_ROLE_TO_KO } from "../util/mapRole";
 
-import { MAP_STATUS_STYLES, MAP_STATUS_TO_KO } from "../util/mapStatus";
-import { ClubMemberData } from "@/types/member";
+import {
+  MAP_STATUS_STYLES,
+  MAP_STATUS_TO_EN,
+  MAP_STATUS_TO_KO,
+} from "../util/mapStatus";
+import {
+  ClubMemberData,
+  clubMemberRoleType,
+  clubMemberStatusType,
+} from "@/types/member";
 
 interface ClubMemberListProps {
   data: ClubMemberData;
+  myMemberData: ClubMemberData;
   isSelected: boolean;
-  toggleMember: (memberId: number) => void;
+  toggleMember: (memberId: string) => void;
+  handleStatusChange: (
+    memberId: string[],
+    statusType: clubMemberStatusType
+  ) => void;
+  handleRoleChange: (memberId: string, roleType: clubMemberRoleType) => void;
+  handleDeleteMember: (memberId: string) => void;
 }
 
 const ClubMemberList = ({
   data,
+  myMemberData,
   isSelected,
   toggleMember,
+  handleStatusChange,
+  handleRoleChange,
+  handleDeleteMember,
 }: ClubMemberListProps) => {
   const [isManagerModalOpen, setIsManagerModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -38,14 +57,19 @@ const ClubMemberList = ({
             alt="checkbox"
             width={16}
             height={16}
-            onClick={() => toggleMember(data.id)}
+            onClick={() => toggleMember(data.memberData.id)}
             className="md:w-5 md:h-5 cursor-pointer"
           />
           <div className="md:hidden">
             <TokenPullDown
               optionData={MEMBER_STATUS_TYPE.slice(2)}
               selectedOption={data.clubMemberStatusType}
-              handleOption={() => {}}
+              handleOption={(value) =>
+                handleStatusChange(
+                  [data.memberData.id],
+                  MAP_STATUS_TO_EN[value]
+                )
+              }
               ImageTokenComponent={
                 <ImageToken
                   bgColor={MAP_STATUS_STYLES[data.clubMemberStatusType].bgColor}
@@ -70,21 +94,28 @@ const ClubMemberList = ({
       </div>
       <div className="w-full flex justify-between md:flex-[4] ">
         <div className="md:flex-[2]">
-          <SubPullDown
-            optionData={ROLE_TYPE.slice(1)}
-            selectedOption={MAP_ROLE_TO_KO[data.clubMemberRoleType]}
-            handleOption={(value) => {
-              if (value == "관리자") {
-                setIsManagerModalOpen(true);
-              }
-            }}
-          />
+          {/* ADMIN만 권한 수정 가능, 본인 수정 불가 */}
+          {myMemberData?.clubMemberRoleType === "ADMIN" && (
+            <SubPullDown
+              optionData={ROLE_TYPE.slice(1)}
+              selectedOption={MAP_ROLE_TO_KO[data.clubMemberRoleType]}
+              handleOption={(value) => {
+                if (value == "관리자") {
+                  setIsManagerModalOpen(true);
+                } else {
+                  handleRoleChange(data.id, MAP_ROLE_TO_EN[value]);
+                }
+              }}
+            />
+          )}
         </div>
         <div className="hidden flex-[2] md:flex justify-center">
           <TokenPullDown
             optionData={MEMBER_STATUS_TYPE.slice(2)}
             selectedOption={MAP_STATUS_TO_KO[data.clubMemberStatusType]}
-            handleOption={() => {}}
+            handleOption={(value) =>
+              handleStatusChange([data.memberData.id], MAP_STATUS_TO_EN[value])
+            }
             ImageTokenComponent={
               <ImageToken
                 bgColor={MAP_STATUS_STYLES[data.clubMemberStatusType].bgColor}
@@ -98,11 +129,17 @@ const ClubMemberList = ({
           />
         </div>
         <div className="flex-[1] flex justify-end items-center">
-          <DeleteBtn
-            onClick={() => {
-              setIsDeleteModalOpen(true);
-            }}
-          />
+          {/* ADMIN인 경우 모두 삭제 가능(본인 제외), 매니저인 경우 일반 회원 삭제 가능 */}
+          {((myMemberData?.clubMemberRoleType === "ADMIN" &&
+            data.id != myMemberData.id) ||
+            (myMemberData.clubMemberRoleType === "MANAGER" &&
+              data.clubMemberRoleType === "GENERAL")) && (
+            <DeleteBtn
+              onClick={() => {
+                setIsDeleteModalOpen(true);
+              }}
+            />
+          )}
         </div>
       </div>
       {/* modal */}
@@ -117,9 +154,13 @@ const ClubMemberList = ({
           }
           description={`해당 동아리원에게 관리자 권한 위임시,\n일반회원으로 바뀌며 관리 기능 이용이 제한돼요.`}
           firstButton={() => {
-            isManagerModalOpen
-              ? setIsManagerModalOpen(false)
-              : setIsDeleteModalOpen(false);
+            if (isManagerModalOpen) {
+              handleRoleChange(data.memberData.id, "ADMIN");
+              setIsDeleteModalOpen(false);
+            } else if (isDeleteModalOpen) {
+              handleDeleteMember(data.id);
+              setIsDeleteModalOpen(false);
+            }
           }}
           firstButtonText={isManagerModalOpen ? "권한 위임하기" : "삭제하기"}
           secondButton={() => {
