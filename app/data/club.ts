@@ -357,7 +357,7 @@ export const CLUB_LEFT_MENU_MEMBER = [
   {
     id: 9,
     label: "동아리 탈퇴 ",
-    url: "/club/leave",
+    url: "/club/withdrawal",
     subUrl: [],
   },
 ];
@@ -440,7 +440,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 8,
     label: "동아리 탈퇴",
-    url: "/club/leave",
+    url: "/club/withdrawal",
     subUrl: [],
   },
   {

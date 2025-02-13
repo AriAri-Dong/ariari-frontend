@@ -1,26 +1,33 @@
 "use client";
 
-import LeftMenu from "@/(club)/club/components/menu/leftMenu";
-import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
+import { useState } from "react";
+import useResponsive from "@/hooks/useResponsive";
 
-const ClosePage = () => {
+import LeftMenu from "@/(club)/club/components/menu/leftMenu";
+import ClubWithdrawalCard from "@/components/card/clubWithdrawalCard";
+import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
+import { ClubMemberData } from "@/types/member";
+import HeaderSection from "./content/headerSection";
+
+const ClubClosePage = () => {
+  const isMdUp = useResponsive("md");
+  const [clubMember, setClubMember] = useState<ClubMemberData | null>(
+    CLUB_MEMBER_DATA[1]
+  ); // 0 => 일반회원, 1 => 관리자로 테스트가능
+
   return (
-    <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
-      <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
-        <MobileMenu />
-        <div className="flex lg:gap-9">
-          {/* 임시 메뉴 */}
-          <div className="flex flex-col">
-            <LeftMenu />
-          </div>
-          <div className="flex text-h3 text-text1">
-            동아리 폐쇠 페이지
-            <p className="text-subtext1 text-h4_sb">관리자만 볼수 있습니다.</p>
-          </div>
-        </div>
+    <div>
+      {!isMdUp && <HeaderSection title={"동아리 폐쇄하기"} />}
+      <div className="flex lg:gap-9 md:mt-8">
+        {/* 임시 메뉴 */}
+        <LeftMenu />
+        <ClubWithdrawalCard
+          isWithdrawal={false}
+          role={clubMember?.clubMemberRoleType || null}
+        />
       </div>
     </div>
   );
 };
 
-export default ClosePage;
+export default ClubClosePage;
