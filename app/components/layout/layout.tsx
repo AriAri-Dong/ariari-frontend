@@ -20,7 +20,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/close",
     "/club/leave",
     "/club/activityHistory",
-    "/club/recruitment",
     "/club/management/activity/accounting",
   ];
   const bgPaths = ["/application", "/help"];
@@ -32,7 +31,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/close",
     "/club/leave",
     "/club/activityHistory",
-    "/club/recruitment",
     "/club/management/members",
   ];
 

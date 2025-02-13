@@ -64,7 +64,6 @@ const ClubActivities = ({
             return (
               <RecruitmentCard
                 key={item.id}
-                id={item.id}
                 title={item.title}
                 date={item.date}
                 onClick={() => {}}
