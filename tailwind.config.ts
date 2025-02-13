@@ -150,23 +150,6 @@ const config: Config = {
             borderRadius: "4px",
           },
         },
-        ".custom-scrollbar-with-bg": {
-          "&::-webkit-scrollbar": {
-            width: "6px",
-            height: "6px",
-          },
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "#ABB0BA",
-            borderRadius: "4px",
-          },
-          "&::-webkit-scrollbar-thumb:hover": {
-            backgroundColor: "#A1A6B0",
-          },
-          "&::-webkit-scrollbar-track": {
-            backgroundColor: "#F2F4F6",
-            borderRadius: "4px",
-          },
-        },
         ".no-scrollbar": {
           "-ms-overflow-style": "none",
           "scrollbar-width": "none",
