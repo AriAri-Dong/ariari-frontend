@@ -15,6 +15,7 @@ interface SubPullDownProps {
   selectedOption: string;
   handleOption?: (label: string) => void;
   handleOptionWithId?: (label: string, id: number) => void;
+  onClick?: (() => void) | null;
 }
 
 const SubPullDown = ({
@@ -22,6 +23,7 @@ const SubPullDown = ({
   selectedOption,
   handleOption,
   handleOptionWithId,
+  onClick,
 }: SubPullDownProps) => {
   const SubPullDownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -73,7 +75,7 @@ const SubPullDown = ({
     <div ref={SubPullDownRef} className="w-fit relative flex items-center">
       <button
         ref={buttonRef}
-        onClick={toggleDropdown}
+        onClick={onClick ? onClick : toggleDropdown}
         className={`relative flex items-center justify-between text-subtext2 text-mobile_body2_m
           pl-2.5 py-1 cursor-pointer gap-1 md:gap-2 md:text-body1_m
         `}
