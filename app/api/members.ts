@@ -18,7 +18,6 @@ export const getClubMembers = async (
     ...(page && { page }),
     ...(size && { size }),
   };
-  console.log("id", clubId);
   const response = await api.get<ClubMemberListRes>(
     `/clubs/${clubId}/club-members`,
     { params }
@@ -33,7 +32,7 @@ export const putClubMembersRole = async (
   console.log("id", memberId);
   const response = await api.put<ClubMemberListRes>(
     `/club-members/${memberId}/role`,
-    // newRole
+
     { clubMemberRoleType: newRole }
   );
   return response.data;
