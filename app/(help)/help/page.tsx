@@ -4,7 +4,7 @@ import { useState } from "react";
 import QuestionDropdown from "@/(club)/club/help/components/questionDropdown";
 import ClubNoticeHeader from "@/(club)/club/management/activity/notice/components/clubNoticeHeader";
 import { FAQ_DATA } from "@/data/faq";
-import { profileType } from "@/models/member";
+import { profileType } from "@/types/member";
 import { PROFILE_TYPES } from "@/data/profileType";
 import { NOTICE_DATA } from "@/data/clubNotice";
 import ClubNoticeDropdown from "@/components/dropdown/clubNoticeDropdown";
