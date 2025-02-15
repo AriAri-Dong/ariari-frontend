@@ -95,7 +95,7 @@ const ClubMemberList = ({
       <div className="w-full flex justify-between md:flex-[4] ">
         <div className="md:flex-[2]">
           {/* ADMIN만 권한 수정 가능, 본인 수정 불가 */}
-          {myMemberData?.clubMemberRoleType === "ADMIN" && (
+          {
             <SubPullDown
               optionData={ROLE_TYPE.slice(1)}
               selectedOption={MAP_ROLE_TO_KO[data.clubMemberRoleType]}
@@ -106,8 +106,13 @@ const ClubMemberList = ({
                   handleRoleChange(data.id, MAP_ROLE_TO_EN[value]);
                 }
               }}
+              onClick={
+                myMemberData?.clubMemberRoleType === "ADMIN"
+                  ? null
+                  : () => alert("관리자만 권한수정이 가능합니다.")
+              }
             />
-          )}
+          }
         </div>
         <div className="hidden flex-[2] md:flex justify-center">
           <TokenPullDown
@@ -131,8 +136,8 @@ const ClubMemberList = ({
         <div className="flex-[1] flex justify-end items-center">
           {/* ADMIN인 경우 모두 삭제 가능(본인 제외), 매니저인 경우 일반 회원 삭제 가능 */}
           {((myMemberData?.clubMemberRoleType === "ADMIN" &&
-            data.id != myMemberData.id) ||
-            (myMemberData.clubMemberRoleType === "MANAGER" &&
+            data.id != myMemberData?.id) ||
+            (myMemberData?.clubMemberRoleType === "MANAGER" &&
               data.clubMemberRoleType === "GENERAL")) && (
             <DeleteBtn
               onClick={() => {
@@ -155,8 +160,8 @@ const ClubMemberList = ({
           description={`해당 동아리원에게 관리자 권한 위임시,\n일반회원으로 바뀌며 관리 기능 이용이 제한돼요.`}
           firstButton={() => {
             if (isManagerModalOpen) {
-              handleRoleChange(data.memberData.id, "ADMIN");
-              setIsDeleteModalOpen(false);
+              handleRoleChange(data.id, "ADMIN");
+              setIsManagerModalOpen(false);
             } else if (isDeleteModalOpen) {
               handleDeleteMember(data.id);
               setIsDeleteModalOpen(false);

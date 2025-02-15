@@ -10,11 +10,13 @@ import InvitaionForm from "./invitationForm";
 
 import { MEMBER_STATUS_TYPE } from "@/data/pulldown";
 interface ClubMemberHeaderProps {
+  totalSize: number;
   handleSearch: (searchTerm: string) => void;
   selectedOption: string[];
   handleOption: (value: string) => void;
 }
 const ClubMemberHeader = ({
+  totalSize,
   handleSearch,
   selectedOption,
   handleOption,
@@ -58,7 +60,7 @@ const ClubMemberHeader = ({
       </div>
       <div className="flex justify-between items-center mb-4 md:mb-[22px]">
         <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-          총 nnn명의 회원이 있어요
+          총 {totalSize}명의 회원이 있어요
         </p>
         <SubSearchBar
           handleSearch={handleSearch}
