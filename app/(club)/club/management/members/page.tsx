@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { MEMBER_STATUS_TYPE } from "@/data/pulldown";
-import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
 import {
   ClubMemberData,
   clubMemberRoleType,
@@ -32,6 +31,7 @@ const contentSize = 2;
 const ClubMemberPage = () => {
   const params = useSearchParams();
   const clubId = params.get("clubId");
+  const router = useRouter();
 
   const [pageInfo, setPageInfo] = useState<PageInfo | null>(null);
   const [page, setPage] = useState<number>(0);
@@ -45,19 +45,18 @@ const ClubMemberPage = () => {
   const [selectedMember, setSelectedMember] = useState<string[]>([]);
 
   const [myMemberData, setMyMemberData] = useState<ClubMemberData | null>(null);
+  const [didMount, setDidMount] = useState(false);
+
   // 검색 핸들러
   const handleSearch = (searchTerm: string) => {
-    if (searchTerm.trim()) {
-      setSearchTerm(searchTerm);
-      console.log(`검색어: ${searchTerm}`);
-      setPage(0);
-      setClubMember(null);
-    }
-  };
-  const handleOption = (value: string) => {
+    setSearchTerm(searchTerm);
     setPage(0);
     setClubMember(null);
+  };
+  const handleOption = (value: string) => {
     setSelectedOption([value]);
+    setPage(0);
+    setClubMember(null);
   };
   // 멤버 선택 toggle
   const toggleMember = (memberId: string) => {
@@ -91,13 +90,8 @@ const ClubMemberPage = () => {
     if (newRole === "ADMIN") {
       entrustAdmin(memberId)
         .then(() => {
-          setClubMember((prevMembers) =>
-            prevMembers!.map((member) =>
-              member.id == memberId
-                ? { ...member, clubMemberRoleType: newRole }
-                : member
-            )
-          );
+          alert("권한이 위임되었습니다. 일반회원으로 전환되었습니다.");
+          router.push(`/club?clubId=${clubId}`);
         })
         .catch((err) => {
           console.error(err);
@@ -179,17 +173,9 @@ const ClubMemberPage = () => {
     }
   }, [selectedMember, clubMember]);
 
-  // 내 멤버 정보, 동아리 멤버 리스트
+  // 동아리 멤버 리스트
   useEffect(() => {
-    if (clubId) {
-      const fetchClubDetail = async () => {
-        try {
-          const data = await getClubDetail(clubId);
-          setMyMemberData(data.clubMemberData);
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    if (clubId && didMount) {
       const handleLoadClubMembers = () => {
         getClubMembers(
           clubId!,
@@ -211,9 +197,28 @@ const ClubMemberPage = () => {
           });
       };
       handleLoadClubMembers();
+    }
+  }, [clubId, selectedOption, searchTerm, page, didMount]);
+
+  // 내 멤버 정보
+  useEffect(() => {
+    if (clubId) {
+      const fetchClubDetail = async () => {
+        try {
+          const data = await getClubDetail(clubId);
+          setMyMemberData(data.clubMemberData);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
       fetchClubDetail();
     }
-  }, [clubId, selectedOption, searchTerm, page]);
+  }, [clubId]);
+
+  useEffect(() => {
+    setDidMount(true);
+  }, []);
 
   return (
     <>
@@ -225,6 +230,7 @@ const ClubMemberPage = () => {
             <div className="w-full">
               <section>
                 <ClubMemberHeader
+                  totalSize={pageInfo ? pageInfo?.totalSize : 0}
                   handleSearch={handleSearch}
                   selectedOption={selectedOption}
                   handleOption={handleOption}
@@ -269,7 +275,7 @@ const ClubMemberPage = () => {
                 )}
               </section>
 
-              {pageInfo && pageInfo!.totalPages >= page + 1 && (
+              {clubMember && pageInfo && pageInfo.totalPages > page + 1 && (
                 <div className="flex justify-center mt-9 md:mt-10">
                   <PlusBtn
                     title={"더보기"}
