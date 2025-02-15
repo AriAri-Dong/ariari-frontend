@@ -9,7 +9,7 @@ export const pageInfo: PageInfo = {
 
 export const QNA_DATA: ClubQuestionData[] = [
   {
-    id: 1,
+    id: "1",
     title: "클럽에 어떻게 가입하나요?",
     body: "이 클럽에 가입하고 싶은데 방법을 모르겠어요. 알려주실 수 있나요?",
     memberData: {
@@ -32,7 +32,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     },
   },
   {
-    id: 2,
+    id: "2",
     title: "회원비는 얼마인가요?",
     body: "클럽 가입 비용이 궁금합니다.",
     memberData: {
@@ -55,7 +55,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     },
   },
   {
-    id: 3,
+    id: "3",
     title: "해외 거주자도 가입할 수 있나요?",
     body: "저는 해외에 거주 중입니다. 가입이 가능할까요?",
     memberData: {
@@ -78,7 +78,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     },
   },
   {
-    id: 4,
+    id: "4",
     title: "다음 클럽 모임 일정은 언제인가요?",
     body: "공지사항을 놓쳤어요. 다음 모임 날짜를 알려주세요.",
     memberData: {
@@ -101,7 +101,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     },
   },
   {
-    id: 5,
+    id: "5",
     title: "연령 제한이 있나요?",
     body: "클럽에 가입하려면 최소 또는 최대 나이 제한이 있나요?",
     memberData: {
@@ -124,7 +124,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     },
   },
   {
-    id: 6,
+    id: "6",
     title: "클럽 행사에 게스트를 데려갈 수 있나요?",
     body: "다가오는 행사에 친구를 초대하고 싶은데, 가능할까요?",
     memberData: {
@@ -147,7 +147,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     },
   },
   {
-    id: 7,
+    id: "7",
     title: "활동기간",
     body: "3개월만 활동하고 싶어요",
     memberData: {
@@ -157,7 +157,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     clubAnswerData: null,
   },
   {
-    id: 8,
+    id: "8",
     title: "회비",
     body: "회비 너무 비싸요",
     memberData: {
@@ -167,7 +167,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     clubAnswerData: null,
   },
   {
-    id: 9,
+    id: "9",
     title: "동아리방",
     body: "동아리방 있나요?",
     memberData: {
@@ -177,7 +177,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     clubAnswerData: null,
   },
   {
-    id: 10,
+    id: "10",
     title: "회장",
     body: "회장 이름 뭔가요",
     memberData: {
