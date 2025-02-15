@@ -52,7 +52,7 @@ export type TokenType =
   | "C_TOKEN_7";
 
 export interface ClubFaqData {
-  id: number; // $int64
+  id: string; // $int64
   title: string;
   body: string;
   clubFaqClassification: string;
@@ -72,7 +72,7 @@ export interface ClubAnswerData {
 }
 
 export interface ClubQuestionData {
-  id: number; // int64
+  id: string; // int64
   title: string;
   body: string;
   memberData: MemberData;
