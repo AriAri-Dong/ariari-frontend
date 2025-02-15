@@ -120,7 +120,7 @@ const InvitationFormContent = ({
             }
           </p>
           <div className="flex gap-[14px] mb-[14px] md:gap-5 md:mb-3">
-            <div className="flex items-center gap-2.5 py-2.5 pl-2 pr-3 md:p-2.5 md:pr-4">
+            <div className="flex items-center gap-2.5 py-2.5 pl-2 pr-3 cursor-pointer md:p-2.5 md:pr-4">
               <Image
                 src={shareType === "ariAriJoin" ? checkIcon : uncheckIcon}
                 alt={shareType === "ariAriJoin" ? "Checked" : "Unchecked"}
@@ -136,7 +136,7 @@ const InvitationFormContent = ({
                 아리아리 초대 링크
               </p>
             </div>
-            <div className="flex items-center  gap-2.5 py-2.5 pl-2 pr-3 md:p-2.5 md:pr-4">
+            <div className="flex items-center  gap-2.5 py-2.5 pl-2 pr-3 cursor-pointer md:p-2.5 md:pr-4">
               <Image
                 src={shareType === "clubJoin" ? checkIcon : uncheckIcon}
                 alt={shareType === "clubJoin" ? "Checked" : "Unchecked"}
