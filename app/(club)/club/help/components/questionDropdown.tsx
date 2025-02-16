@@ -26,7 +26,7 @@ interface QuestionDropdownProps {
   myRoleType: clubMemberRoleType | null | undefined;
   myProfileType: profileType | null | undefined;
   isOpen: boolean;
-  setSelected: (value: number | null) => void;
+  setSelected: (value: string | null) => void;
 }
 /**
  *
@@ -66,7 +66,7 @@ const QuestionDropdown = ({
     label = data.clubAnswerData ? "답변완료" : "미답변";
   }
 
-  const onClick = (id: number) => {
+  const onClick = (id: string) => {
     if (isOpen) {
       setSelected(null);
     } else {

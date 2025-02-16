@@ -10,30 +10,23 @@ import InvitaionForm from "./invitationForm";
 
 import { MEMBER_STATUS_TYPE } from "@/data/pulldown";
 interface ClubMemberHeaderProps {
-  searchTerm: string;
-  setSearchTerm: (searchTerm: string) => void;
+  totalSize: number;
   handleSearch: (searchTerm: string) => void;
   selectedOption: string[];
-  setSelectedOption: (value: string[]) => void;
+  handleOption: (value: string) => void;
 }
 const ClubMemberHeader = ({
-  searchTerm,
-  setSearchTerm,
+  totalSize,
   handleSearch,
   selectedOption,
-  setSelectedOption,
+  handleOption,
 }: ClubMemberHeaderProps) => {
   const [isInvitationModalOpen, setIsInvitationModalOpen] =
     useState<boolean>(false);
-  const [type, setType] = useState<string>(
-    MEMBER_STATUS_TYPE.slice(1)[0].label
-  );
 
   return (
     <div>
       <SubSearchBar
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
         handleSearch={handleSearch}
         placeholder="동아리원 이름"
         className="md:hidden mb-2"
@@ -42,8 +35,8 @@ const ClubMemberHeader = ({
         <div className="hidden mb-2 md:block">
           <SubTap
             optionData={MEMBER_STATUS_TYPE.slice(1)}
-            selectedOption={type}
-            handleOption={setType}
+            selectedOption={selectedOption[0]}
+            handleOption={(value) => handleOption(value)}
           />
         </div>
         <div className="md:hidden">
@@ -54,7 +47,7 @@ const ClubMemberHeader = ({
                 ? ["활동상태"]
                 : selectedOption
             }
-            handleOption={([value]) => setSelectedOption([value])}
+            handleOption={([value]) => handleOption(value)}
             optionSize="small"
           />
         </div>
@@ -67,11 +60,9 @@ const ClubMemberHeader = ({
       </div>
       <div className="flex justify-between items-center mb-4 md:mb-[22px]">
         <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-          총 nnn명의 회원이 있어요
+          총 {totalSize}명의 회원이 있어요
         </p>
         <SubSearchBar
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
           handleSearch={handleSearch}
           placeholder="동아리원 이름"
           className="hidden md:flex md:w-[270px]"

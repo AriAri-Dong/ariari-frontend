@@ -50,8 +50,8 @@ const ClubHelpPage = () => {
   const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
 
-  const [selectedFaq, setSelectedFaq] = useState<number | null>(null);
-  const [selectedQna, setSelectedQna] = useState<number | null>(null);
+  const [selectedFaq, setSelectedFaq] = useState<string | null>(null);
+  const [selectedQna, setSelectedQna] = useState<string | null>(null);
 
   const [clubMember, setClubMember] = useState<ClubMemberData | null>(
     CLUB_MEMBER_DATA[0]

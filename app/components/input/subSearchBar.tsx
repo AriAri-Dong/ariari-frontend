@@ -5,8 +5,6 @@ import { useState } from "react";
 import searchIcon from "@/images/icon/search.svg";
 
 interface SubSearchBarProps {
-  searchTerm: string;
-  setSearchTerm: (searchTerm: string) => void;
   handleSearch: (searchTerm: string) => void;
   placeholder?: string;
   className?: string;
@@ -14,8 +12,6 @@ interface SubSearchBarProps {
 
 /**
  *
- * @param searchTerm 검색어
- * @param setSearchTerm set검색어
  * @param handleSearch 검색 핸들러
  * @param placeholder
  * @param className 추가 style 코드
@@ -24,11 +20,10 @@ interface SubSearchBarProps {
 
 const SubSearchBar = ({
   placeholder,
-  searchTerm,
-  setSearchTerm,
   handleSearch,
   className,
 }: SubSearchBarProps) => {
+  const [searchValue, setSearchValue] = useState<string>("");
   return (
     <div
       className={`w-full flex items-center justify-between gap-2.5 p-2.5 border border-menuborder bg-background rounded-24 focus-within:border-searchbarborder md:max-w-[728px] md:px-[22px] md:rounded-28 ${className}`}
@@ -42,8 +37,8 @@ const SubSearchBar = ({
       />
       <input
         type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
         placeholder={placeholder}
         className="flex-grow bg-background text-mobile_body2_r text-text1 md:text-body1_r focus:outline-none"
         onKeyDown={(e) => {
