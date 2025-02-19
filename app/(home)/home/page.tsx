@@ -1,4 +1,4 @@
-import HomePageContent from "@/(home)/home/content/PageContent";
+import HomePageContent from "@/(home)/home/pageContent";
 import { Suspense } from "react";
 
 const Home = () => {
