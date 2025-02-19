@@ -7,7 +7,7 @@ import { useUserStore } from "@/providers/user-store-provider";
 import HeaderToken from "@/api/headerToken";
 import { IoConstructOutline } from "react-icons/io5";
 
-export default function SignIn() {
+export default function SignInPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [kakaoCode, setKakaoCode] = useState<string>("");
