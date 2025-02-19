@@ -10,7 +10,6 @@ import { NOTICE_DATA } from "@/data/clubNotice";
 import ClubNoticeDropdown from "@/components/dropdown/clubNoticeDropdown";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MobileHeaderSection from "./components/mobileHeaderSection";
-import { profileType } from "@/types/member";
 
 const getProfileByIndex = (index: number): profileType => {
   return PROFILE_TYPES[index % PROFILE_TYPES.length];
