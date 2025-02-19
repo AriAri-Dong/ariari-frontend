@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getTokenWithCode, getUserData } from "@/api/apis.ts";
 import { useUserStore } from "@/providers/user-store-provider";
 import HeaderToken from "@/api/headerToken";
@@ -10,10 +10,13 @@ import { IoConstructOutline } from "react-icons/io5";
 export default function SignIn() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [kakaoCode, setKakaoCode] = useState<string>("");
   const { signIn, setUserData } = useUserStore((state) => state);
 
   useEffect(() => {
-    const kakaoCode = searchParams.get("code") || "";
+    const curKakaoCode = searchParams.get("code") || "";
+    if (curKakaoCode === "") return;
+    setKakaoCode(curKakaoCode);
 
     getTokenWithCode(kakaoCode)
       .then(async (res1) => {
@@ -35,7 +38,7 @@ export default function SignIn() {
       .catch(() => {
         router.replace("/");
       });
-  }, [router, searchParams, signIn]);
+  }, [kakaoCode, router, searchParams, setUserData, signIn]);
 
   return (
     <>
