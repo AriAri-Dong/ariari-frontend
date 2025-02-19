@@ -17,7 +17,7 @@ const Home = () => {
   const router = useRouter();
   const isMdUp = useResponsive("md");
   const searchParams = useSearchParams();
-  const [firstLogin, setFirstLogin] = useState<string | null>(null);
+  const [isFirstLogin, setIsFirstLogin] = useState<string | null>(null);
   const { setUserData, accessToken } = useUserStore(
     useShallow((state) => ({
       setUserData: state.setUserData,
@@ -25,9 +25,7 @@ const Home = () => {
     }))
   );
 
-  const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] = useState(
-    firstLogin === "1"
-  );
+  const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] = useState(false);
 
   const handleFirstLoginModalClose = () => {
     setIsFirstLoginModalOpen(false);
@@ -35,7 +33,9 @@ const Home = () => {
   };
 
   useEffect(() => {
-    setFirstLogin(searchParams.get("firstLogin"));
+    const searchParamFirstLogin = searchParams.get("firstLogin");
+    setIsFirstLogin(searchParamFirstLogin);
+    setIsFirstLoginModalOpen(searchParamFirstLogin === "1");
   }, [searchParams]);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const Home = () => {
       <ClubRanking />
       <PopularRecruitment />
       <LatestRecruitment />
-      {firstLogin &&
+      {isFirstLogin &&
         isFirstLoginModalOpen &&
         (isMdUp ? (
           <ProfileSettingModal onClose={handleFirstLoginModalClose} />
