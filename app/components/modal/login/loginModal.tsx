@@ -13,9 +13,26 @@ interface LoginDialogProps {
  * @returns
  */
 const LoginModal = ({ onClose }: LoginDialogProps) => {
+  const handleLoginClick = () => {
+    const location = process.env.NEXT_PUBLIC_KAKAO_AUTH_URL;
+    const clientId = process.env.NEXT_PUBLIC_KAKAO_AUTH_API_KEY;
+    const redirectUri = process.env.NEXT_PUBLIC_CLIENT_BASE_URL + "/auth/kakao";
+    const respoinseType = "code";
+
+    const requestUrl =
+      location +
+      "?" +
+      "client_id=" +
+      clientId +
+      "&redirect_uri=" +
+      redirectUri +
+      "&response_type=" +
+      respoinseType;
+    window.location.href = requestUrl;
+  };
   return (
     <div
-      className="hidden md:flex fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+      className="hidden md:flex fixed inset-0 !ml-[-20px] z-50 items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
       style={{ zIndex: 1000 }}
     >
       <div className="absolute inset-0" onClick={onClose} />
@@ -35,9 +52,9 @@ const LoginModal = ({ onClose }: LoginDialogProps) => {
         </p>
         <Image
           src={kakoBtn}
-          alt={"kakao"}
+          alt={"카카오 로그인 버튼"}
           width={390}
-          onClick={() => {}}
+          onClick={handleLoginClick}
           className="cursor-pointer"
         />
       </div>
