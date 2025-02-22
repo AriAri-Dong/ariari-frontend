@@ -4,10 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import SubTap from "@/components/tab/subTap";
-import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound";
-import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import useResponsive from "@/hooks/useResponsive";
-import ClubInfoSection from "@/(club)/club/content/clubInfoSection";
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import AllCheckBox from "@/components/checkBox/allCheckBox";
 import ApplicationFormCard from "@/components/card/applicationFormCard";
@@ -15,14 +12,12 @@ import vector from "@/images/icon/sub_pull_down.svg";
 import SingleSelectOptions from "@/components/pulldown/singleSelectOptions";
 import { APPLICATION_FORM_DATA } from "@/data/application";
 import NotiPopUp from "@/components/modal/notiPopUp";
-import Tabs from "@/(club)/club/components/tabs/mobileTabs";
 import PullDown from "@/components/pulldown/pullDown";
 import SubSearchInput from "@/components/input/subSearchInput";
 import RangeCalendar from "@/components/calendar/rangeCalendar";
 import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
-import ClubInfoWrapper from "@/(club)/club/content/clubInfoWrapper";
 
 const OPTIONS = [
   { id: 0, label: "전체", number: 14 },
@@ -104,7 +99,7 @@ const ApplicationStatusPage = () => {
   return (
     <>
       <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
-        <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
+        <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:mt-8 md:px-5">
           <MobileMenu />
           <div className="flex lg:gap-9">
             {/* 임시 메뉴 */}
@@ -120,10 +115,10 @@ const ApplicationStatusPage = () => {
 
               <div
                 className="flex gap-4 flex-col-reverse lg:flex-row justify-between items-start
-              lg:items-center mb-4 mt-4 lg:mb-[22px] lg:mt-[22px] lg:gap-0"
+              lg:items-center mb-4 lg:mb-[22px] lg:mt-[22px] lg:gap-0"
               >
                 <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-                  총 nnn개의 지원서가 있어요.
+                  총 {APPLICATION_FORM_DATA.length}개의 지원서가 있어요.
                 </p>
                 <div className="flex items-center flex-row-reverse md:flex-row gap-2.5 md:gap-5">
                   <IconBtn

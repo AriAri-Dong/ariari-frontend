@@ -39,6 +39,9 @@ const Header = () => {
     "/club/create",
     "/club/recruitment/create",
     "/notification",
+    "/club/withdrawal",
+    "/club/close",
+    "/help",
   ].includes(pathname);
 
   return (
@@ -59,7 +62,7 @@ const Header = () => {
           />
 
           <div className="hidden md:block">
-            <div className="flex space-x-5">
+            <div className="flex gap-x-5">
               <User />
               <Tooltip message="동아리 관리 버튼을 설명하는 헬프 텍스트 입니다. 000 (최대 55자)">
                 <SmallBtn title={"동아리 관리"} onClick={handleButtonClick} />

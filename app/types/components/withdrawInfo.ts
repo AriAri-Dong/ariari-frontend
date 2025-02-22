@@ -11,7 +11,7 @@ export type WithdrawalButton = {
 
 export type WithdrawalInfoItem = {
   title: string;
-  description: string;
+  description: string | null;
   sections: string[];
   button?: WithdrawalButton;
 };
