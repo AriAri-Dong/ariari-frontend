@@ -18,7 +18,7 @@ export function transformRecruitmentToMainCard(
     imageUrl: recruitmentData.posterUri,
     limits: recruitmentData.limits,
     tag: {
-      affiliation: clubData.schoolData.name,
+      affiliation: clubData.schoolData ? clubData.schoolData.name : "교외",
       field: clubData.clubCategoryType,
       region: clubData.clubRegionType,
       target: clubData.participantType,

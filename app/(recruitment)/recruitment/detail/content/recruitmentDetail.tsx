@@ -11,8 +11,7 @@ import { RecruitmentData, RecruitmentNoteData } from "@/types/recruitment";
 import { transformRecruitmentToMainCard } from "../util/transformRecruitmentToMainCard";
 
 import { getClubRecruitmentList, getRecruitmentDetail } from "@/api/api";
-
-//테스트용 => /recruitment/detail?id=673127617679043209&clubId=673127617498687669
+import axios from "axios";
 
 const RecruitmentDetail = () => {
   const params = useSearchParams();
@@ -33,6 +32,7 @@ const RecruitmentDetail = () => {
   >(null);
 
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (recruitmentId) {
@@ -45,8 +45,17 @@ const RecruitmentDetail = () => {
 
           setRecruitmentData(parsedData);
           setRecruitmentNoteDataList(data.recruitmentNoteDataList);
+          setError(null);
         } catch (error) {
-          console.error(error);
+          if (axios.isAxiosError(error)) {
+            const errorMessage =
+              (error.response?.data as { message?: string })?.message ||
+              "문제가 발생했습니다.";
+            setError(errorMessage);
+            console.log("error", errorMsg);
+          } else {
+            console.error("Unexpected error", error);
+          }
         } finally {
           setLoading(false);
         }
@@ -55,7 +64,7 @@ const RecruitmentDetail = () => {
       fetchRecruitmentDetail();
     }
     if (clubId) {
-      const fetchAccectanceReview = async () => {
+      const fetchPrevRecruitment = async () => {
         try {
           const data = await getClubRecruitmentList(clubId);
           setPrevRecruitmentList(data.recruitmentDataList);
@@ -63,13 +72,17 @@ const RecruitmentDetail = () => {
           console.error(error);
         }
       };
-      fetchAccectanceReview();
+      fetchPrevRecruitment();
     }
-  }, [recruitmentId, clubId]);
+  }, [recruitmentId, clubId, errorMsg]);
 
-  // if (loading) {
-  //   return <h4 className="w-full text-center text-h4">로딩 중...</h4>;
-  // }
+  if (loading) {
+    return <h4 className="w-full text-center text-h4">로딩 중...</h4>;
+  }
+  if (errorMsg) {
+    return <h4 className="w-full text-center text-h4">{errorMsg}</h4>;
+  }
+
   if (!recruitmentData) {
     return (
       <h4 className="w-full text-center text-h4">
@@ -77,7 +90,6 @@ const RecruitmentDetail = () => {
       </h4>
     );
   }
-
   return (
     <>
       <ClubInfo recruitmentData={recruitmentData} />

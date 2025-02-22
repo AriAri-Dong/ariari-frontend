@@ -3,14 +3,7 @@ import {
   RecruitmentResponse,
 } from "@/types/recruitment";
 import axios from "axios";
-
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  headers: {
-    Authorization:
-      "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI2NzMxMjc2MTc0NDgzNTcyNjgiLCJ0b2tlblR5cGUiOiJBQ0NFU1NfVE9LRU4iLCJhdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE3Mzg2MzY4NjYsImV4cCI6MTczODY3Mjg2Nn0.mfigEE0G2nN_cW1yUbXFs1wjb5lIl0thlOXcBOy6AMH_IhYeY_zB7pkI-v2V3zW_",
-  },
-});
+import api from ".";
 
 export const getRecruitmentDetail = async (recruitmentId: string) => {
   console.log("id", recruitmentId);
