@@ -8,8 +8,8 @@ import EndBtn from "../button/iconBtn/endBtn";
 
 type ManagerActionsProps = {
   isManager: true;
-  onDelete: (id: number) => void;
-  onEnd: (id: number) => void;
+  onDelete: (id: string) => void;
+  onEnd: (id: string) => void;
 };
 
 type GeneralUserProps = {
@@ -17,7 +17,7 @@ type GeneralUserProps = {
 };
 
 type RecruitmentCardProps = {
-  id: number;
+  id: string;
   title: string;
   date: string;
   status: "enable" | "disable";
@@ -32,7 +32,6 @@ const RecruitmentCard = (props: RecruitmentCardProps) => {
   const handleDelete = (event: React.MouseEvent | React.TouchEvent) => {
     if (isManager) {
       event.stopPropagation();
-      alert("모집 삭제");
       props.onDelete(id);
     }
   };
@@ -40,7 +39,6 @@ const RecruitmentCard = (props: RecruitmentCardProps) => {
   const handleEnd = (event: React.MouseEvent | React.TouchEvent) => {
     if (isManager) {
       event.stopPropagation();
-      alert("모집 종료");
       props.onEnd(id);
     }
   };

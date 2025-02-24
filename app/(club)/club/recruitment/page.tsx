@@ -1,60 +1,53 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import useResponsive from "@/hooks/useResponsive";
+import { useRouter, useSearchParams } from "next/navigation";
 
-import { PageInfo } from "@/types/pageInfo";
-
-import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
-import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
-import { ClubMemberData } from "@/types/member";
-import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
 import LeftMenu from "../components/menu/leftMenu";
 import MobileMenu from "../components/menu/mobileMenu";
-import { RECRUITMENT_DATA } from "@/data/recruitment";
-import { RecruitmentData } from "@/types/recruitment";
-
-import { pageInfo as dummyPageInfo } from "@/data/qna";
+import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
+import RecruitmentGuideForm from "./components/RecruitmentGuideForm";
 import RecruitmentCard from "@/components/card/recruitmentCard";
-import formatDateToDot from "@/utils/formatDateToDot";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import NotiPopUp from "@/components/modal/notiPopUp";
-import RecruitmentGuidelines from "./components/RecruitmentGuideBox";
-import RecruitmentGuideForm from "./components/RecruitmentGuideForm";
-import { set } from "react-datepicker/dist/date_utils";
+
+import formatDateToDot from "@/utils/formatDateToDot";
+
+import { RecruitmentData } from "@/types/recruitment";
+import { ClubMemberData } from "@/types/member";
+import {
+  deleteRecruitment,
+  endRecruitment,
+  getClubRecruitment,
+} from "@/api/recruitment";
+import { getClubDetail } from "@/api/club";
 
 const ClubRecruitmentPage = () => {
-  const [recruitmentData, setRecruitmentData] =
-    useState<RecruitmentData[]>(RECRUITMENT_DATA);
-  const [pageInfo, setPageInfo] = useState<PageInfo>(dummyPageInfo);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const params = useSearchParams();
+  const clubId = params.get("clubId");
+  const router = useRouter();
+
+  const [recruitmentData, setRecruitmentData] = useState<
+    RecruitmentData[] | null
+  >(null);
 
   const [isRecruitingModalOpen, setIsRecruitingModalOpen] =
     useState<boolean>(false);
   const [isRecruitementGuideOpen, setIsRecruitmentGuideOpen] =
     useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const [clubMember, setClubMember] = useState<ClubMemberData | null>(
-    CLUB_MEMBER_DATA[1]
-  ); // 멤버타입 (null - 미소속회원)
+  // 내 클럽 멤버 정보
+  const [clubMember, setClubMember] = useState<ClubMemberData | null>(null); // 멤버타입 (null - 미소속회원)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
-
-  const handleLoadMore = () => {
-    setCurrentPage((prev) => prev + 1);
-    // 데이터 받아오기
-    setRecruitmentData((prev) => [...prev, ...recruitmentData]);
-  };
 
   const hasActivatedRecruitment = (recruitmentData: RecruitmentData[]) => {
     return recruitmentData.some((item) => item.isActivated);
   };
 
-  const router = useRouter();
-
   const handleWrite = () => {
-    if (hasActivatedRecruitment(recruitmentData)) {
+    if (recruitmentData && hasActivatedRecruitment(recruitmentData)) {
       setIsRecruitingModalOpen(true);
     } else {
       setIsRecruitmentGuideOpen(true);
@@ -62,17 +55,64 @@ const ClubRecruitmentPage = () => {
   };
 
   // 모집 삭제 핸들러
-  const handleDeleteRecruitment = (id: number) => {
-    setRecruitmentData((prev) => prev.filter((item) => item.id !== id));
+  const handleDeleteRecruitment = async (id: string) => {
+    try {
+      await deleteRecruitment(id);
+      setRecruitmentData((prev) =>
+        prev ? prev.filter((item) => item.id !== id) : []
+      );
+      alert("모집이 삭제되었습니다.");
+    } catch (error) {
+      console.error("모집 삭제 실패:", error);
+      alert("문제가 발생했습니다.");
+    }
   };
   // 모집 종료 핸들러
-  const handleEndRecruitment = (id: number) => {
-    setRecruitmentData((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, isActivated: false } : item
-      )
-    );
+  const handleEndRecruitment = async (id: string) => {
+    try {
+      await endRecruitment(id);
+      setRecruitmentData((prev) =>
+        prev
+          ? prev.map((item) =>
+              item.id === id ? { ...item, isActivated: false } : item
+            )
+          : []
+      );
+      alert("모집이 종료되었습니다.");
+    } catch (error) {
+      console.error("모집 마감 실패:", error);
+      alert("문제가 발생했습니다.");
+    }
   };
+
+  useEffect(() => {
+    if (clubId) {
+      // 내 클럽 멤버 정보
+      const fetchClubDetail = async () => {
+        try {
+          const data = await getClubDetail(clubId);
+          setClubMember(data.clubMemberData);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      // 동아리 모집 정보
+      const fetchClubRecruitment = async () => {
+        try {
+          setLoading(true);
+          const data = await getClubRecruitment(clubId);
+          setRecruitmentData(data.recruitmentDataList);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchClubDetail();
+      fetchClubRecruitment();
+    }
+  }, [clubId]);
 
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
@@ -83,7 +123,7 @@ const ClubRecruitmentPage = () => {
           <div className="w-full mt-5 md:mt-0">
             <div className="flex items-center justify-between mb-[22px]">
               <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-                총 20개의 모집공고가 있어요
+                총 {recruitmentData?.length}개의 모집공고가 있어요
               </p>
             </div>
             <div className="hidden pl-6 pr-[114px] py-1.5 mb-2.5 justify-between bg-white70 text-subtext2 rounded-[4px] text-body1_m md:flex">
@@ -94,34 +134,32 @@ const ClubRecruitmentPage = () => {
               <div>모집 기간</div>
             </div>
 
-            {recruitmentData.map((item, index) => (
-              <div key={index} className="mb-2.5">
-                <RecruitmentCard
-                  id={item.id}
-                  title={item.title}
-                  onClick={() =>
-                    router.push(`/recruitment/detail?id=${item.id}`)
-                  }
-                  date={`${formatDateToDot(
-                    item.startDateTime,
-                    false,
-                    true
-                  )} ~ ${formatDateToDot(item.endDateTime, false, true)} `}
-                  status={item.isActivated ? "enable" : "disable"}
-                  isManager={
-                    clubMember?.clubMemberRoleType == "MANAGER" ||
-                    clubMember?.clubMemberRoleType == "ADMIN"
-                  }
-                  onDelete={handleDeleteRecruitment}
-                  onEnd={handleEndRecruitment}
-                />
-              </div>
-            ))}
-
-            {pageInfo.totalPages > currentPage && (
-              <div className="flex justify-center mt-9 md:mt-10">
-                <PlusBtn title={"더보기"} onClick={handleLoadMore} />
-              </div>
+            {loading ? (
+              <div className="text-center p-10 text-subtext1">로딩중...</div>
+            ) : (
+              recruitmentData?.map((item, index) => (
+                <div key={index} className="mb-2.5">
+                  <RecruitmentCard
+                    id={item.id}
+                    title={item.title}
+                    onClick={() =>
+                      router.push(`/recruitment/detail?id=${item.id}`)
+                    }
+                    date={`${formatDateToDot(
+                      item.startDateTime,
+                      false,
+                      true
+                    )} ~ ${formatDateToDot(item.endDateTime, false, true)}`}
+                    status={item.isActivated ? "enable" : "disable"}
+                    isManager={
+                      clubMember?.clubMemberRoleType === "MANAGER" ||
+                      clubMember?.clubMemberRoleType === "ADMIN"
+                    }
+                    onDelete={handleDeleteRecruitment}
+                    onEnd={handleEndRecruitment}
+                  />
+                </div>
+              ))
             )}
           </div>
         </div>
