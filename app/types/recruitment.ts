@@ -1,5 +1,7 @@
+import { PageInfo } from "./pageInfo";
+
 export interface RecruitmentData {
-  id: number; // 모집공고 ID
+  id: string; // 모집공고 ID
   title: string;
   body: string;
   posterUri: string;
@@ -10,4 +12,9 @@ export interface RecruitmentData {
   endDateTime: string;
   isActivated: boolean;
   isMyBookmark: boolean;
+}
+
+export interface ClubRecruitmentListRes {
+  recruitmentDataList: RecruitmentData[];
+  pageInfo: PageInfo;
 }
