@@ -31,10 +31,15 @@ const ClubRecruitmentPage = () => {
   const [recruitmentData, setRecruitmentData] = useState<
     RecruitmentData[] | null
   >(null);
+  const [selectedRecruitment, setSelectedRecruitment] = useState<string | null>(
+    null
+  );
 
   const [isRecruitingModalOpen, setIsRecruitingModalOpen] =
     useState<boolean>(false);
   const [isRecruitementGuideOpen, setIsRecruitmentGuideOpen] =
+    useState<boolean>(false);
+  const [isRecruitmentCloseModalOpen, setIsRecruitmentCloseModalOpen] =
     useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -156,7 +161,10 @@ const ClubRecruitmentPage = () => {
                       clubMember?.clubMemberRoleType === "ADMIN"
                     }
                     onDelete={handleDeleteRecruitment}
-                    onEnd={handleEndRecruitment}
+                    onEnd={() => {
+                      setIsRecruitmentCloseModalOpen(true);
+                      setSelectedRecruitment(item.id);
+                    }}
                   />
                 </div>
               ))
@@ -204,6 +212,28 @@ const ClubRecruitmentPage = () => {
         <RecruitmentGuideForm
           onClose={() => setIsRecruitmentGuideOpen(false)}
           onSubmit={() => router.push("/club/management/recruitment/create")}
+        />
+      )}
+      {isRecruitmentCloseModalOpen && (
+        <NotiPopUp
+          onClose={() => {
+            setIsRecruitmentCloseModalOpen(false);
+          }}
+          icon={"check"}
+          title={"모집을 종료할까요?"}
+          description={
+            "동아리 모집공고 게시물을 내리고,<br/>지원서 접수를 마감할까요?"
+          }
+          modalType={"button"}
+          firstButton={() => {
+            handleEndRecruitment(selectedRecruitment || "");
+            setIsRecruitmentCloseModalOpen(false);
+          }}
+          firstButtonText={"모집 종료하기"}
+          secondButton={() => {
+            setIsRecruitmentCloseModalOpen(false);
+          }}
+          secondButtonText={"취소하기"}
         />
       )}
     </div>
