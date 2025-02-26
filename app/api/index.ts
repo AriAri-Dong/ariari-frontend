@@ -5,6 +5,8 @@ const api = axios.create({
   timeout: 30000,
   headers: {
     "Content-Type": "application/json",
+    Authorization:
+      "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI2ODI0NzY4NjM3NDQwNTEwMDIiLCJ0b2tlblR5cGUiOiJBQ0NFU1NfVE9LRU4iLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNzQwNTYwMTc0LCJleHAiOjE3NDA1OTYxNzR9.FraspNoublYM172pEmzm4FJ4SwIaSweRks1xqEiqkBoHUslzhImrj5exERBpqPA-",
   },
   withCredentials: true,
 });

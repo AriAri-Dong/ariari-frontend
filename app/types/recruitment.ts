@@ -1,5 +1,9 @@
+import { PageInfo } from "./pageInfo";
+
+export type RecruitmentStatusType = "SCHEDULED" | "OPEN" | "CLOSED";
+
 export interface RecruitmentData {
-  id: number; // 모집공고 ID
+  id: string; // 모집공고 ID
   title: string;
   body: string;
   posterUri: string;
@@ -8,6 +12,12 @@ export interface RecruitmentData {
   createdDateTime: string;
   startDateTime: string;
   endDateTime: string;
-  isActivated: boolean;
+  // isActivated: boolean;
+  recruitmentStatusType: RecruitmentStatusType;
   isMyBookmark: boolean;
+}
+
+export interface ClubRecruitmentListRes {
+  recruitmentDataList: RecruitmentData[];
+  pageInfo: PageInfo;
 }
