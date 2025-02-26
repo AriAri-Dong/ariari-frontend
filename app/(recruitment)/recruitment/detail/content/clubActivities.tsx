@@ -74,7 +74,7 @@ const ClubActivities = ({
                   true
                 )} ~ ${formatDateToDot(item.endDateTime, false, true)}`}
                 onClick={() => {}}
-                status={"CLOSED"}
+                status={item.recruitmentStatusType}
               />
             );
           })}
