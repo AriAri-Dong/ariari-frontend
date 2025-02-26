@@ -48,7 +48,9 @@ const ClubRecruitmentPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
 
   const hasActivatedRecruitment = (recruitmentData: RecruitmentData[]) => {
-    return recruitmentData.some((item) => item.isActivated);
+    return recruitmentData.some(
+      (item) => item.recruitmentStatusType === "OPEN"
+    );
   };
 
   const handleWrite = () => {
@@ -79,7 +81,9 @@ const ClubRecruitmentPage = () => {
       setRecruitmentData((prev) =>
         prev
           ? prev.map((item) =>
-              item.id === id ? { ...item, isActivated: false } : item
+              item.id === id
+                ? { ...item, recruitmentStatusType: "CLOSED" }
+                : item
             )
           : []
       );
@@ -155,7 +159,7 @@ const ClubRecruitmentPage = () => {
                       false,
                       true
                     )} ~ ${formatDateToDot(item.endDateTime, false, true)}`}
-                    status={item.isActivated ? "enable" : "disable"}
+                    status={item.recruitmentStatusType}
                     isManager={
                       clubMember?.clubMemberRoleType === "MANAGER" ||
                       clubMember?.clubMemberRoleType === "ADMIN"

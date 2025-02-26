@@ -5,6 +5,7 @@ import useResponsive from "@/hooks/useResponsive";
 import Badge from "../badge/badge";
 import DeleteBtn from "../button/iconBtn/deleteBtn";
 import EndBtn from "../button/iconBtn/endBtn";
+import { RecruitmentStatusType } from "@/types/recruitment";
 
 type ManagerActionsProps = {
   isManager: true;
@@ -20,7 +21,7 @@ type RecruitmentCardProps = {
   id: string;
   title: string;
   date: string;
-  status: "enable" | "disable";
+  status: RecruitmentStatusType;
   className?: string;
   onClick: () => void;
 } & (ManagerActionsProps | GeneralUserProps);
@@ -52,12 +53,12 @@ const RecruitmentCard = (props: RecruitmentCardProps) => {
         <div className="w-full flex flex-col items-start md:flex-row  md:items-center gap-3 md:gap-10 md:w-fit">
           <div className="w-full flex justify-between md:w-fit">
             <Badge status={status} />
-            {!isMdUp && isManager && status === "disable" && (
+            {!isMdUp && isManager && status != "OPEN" && (
               <div onClick={(e) => handleDelete(e)}>
                 <DeleteBtn onClick={() => {}} />
               </div>
             )}
-            {!isMdUp && isManager && status === "enable" && (
+            {!isMdUp && isManager && status === "OPEN" && (
               <div
                 className="flex items-center gap-1 px-1.5 py-1 text-mobile_body3_m text-subtext2"
                 onClick={handleEnd}
@@ -73,12 +74,12 @@ const RecruitmentCard = (props: RecruitmentCardProps) => {
           <p className="text-subtext2 text-body4_r md:px-3.5 md:text-body3_r">
             {date}
           </p>
-          {isMdUp && isManager && status === "disable" && (
+          {isMdUp && isManager && status != "OPEN" && (
             <div onClick={(e) => handleDelete(e)}>
               <DeleteBtn onClick={() => {}} />
             </div>
           )}
-          {isMdUp && isManager && status === "enable" && (
+          {isMdUp && isManager && status === "OPEN" && (
             <div onClick={(e) => handleEnd(e)}>
               <EndBtn onClick={() => {}} />
             </div>
