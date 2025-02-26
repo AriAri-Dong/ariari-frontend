@@ -87,7 +87,6 @@ const ClubRecruitmentPage = () => {
             )
           : []
       );
-      alert("모집이 종료되었습니다.");
     } catch (error) {
       console.error("모집 마감 실패:", error);
       alert("문제가 발생했습니다.");

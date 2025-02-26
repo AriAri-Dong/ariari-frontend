@@ -4,11 +4,13 @@ import React, { useState } from "react";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import RecruitmentCard from "@/components/card/recruitmentCard";
 import AcceptanceReviewDropdown from "@/components/dropdown/acceptanceReviewDropdown";
-import { ACCEPTANCE_REVIEWS, RECRUITMENT_CARDS } from "@/data/club";
+import { ACCEPTANCE_REVIEWS } from "@/data/club";
 import { MainRecruitmentCardProps } from "@/types/components/card";
+import { RECRUITMENT_DATA } from "@/data/recruitment";
+import formatDateToDot from "@/utils/formatDateToDot";
 
 interface ClubActivitiesProps {
-  recruitmentId?: number;
+  recruitmentId?: string;
   recruitmentData?: MainRecruitmentCardProps;
 }
 
@@ -60,15 +62,19 @@ const ClubActivities = ({
           이전 모집 공고
         </h1>
         <div className="flex flex-col mt-5 gap-3 md:gap-[14px]">
-          {RECRUITMENT_CARDS.map((item) => {
+          {RECRUITMENT_DATA.map((item) => {
             return (
               <RecruitmentCard
                 key={item.id}
                 id={item.id}
                 title={item.title}
-                date={item.date}
+                date={`${formatDateToDot(
+                  item.startDateTime,
+                  false,
+                  true
+                )} ~ ${formatDateToDot(item.endDateTime, false, true)}`}
                 onClick={() => {}}
-                status={item.status === "모집중" ? "enable" : "disable"}
+                status={"CLOSED"}
               />
             );
           })}
