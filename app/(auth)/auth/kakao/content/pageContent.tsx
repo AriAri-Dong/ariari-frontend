@@ -2,10 +2,11 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getTokenWithCode, getUserData } from "@/api/apis.ts";
 import { useUserStore } from "@/providers/user-store-provider";
 import HeaderToken from "@/api/headerToken";
 import LoginLoading from "./loginLoading";
+import { getTokenWithCode, getUserData } from "@/api/login/api";
+import api from "@/api";
 
 export default function SignInPageContent() {
   const router = useRouter();
@@ -20,23 +21,23 @@ export default function SignInPageContent() {
     // 카카오 로그인 코드 상태 업데이트
     setKakaoCode(curKakaoCode);
 
-    // 카카오 로그인 코드로 액세스 토큰 요청
     getTokenWithCode(kakaoCode)
       .then(async (res1) => {
         // 로그인 상태 업데이트
         signIn({
           accessToken: res1.accessToken,
-          refreshToken: res1.refreshToken,
           isFirstLogin: res1.isFirstLogin,
           isSignIn: true,
         });
 
         // API 요청을 위한 헤더에 액세스 토큰 설정
         HeaderToken.set(res1.accessToken);
+        api.defaults.headers.common["Authorization"] = `${res1.accessToken}`;
 
         // 유저 정보 가져와서 상태 업데이트
         await getUserData().then((res2) => {
           setUserData(res2);
+          console.log(res2);
         });
 
         // 첫 로그인 여부에 따라 리다이렉트 처리
