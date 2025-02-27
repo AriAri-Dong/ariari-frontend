@@ -6,12 +6,12 @@ import ProfileSettingModal from "@/components/modal/profileSetting/profileSettin
 import useResponsive from "@/hooks/useResponsive";
 import MobileProfileSettingModal from "@/components/modal/profileSetting/mobile/mobileProfileSettingModal";
 import { useEffect, useState } from "react";
-import { getUserData } from "@/api/apis";
 import HeaderToken from "@/api/headerToken";
 import ClubRanking from "@/(home)/home/content/clubRanking";
 import { useShallow } from "zustand/shallow";
 import PopularRecruitment from "@/(home)/home/content/popularRecruitment";
 import LatestRecruitment from "@/(home)/home/content/latestRecruitment";
+import { getUserData } from "@/api/login/api";
 
 const HomePageContent = () => {
   const router = useRouter();
@@ -25,7 +25,7 @@ const HomePageContent = () => {
     }))
   );
 
-  const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] = useState(false);
+  const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] = useState<boolean>(false);
 
   const handleFirstLoginModalClose = () => {
     setIsFirstLoginModalOpen(false);
