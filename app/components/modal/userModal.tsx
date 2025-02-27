@@ -4,7 +4,10 @@ import Image from "next/image";
 import closeIcon from "@/images/icon/close.svg";
 import logo from "@/images/logo/ariari.svg";
 import { USER_MENU } from "@/data/header";
+import { useUserStore } from "@/providers/user-store-provider";
 import { useRouter } from "next/navigation";
+import HeaderToken from "@/api/headerToken";
+import { useShallow } from "zustand/shallow";
 
 interface UserModalProps {
   username?: string;
@@ -19,10 +22,19 @@ interface UserModalProps {
  */
 const UserModal = ({ onClose }: UserModalProps) => {
   const router = useRouter();
-  const username = "Suyoooi";
+  const username = useUserStore(
+    useShallow((state) => state.memberData.nickname)
+  );
 
-  const handleMenuClick = (path: string) => {
-    router.push(path);
+  const { signOut } = useUserStore((state) => state);
+
+  const handleMenuClick = (path: string, label: string) => {
+    if (label === "로그아웃") {
+      HeaderToken.set("");
+      signOut();
+    } else {
+      router.push(path);
+    }
     onClose();
   };
 
@@ -65,7 +77,7 @@ const UserModal = ({ onClose }: UserModalProps) => {
             ? `text-subtext2 text-mobile_body1_r`
             : `text-text1 text-mobile_h1_contents_title`
         }`}
-                  onClick={() => handleMenuClick(item.path)}
+                  onClick={() => handleMenuClick(item.path, item.label)}
                 >
                   {item.label}
                 </span>
