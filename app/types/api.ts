@@ -6,11 +6,9 @@ export type AuthResponseType = {
 
 export type UserDataResponseType = {
   memberData: {
-    // id: string;
-    // nickname: string;
-    // profileType: string;
-    memberId: string;
+    id: string;
     nickname: string;
+    profileType: string;
   };
   schoolData: {
     name: string;
