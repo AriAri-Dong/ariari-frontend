@@ -1,9 +1,14 @@
 // == LOGIN ==
 export const LOGIN = "/login/kakao";
 export const REISSUE = "/reissue/token";
+export const LOGOUT = "/logout";
+export const UNREGISTER = "/unregister";
 
 // MEMBER
+export const MEMBERS = "/members";
 export const MEMBERS_MY = "/members/my";
+export const MEMBERS_MY_NICKNAME = "/members/my/nickname";
+export const MEMBERS_MY_PROFILE = "/members/my/profile";
 
 // == CLUB ==
 export const CLUBS = "/clubs";
