@@ -22,7 +22,7 @@ export const getTokenWithCode = async (code: string) => {
   }
 };
 
-export const getUserData = async () => {
+export const getMemberData = async () => {
   try {
     const { data } = await api.get<UserDataResponseType>(MEMBERS_MY);
 
@@ -30,7 +30,7 @@ export const getUserData = async () => {
   } catch (err) {
     console.error(err);
     return {
-      memberData: { memberId: "", nickname: "" },
+      memberData: { id: "", nickname: "", profileType: "" },
       schoolData: { name: "" },
     };
   }
