@@ -1,11 +1,10 @@
 import axios from "axios";
-import { MEMBERS_MY, REISSUE } from "../apiUrl";
-import api from "..";
-import { AuthResponseType, UserDataResponseType } from "@/types/api";
+import { REISSUE, LOGOUT } from "../apiUrl";
+import { AuthResponseType } from "@/types/api";
+import axiosInstance from "../axiosInstance";
 
 export const refreshAccessToken = async () => {
   const response = await axios.post(REISSUE, {}, { withCredentials: true });
-
   return response.data.accessToken;
 };
 
@@ -13,8 +12,7 @@ export const getTokenWithCode = async (code: string) => {
   const url = `/login/kakao?code=${code}`;
 
   try {
-    const { data } = await api.get<AuthResponseType>(url);
-
+    const { data } = await axiosInstance.get<AuthResponseType>(url);
     return data;
   } catch (err) {
     console.error(err);
@@ -22,16 +20,19 @@ export const getTokenWithCode = async (code: string) => {
   }
 };
 
-export const getMemberData = async () => {
+export const logout = async (accessToken: string, refreshToken: string) => {
   try {
-    const { data } = await api.get<UserDataResponseType>(MEMBERS_MY);
+    await axiosInstance.post(
+      LOGOUT,
+      { accessToken, refreshToken },
+      { withCredentials: true }
+    );
 
-    return data;
+    sessionStorage.removeItem("accessToken");
+
+    // 로그인 페이지로 리디렉트
+    window.location.href = "/";
   } catch (err) {
-    console.error(err);
-    return {
-      memberData: { id: "", nickname: "", profileType: "" },
-      schoolData: { name: "" },
-    };
+    console.error("로그아웃 실패:", err);
   }
 };
