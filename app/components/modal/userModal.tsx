@@ -1,13 +1,9 @@
 "use client";
 
-import Image from "next/image";
-import closeIcon from "@/images/icon/close.svg";
-import logo from "@/images/logo/ariari.svg";
 import { USER_MENU } from "@/data/header";
 import { useUserStore } from "@/providers/user-store-provider";
 import { useRouter } from "next/navigation";
-import HeaderToken from "@/api/headerToken";
-import { useShallow } from "zustand/shallow";
+import { logout } from "@/api/login/api";
 
 interface UserModalProps {
   username?: string;
@@ -22,16 +18,24 @@ interface UserModalProps {
  */
 const UserModal = ({ onClose }: UserModalProps) => {
   const router = useRouter();
-  const username = useUserStore(
-    useShallow((state) => state.memberData.nickname)
-  );
-
+  const username = useUserStore((state) => state.memberData.nickname);
   const { signOut } = useUserStore((state) => state);
+
+  const handleLogout = async () => {
+    try {
+      const accessToken = sessionStorage.getItem("accessToken") || "";
+      const refreshToken = "";
+      await logout(accessToken, refreshToken);
+      signOut();
+      window.location.href = "/";
+    } catch (error) {
+      console.error("로그아웃 오류:", error);
+    }
+  };
 
   const handleMenuClick = (path: string, label: string) => {
     if (label === "로그아웃") {
-      HeaderToken.set("");
-      signOut();
+      handleLogout();
     } else {
       router.push(path);
     }
@@ -44,54 +48,30 @@ const UserModal = ({ onClose }: UserModalProps) => {
         <div className="flex justify-between mt-10 mb-4">
           <div className="flex items-center gap-3">
             <div className="rounded-full w-9 h-9 bg-[#CBCBCB]" />
-            <span className="text-subtext2  text-mobile_body1_m">
+            <span className="text-subtext2 text-mobile_body1_m">
               {username}
             </span>
           </div>
-          <Image
-            src={closeIcon}
-            alt="닫기"
-            width={24}
-            height={24}
-            onClick={onClose}
-          />
+          <button onClick={onClose} className="w-6 h-6">
+            닫기
+          </button>
         </div>
-        <div
-          className="flex items-center justify-between w-full bg-selectedoption_default
-          rounded-lg max-w-[1248px] px-5 h-[55px]"
-        >
-          <h3 className="text-body1_sb text-primary">내 포인트 현황</h3>
-          <div className="flex items-center gap-1.5 text-primary">
-            <div className="text-h4_sb">20</div>
-            <p className="text-body3_r">p</p>
-          </div>
-        </div>
-        <div className="w-full mt-5">
-          <ul className="flex flex-col gap-y-8">
-            {USER_MENU.map((item, index) => (
-              <li key={index} className="">
-                <span
-                  className={`cursor-pointer
-        ${
-          index === USER_MENU.length - 1
-            ? `text-subtext2 text-mobile_body1_r`
-            : `text-text1 text-mobile_h1_contents_title`
-        }`}
-                  onClick={() => handleMenuClick(item.path, item.label)}
-                >
-                  {item.label}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <Image
-          src={logo}
-          alt="Logo"
-          width={52}
-          height={42}
-          className="fixed bottom-0 pb-10"
-        />
+        <ul className="flex flex-col gap-y-8">
+          {USER_MENU.map((item, index) => (
+            <li key={index} className="">
+              <span
+                className={`cursor-pointer ${
+                  index === USER_MENU.length - 1
+                    ? `text-subtext2 text-mobile_body1_r`
+                    : `text-text1 text-mobile_h1_contents_title`
+                }`}
+                onClick={() => handleMenuClick(item.path, item.label)}
+              >
+                {item.label}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
