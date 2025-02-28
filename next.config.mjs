@@ -3,7 +3,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const nextConfig = {
   reactStrictMode: false,
-  swcMinify: false,
+  swcMinify: true,
   compiler: {
     styledComponents: true,
   },
