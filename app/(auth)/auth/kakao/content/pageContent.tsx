@@ -1,41 +1,64 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import ProfileSettingModal from "@/components/modal/profileSetting/profileSettingModal";
+import useResponsive from "@/hooks/useResponsive";
+import MobileProfileSettingModal from "@/components/modal/profileSetting/mobile/mobileProfileSettingModal";
+import { useEffect, useState } from "react";
+import ClubRanking from "@/(home)/home/content/clubRanking";
+import PopularRecruitment from "@/(home)/home/content/popularRecruitment";
+import LatestRecruitment from "@/(home)/home/content/latestRecruitment";
 import { useUserStore } from "@/providers/user-store-provider";
-import LoginLoading from "./loginLoading";
-import { setAccessToken } from "@/api/axiosInstance";
-import { getTokenWithCode } from "@/api/login/api";
+import { getMemberData } from "@/api/member/api";
 
-export default function SignInPageContent() {
+const HomePageContent = () => {
   const router = useRouter();
+  const isMdUp = useResponsive("md");
   const searchParams = useSearchParams();
-  const { signIn } = useUserStore((state) => state);
+  const [isFirstLogin, setIsFirstLogin] = useState<string | null>(null);
+  const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] =
+    useState<boolean>(false);
+
+  const { setUserData } = useUserStore((state) => state);
+
+  const handleFirstLoginModalClose = () => {
+    setIsFirstLoginModalOpen(false);
+    router.replace("/", undefined);
+  };
 
   useEffect(() => {
-    const curKakaoCode = searchParams.get("code");
-    if (!curKakaoCode) return;
+    const searchParamFirstLogin = searchParams.get("firstLogin");
+    setIsFirstLogin(searchParamFirstLogin);
+    setIsFirstLoginModalOpen(searchParamFirstLogin === "1");
 
+    // 유저 정보 가져와서 상태 업데이트
     (async () => {
       try {
-        // 카카오 로그인 후 AccessToken 발급
-        const res1 = await getTokenWithCode(curKakaoCode);
-        const { accessToken, isFirstLogin } = res1;
-
-        // 로그인 상태 업데이트
-        signIn({ accessToken, isFirstLogin, isSignIn: true });
-
-        // axiosInstance에 accessToken 저장
-        setAccessToken(accessToken);
-
-        // 첫 로그인 여부에 따라 리디렉트 처리
-        router.replace(isFirstLogin ? "/?firstLogin=1" : "/");
-      } catch (error: any) {
-        console.error("Login error:", error);
-        router.replace("/");
+        const res = await getMemberData();
+        if (res) {
+          setUserData(res);
+          console.log("유저 정보 불러오기 성공:", res);
+        }
+      } catch (error) {
+        console.error("유저 정보 불러오기 실패:", error);
       }
     })();
-  }, [router, searchParams, signIn]);
+  }, [searchParams, setUserData]);
 
-  return <LoginLoading />;
-}
+  return (
+    <div className="w-full ">
+      <ClubRanking />
+      <PopularRecruitment />
+      <LatestRecruitment />
+      {isFirstLogin &&
+        isFirstLoginModalOpen &&
+        (isMdUp ? (
+          <ProfileSettingModal onClose={handleFirstLoginModalClose} />
+        ) : (
+          <MobileProfileSettingModal onClose={handleFirstLoginModalClose} />
+        ))}
+    </div>
+  );
+};
+
+export default HomePageContent;
