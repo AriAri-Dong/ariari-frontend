@@ -4,14 +4,13 @@ import { createStore } from "zustand/vanilla";
 
 export type UserState = {
   accessToken: string;
-  // refreshToken: string;
   id: string;
   isSignIn: boolean;
   isFirstLogin: boolean;
   memberData: {
-    memberId: string;
+    id: string;
     nickname: string;
-    // profileType: string | null;
+    profileType: string | null;
   };
   schoolData: {
     name: string;
@@ -21,12 +20,10 @@ export type UserState = {
 export type UserActions = {
   signIn: ({
     accessToken,
-    // refreshToken,
     isFirstLogin,
     isSignIn,
   }: {
     accessToken: string;
-    // refreshToken: string;
     isFirstLogin: boolean;
     isSignIn: boolean;
   }) => void;
@@ -38,14 +35,13 @@ export type UserStore = UserState & UserActions;
 
 export const defaultInitState: UserState = {
   accessToken: "initialAccessToken",
-  // refreshToken: "initialRefreshToken",
   id: "defaultIdValue",
   isSignIn: false,
   isFirstLogin: false,
   memberData: {
-    memberId: "",
+    id: "",
     nickname: "",
-    // profileType: "",
+    profileType: "",
   },
   schoolData: {
     name: "",
@@ -67,7 +63,6 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
               return {
                 ...state,
                 accessToken: accessToken,
-                // refreshToken: refreshToken,
                 isFirstLogin: isFirstLogin,
                 isSignIn: isSignIn,
               };
