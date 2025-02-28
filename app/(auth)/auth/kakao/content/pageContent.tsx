@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useUserStore } from "@/providers/user-store-provider";
 import HeaderToken from "@/api/headerToken";
 import LoginLoading from "./loginLoading";
-import { getTokenWithCode, getUserData } from "@/api/login/api";
+import { getMemberData, getTokenWithCode } from "@/api/login/api";
 import api from "@/api";
 
 export default function SignInPageContent() {
@@ -35,7 +35,7 @@ export default function SignInPageContent() {
         api.defaults.headers.common["Authorization"] = `${res1.accessToken}`;
 
         // 유저 정보 가져와서 상태 업데이트
-        await getUserData().then((res2) => {
+        await getMemberData().then((res2) => {
           setUserData(res2);
           console.log(res2);
         });
