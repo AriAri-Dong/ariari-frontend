@@ -11,7 +11,7 @@ import ClubRanking from "@/(home)/home/content/clubRanking";
 import { useShallow } from "zustand/shallow";
 import PopularRecruitment from "@/(home)/home/content/popularRecruitment";
 import LatestRecruitment from "@/(home)/home/content/latestRecruitment";
-import { getUserData } from "@/api/login/api";
+import { getMemberData } from "@/api/login/api";
 
 const HomePageContent = () => {
   const router = useRouter();
@@ -25,7 +25,8 @@ const HomePageContent = () => {
     }))
   );
 
-  const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] = useState<boolean>(false);
+  const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] =
+    useState<boolean>(false);
 
   const handleFirstLoginModalClose = () => {
     setIsFirstLoginModalOpen(false);
@@ -42,7 +43,7 @@ const HomePageContent = () => {
     if (!!accessToken) {
       HeaderToken.set(accessToken);
     }
-    getUserData()
+    getMemberData()
       .then((res) => {
         setUserData(res);
       })
