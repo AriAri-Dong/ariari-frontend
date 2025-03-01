@@ -1,5 +1,6 @@
 import { RecruitmentData } from "@/types/recruitment";
 import noimage from "@/images/test/test.svg";
+import { ClubInfoCard } from "@/types/components/card";
 
 export const RECRUITMENT_GUIDE_DATA = [
   {
@@ -265,3 +266,25 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     isMyBookmark: false,
   },
 ];
+export const CLUB_INFO_DATA: ClubInfoCard = {
+  id: "1",
+  startDate: "2025-01-08T16:00:00Z",
+  endDate: "2025-03-01T09:00:00Z",
+  clubName: "인터페이스",
+  clubImageUrl: noimage,
+  title: "인터페이스 38기 모지",
+  imageUrl: noimage,
+  limits: 20,
+  tag: {
+    affiliation: "세종대학교",
+    field: "CULTURE",
+    region: "SEOUL_GYEONGGI",
+    target: "GRADUATE_STUDENT",
+  },
+  isMyRecruitmentScrap: false,
+  procedureType: "INTERVIEW",
+  recruitmentBookmarks: 15,
+  isMyClub: false,
+  isMyApply: true,
+  isMyClubBookmark: false,
+};

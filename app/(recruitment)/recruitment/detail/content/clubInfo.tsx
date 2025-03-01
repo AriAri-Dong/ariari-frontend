@@ -26,7 +26,7 @@ import {
 import { deleteClubBookmark, postClubBookmark } from "@/api/api";
 
 interface ClubInfoProps {
-  recruitmentId?: number;
+  recruitmentId?: string;
   recruitmentData: ClubInfoCard;
 
   isPreview?: boolean;

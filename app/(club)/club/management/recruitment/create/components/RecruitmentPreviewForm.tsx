@@ -9,10 +9,7 @@ import close from "@/images/icon/close.svg";
 import ClubInfo from "@/(recruitment)/recruitment/detail/content/clubInfo";
 import ClubActivities from "@/(recruitment)/recruitment/detail/content/clubActivities";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
-import {
-  MAIN_RECRUITMENT_CARD_DATA,
-  RECRUITMENT_DATA,
-} from "@/data/recruitment";
+import { CLUB_INFO_DATA, RECRUITMENT_DATA } from "@/data/recruitment";
 
 interface RecruitmentPreviewFormProps {
   onClose: () => void;
@@ -62,11 +59,11 @@ const RecruitmentPreviewForm = ({
         <div className="overflow-y-scroll h-[calc(100vh-65px)]">
           <div className="h-5" />
           <div style={{ pointerEvents: "none" }}>
-            <ClubInfo
-              isPreview={true}
-              recruitmentData={MAIN_RECRUITMENT_CARD_DATA}
+            <ClubInfo isPreview={true} recruitmentData={CLUB_INFO_DATA} />
+            <ClubActivities
+              recruitmentId={CLUB_INFO_DATA.id.toString()}
+              prevRecruitmentList={RECRUITMENT_DATA}
             />
-            <ClubActivities prevRecruitmentList={RECRUITMENT_DATA} />
           </div>
           <section className="flex flex-col items-center gap-5 bg-sub_bg px-4 mt-[-40px] pb-[80px]">
             <LargeBtn title={"등록하기"} onClick={onSubmit} />
@@ -96,10 +93,7 @@ const RecruitmentPreviewForm = ({
         className="relative w-3/4 p-5 pb-6 bg-white rounded-[16px]"
         style={{ pointerEvents: "none" }} // 내부 클릭 차단
       >
-        <ClubInfo
-          isPreview={true}
-          recruitmentData={MAIN_RECRUITMENT_CARD_DATA}
-        />
+        <ClubInfo isPreview={true} recruitmentData={CLUB_INFO_DATA} />
       </div>
     </div>
   );

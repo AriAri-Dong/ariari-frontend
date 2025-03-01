@@ -19,7 +19,7 @@ export interface MainRecruitmentCardProps {
 }
 
 export interface ClubInfoCard {
-  id: number;
+  id: string;
   startDate: string;
   endDate: string;
   clubName: string;
