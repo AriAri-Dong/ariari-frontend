@@ -48,7 +48,9 @@ const ClubRecruitmentPage = () => {
   };
 
   const hasActivatedRecruitment = (recruitmentData: RecruitmentData[]) => {
-    return recruitmentData.some((item) => item.isActivated);
+    return recruitmentData.some(
+      (item) => item.recruitmentStatusType === "OPEN"
+    );
   };
 
   const router = useRouter();
@@ -62,14 +64,14 @@ const ClubRecruitmentPage = () => {
   };
 
   // 모집 삭제 핸들러
-  const handleDeleteRecruitment = (id: number) => {
+  const handleDeleteRecruitment = (id: string) => {
     setRecruitmentData((prev) => prev.filter((item) => item.id !== id));
   };
   // 모집 종료 핸들러
-  const handleEndRecruitment = (id: number) => {
+  const handleEndRecruitment = (id: string) => {
     setRecruitmentData((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, isActivated: false } : item
+        item.id === id ? { ...item, recruitmentStatusType: "CLOSED" } : item
       )
     );
   };
@@ -107,7 +109,7 @@ const ClubRecruitmentPage = () => {
                     false,
                     true
                   )} ~ ${formatDateToDot(item.endDateTime, false, true)} `}
-                  status={item.isActivated ? "enable" : "disable"}
+                  status={item.recruitmentStatusType}
                   isManager={
                     clubMember?.clubMemberRoleType == "MANAGER" ||
                     clubMember?.clubMemberRoleType == "ADMIN"
