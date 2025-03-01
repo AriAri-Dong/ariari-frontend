@@ -2,9 +2,10 @@ import { ClubData } from "@/types/club";
 import { PageInfo } from "@/types/pageInfo";
 
 export type ProcedureType = "DOCUMENT" | "INTERVIEW";
+export type RecruitmentStatusType = "SCHEDULED" | "OPEN" | "CLOSED";
 
 export interface RecruitmentData {
-  id: number;
+  id: string;
   title: string;
   body: string;
   posterUri: string;
@@ -13,7 +14,8 @@ export interface RecruitmentData {
   startDateTime: string;
   endDateTime: string;
   createdDateTime: string;
-  isActivated: boolean;
+  // isActivated: boolean;
+  recruitmentStatusType: RecruitmentStatusType;
   isMyBookmark: boolean;
 }
 

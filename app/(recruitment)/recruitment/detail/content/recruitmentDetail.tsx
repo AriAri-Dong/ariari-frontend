@@ -83,7 +83,7 @@ const RecruitmentDetail = () => {
     return <h4 className="w-full text-center text-h4">{errorMsg}</h4>;
   }
 
-  if (!recruitmentData) {
+  if (!recruitmentData || !recruitmentId) {
     return (
       <h4 className="w-full text-center text-h4">
         모집공고 데이터를 찾을 수 없습니다.
@@ -94,6 +94,7 @@ const RecruitmentDetail = () => {
     <>
       <ClubInfo recruitmentData={recruitmentData} />
       <ClubActivities
+        recruitmentId={recruitmentId}
         recruitmentNoteDataList={recruitmentNoteDataList}
         prevRecruitmentList={prevRecruitmentList || []}
       />

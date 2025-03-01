@@ -10,7 +10,7 @@ import formatDateToDot from "@/utils/formatDateToDot";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface ClubActivitiesProps {
-  recruitmentId?: number;
+  recruitmentId: string;
   recruitmentNoteDataList?: RecruitmentNoteData[] | null;
   prevRecruitmentList: RecruitmentData[];
 }
@@ -84,28 +84,29 @@ const ClubActivities = ({
           이전 모집 공고
         </h1>
         <div className="flex flex-col mt-5 gap-3 md:gap-2.5">
-          {prevRecruitmentList
-            .slice(0, prevRecruitmentListLength)
-            .map((item) => {
-              return (
+          {prevRecruitmentList.length > 1 ? (
+            prevRecruitmentList
+              .slice(0, prevRecruitmentListLength)
+              .filter((item) => item.id !== recruitmentId)
+              .map((item) => (
                 <RecruitmentCard
                   key={item.id}
+                  id={item.id}
                   title={item.title}
                   date={`${formatDateToDot(
                     item.startDateTime,
                     false,
                     true
                   )} ~ ${formatDateToDot(item.endDateTime, false, true)}`}
-                  onClick={() =>
-                    router.push(
-                      `/recruitment/detail?id=${item.id}&clubId=${clubId}`
-                    )
-                  }
-                  status={item.isActivated === true ? "enable" : "disable"}
+                  onClick={() => {}}
+                  status={item.recruitmentStatusType}
                 />
-              );
-            })}
+              ))
+          ) : (
+            <p className="text-gray-500 text-center">이전 모집이 없습니다.</p>
+          )}
         </div>
+
         <div className="flex justify-center pb-[80px] md:pb-[124px] mt-9 md:mt-10">
           {prevRecruitmentListLength < prevRecruitmentList.length && (
             <PlusBtn
