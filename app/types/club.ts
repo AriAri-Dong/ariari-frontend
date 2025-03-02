@@ -49,3 +49,29 @@ export interface MembershipBalance {
   amount: number; // 입금(양수) 또는 출금(음수)
   balance: number; // 현재 잔액
 }
+
+export interface ClubActivity {
+  clubActivityId: string;
+  clubId: string;
+  clubMember: ClubMemberData;
+  accessType: "ALL" | "CLUB_MEMBER";
+  body: string;
+  createdDateTime: string;
+  // deletedDateTime?: string | null;
+  images: string[];
+  likes: number;
+  myLike: boolean;
+  commentCount: number;
+  comments: ClubActivityComment[];
+}
+
+export interface ClubActivityComment {
+  clubActivityCommentId: string;
+  clubMember: ClubMemberData;
+  clubActivityId: string;
+  body: string;
+  createdDateTime: string;
+  likes: number;
+  myLike: boolean;
+  comments: ClubActivityComment[];
+}
