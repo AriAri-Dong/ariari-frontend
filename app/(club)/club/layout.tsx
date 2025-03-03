@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
@@ -61,7 +61,9 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
 const ClubPageWithProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ClubProvider>
-      <ClubPage>{children}</ClubPage>
+      <Suspense fallback={<p>Loading...</p>}>
+        <ClubPage>{children}</ClubPage>
+      </Suspense>
     </ClubProvider>
   );
 };
