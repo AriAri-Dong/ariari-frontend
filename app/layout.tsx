@@ -4,6 +4,7 @@ import "./globals.css";
 
 import { UserStoreProvider } from "@/providers/user-store-provider";
 import Layout from "@/components/layout/layout";
+import QueryClientProvider from "./providers/QueryClientProvider";
 
 const pretendard = localFont({
   src: "../public/fonts/PretendardVariable.woff2",
@@ -28,9 +29,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={pretendard.variable}>
-        <UserStoreProvider>
-          <Layout>{children}</Layout>
-        </UserStoreProvider>
+        <QueryClientProvider>
+          <UserStoreProvider>
+            <Layout>{children}</Layout>
+          </UserStoreProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
