@@ -70,3 +70,12 @@ export const ROLE_TYPE = [
   { id: 2, label: "매니저" },
   { id: 3, label: "관리자" },
 ];
+export const EDIT_ACTION_TYPE = [
+  { id: 0, label: "수정하기" },
+  { id: 1, label: "삭제하기" },
+];
+
+export const REPORT_ACTION_TYPE = [
+  { id: 0, label: "차단하기" },
+  { id: 1, label: "신고하기" },
+];
