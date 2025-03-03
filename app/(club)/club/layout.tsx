@@ -1,15 +1,23 @@
 "use client";
 
-import React from "react";
-import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
+import useResponsive from "@/hooks/useResponsive";
+import { useFetchClubInfo } from "@/hooks/club/useClubInfo";
 import ClubInfoWrapper from "./content/clubInfoWrapper";
 import { ClubProvider, useClubContext } from "@/context/ClubContext";
 
 const ClubPage = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const router = useRouter();
+  const params = useSearchParams();
+  const clubId = params.get("clubId") ?? "";
+
+  const { clubInfo, isLoading } = useFetchClubInfo(clubId);
+  const { setRole, setClubInfo } = useClubContext();
+
   const isMdUp = useResponsive("md");
   const clubDetailPathsOnlyMdUp = ["/club/withdrawal", "/club/close"];
 
@@ -22,7 +30,17 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
     router.push("/");
   };
 
+  useEffect(() => {
+    if (!clubInfo) return;
+    setRole(clubInfo.clubMemberData.clubMemberRoleType);
+    setClubInfo(clubInfo);
+  }, [clubInfo, setRole]);
+
   const handleWrite = () => [console.log("작성 핸들러")];
+
+  if (isLoading) {
+    return <h1>Loading</h1>;
+  }
 
   return (
     <div>
