@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import ClubInfoWrapper from "./content/clubInfoWrapper";
-import useResponsive from "@/hooks/useResponsive";
+import { ClubProvider, useClubContext } from "@/context/ClubContext";
 
 const ClubPage = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -40,4 +40,12 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default ClubPage;
+const ClubPageWithProvider = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <ClubProvider>
+      <ClubPage>{children}</ClubPage>
+    </ClubProvider>
+  );
+};
+
+export default ClubPageWithProvider;
