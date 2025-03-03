@@ -5,13 +5,10 @@ import SearchTermContext from "@/context/searchTermContext";
 import Footer from "./footer";
 import Header from "./header";
 import { usePathname } from "next/navigation";
-import ClubInfoWrapper from "@/(club)/club/content/clubInfoWrapper";
-import useResponsive from "@/hooks/useResponsive";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
-  const isMdUp = useResponsive("md");
   const specialPaths = [
     "/recruitment/detail",
     "/club/review",
@@ -22,20 +19,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/recruitment",
     "/club/management/activity/accounting",
   ];
-  const bgPaths = ["/application","/help"];
+  const bgPaths = ["/application", "/help"];
   const mobileBgPaths = ["/club/create", "/withdrawal", "/club/close"];
-  
-  // ClubInfo 컴포넌트 노출
-  const clubDetailPaths = [
-    "/club/review",
-    "/club/management",
-    "/club/help",
-    "/club/activityHistory",
-    "/club/recruitment",
-    "/club/management/members",
-  ];
-  // Md 이상인 경우만 ClubInfo 컴포넌트 노출
-  const clubDetailPathsOnlyMdUp = ["/club/withdrawal", "/club/close"];
 
   const isSpecialComponent = specialPaths.some((path) =>
     pathname.includes(path)
@@ -44,19 +29,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const isBgComponentOnlyMobile = mobileBgPaths.some((path) =>
     pathname.includes(path)
   );
-  const isClubDetailComponent = clubDetailPaths.some((path) =>
-    pathname.includes(path)
-  );
-  const isClubDetailOnlyMdUpComponent = clubDetailPathsOnlyMdUp.some((path) =>
-    pathname.includes(path)
-  );
 
   return (
     <SearchTermContext.Provider value={{ searchTerm, setSearchTerm }}>
       <div className="flex flex-col min-h-screen">
         <Header />
-        {isClubDetailComponent && <ClubInfoWrapper />}
-        {isClubDetailOnlyMdUpComponent && isMdUp && <ClubInfoWrapper />}
         <main
           className={`flex-grow flex justify-center items-center 
             ${isBgComponent && "bg-sub_bg"} 
