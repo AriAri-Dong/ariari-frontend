@@ -61,6 +61,7 @@ export interface ClubActivity {
   images: string[];
   likes: number;
   myLike: boolean;
+  isMine: boolean;
   commentCount: number;
   comments: ClubActivityComment[];
 }
@@ -73,5 +74,6 @@ export interface ClubActivityComment {
   createdDateTime: string;
   likes: number;
   myLike: boolean;
+  isMine: boolean;
   comments: ClubActivityComment[];
 }

@@ -14,6 +14,7 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
     likes: 10,
     myLike: true,
     commentCount: 3,
+    isMine: true,
     comments: [
       {
         clubActivityCommentId: "301",
@@ -23,6 +24,7 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
         createdDateTime: "2024-03-01T12:30:00Z",
         myLike: false,
         likes: 1,
+        isMine: false,
         comments: [
           {
             clubActivityCommentId: "401",
@@ -32,6 +34,8 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
             createdDateTime: "2024-03-01T12:45:00Z",
             myLike: false,
             likes: 1,
+            isMine: false,
+
             comments: [],
           },
         ],
@@ -44,6 +48,8 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
         createdDateTime: "2024-03-01T12:45:00Z",
         likes: 1,
         myLike: false,
+        isMine: false,
+
         comments: [],
       },
     ],
@@ -58,6 +64,8 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
     images: [noimage],
     likes: 25,
     myLike: false,
+    isMine: false,
+
     commentCount: 3,
     comments: [
       {
@@ -68,6 +76,8 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
         createdDateTime: "2024-03-02T15:00:00Z",
         likes: 1,
         myLike: true,
+        isMine: false,
+
         comments: [],
       },
       {
@@ -77,8 +87,8 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
         body: "저도 환영합니다! 함께 즐거운 시간 보내요!",
         createdDateTime: "2024-03-02T15:10:00Z",
         likes: 1,
-
         myLike: false,
+        isMine: false,
         comments: [
           {
             clubActivityCommentId: "402",
@@ -88,6 +98,7 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
             createdDateTime: "2024-03-02T15:20:00Z",
             likes: 0,
             myLike: false,
+            isMine: false,
             comments: [],
           },
         ],
@@ -104,8 +115,21 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
     images: [noimage],
     likes: 5,
     myLike: true,
-    commentCount: 0,
-    comments: [],
+    isMine: false,
+    commentCount: 1,
+    comments: [
+      {
+        clubActivityCommentId: "503",
+        clubMember: CLUB_MEMBER_DATA[0],
+        clubActivityId: "2",
+        body: "기대됩니다.",
+        createdDateTime: "2024-03-02T15:20:00Z",
+        likes: 0,
+        myLike: false,
+        isMine: true,
+        comments: [],
+      },
+    ],
   },
   {
     clubActivityId: "4",
@@ -117,6 +141,7 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
     images: [noimage, noimage],
     likes: 18,
     myLike: false,
+    isMine: false,
     commentCount: 2,
     comments: [
       {
@@ -127,6 +152,7 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
         createdDateTime: "2024-03-04T11:00:00Z",
         likes: 0,
         myLike: false,
+        isMine: true,
         comments: [],
       },
       {
@@ -137,6 +163,7 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
         createdDateTime: "2024-03-04T11:10:00Z",
         likes: 1,
         myLike: false,
+        isMine: false,
         comments: [],
       },
     ],
@@ -151,6 +178,7 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
     images: [noimage],
     likes: 30,
     myLike: false,
+    isMine: false,
     commentCount: 3,
     comments: [
       {
@@ -160,6 +188,7 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
         body: "다음에도 꼭 참여하고 싶어요!",
         createdDateTime: "2024-03-05T17:00:00Z",
         myLike: true,
+        isMine: false,
         likes: 1,
         comments: [],
       },
@@ -167,10 +196,11 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
         clubActivityCommentId: "206",
         clubMember: CLUB_MEMBER_DATA[4],
         clubActivityId: "5",
-        body: "정말 재미있었어요! 후기 감사합니다!",
+        body: "정말 재미있었어요! 많이 참여해주세요!",
         createdDateTime: "2024-03-05T17:15:00Z",
         likes: 1,
         myLike: false,
+        isMine: false,
         comments: [
           {
             clubActivityCommentId: "403",
@@ -180,6 +210,7 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
             createdDateTime: "2024-03-05T17:30:00Z",
             likes: 1,
             myLike: true,
+            isMine: false,
             comments: [],
           },
         ],
