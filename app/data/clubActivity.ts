@@ -11,7 +11,7 @@ export const CLUB_ACTIVITY_DATA: ClubActivity[] = [
     body: "오늘 클럽 모임을 가졌어요! 오랜만에 다 같이 모여서 정말 즐거운 시간을 보냈어요. 처음에는 다들 근황을 나누면서 편안한 분위기에서 이야기를 시작했어요.\n이후에는 이번 모임의 주요 주제에 대해 깊이 있는 대화를 나눴고, 각자의 생각을 공유하면서 새로운 시각을 배울 수 있었어요.\n특히, 팀 활동을 하면서 협업의 중요성을 다시 한번 깨닫게 되었고, 모두가 적극적으로 참여해 더욱 의미 있는 시간이 되었어요. 다음 모임도 기대돼요! ",
     createdDateTime: "2024-03-01T12:00:00Z",
     images: [noimage, noimage],
-    likes: 10,
+    likes: 11,
     myLike: true,
     commentCount: 3,
     isMine: true,
