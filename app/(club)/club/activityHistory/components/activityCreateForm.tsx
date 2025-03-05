@@ -72,7 +72,6 @@ const ActivityCreateForm = ({ onClose, onSubmit }: ActivityCreateFormProps) => {
     }
 
     onSubmit();
-    setAlertMessage("정상 등록되었습니다.");
     onClose();
   };
 
