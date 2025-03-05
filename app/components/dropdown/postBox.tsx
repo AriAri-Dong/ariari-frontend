@@ -159,7 +159,9 @@ const PostBox = ({ data, role }: PostBoxProps) => {
   }, [isOptionOpen]);
 
   return (
-    <div className={`bg-background p-4 md:py-[26px] md:px-6`}>
+    <div
+      className={`bg-background p-[14px] pb-4 rounded-12 md:p-6 md:pb-[26px]`}
+    >
       <div className="flex flex-col gap-3.5 md:flex-row justify-between">
         <div className="flex w-full justify-between">
           <div className="flex items-center gap-[14px]">
@@ -244,7 +246,7 @@ const PostBox = ({ data, role }: PostBoxProps) => {
           </div>
         </div>
       </div>
-      <div className="md:mt-[34px] mt-4">
+      <div className="md:mt-[22px] mt-4">
         <h1
           ref={contentRef}
           className={`whitespace-pre-line text-subtext1 text-mobile_body1_r md:text-body1_r ${
@@ -306,11 +308,7 @@ const PostBox = ({ data, role }: PostBoxProps) => {
         )}
 
         <div className="flex flex-col-reverse items-end md:flex-row md:items-center gap-4 md:gap-5 mt-3 md:mt-7">
-          <CommentInput
-            onSend={() => {
-              alert("댓글 전송");
-            }}
-          />
+          <CommentInput onSend={() => {}} />
           <div className="flex gap-1 flex-shrink-0 items-center">
             <IconBtn
               type={"comment"}

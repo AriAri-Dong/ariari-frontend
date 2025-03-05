@@ -175,12 +175,12 @@ const Comment = (props: CommentBaseProps) => {
             </div>
           </div>
           {!isReplying && (
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-[2px] md:gap-2 items-center">
               {!isReply && (
                 <IconBtn
                   type={"reply"}
                   size={"large"}
-                  title={"답글"}
+                  title={isMdUp ? "답글" : ""}
                   onClick={() => {
                     setIsReplyFormOpen(!isReplyFormOpen);
                   }}
