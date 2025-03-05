@@ -80,7 +80,7 @@ const IconBtn = ({ title, onClick, type, size, className }: BtnType) => {
             }`}
           />
         )}
-        <p className="flex-shrink-0">{title}</p>
+        {title && <p className="flex-shrink-0">{title}</p>}
       </div>
     </button>
   );
