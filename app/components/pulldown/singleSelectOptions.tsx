@@ -4,6 +4,7 @@ interface SingleSelectOptionsProps {
   selectedOption: string;
   optionData: { id: number; label: string }[];
   size: "small" | "medium" | "large" | "mobile";
+  position?: "center" | "end";
   handleMenuClick?: (label: string) => void;
   handleMenuClickWithId?: (label: string, id: number) => void;
 }
@@ -13,6 +14,7 @@ interface SingleSelectOptionsProps {
  * @param selectedOption 선택한 옵션
  * @param optionData 옵션 데이터
  * @param size 사이즈
+ * @param position 부모 컴포넌트 기준 위치
  * @param handleMenuClick 메뉴 클릭 핸들러
  * @returns
  */
@@ -20,6 +22,7 @@ const SingleSelectOptions = ({
   selectedOption,
   optionData,
   size,
+  position = "center",
   handleMenuClick,
   handleMenuClickWithId,
 }: SingleSelectOptionsProps) => {
@@ -33,7 +36,7 @@ const SingleSelectOptions = ({
   };
   return (
     <div
-      className={`z-50 absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-background
+      className={`z-50 absolute top-full  mt-2 bg-background
       rounded-lg border border-menuborder shadow-default ${
         size === "small"
           ? "w-[116px]"
@@ -42,7 +45,13 @@ const SingleSelectOptions = ({
           : size === "mobile"
           ? "w-[80px]"
           : "w-[190px]"
-      } `}
+      } 
+      ${
+        position === "center"
+          ? "left-1/2 transform -translate-x-1/2"
+          : "right-0"
+      }
+   `}
     >
       {optionData.map((item, index) => (
         <div
