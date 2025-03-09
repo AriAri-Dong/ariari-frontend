@@ -13,6 +13,24 @@ interface LoginDialogProps {
 const MobileLoginModal = ({ onClose }: LoginDialogProps) => {
   const isSmallScreen = useScreenHeight(740);
 
+  const handleLoginClick = () => {
+    const location = process.env.NEXT_PUBLIC_KAKAO_AUTH_URL;
+    const clientId = process.env.NEXT_PUBLIC_KAKAO_AUTH_API_KEY;
+    const redirectUri = process.env.NEXT_PUBLIC_CLIENT_BASE_URL + "/auth/kakao";
+    const respoinseType = "code";
+
+    const requestUrl =
+      location +
+      "?" +
+      "client_id=" +
+      clientId +
+      "&redirect_uri=" +
+      redirectUri +
+      "&response_type=" +
+      respoinseType;
+    window.location.href = requestUrl;
+  };
+
   return (
     <div
       className="fixed top-0 left-0 w-full h-full bg-background z-50 flex flex-col 
@@ -43,7 +61,7 @@ const MobileLoginModal = ({ onClose }: LoginDialogProps) => {
         src={kakoBtn}
         alt={"kakao"}
         width={390}
-        onClick={() => {}}
+        onClick={handleLoginClick}
         className="cursor-pointer"
       />
     </div>

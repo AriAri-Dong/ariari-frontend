@@ -1,3 +1,9 @@
+export interface Pageable {
+  page: number;
+  size: number;
+  sort?: string[];
+}
+
 export type AuthResponseType = {
   accessToken: string;
   refreshToken: string;
