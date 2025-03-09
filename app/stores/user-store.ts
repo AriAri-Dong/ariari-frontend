@@ -4,7 +4,6 @@ import { createStore } from "zustand/vanilla";
 
 export type UserState = {
   accessToken: string;
-  refreshToken: string;
   id: string;
   isSignIn: boolean;
   isFirstLogin: boolean;
@@ -21,12 +20,10 @@ export type UserState = {
 export type UserActions = {
   signIn: ({
     accessToken,
-    refreshToken,
     isFirstLogin,
     isSignIn,
   }: {
     accessToken: string;
-    refreshToken: string;
     isFirstLogin: boolean;
     isSignIn: boolean;
   }) => void;
@@ -38,7 +35,6 @@ export type UserStore = UserState & UserActions;
 
 export const defaultInitState: UserState = {
   accessToken: "initialAccessToken",
-  refreshToken: "initialRefreshToken",
   id: "defaultIdValue",
   isSignIn: false,
   isFirstLogin: false,
@@ -62,12 +58,11 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
       persist(
         (set, get) => ({
           ...initState,
-          signIn: ({ accessToken, refreshToken, isFirstLogin, isSignIn }) =>
+          signIn: ({ accessToken, isFirstLogin, isSignIn }) =>
             set((state) => {
               return {
                 ...state,
                 accessToken: accessToken,
-                refreshToken: refreshToken,
                 isFirstLogin: isFirstLogin,
                 isSignIn: isSignIn,
               };
