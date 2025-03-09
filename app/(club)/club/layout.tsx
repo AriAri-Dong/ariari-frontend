@@ -8,6 +8,10 @@ import useResponsive from "@/hooks/useResponsive";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import ClubInfoWrapper from "./content/clubInfoWrapper";
 import { ClubProvider, useClubContext } from "@/context/ClubContext";
+import { useUserStore } from "@/providers/user-store-provider";
+import { useShallow } from "zustand/shallow";
+import LoginModal from "@/components/modal/login/loginModal";
+import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 
 const ClubPage = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -15,6 +19,7 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
   const params = useSearchParams();
   const clubId = params.get("clubId") ?? "";
 
+  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
   const { clubInfo, isLoading } = useClubInfoQuery(clubId);
   const { setRole, setClubInfo } = useClubContext();
 
@@ -30,13 +35,17 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
     router.push("/");
   };
 
+  const handleWrite = () => {
+    console.log("작성 핸들러");
+  };
+
   useEffect(() => {
     if (!clubInfo) return;
-    setRole(clubInfo.clubMemberData.clubMemberRoleType);
+    if (isSignIn && clubInfo.clubMemberData != null) {
+      setRole(clubInfo.clubMemberData.clubMemberRoleType);
+    }
     setClubInfo(clubInfo);
   }, [clubInfo, setRole]);
-
-  const handleWrite = () => [console.log("작성 핸들러")];
 
   if (isLoading) {
     return <h1>Loading</h1>;
@@ -44,6 +53,15 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div>
+      {/* === 로그인하지 않은 경우 모달 노출 ===*/}
+      {/* 학교 인증에 따른 모달 추가 구현 필요 */}
+      {!isSignIn &&
+        (isMdUp ? (
+          <LoginModal onClose={handleRouter} />
+        ) : (
+          <MobileLoginModal onClose={handleRouter} />
+        ))}
+
       {/* === 상단 동아리 정보(공통 영역) === */}
       {(!isClubDetailOnlyMdUpComponent || isMdUp) && <ClubInfoWrapper />}
       {children}
