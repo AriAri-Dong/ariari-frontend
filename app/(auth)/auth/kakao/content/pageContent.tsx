@@ -2,10 +2,12 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getTokenWithCode, getUserData } from "@/api/apis.ts";
-import { useUserStore } from "@/providers/user-store-provider";
 import HeaderToken from "@/api/headerToken";
-import { IoConstructOutline } from "react-icons/io5";
+import LoginLoading from "./loginLoading";
+import { getTokenWithCode } from "@/api/login/api";
+import { getMemberData } from "@/api/member/api";
+import axiosInstance from "@/api/axiosInstance";
+import { useUserStore } from "@/providers/user-store-provider";
 
 export default function SignInPageContent() {
   const router = useRouter();
@@ -14,25 +16,39 @@ export default function SignInPageContent() {
   const { signIn, setUserData } = useUserStore((state) => state);
 
   useEffect(() => {
+    // "code" 쿼리 파라미터 추출
     const curKakaoCode = searchParams.get("code") || "";
     if (curKakaoCode === "") return;
+    // 카카오 로그인 코드 상태 업데이트
     setKakaoCode(curKakaoCode);
 
     getTokenWithCode(kakaoCode)
       .then(async (res1) => {
+        // 로그인 상태 업데이트
         signIn({
           accessToken: res1.accessToken,
-          refreshToken: res1.refreshToken,
           isFirstLogin: res1.isFirstLogin,
           isSignIn: true,
         });
 
-        HeaderToken.set(res1.accessToken);
+        // 토큰을 sessionStorage에 저장
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem("accessToken", res1.accessToken);
+        }
 
-        await getUserData().then((res2) => {
+        // API 요청을 위한 헤더에 액세스 토큰 설정
+        HeaderToken.set(res1.accessToken);
+        axiosInstance.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${res1.accessToken}`;
+
+        // 유저 정보 가져와서 상태 업데이트
+        await getMemberData().then((res2) => {
           setUserData(res2);
+          console.log(res2);
         });
 
+        // 첫 로그인 여부에 따라 리다이렉트 처리
         router.replace(`/${res1.isFirstLogin ? "?firstLogin=1" : ""}`);
       })
       .catch(() => {
@@ -40,9 +56,5 @@ export default function SignInPageContent() {
       });
   }, [kakaoCode, router, searchParams, setUserData, signIn]);
 
-  return (
-    <>
-      <p>카카오 로그인중입니다. 잠시만 기다려주세요.</p>
-    </>
-  );
+  return <LoginLoading />;
 }
