@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import useResponsive from "@/hooks/useResponsive";
-import { useFetchClubInfo } from "@/hooks/club/useClubInfo";
+import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import ClubInfoWrapper from "./content/clubInfoWrapper";
 import { ClubProvider, useClubContext } from "@/context/ClubContext";
 
@@ -15,7 +15,7 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
   const params = useSearchParams();
   const clubId = params.get("clubId") ?? "";
 
-  const { clubInfo, isLoading } = useFetchClubInfo(clubId);
+  const { clubInfo, isLoading } = useClubInfoQuery(clubId);
   const { setRole, setClubInfo } = useClubContext();
 
   const isMdUp = useResponsive("md");
