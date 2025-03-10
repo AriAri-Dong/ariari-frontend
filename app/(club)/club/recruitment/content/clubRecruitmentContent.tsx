@@ -2,31 +2,36 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useClubContext } from "@/context/ClubContext";
+import { useUserStore } from "@/providers/user-store-provider";
+import { useShallow } from "zustand/shallow";
 
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
 import RecruitmentCard from "@/components/card/recruitmentCard";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import NotiPopUp from "@/components/modal/notiPopUp";
+import MobileMenu from "../../components/menu/mobileMenu";
+import LeftMenu from "../../components/menu/leftMenu";
+import RecruitmentGuideForm from "../components/RecruitmentGuideForm";
+import Alert from "@/components/alert/alert";
 
 import formatDateToDot from "@/utils/formatDateToDot";
 
 import { RecruitmentData } from "@/types/recruitment";
-import { ClubMemberData } from "@/types/member";
+
 import {
   deleteRecruitment,
   endRecruitment,
   getClubRecruitment,
-} from "@/api/recruitment";
-import { getClubDetail } from "@/api/club";
-import MobileMenu from "../../components/menu/mobileMenu";
-import LeftMenu from "../../components/menu/leftMenu";
-import RecruitmentGuideForm from "../components/RecruitmentGuideForm";
+} from "@/api/recruitment/api";
 
 const ClubRecruitmentContent = () => {
   const params = useSearchParams();
   const clubId = params.get("clubId");
   const router = useRouter();
+  const { role } = useClubContext();
+  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
 
   const [recruitmentData, setRecruitmentData] = useState<
     RecruitmentData[] | null
@@ -42,10 +47,7 @@ const ClubRecruitmentContent = () => {
   const [isRecruitmentCloseModalOpen, setIsRecruitmentCloseModalOpen] =
     useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-
-  // 내 클럽 멤버 정보
-  const [clubMember, setClubMember] = useState<ClubMemberData | null>(null); // 멤버타입 (null - 미소속회원)
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const hasActivatedRecruitment = (recruitmentData: RecruitmentData[]) => {
     return recruitmentData.some(
@@ -68,10 +70,10 @@ const ClubRecruitmentContent = () => {
       setRecruitmentData((prev) =>
         prev ? prev.filter((item) => item.id !== id) : []
       );
-      alert("모집이 삭제되었습니다.");
+      setAlertMessage("삭제되었습니다.");
     } catch (error) {
       console.error("모집 삭제 실패:", error);
-      alert("문제가 발생했습니다.");
+      setAlertMessage("문제가 발생했습니다.");
     }
   };
   // 모집 종료 핸들러
@@ -89,45 +91,33 @@ const ClubRecruitmentContent = () => {
       );
     } catch (error) {
       console.error("모집 마감 실패:", error);
-      alert("문제가 발생했습니다.");
+      setAlertMessage("문제가 발생했습니다.");
     }
   };
 
   useEffect(() => {
-    if (clubId) {
-      // 내 클럽 멤버 정보
-      const fetchClubDetail = async () => {
-        try {
-          const data = await getClubDetail(clubId);
-          setClubMember(data.clubMemberData);
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    if (clubId && isSignIn) {
       // 동아리 모집 정보
       const fetchClubRecruitment = async () => {
         try {
           setLoading(true);
           const data = await getClubRecruitment(clubId);
-          setRecruitmentData(data.recruitmentDataList);
-        } catch (error) {
-          console.error(error);
+          setRecruitmentData(data!.recruitmentDataList);
         } finally {
           setLoading(false);
         }
       };
 
-      fetchClubDetail();
       fetchClubRecruitment();
     }
-  }, [clubId]);
+  }, [clubId, isSignIn]);
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
       <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
         <MobileMenu />
         <div className="flex lg:gap-9">
           <LeftMenu />
-          <div className="w-full mt-5 md:mt-0">
+          <div className="w-full">
             <div className="flex items-center justify-between mb-[22px]">
               <p className="text-subtext2 text-mobile_body2_m md:text-h4">
                 총 {recruitmentData?.length}개의 모집공고가 있어요
@@ -158,10 +148,7 @@ const ClubRecruitmentContent = () => {
                       true
                     )} ~ ${formatDateToDot(item.endDateTime, false, true)}`}
                     status={item.recruitmentStatusType}
-                    isManager={
-                      clubMember?.clubMemberRoleType === "MANAGER" ||
-                      clubMember?.clubMemberRoleType === "ADMIN"
-                    }
+                    isManager={role === "MANAGER" || role === "ADMIN"}
                     onDelete={handleDeleteRecruitment}
                     onEnd={() => {
                       setIsRecruitmentCloseModalOpen(true);
@@ -174,32 +161,29 @@ const ClubRecruitmentContent = () => {
           </div>
         </div>
       </div>
-      {/* ====== PC 해상도에서만 보이는  모집공고 보기 ====== */}
-      {/* 모집안내 바 : 로그인 x or 동아리 가입 x */}
-      {(clubMember == null || !isLoggedIn) && (
+      {/* PC 모집안내 바 :  동아리 가입 x */}
+      {role == null && isSignIn && (
         <RecruitmentGuideFloatingBar
           deadline={new Date("2025-03-01T23:59:59")}
           isWriteButtonVisible={false}
           handleWrite={() => {}}
         />
       )}
-      {/* ====== 모바일 해상도에서만 보이는 모집공고 보기 ======  */}
-      {/* 모집안내 바 : 로그인 x or 동아리 가입 x */}
+      {/* 모바일 모집안내 바 : 동아리 가입 x */}
 
-      {(clubMember == null || !isLoggedIn) && (
+      {role == null && isSignIn && (
         <div className="fixed bottom-5 md:hidden left-50% translate-1/2">
           <DarkBtn title={"모집공고 보기"} onClick={handleWrite} />
         </div>
       )}
 
       {/* 작성버튼 - 관리자 */}
-      {clubMember?.clubMemberRoleType == "MANAGER" ||
-        (clubMember?.clubMemberRoleType == "ADMIN" && (
-          <div className="fixed w-full bottom-5 px-5 flex justify-end md:bottom-[44px] md:max-w-[1248px] md:px-5">
-            <WriteBtn onClick={handleWrite} />
-          </div>
-        ))}
-      {/* 모집중인 공고 O - 관리자 */}
+      {(role == "MANAGER" || role == "ADMIN") && (
+        <div className="fixed w-full bottom-5 px-5 flex justify-end md:bottom-[44px] md:max-w-[1248px] md:px-5">
+          <WriteBtn onClick={handleWrite} />
+        </div>
+      )}
+      {/* 작성 불가 모달 - 모집중인 공고 O */}
       {isRecruitingModalOpen && (
         <NotiPopUp
           modalType="x-button"
@@ -216,6 +200,8 @@ const ClubRecruitmentContent = () => {
           onSubmit={() => router.push("/club/management/recruitment/create")}
         />
       )}
+
+      {/* 모집공고 종료 확인 모달 */}
       {isRecruitmentCloseModalOpen && (
         <NotiPopUp
           onClose={() => {
@@ -237,6 +223,10 @@ const ClubRecruitmentContent = () => {
           }}
           secondButtonText={"취소하기"}
         />
+      )}
+
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
     </div>
   );
