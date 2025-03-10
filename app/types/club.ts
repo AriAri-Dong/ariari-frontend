@@ -62,7 +62,7 @@ export interface ClubFaqData {
 }
 
 export interface ClubFaqListRes {
-  contents: ClubFaqData[];
+  clubFaqDataList: ClubFaqData[];
   pageInfo: PageInfo;
 }
 
