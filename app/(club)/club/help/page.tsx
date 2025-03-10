@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import useResponsive from "@/hooks/useResponsive";
 
-import { FAQ_DATA } from "@/data/faq";
 import { QUESTION_TYPE } from "@/data/pulldown";
 import { pageInfo, QNA_DATA } from "@/data/qna";
-import { ClubFaqData, ClubQuestionData } from "@/types/club";
+import { ClubQuestionData } from "@/types/club";
 import { PageInfo } from "@/types/pageInfo";
 
 import SubTap from "@/components/tab/subTap";
@@ -32,15 +31,12 @@ import MobileMenu from "../components/menu/mobileMenu";
 import FaqForm from "./components/faqForm";
 import QnaForm from "./components/qnaForm";
 import QuestionDropdown from "./components/questionDropdown";
+import { useClubFaqQuery } from "@/hooks/club/useClubHelpQuery";
 
 const ClubHelpPage = () => {
   const [type, setType] = useState<string>(QUESTION_TYPE[0].label);
   const [isQnaFormOpen, setIsQnaFormOpen] = useState<boolean>(false);
   const [isFaqFormOpen, setIsFaqFormOpen] = useState<boolean>(false);
-
-  const [faqData, setFaqData] = useState<ClubFaqData[]>(FAQ_DATA);
-  const [faqPageInfo, setFaqPageInfo] = useState<PageInfo>(pageInfo);
-  const [faqCurrentPage, setFaqCurrentPage] = useState<number>(1);
 
   const [qnaData, setQnaData] = useState<ClubQuestionData[]>(QNA_DATA);
   const [qnaPageInfo, setQnaPageInfo] = useState<PageInfo>(pageInfo);
@@ -58,19 +54,20 @@ const ClubHelpPage = () => {
   ); // 멤버타입 (null - 미소속회원)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true); // 로그인여부 임시값
   const isTapOver = useResponsive("md");
-
-  const handleLoadMoreFaq = () => {
-    setFaqCurrentPage((prev) => prev + 1);
-    // 데이터 받아오기
-    setFaqData((prev) => [...prev, ...faqData]);
-  };
+  const params = useSearchParams();
+  const clubId = params.get("clubId") ?? "";
+  const {
+    faqList,
+    totalSize,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isError,
+  } = useClubFaqQuery(clubId);
 
   const handleLoadMoreQna = () => {
     setQnaCurrentPage((prev) => prev + 1);
-    // 데이터 받기
-    setQnaData((prev) => [...prev, ...qnaData]);
   };
-
   const router = useRouter();
 
   const handleRouter = () => {
@@ -95,8 +92,7 @@ const ClubHelpPage = () => {
           <div className="w-full">
             <div className="flex items-center justify-between mb-[22px]">
               <p className="text-subtext2">
-                총
-                {type == "FAQ" ? faqPageInfo.totalSize : qnaPageInfo.totalSize}
+                총{type == "FAQ" ? totalSize ?? "" : qnaPageInfo.totalSize}
                 개의 FAQ가 있어요
               </p>
               <SubTap
@@ -112,9 +108,8 @@ const ClubHelpPage = () => {
               </div>
               <div className={type == "FAQ" ? "hidden" : ""}>작성일</div>
             </div>
-
             {type == "FAQ"
-              ? faqData.map((item, index) => (
+              ? faqList?.map((item, index) => (
                   <div key={index} className="mb-2.5">
                     <QuestionDropdown
                       data={item}
@@ -137,9 +132,9 @@ const ClubHelpPage = () => {
                   </div>
                 ))}
 
-            {type == "FAQ" && faqPageInfo.totalPages > faqCurrentPage && (
+            {type == "FAQ" && hasNextPage && (
               <div className="flex justify-center mt-9 md:mt-10">
-                <PlusBtn title={"더보기"} onClick={handleLoadMoreFaq} />
+                <PlusBtn title={"더보기"} onClick={() => fetchNextPage()} />
               </div>
             )}
             {type == "Q&A" && qnaPageInfo.totalPages > qnaCurrentPage && (
