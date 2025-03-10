@@ -65,13 +65,6 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
       {/* === 상단 동아리 정보(공통 영역) === */}
       {(!isClubDetailOnlyMdUpComponent || isMdUp) && <ClubInfoWrapper />}
       {children}
-      {/* === 모바일 해상도에서만 보이는 하단 버튼 ===  */}
-      <div className="fixed bottom-[77px] right-5 md:hidden">
-        <WriteBtn onClick={handleWrite} />
-      </div>
-      <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 md:hidden">
-        <DarkBtn title={"모집공고 보기"} onClick={handleRouter} />
-      </div>
     </div>
   );
 };
