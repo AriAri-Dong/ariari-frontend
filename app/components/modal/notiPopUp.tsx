@@ -11,6 +11,10 @@ import deleteIcon from "@/images/icon/popup/delete.svg";
 import celebrationIcon from "@/images/icon/popup/celebration.svg";
 import registration from "@/images/icon/popup/registration.svg";
 import invitationIcon from "@/images/icon/popup/invitation.svg";
+import closedIcon from "@/images/icon/popup/closed.svg";
+import leaveIcom from "@/images/icon/popup/leave.svg";
+import warningIcom from "@/images/icon/popup/warning.svg";
+import checkIcon from "@/images/icon/popup/check.svg";
 import closeIcon from "@/images/icon/close.svg";
 
 type ButtonModalProps = {
@@ -35,7 +39,11 @@ type NotiPopUpProps = {
     | "delete"
     | "celebration"
     | "registration"
-    | "invitation";
+    | "invitation"
+    | "closed"
+    | "leave"
+    | "warning"
+    | "check";
   title: string;
   description: string;
 } & (ButtonModalProps | XButtonModalProps);
@@ -52,6 +60,10 @@ const NotiPopUp = (props: NotiPopUpProps) => {
     celebration: celebrationIcon,
     registration: registration,
     invitation: invitationIcon,
+    closed: closedIcon,
+    leave: leaveIcom,
+    warning: warningIcom,
+    check: checkIcon,
   };
 
   return (

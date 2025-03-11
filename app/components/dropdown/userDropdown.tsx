@@ -1,5 +1,7 @@
 "use client";
 
+import { logout } from "@/api/login/api";
+import { useUserStore } from "@/providers/user-store-provider";
 import { useRouter } from "next/navigation";
 
 interface MenuProps {
@@ -15,9 +17,28 @@ interface MenuProps {
  */
 const UserDropdown = ({ optionData, onClose }: MenuProps) => {
   const router = useRouter();
+  const { signOut } = useUserStore((state) => state);
+
+  const handleLogout = async () => {
+    try {
+      // 현재 저장된 토큰 가져오기
+      const accessToken = sessionStorage.getItem("accessToken") || "";
+      const refreshToken = "";
+
+      await logout(accessToken, refreshToken);
+
+      // 상태 초기화 및 로그인 페이지로 이동
+      signOut();
+      window.location.href = "/";
+    } catch (error) {
+      console.error("로그아웃 오류:", error);
+    }
+  };
 
   const handleMenuClick = (item: { label: string; path: string | null }) => {
-    if (item.path) {
+    if (item.label === "로그아웃") {
+      handleLogout();
+    } else if (item.path) {
       router.push(item.path);
     } else {
       console.log("No path available for:", item.label);

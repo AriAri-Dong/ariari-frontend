@@ -1,14 +1,11 @@
-import ClubRanking from "./content/clubRanking";
-import LatestRecruitment from "./content/latestRecruitment";
-import PopularRecruitment from "./content/popularRecruitment";
+import HomePageContent from "@/(home)/home/pageContent";
+import { Suspense } from "react";
 
 const Home = () => {
   return (
-    <div className="w-full ">
-      <ClubRanking />
-      <PopularRecruitment />
-      <LatestRecruitment />
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomePageContent />
+    </Suspense>
   );
 };
 

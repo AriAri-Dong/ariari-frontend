@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import MobileButtons from "../components/buttons/mobile_Buttons";
 import PcButtons from "../components/buttons/PC_Buttons";
@@ -17,6 +17,9 @@ import Alert from "@/components/alert/alert";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import helpText from "@/images/icon/mobile_point_Helptext.svg";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
+import { getRecruitmentRanking } from "@/api/recruitment/api";
+import { getSchoolData } from "@/api/school/api";
+import { getAllClubsInfo, getMyClubs } from "@/api/club/api";
 
 const TestPage = () => {
   const isMdUp = useResponsive("md");
@@ -44,6 +47,80 @@ const TestPage = () => {
     setAlertMessage("활동후기가 등록되었습니다.");
     setOpenReview(false);
   };
+
+  useEffect(() => {
+    const fetchAppliedList = async () => {
+      const result = await getRecruitmentRanking();
+      console.log(result.data);
+    };
+
+    fetchAppliedList();
+  }, []);
+
+  useEffect(() => {
+    const fetchSchoolList = async () => {
+      try {
+        // getSchoolData 호출 시 Pageable 객체를 전달
+        const data = await getSchoolData("학교 이름", {
+          page: 10,
+          size: 1,
+          sort: ["name"],
+        });
+        console.log(data); // 데이터 출력
+      } catch (err) {
+        console.log(err);
+      } finally {
+        // 로딩 종료 처리 등
+      }
+    };
+
+    fetchSchoolList();
+  }, []);
+
+  // 동아리 전체 조회
+  useEffect(() => {
+    const fetchClubsInfo = async () => {
+      try {
+        const data = await getAllClubsInfo();
+        console.log(data);
+      } catch (err) {
+        console.log;
+      } finally {
+      }
+    };
+
+    fetchClubsInfo();
+  }, []);
+
+  // 동아리 상세 정보 조회
+  // useEffect(() => {
+  //   const fetchClubsInfo = async () => {
+  //     try {
+  //       const data = await getClubDetails("674459337435096561");
+  //       console.log("동아리 상세 정보 >>", data);
+  //     } catch (err) {
+  //       console.log(err);
+  //     } finally {
+  //     }
+  //   };
+
+  //   fetchClubsInfo();
+  // }, []);
+
+  // 나의 동아리 조회
+  useEffect(() => {
+    const fetchClubsInfo = async () => {
+      try {
+        const data = await getMyClubs({ page: 0, size: 10, sort: ["name"] });
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+      }
+    };
+
+    fetchClubsInfo();
+  }, []);
 
   return (
     <div>

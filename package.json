@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.66.11",
     "@types/react-datepicker": "^7.0.0",
     "axios": "^1.7.9",
     "date-fns": "^4.1.0",
@@ -24,6 +25,7 @@
     "zustand": "5.0.0-rc.2"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.66.11",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

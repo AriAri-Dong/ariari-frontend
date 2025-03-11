@@ -1,11 +1,12 @@
 import { ClubMemberData } from "@/types/member";
+
 export const CLUB_MEMBER_DATA: ClubMemberData[] = [
   {
     id: "677330845149174390",
     name: "변성은",
-    clubMemberRoleType: "GENERAL",
+    clubMemberRoleType: "ADMIN",
     clubMemberStatusType: "ACTIVE",
-    profileType: "ARIARI_MOUSE",
+    profileType: "ARIARI_SNAKE",
     memberData: {
       id: "101",
       nickname: "성은",
@@ -38,7 +39,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     name: "변성은",
     clubMemberRoleType: "GENERAL",
     clubMemberStatusType: "WITHDRAWN",
-    profileType: "ARIARI_COW",
+    profileType: "ARIARI_TIGER",
     memberData: {
       id: "104",
       nickname: "성은",
@@ -60,7 +61,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     name: "권수연",
     clubMemberRoleType: "MANAGER",
     clubMemberStatusType: "ACTIVE",
-    profileType: "ARIARI_MOUSE",
+    profileType: "ARIARI_DRAGON",
     memberData: {
       id: "106",
       nickname: "수연",
@@ -71,7 +72,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     name: "변성은",
     clubMemberRoleType: "ADMIN",
     clubMemberStatusType: "INACTIVE",
-    profileType: "ARIARI_DOG",
+    profileType: "ARIARI_HORSE",
     memberData: {
       id: "107",
       nickname: "성은",
@@ -82,7 +83,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     name: "박찬진",
     clubMemberRoleType: "GENERAL",
     clubMemberStatusType: "ACTIVE",
-    profileType: "ARIARI_DOG",
+    profileType: "ARIARI_SHEEP",
     memberData: {
       id: "108",
       nickname: "찬진",
@@ -93,7 +94,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     name: "권수연",
     clubMemberRoleType: "GENERAL",
     clubMemberStatusType: "ACTIVE",
-    profileType: "ARIARI_PIG",
+    profileType: "ARIARI_MONKEY",
     memberData: {
       id: "109",
       nickname: "수연",
@@ -104,7 +105,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     name: "변성은",
     clubMemberRoleType: "MANAGER",
     clubMemberStatusType: "ACTIVE",
-    profileType: "ARIARI_RABBIT",
+    profileType: "ARIARI_CHICKEN",
     memberData: {
       id: "110",
       nickname: "성은",

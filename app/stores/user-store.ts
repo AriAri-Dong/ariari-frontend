@@ -1,31 +1,51 @@
+import { UserDataResponseType } from "@/types/api";
 import { devtools, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 
 export type UserState = {
   accessToken: string;
-  refreshToken: string;
   id: string;
   isSignIn: boolean;
+  isFirstLogin: boolean;
+  memberData: {
+    id: string;
+    nickname: string;
+    profileType: string | null;
+  };
+  schoolData: {
+    name: string;
+  } | null;
 };
 
 export type UserActions = {
   signIn: ({
     accessToken,
-    refreshToken,
+    isFirstLogin,
+    isSignIn,
   }: {
     accessToken: string;
-    refreshToken: string;
+    isFirstLogin: boolean;
+    isSignIn: boolean;
   }) => void;
   signOut: () => void;
+  setUserData: (userData: UserDataResponseType) => void;
 };
 
 export type UserStore = UserState & UserActions;
 
 export const defaultInitState: UserState = {
   accessToken: "initialAccessToken",
-  refreshToken: "initialRefreshToken",
   id: "defaultIdValue",
   isSignIn: false,
+  isFirstLogin: false,
+  memberData: {
+    id: "",
+    nickname: "",
+    profileType: "",
+  },
+  schoolData: {
+    name: "",
+  },
 };
 
 export const initUserStore = (): UserState => {
@@ -38,13 +58,26 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
       persist(
         (set, get) => ({
           ...initState,
-          signIn: ({ accessToken, refreshToken }) =>
+          signIn: ({ accessToken, isFirstLogin, isSignIn }) =>
+            set((state) => {
+              return {
+                ...state,
+                accessToken: accessToken,
+                isFirstLogin: isFirstLogin,
+                isSignIn: isSignIn,
+              };
+            }),
+          signOut: () => set(() => initState),
+          setUserData: (userData) =>
             set((state) => ({
               ...state,
-              accessToken: accessToken,
-              refreshToken: refreshToken,
+              memberData: {
+                ...userData.memberData,
+              },
+              schoolData: {
+                ...userData.schoolData,
+              },
             })),
-          signOut: () => set(() => initState),
         }),
         {
           name: "ariari-storage",
