@@ -2,24 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useClubContext } from "@/context/ClubContext";
 
 import { MEMBER_STATUS_TYPE } from "@/data/pulldown";
 
-import {
-  deleteClubMember,
-  entrustAdmin,
-  getClubMembers,
-  putClubMembersRole,
-  putClubMembersStatus,
-} from "@/api/members";
-import { getClubDetail } from "@/api/club";
-
 import { PageInfo } from "@/types/pageInfo";
-import {
-  ClubMemberData,
-  clubMemberRoleType,
-  clubMemberStatusType,
-} from "@/types/member";
 
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
@@ -27,9 +14,23 @@ import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import ClubMemberHeader from "../components/clubMemberHeader";
 import ClubMemberCategoryBar from "../components/clubMemberCategoryBar";
 import ClubMemberList from "../components/clubMemberList";
+import Alert from "@/components/alert/alert";
 import { MAP_STATUS_TO_EN } from "../util/mapStatus";
 
-const contentSize = 2;
+import {
+  deleteClubMember,
+  entrustAdmin,
+  getClubMembers,
+  putClubMembersRole,
+  putClubMembersStatus,
+} from "@/api/member/api";
+import {
+  ClubMemberData,
+  clubMemberRoleType,
+  clubMemberStatusType,
+} from "@/types/member";
+
+const contentSize = 10;
 
 const ClubMemberContent = () => {
   const params = useSearchParams();
@@ -46,9 +47,11 @@ const ClubMemberContent = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
   const [selectedMember, setSelectedMember] = useState<string[]>([]);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const [myMemberData, setMyMemberData] = useState<ClubMemberData | null>(null);
   const [didMount, setDidMount] = useState(false);
+
+  const { role, clubInfo } = useClubContext();
 
   // 검색 핸들러
   const handleSearch = (searchTerm: string) => {
@@ -56,6 +59,7 @@ const ClubMemberContent = () => {
     setPage(0);
     setClubMember(null);
   };
+  //전체, 활동중, 휴식중, 활동 종료 선택
   const handleOption = (value: string) => {
     setSelectedOption([value]);
     setPage(0);
@@ -93,20 +97,16 @@ const ClubMemberContent = () => {
     if (newRole === "ADMIN") {
       entrustAdmin(memberId)
         .then(() => {
-          alert("권한이 위임되었습니다. 일반회원으로 전환되었습니다.");
-          router.push(`/club?clubId=${clubId}`);
+          setAlertMessage("권한이 위임되었습니다.");
+          router.push(`/club/activityHistory?clubId=${clubId}`);
         })
         .catch((err) => {
-          console.error(err);
-          alert("변경에 실패했습니다.");
+          setAlertMessage("변경에 실패했습니다.");
         });
     } else {
       // ADMIN이 본인 권한 수정
-      if (
-        myMemberData?.clubMemberRoleType == "ADMIN" &&
-        memberId == myMemberData.id
-      ) {
-        alert("관리자는 본인의 권한을 변경할 수 없습니다.");
+      if (role == "ADMIN" && memberId == clubInfo?.clubMemberData.id) {
+        setAlertMessage("관리자는 본인의 권한을 변경할 수 없습니다.");
         return;
       }
       // 권한 수정
@@ -121,8 +121,7 @@ const ClubMemberContent = () => {
           );
         })
         .catch((err) => {
-          console.error(err);
-          alert("변경에 실패했습니다.");
+          setAlertMessage("변경에 실패했습니다.");
         });
     }
   };
@@ -143,8 +142,7 @@ const ClubMemberContent = () => {
           );
         })
         .catch((err) => {
-          console.log(err);
-          alert("변경에 실패했습니다.");
+          setAlertMessage("변경에 실패했습니다.");
         });
     }
   };
@@ -158,8 +156,7 @@ const ClubMemberContent = () => {
           );
         })
         .catch((err) => {
-          console.log(err);
-          alert("삭제에 실패했습니다.");
+          setAlertMessage("삭제 실패했습니다.");
         });
     }
   };
@@ -178,7 +175,7 @@ const ClubMemberContent = () => {
 
   // 동아리 멤버 리스트
   useEffect(() => {
-    if (clubId && didMount) {
+    if (clubId && didMount && (role === "ADMIN" || role === "MANAGER")) {
       const handleLoadClubMembers = () => {
         getClubMembers(
           clubId!,
@@ -186,42 +183,30 @@ const ClubMemberContent = () => {
           searchTerm,
           page,
           contentSize
-        )
-          .then((res) => {
-            setClubMember((prevMembers) =>
-              prevMembers
-                ? [...prevMembers, ...res.clubMemberDataList]
-                : res.clubMemberDataList
-            );
-            setPageInfo(res.pageInfo);
-          })
-          .catch((err) => {
-            console.error("동아리 회원 목록을 불러오는 데 실패했습니다.", err);
-          });
+        ).then((res) => {
+          setClubMember((prevMembers) =>
+            prevMembers
+              ? [...prevMembers, ...res!.clubMemberDataList]
+              : res!.clubMemberDataList
+          );
+          setPageInfo(res!.pageInfo);
+        });
       };
       handleLoadClubMembers();
     }
-  }, [clubId, selectedOption, searchTerm, page, didMount]);
-
-  // 내 멤버 정보
-  useEffect(() => {
-    if (clubId) {
-      const fetchClubDetail = async () => {
-        try {
-          const data = await getClubDetail(clubId);
-          setMyMemberData(data.clubMemberData);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
-      fetchClubDetail();
-    }
-  }, [clubId]);
+  }, [clubId, selectedOption, searchTerm, page, didMount, role]);
 
   useEffect(() => {
     setDidMount(true);
   }, []);
+
+  if (role === "GENERAL") {
+    return (
+      <div className="text-center p-[100px] text-subtext2 text-mobile_body2_m md:text-body2_m">
+        매니저 이상 접근 가능한 페이지입니다.
+      </div>
+    );
+  }
 
   return (
     <>
@@ -255,7 +240,6 @@ const ClubMemberContent = () => {
                       <div key={index}>
                         <ClubMemberList
                           data={member}
-                          myMemberData={myMemberData!}
                           isSelected={selectedMember?.includes(
                             member.memberData.id
                           )}
@@ -267,12 +251,12 @@ const ClubMemberContent = () => {
                       </div>
                     ))
                   ) : (
-                    <div className="text-center p-10 text-subtext1">
+                    <div className="text-center p-10 text-subtext2 text-mobile_body2_m md:text-body2_m">
                       조건에 맞는 회원을 찾을 수 없습니다.
                     </div>
                   )
                 ) : (
-                  <div className="text-center p-10 text-subtext1">
+                  <div className="text-center p-10 text-subtext2 text-mobile_body2_m md:text-body2_m">
                     로딩중...
                   </div>
                 )}
@@ -292,6 +276,10 @@ const ClubMemberContent = () => {
           </div>
         </div>
       </div>
+      {/* ====== 알림 ======*/}
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+      )}
     </>
   );
 };
