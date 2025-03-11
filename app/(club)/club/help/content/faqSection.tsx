@@ -28,7 +28,7 @@ const FaqSection = ({
 
   useEffect(() => {
     onListCount(totalSize);
-  }, [onListCount]);
+  }, [totalSize]);
 
   return (
     <>

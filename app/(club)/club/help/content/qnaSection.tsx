@@ -27,7 +27,7 @@ const QnaSection = ({
 
   useEffect(() => {
     onListCount(totalSize);
-  }, [onListCount]);
+  }, [totalSize]);
 
   return (
     <>
