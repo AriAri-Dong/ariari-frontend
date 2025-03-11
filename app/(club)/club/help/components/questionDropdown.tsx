@@ -117,7 +117,7 @@ const QuestionDropdown = ({
           <div className="flex items-center justify-between md:gap-5">
             {!isFaq && (
               <p className="text-subtext2 text-mobile_body4_r md:text-body2_m">
-                {formatDateToDot(data.createdDateTime.toString())}
+                {formatDateToDot(data.createdDateTime!.toString())}
               </p>
             )}
             <button

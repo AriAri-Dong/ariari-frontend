@@ -75,7 +75,7 @@ export interface ClubQuestionData {
   id: number; // int64
   title: string;
   body: string;
-  createdDateTime: Date;
+  createdDateTime?: Date;
   memberData: MemberData;
   clubAnswerData: ClubAnswerData | null;
 }
