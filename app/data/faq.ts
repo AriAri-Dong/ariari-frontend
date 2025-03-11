@@ -16,6 +16,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       memberData: {
         id: "101",
         nickname: "길동이",
+        profileType: "ARIARI_MOUSE",
       },
     },
   },
@@ -34,6 +35,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       memberData: {
         id: "102",
         nickname: "영희",
+        profileType: "ARIARI_MOUSE",
       },
     },
   },
@@ -52,6 +54,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       memberData: {
         id: "103",
         nickname: "철수",
+        profileType: "ARIARI_MOUSE",
       },
     },
   },
@@ -70,6 +73,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       memberData: {
         id: "103",
         nickname: "철수",
+        profileType: "ARIARI_MOUSE",
       },
     },
   },
@@ -88,6 +92,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       memberData: {
         id: "103",
         nickname: "철수",
+        profileType: "ARIARI_MOUSE",
       },
     },
   },
@@ -106,6 +111,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       memberData: {
         id: "101",
         nickname: "길동이",
+        profileType: "ARIARI_MOUSE",
       },
     },
   },
@@ -124,6 +130,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       memberData: {
         id: "102",
         nickname: "영희",
+        profileType: "ARIARI_MOUSE",
       },
     },
   },
@@ -142,6 +149,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       memberData: {
         id: "103",
         nickname: "철수",
+        profileType: "ARIARI_MOUSE",
       },
     },
   },
@@ -160,6 +168,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       memberData: {
         id: "103",
         nickname: "철수",
+        profileType: "ARIARI_MOUSE",
       },
     },
   },
@@ -178,6 +187,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       memberData: {
         id: "103",
         nickname: "철수",
+        profileType: "ARIARI_MOUSE",
       },
     },
   },
