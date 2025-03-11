@@ -16,6 +16,7 @@ export type profileType =
 export interface MemberData {
   id: number; // $int64
   nickname: string;
+  profileType: profileType;
 }
 
 export interface ClubMemberData {
