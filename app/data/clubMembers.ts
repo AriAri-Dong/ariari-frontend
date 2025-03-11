@@ -10,6 +10,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     memberData: {
       id: "101",
       nickname: "성은",
+      profileType: "ARIARI_SNAKE",
     },
   },
   {
@@ -21,6 +22,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     memberData: {
       id: "102",
       nickname: "찬진",
+      profileType: "ARIARI_COW",
     },
   },
   {
@@ -32,6 +34,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     memberData: {
       id: "103",
       nickname: "수연",
+      profileType: "ARIARI_DOG",
     },
   },
   {
@@ -43,6 +46,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     memberData: {
       id: "104",
       nickname: "성은",
+      profileType: "ARIARI_TIGER",
     },
   },
   {
@@ -54,6 +58,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     memberData: {
       id: "105",
       nickname: "찬진",
+      profileType: "ARIARI_RABBIT",
     },
   },
   {
@@ -65,6 +70,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     memberData: {
       id: "106",
       nickname: "수연",
+      profileType: "ARIARI_DRAGON",
     },
   },
   {
@@ -76,6 +82,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     memberData: {
       id: "107",
       nickname: "성은",
+      profileType: "ARIARI_HORSE",
     },
   },
   {
@@ -87,6 +94,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     memberData: {
       id: "108",
       nickname: "찬진",
+      profileType: "ARIARI_SHEEP",
     },
   },
   {
@@ -98,6 +106,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     memberData: {
       id: "109",
       nickname: "수연",
+      profileType: "ARIARI_MONKEY",
     },
   },
   {
@@ -109,6 +118,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     memberData: {
       id: "110",
       nickname: "성은",
+      profileType: "ARIARI_CHICKEN",
     },
   },
 ];

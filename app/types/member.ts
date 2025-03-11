@@ -18,6 +18,7 @@ export type profileType =
 export interface MemberData {
   id: string;
   nickname: string;
+  profileType: profileType;
 }
 
 export interface ClubMemberData {
