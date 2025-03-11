@@ -94,3 +94,26 @@ export const addQuestion = async ({
     console.log("add question error", error);
   }
 };
+
+// 동아리 상세 Q&A 답변 등록(role - ADMIN, MANAGER)
+type AddAnswer = {
+  clubId: string;
+  clubQuestionId: number;
+  data: { body: string };
+};
+export const addAnswer = async ({
+  clubId,
+  clubQuestionId,
+  data,
+}: AddAnswer) => {
+  try {
+    const res = await axiosInstance.post(
+      `${CLUBS}/${clubId}/question/${clubQuestionId}/answers`,
+      data
+    );
+    console.log("add answer res", res);
+    return res;
+  } catch (error) {
+    console.log("add answer error", error);
+  }
+};

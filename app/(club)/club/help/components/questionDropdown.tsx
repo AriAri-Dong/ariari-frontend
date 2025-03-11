@@ -23,6 +23,7 @@ import Alert from "@/components/alert/alert";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import { useSearchParams } from "next/navigation";
 import formatDateToDot from "@/utils/formatDateToDot";
+import { useAddAnswerMutation } from "@/hooks/club/useClubHelpMutation";
 
 interface QuestionDropdownProps {
   data: ClubQuestionData | ClubFaqData;
@@ -53,6 +54,7 @@ const QuestionDropdown = ({
 
   const isMdUp = useResponsive("md");
   const { clubInfo } = useClubInfoQuery(clubId);
+  const { addAnswer } = useAddAnswerMutation({ clubId });
 
   let bg, text, label;
   const isFaq = "clubFaqColorType" in data;
@@ -84,6 +86,14 @@ const QuestionDropdown = ({
   const handleReportSubmit = () => {
     setReportIsOpen(false);
     setAlertMessage("신고가 정상적으로 접수되었습니다.");
+  };
+
+  const handleAnswerSubmit = () => {
+    addAnswer.mutate({
+      clubId,
+      clubQuestionId: data.id,
+      data: { body: answer },
+    });
   };
 
   return (
@@ -226,7 +236,7 @@ const QuestionDropdown = ({
                         className="w-full py-[5px] rounded-[12px] bg-searchbar text-subtext1 text-mobile_body1_r md:py-1.5 md:text-body1_r focus:outline-none placeholder:text-subtext1"
                       />
                       <div>
-                        <SendBtn onClick={() => {}} />
+                        <SendBtn onClick={handleAnswerSubmit} />
                       </div>
                     </div>
                   ) : (

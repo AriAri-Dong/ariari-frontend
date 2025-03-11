@@ -1,4 +1,4 @@
-import { addFaq, addQuestion } from "@/api/club/help/api";
+import { addAnswer, addFaq, addQuestion } from "@/api/club/help/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // 동아리 상세 FAQ 등록(관리자)
@@ -46,4 +46,21 @@ export const useAddQuestionMutation = ({
   });
 
   return { addQuestion: mutation };
+};
+
+// 동아리 상세 Q&A 답변 등록(role - ADMIN, MANAGER)
+export const useAddAnswerMutation = ({ clubId }: { clubId: string }) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: addAnswer,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["club-questions", clubId] });
+    },
+    onError: (error) => {
+      console.log("add answer error", error);
+    },
+  });
+
+  return { addAnswer: mutation };
 };

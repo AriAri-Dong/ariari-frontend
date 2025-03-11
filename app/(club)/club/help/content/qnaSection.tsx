@@ -36,7 +36,7 @@ const QnaSection = ({
           <QuestionDropdown
             data={item}
             myRoleType={role}
-            myProfileType={clubInfo?.clubMemberData.profileType}
+            myProfileType={clubInfo?.clubMemberData.memberData.profileType}
             isOpen={item.id == selectedQna}
             setSelected={setSelectedQna}
           />
