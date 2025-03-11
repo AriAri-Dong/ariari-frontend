@@ -20,6 +20,8 @@ import ReportModal from "@/components/modal/reportModal";
 import SendBtn from "@/components/button/iconBtn/sendBtn";
 import useResponsive from "@/hooks/useResponsive";
 import Alert from "@/components/alert/alert";
+import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
+import { useSearchParams } from "next/navigation";
 
 interface QuestionDropdownProps {
   data: ClubQuestionData | ClubFaqData;
@@ -45,7 +47,11 @@ const QuestionDropdown = ({
   isOpen,
   setSelected,
 }: QuestionDropdownProps) => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") ?? "";
+
   const isMdUp = useResponsive("md");
+  const { clubInfo } = useClubInfoQuery(clubId);
 
   let bg, text, label;
   const isFaq = "clubFaqColorType" in data;
@@ -190,9 +196,9 @@ const QuestionDropdown = ({
                   src={
                     profileImageMap[
                       isFaq
-                        ? data.clubMemberData.profileType
+                        ? clubInfo?.clubMemberData.memberData.profileType!
                         : data.clubAnswerData
-                        ? data.clubAnswerData!.clubMemberData.profileType
+                        ? clubInfo?.clubMemberData.memberData.profileType!
                         : myProfileType!
                     ]
                   }
