@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import QuestionDropdown from "@/(club)/club/help/components/questionDropdown";
 import ClubNoticeHeader from "@/(club)/club/management/activity/notice/components/clubNoticeHeader";
 import { FAQ_DATA } from "@/data/faq";
@@ -38,18 +38,20 @@ const HelpPage = () => {
             <p>제목</p>
           </div>
         </div>
-        <div className="flex flex-col gap-2.5">
-          {FAQ_DATA.map((item, index) => (
-            <QuestionDropdown
-              key={item.id}
-              data={item}
-              myRoleType={"GENERAL"}
-              myProfileType={getProfileByIndex(index)}
-              isOpen={item.id === selectedFaq}
-              setSelected={setSelectedFaq}
-            />
-          ))}
-        </div>
+        <Suspense fallback={<div>Loading..</div>}>
+          <div className="flex flex-col gap-2.5">
+            {FAQ_DATA.map((item, index) => (
+              <QuestionDropdown
+                key={item.id}
+                data={item}
+                myRoleType={"GENERAL"}
+                myProfileType={getProfileByIndex(index)}
+                isOpen={item.id === selectedFaq}
+                setSelected={setSelectedFaq}
+              />
+            ))}
+          </div>
+        </Suspense>
         <div className="flex justify-center  mt-9 md:mt-10">
           <PlusBtn title={"더보기"} onClick={() => {}} />
         </div>
