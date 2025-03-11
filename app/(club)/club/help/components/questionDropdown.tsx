@@ -22,6 +22,7 @@ import useResponsive from "@/hooks/useResponsive";
 import Alert from "@/components/alert/alert";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import { useSearchParams } from "next/navigation";
+import formatDateToDot from "@/utils/formatDateToDot";
 
 interface QuestionDropdownProps {
   data: ClubQuestionData | ClubFaqData;
@@ -106,7 +107,7 @@ const QuestionDropdown = ({
           <div className="flex items-center justify-between md:gap-5">
             {!isFaq && (
               <p className="text-subtext2 text-mobile_body4_r md:text-body2_m">
-                {"2024. 01. 08"}
+                {formatDateToDot(data.createdDateTime.toString())}
               </p>
             )}
             <button
