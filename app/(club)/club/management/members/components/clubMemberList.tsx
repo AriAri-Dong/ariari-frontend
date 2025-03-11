@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useClubContext } from "@/context/ClubContext";
+import useResponsive from "@/hooks/useResponsive";
 import Image from "next/image";
 import checkIcon from "@/images/icon/checkBox_checked.svg";
 import uncheckIcon from "@/images/icon/checkBox_unchecked.svg";
@@ -26,7 +28,6 @@ import {
 
 interface ClubMemberListProps {
   data: ClubMemberData;
-  myMemberData: ClubMemberData;
   isSelected: boolean;
   toggleMember: (memberId: string) => void;
   handleStatusChange: (
@@ -39,13 +40,15 @@ interface ClubMemberListProps {
 
 const ClubMemberList = ({
   data,
-  myMemberData,
   isSelected,
   toggleMember,
   handleStatusChange,
   handleRoleChange,
   handleDeleteMember,
 }: ClubMemberListProps) => {
+  const { role, clubInfo } = useClubContext();
+  const isMdUp = useResponsive("md");
+
   const [isManagerModalOpen, setIsManagerModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   return (
@@ -63,7 +66,7 @@ const ClubMemberList = ({
           <div className="md:hidden">
             <TokenPullDown
               optionData={MEMBER_STATUS_TYPE.slice(2)}
-              selectedOption={data.clubMemberStatusType}
+              selectedOption={MAP_STATUS_TO_KO[data.clubMemberStatusType]}
               handleOption={(value) =>
                 handleStatusChange(
                   [data.memberData.id],
@@ -107,7 +110,7 @@ const ClubMemberList = ({
                 }
               }}
               onClick={
-                myMemberData?.clubMemberRoleType === "ADMIN"
+                role === "ADMIN"
                   ? null
                   : () => alert("관리자만 권한수정이 가능합니다.")
               }
@@ -135,10 +138,8 @@ const ClubMemberList = ({
         </div>
         <div className="flex-[1] flex justify-end items-center">
           {/* ADMIN인 경우 모두 삭제 가능(본인 제외), 매니저인 경우 일반 회원 삭제 가능 */}
-          {((myMemberData?.clubMemberRoleType === "ADMIN" &&
-            data.id != myMemberData?.id) ||
-            (myMemberData?.clubMemberRoleType === "MANAGER" &&
-              data.clubMemberRoleType === "GENERAL")) && (
+          {((role === "ADMIN" && data.id != clubInfo?.clubMemberData.id) ||
+            (role === "MANAGER" && data.clubMemberRoleType === "GENERAL")) && (
             <DeleteBtn
               onClick={() => {
                 setIsDeleteModalOpen(true);
@@ -157,7 +158,13 @@ const ClubMemberList = ({
               ? "관리자 권한을 위임할까요?"
               : "해당 동아리원을 삭제할까요?"
           }
-          description={`해당 동아리원에게 관리자 권한 위임시,\n일반회원으로 바뀌며 관리 기능 이용이 제한돼요.`}
+          description={
+            isManagerModalOpen
+              ? `해당 동아리원에게 관리자 권한 위임시,\n일반회원으로 바뀌며 관리 기능 이용이 제한돼요.`
+              : isMdUp
+              ? ` 동아리에서 삭제된 회원은 동아리 소속에서 제외돼요.`
+              : ` 동아리에서 삭제된 회원은\n동아리 소속에서 제외돼요.`
+          }
           firstButton={() => {
             if (isManagerModalOpen) {
               handleRoleChange(data.id, "ADMIN");
