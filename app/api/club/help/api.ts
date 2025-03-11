@@ -1,6 +1,7 @@
+import { CLUBS } from "@/api/apiUrl";
 import axiosInstance from "@/api/axiosInstance";
 import { Pageable } from "@/types/api";
-import { ClubFaqListRes, ClubQnaListRes } from "@/types/club";
+import { ClubFaqData, ClubFaqListRes, ClubQnaListRes } from "@/types/club";
 
 // 동아리 상세 FAQ 리스트 조회
 export const getClubFaqList = async (
@@ -24,6 +25,23 @@ export const getClubFaqList = async (
       clubFaqDataList: [],
       pageInfo: { contentSize: 0, totalSize: 0, totalPages: 0 },
     };
+  }
+};
+
+// 동아리 상세 FAQ 등록(관리자)
+export const addFaq = async ({
+  clubId,
+  data,
+}: {
+  clubId: string;
+  data: Omit<ClubFaqData, "clubMemberData" | "id">;
+}) => {
+  try {
+    const res = await axiosInstance.post(`${CLUBS}/${clubId}/club-faqs`, data);
+    console.log("add faq res", res);
+    return res;
+  } catch (error) {
+    console.log("add faq error", error);
   }
 };
 
