@@ -33,3 +33,7 @@ export interface ClubMemberListRes {
   clubMemberDataList: ClubMemberData[];
   pageInfo: PageInfo;
 }
+
+export interface MemberListRes {
+  memberDataList: MemberData[];
+}
