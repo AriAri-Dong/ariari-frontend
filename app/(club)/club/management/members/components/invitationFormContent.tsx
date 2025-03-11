@@ -10,6 +10,7 @@ import uncheckIcon from "@/images/icon/radio_button_unchecked.svg";
 import copy from "@/images/icon/copy.svg";
 import { ShareType } from "./invitationForm";
 import Alert from "@/components/alert/alert";
+import MemberSearch from "@/components/input/memberSearch";
 interface InvitationFormContentProps {
   nickname: string;
   setNickname: (value: string) => void;
@@ -83,15 +84,10 @@ const InvitationFormContent = ({
             동아리에 아리아리 사용자를 초대해 보세요.
           </p>
           <div className="flex flex-col gap-[14px] md:flex-row md:gap-5">
-            <input
-              type="text"
-              value={nickname}
-              onChange={(e) => {
-                setNickname(e.target.value);
-                setErrorMessage(null);
-              }}
-              placeholder="초대하실 사용자의 서비스 닉네임을 작성해 주세요."
-              className="flex-grow px-4 py-3 rounded-[12px] bg-searchbar text-mobile_body1_r md:px-[22px] md:py-[13px] md:text-body1_r focus:outline-none  placeholder:text-subtext2"
+            <MemberSearch
+              nickname={nickname}
+              setNickname={setNickname}
+              setErrorMessage={setErrorMessage}
             />
             <SmallBtn
               title={"초대하기"}
@@ -99,9 +95,10 @@ const InvitationFormContent = ({
                 if (nickname) {
                   setAlertMessage("초대장을 전송했습니다.");
                 } else {
-                  setErrorMessage("닉네임을 작성해주세요");
+                  setAlertMessage("초대할 회원을 선택해주세요.");
                 }
               }}
+              className="flex-shrink-0"
             />
           </div>
           {errorMessage && (
