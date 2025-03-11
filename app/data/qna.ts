@@ -15,6 +15,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     memberData: {
       id: "101",
       nickname: "변성은",
+      profileType: "ARIARI_SNAKE",
     },
     clubAnswerData: {
       body: "클럽 홈페이지에 접속하여 가입 신청서를 작성해 주시면 됩니다.",
@@ -27,6 +28,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         memberData: {
           id: "201",
           nickname: "관리자1",
+          profileType: "ARIARI_DRAGON",
         },
       },
     },
@@ -38,6 +40,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     memberData: {
       id: "102",
       nickname: "박찬진",
+      profileType: "ARIARI_COW",
     },
     clubAnswerData: {
       body: "연회비는 50,000원이며, 모든 행사에 참여할 수 있는 권한이 포함됩니다. 연회비는 50,000원이며, 모든 행사에 참여할 수 있는 권한이 포함됩니다. 연회비는 50,000원이며, 모든 행사에 참여할 수 있는 권한이 포함됩니다.",
@@ -50,6 +53,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         memberData: {
           id: "202",
           nickname: "회계담당자",
+          profileType: "ARIARI_PIG",
         },
       },
     },
@@ -61,6 +65,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     memberData: {
       id: "103",
       nickname: "권수연",
+      profileType: "ARIARI_DOG",
     },
     clubAnswerData: {
       body: "네, 해외 거주자도 가입 가능합니다! 자세한 내용은 문의해 주세요.",
@@ -73,6 +78,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         memberData: {
           id: "203",
           nickname: "관리자2",
+          profileType: "ARIARI_COW",
         },
       },
     },
@@ -84,6 +90,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     memberData: {
       id: "104",
       nickname: "정현우",
+      profileType: "ARIARI_TIGER",
     },
     clubAnswerData: {
       body: "다음 모임은 1월 20일 오후 7시에 커뮤니티 홀에서 열립니다.",
@@ -96,6 +103,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         memberData: {
           id: "204",
           nickname: "총무담당",
+          profileType: "ARIARI_RABBIT",
         },
       },
     },
@@ -107,6 +115,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     memberData: {
       id: "105",
       nickname: "최은지",
+      profileType: "ARIARI_DRAGON",
     },
     clubAnswerData: {
       body: "저희 클럽은 모든 연령대가 가입 가능하지만, 일부 행사는 특정 연령 제한이 있을 수 있습니다.",
@@ -119,6 +128,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         memberData: {
           id: "205",
           nickname: "기획자1",
+          profileType: "ARIARI_TIGER",
         },
       },
     },
@@ -130,6 +140,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     memberData: {
       id: "106",
       nickname: "한상민",
+      profileType: "ARIARI_SHEEP",
     },
     clubAnswerData: {
       body: "게스트 초대는 가능합니다. 다만, 사전에 알려주시면 준비에 도움이 됩니다.",
@@ -142,6 +153,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         memberData: {
           id: "206",
           nickname: "관리자3",
+          profileType: "ARIARI_DRAGON",
         },
       },
     },
@@ -153,6 +165,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     memberData: {
       id: "106",
       nickname: "아무개",
+      profileType: "ARIARI_MONKEY",
     },
     clubAnswerData: null,
   },
@@ -163,6 +176,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     memberData: {
       id: "106",
       nickname: "아무개",
+      profileType: "ARIARI_CHICKEN",
     },
     clubAnswerData: null,
   },
@@ -173,6 +187,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     memberData: {
       id: "106",
       nickname: "아무개",
+      profileType: "ARIARI_CHICKEN",
     },
     clubAnswerData: null,
   },
@@ -183,6 +198,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     memberData: {
       id: "106",
       nickname: "아무개",
+      profileType: "ARIARI_MONKEY",
     },
     clubAnswerData: null,
   },
