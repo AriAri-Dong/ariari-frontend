@@ -23,7 +23,7 @@ import {
   participantMap,
   regionMap,
 } from "@/utils/clubCategoryMapping";
-import { deleteClubBookmark, postClubBookmark } from "@/api/api";
+import { deleteClubBookmark, postClubBookmark } from "@/api/club/api";
 
 interface ClubInfoProps {
   recruitmentId?: string;
@@ -42,7 +42,8 @@ const ClubInfo = ({
   isPreview = false,
 }: ClubInfoProps) => {
   const params = useSearchParams();
-  const clubId = params.get("clubId");
+  // const clubId = params.get("clubId");
+  const id = params.get("id") ?? "";
   const [isClubHeart, setIsClubHeart] = useState<boolean>(
     recruitmentData.isMyClubBookmark
   );
@@ -51,16 +52,14 @@ const ClubInfo = ({
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const onClubHeartClick = () => {
-    if (clubId) {
-      if (isClubHeart) {
-        deleteClubBookmark(clubId).then(() => {
-          setIsClubHeart(!isClubHeart);
-        });
-      } else {
-        postClubBookmark(clubId).then(() => {
-          setIsClubHeart(!isClubHeart);
-        });
-      }
+    if (isClubHeart) {
+      deleteClubBookmark(recruitmentData.clubId).then(() => {
+        setIsClubHeart(!isClubHeart);
+      });
+    } else {
+      postClubBookmark(recruitmentData.clubId).then(() => {
+        setIsClubHeart(!isClubHeart);
+      });
     }
   };
   const toggleBottomSheet = () => {
@@ -217,12 +216,16 @@ const ClubInfo = ({
         {/* <MobilePointStatusFloatingBar /> */}
         {isBottomSheetOpen && (
           <ReportBottomSheet
+            id={id}
+            reportTargetType="RECRUITMENT"
             onClose={() => setIsBottomSheetOpen(false)}
             onSubmit={handleReportSubmit}
           />
         )}
         {isBottomModalOpen && (
           <ReportModal
+            id={id}
+            reportTargetType="RECRUITMENT"
             onClose={() => setIsBottomModalOpen(false)}
             onSubmit={handleReportSubmit}
           />

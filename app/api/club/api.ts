@@ -102,3 +102,23 @@ export const getClubDetails = async (clubId: string) => {
     throw error;
   }
 };
+
+// 동아리 북마크
+export const postClubBookmark = async (clubId: string) => {
+  try {
+    const response = await axiosInstance.post(`/clubs/${clubId}/bookmark`);
+    return response.status;
+  } catch (err) {
+    console.log("동아리 북마크 실패", err);
+  }
+};
+
+// 동아리 북마크 취소
+export const deleteClubBookmark = async (clubId: string) => {
+  try {
+    const response = await axiosInstance.delete(`/clubs/${clubId}/bookmark`);
+    return response.status;
+  } catch (err) {
+    console.log("동아리 북마크 취소 실패", err);
+  }
+};

@@ -24,6 +24,7 @@ export function transformRecruitmentToMainCard(
       target: clubData.participantType,
     },
     procedureType: recruitmentData.procedureType,
+    clubId: clubData.id,
     isMyClub: isMyClub,
     isMyApply: isMyApply,
     recruitmentBookmarks: bookmarks,

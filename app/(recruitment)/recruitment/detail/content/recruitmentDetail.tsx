@@ -10,13 +10,16 @@ import { ClubInfoCard } from "@/types/components/card";
 import { RecruitmentData, RecruitmentNoteData } from "@/types/recruitment";
 import { transformRecruitmentToMainCard } from "../util/transformRecruitmentToMainCard";
 
-import { getClubRecruitmentList, getRecruitmentDetail } from "@/api/api";
 import axios from "axios";
+import {
+  getClubRecruitmentList,
+  getRecruitmentDetail,
+} from "@/api/recruitment/api";
 
 const RecruitmentDetail = () => {
   const params = useSearchParams();
   const recruitmentId = params.get("id");
-  const clubId = params.get("clubId");
+  const clubId = params.get("clubId") ?? "";
 
   // 이전 모집공고
   const [prevRecruitmentList, setPrevRecruitmentList] = useState<
@@ -41,10 +44,9 @@ const RecruitmentDetail = () => {
           setLoading(true);
           setRecruitmentData(null);
           const data = await getRecruitmentDetail(recruitmentId);
-          const parsedData = transformRecruitmentToMainCard(data);
-
+          const parsedData = transformRecruitmentToMainCard(data!);
           setRecruitmentData(parsedData);
-          setRecruitmentNoteDataList(data.recruitmentNoteDataList);
+          setRecruitmentNoteDataList(data!.recruitmentNoteDataList);
           setError(null);
         } catch (error) {
           if (axios.isAxiosError(error)) {
@@ -60,14 +62,13 @@ const RecruitmentDetail = () => {
           setLoading(false);
         }
       };
-
       fetchRecruitmentDetail();
     }
     if (clubId) {
       const fetchPrevRecruitment = async () => {
         try {
           const data = await getClubRecruitmentList(clubId);
-          setPrevRecruitmentList(data.recruitmentDataList);
+          setPrevRecruitmentList(data!.recruitmentDataList);
         } catch (error) {
           console.error(error);
         }
@@ -77,7 +78,7 @@ const RecruitmentDetail = () => {
   }, [recruitmentId, clubId, errorMsg]);
 
   if (loading) {
-    return <h4 className="w-full text-center text-h4">로딩 중...</h4>;
+    return <h4 className="w-full text-center text-h4">Loading...</h4>;
   }
   if (errorMsg) {
     return <h4 className="w-full text-center text-h4">{errorMsg}</h4>;
@@ -86,7 +87,7 @@ const RecruitmentDetail = () => {
   if (!recruitmentData || !recruitmentId) {
     return (
       <h4 className="w-full text-center text-h4">
-        모집공고 데이터를 찾을 수 없습니다.
+        모집공고를 찾을 수 없습니다.
       </h4>
     );
   }
