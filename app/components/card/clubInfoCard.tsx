@@ -11,9 +11,9 @@ import {
   CLUB_PARTICIPANT,
   CLUB_REGION,
 } from "@/constants/clubInfo";
+import { addClubBookmark, removeClubBookmark } from "@/api/club/api";
 
 /**
- *
  * @param name 동아리 이름
  * @param profileUri 동아리 프로필
  * @param afiliationType 소속
@@ -37,15 +37,30 @@ const ClubInfoCard = ({
 }: ClubListData) => {
   const router = useRouter();
   const [isHeart, setIsHeart] = useState<boolean>(isMyBookmark);
-  const [heartNumberVal, setHeartNumberVal] = useState<number>(0);
+  // 현재 북마크 개수에 대한 데이터 없음
+  const [heartNumberVal, setHeartNumberVal] = useState<number>(
+    isMyBookmark ? 1 : 0
+  );
 
   const onClubProfileClick = () => {
     router.push(`/club/management/recruitment/applicationStatus?clubId=${id}`);
   };
 
-  const onHeartClick = () => {
-    setIsHeart(!isHeart);
-    setHeartNumberVal((prev) => (isHeart ? prev - 1 : prev + 1));
+  const onHeartClick = async () => {
+    try {
+      setIsHeart((prev) => !prev);
+      setHeartNumberVal((prev) => (isHeart ? Math.max(prev - 1, 0) : prev + 1));
+
+      if (isHeart) {
+        await removeClubBookmark(id);
+      } else {
+        await addClubBookmark(id);
+      }
+    } catch (error) {
+      console.error("북마크 변경 실패:", error);
+      setIsHeart((prev) => !prev);
+      setHeartNumberVal((prev) => (isHeart ? prev + 1 : Math.max(prev - 1, 0)));
+    }
   };
 
   return (
