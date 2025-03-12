@@ -1,5 +1,6 @@
 import axios from "axios";
 import { refreshAccessToken } from "./login/api";
+import { authStore } from "@/stores/userStore";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -7,66 +8,59 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  // 쿠키 인증 활성화
-  withCredentials: true,
 });
 
-let accessToken = "";
-if (typeof window !== "undefined") {
-  accessToken = sessionStorage.getItem("accessToken") || "";
-}
+// 디버깅 목적 로그 추가 (리프레시 토큰 및 회원탈퇴 완료 후 삭제 예정)
 
-// 요청 인터셉터 (모든 요청에 accessToken 자동 추가)
+// 요청 인터셉터
 axiosInstance.interceptors.request.use((config) => {
-  if (typeof window !== "undefined") {
-    const token = sessionStorage.getItem("accessToken");
-    if (token) {
-      config.headers["Authorization"] = token;
-    }
+  const { accessToken } = authStore.getState();
+  console.log("+++ 요청 인터셉터 - 현재 Access Token:", accessToken);
+  if (accessToken) {
+    config.headers["Authorization"] = `${accessToken}`;
   }
   return config;
 });
 
-// 응답 인터셉터 (401 발생 시 refreshToken 사용)
+// 응답 인터셉터 (401 처리)
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
+    console.log("error", error);
+
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // error.response가 undefined이거나 401일 경우 refreshToken 시도
+    if (!error.response || error.response.status === 401) {
+      console.log("401 Unauthorized 또는 응답 없음 >>> Refresh Token 시도");
+
       originalRequest._retry = true;
 
       try {
-        // refreshToken을 사용하여 accessToken 재발급 요청
         const newAccessToken = await refreshAccessToken();
+        console.log("새로운 액세스 토큰 발급됨:", newAccessToken);
 
-        // 브라우저 환경에서만 sessionStorage 사용
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem("accessToken", newAccessToken);
-        }
+        if (!newAccessToken) throw new Error("토큰 재발급 실패");
 
-        // 기존 요청에 새 accessToken 적용 후 재시도
+        // Zustand 상태 업데이트
+        authStore.getState().setAccessToken(newAccessToken);
+
+        // axios 기본 헤더 업데이트
+        axiosInstance.defaults.headers.common["Authorization"] = newAccessToken;
+
+        // 기존 요청을 새로운 accessToken으로 재시도
         originalRequest.headers["Authorization"] = newAccessToken;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        console.error("RefreshToken 만료됨. 로그인 페이지로 이동.");
-
-        if (typeof window !== "undefined") {
-          sessionStorage.removeItem("accessToken");
-          window.location.href = "/";
-        }
+        console.error("RefreshToken 만료됨. 로그아웃 처리.");
+        authStore.getState().signOut();
+        window.location.href = "/";
+        return Promise.reject(refreshError);
       }
     }
 
     return Promise.reject(error);
   }
 );
-
-// 클라이언트에서만 accessToken을 설정할 수 있도록 수정
-export const setAccessToken = (token: string) => {
-  if (typeof window !== "undefined") {
-    sessionStorage.setItem("accessToken", token);
-  }
-};
 
 export default axiosInstance;
