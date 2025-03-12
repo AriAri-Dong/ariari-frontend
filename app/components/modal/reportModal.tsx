@@ -8,18 +8,36 @@ import close from "@/images/icon/close.svg";
 import { REPORT_REASONS } from "@/data/report";
 import SmallBtn from "../button/basicBtn/smallBtn";
 import Alert from "../alert/alert";
+import { ReportTargetType, ReportType } from "@/types/report";
+import { reportItem } from "@/api/report/api";
 
 interface ReportBottomSheetProps {
+  id?: string;
+  reportTargetType?: ReportTargetType;
   onClose: () => void;
   onSubmit: () => void;
 }
 
-const ReportModal = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
-  const [selectedReason, setSelectedReason] = useState<string | null>(null);
+/**
+ * 신고하기 바텀 시트 컴포넌트
+ * @param id 신고 대상 id
+ * @param reportTargetType 신고 대상 타입 ex) | "CLUB" | "MEMBER""PASS_REVIEW"... 타입 참조
+ * @param onClose 바텀시트 닫는 함수
+ * @param onSubmit 신고 제출 함수
+ * @returns
+ */
+
+const ReportModal = ({
+  id,
+  reportTargetType,
+  onClose,
+  onSubmit,
+}: ReportBottomSheetProps) => {
+  const [selectedReason, setSelectedReason] = useState<ReportType | null>(null);
   const [details, setDetails] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const handleReasonChange = (reason: string) => {
+  const handleReasonChange = (reason: ReportType) => {
     setSelectedReason(reason);
     setAlertMessage(null);
   };
@@ -29,10 +47,23 @@ const ReportModal = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
       setAlertMessage("신고 사유를 선택해주세요.");
       return;
     }
-    setSelectedReason(null);
-    setDetails("");
-    onSubmit();
-    onClose();
+    if (id && reportTargetType) {
+      reportItem({
+        reportTargetType,
+        reportType: selectedReason,
+        body: details,
+        reportedEntityId: id,
+      })
+        .then(() => {
+          setSelectedReason(null);
+          setDetails("");
+          onSubmit();
+          onClose();
+        })
+        .catch((err) => {
+          setAlertMessage(err.message);
+        });
+    }
   };
 
   // 스크롤 금지
@@ -46,7 +77,7 @@ const ReportModal = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
   return (
     <div
       id="background"
-      className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
+      className="fixed inset-0 z-10 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
       onClick={(e) =>
         (e.target as HTMLDivElement).id === "background" && onClose()
       }
@@ -72,16 +103,24 @@ const ReportModal = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
                 <li key={index}>
                   <label
                     className="flex items-center cursor-pointer text-body1_m text-subtext2"
-                    onClick={() => handleReasonChange(reason)}
+                    onClick={() => handleReasonChange(reason.value)}
                   >
                     <Image
-                      src={selectedReason === reason ? checkIcon : uncheckIcon}
-                      alt={selectedReason === reason ? "Checked" : "Unchecked"}
+                      src={
+                        selectedReason === reason.value
+                          ? checkIcon
+                          : uncheckIcon
+                      }
+                      alt={
+                        selectedReason === reason.value
+                          ? "Checked"
+                          : "Unchecked"
+                      }
                       width={20}
                       height={20}
                       className="mr-2.5"
                     />
-                    {reason}
+                    {reason.label}
                   </label>
                 </li>
               ))}
@@ -95,8 +134,7 @@ const ReportModal = ({ onClose, onSubmit }: ReportBottomSheetProps) => {
               onChange={(e) => setDetails(e.target.value)}
               maxLength={1000}
               className="w-full p-1.5 h-[310px] border-0 rounded-md resize-none text-body1_r 
-            text-subtext1  focus:outline-none focus:ring-[1px]
-            focus:ring-searchbarborder placeholder:text-unselected"
+            text-subtext1  focus:outline-none  placeholder:text-unselected"
             />
           </div>
           <div className="mt-6 flex justify-end items-center gap-[33px]">
