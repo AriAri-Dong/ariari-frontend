@@ -85,10 +85,17 @@ export interface ClubQnaListRes {
 }
 
 export interface MembershipBalance {
-  date: string; // YYYY.MM.DD 형식
-  title: string;
+  id: string;
   amount: number; // 입금(양수) 또는 출금(음수)
+  recordDateTime: Date;
+  createdDateTime: Date;
+  title: string;
   balance: number; // 현재 잔액
+}
+
+export interface MembershipBalanceRes {
+  financialRecordDataList: MembershipBalance[];
+  pageInfo: PageInfo;
 }
 
 export interface ClubActivity {
