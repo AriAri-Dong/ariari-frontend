@@ -32,7 +32,10 @@ const Alert = ({ text, subText, onClose }: AlertProps) => {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-500">
+    <div
+      className="fixed inset-0 z-1000 flex items-center justify-center transition-opacity duration-500"
+      style={{ zIndex: 1000 }}
+    >
       <div className="flex flex-col gap-0.5 py-2.5 px-7 bg-black_50 rounded-lg text-center">
         <h1
           className="text-mobile_body1_m text-background md:text-body1_m"
