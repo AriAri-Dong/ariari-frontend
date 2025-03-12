@@ -1,7 +1,7 @@
 "use client";
 
 import { USER_MENU } from "@/data/header";
-import { useUserStore } from "@/providers/user-store-provider";
+import { useUserStore } from "@/providers/userStoreProvider";
 import { useRouter } from "next/navigation";
 import { logout } from "@/api/login/api";
 
@@ -24,7 +24,7 @@ const UserModal = ({ onClose }: UserModalProps) => {
   const handleLogout = async () => {
     try {
       const accessToken = sessionStorage.getItem("accessToken") || "";
-      const refreshToken = "";
+      const refreshToken = sessionStorage.getItem("refreshToken") || "";
       await logout(accessToken, refreshToken);
       signOut();
       window.location.href = "/";
