@@ -2,6 +2,7 @@
 
 import useResponsive from "@/hooks/useResponsive";
 import { MembershipBalance } from "@/types/club";
+import formatDateToDot from "@/utils/formatDateToDot";
 import React from "react";
 
 interface MembershipBalanceListProps {
@@ -16,7 +17,9 @@ const MembershipBalanceList: React.FC<MembershipBalanceListProps> = ({
   return (
     <div className="w-full bg-white rounded-lg py-3 px-4 md:py-5 md:px-4">
       {transactions.map((transaction, index) => {
-        const [year, month, day] = transaction.date.split(".");
+        const [year, month, day] = formatDateToDot(
+          transaction.recordDateTime.toString()
+        ).split(".");
         const isPositive = transaction.amount >= 0;
         const isFirst = index === 0;
         const isLast = index === transactions.length - 1;

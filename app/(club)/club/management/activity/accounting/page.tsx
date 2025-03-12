@@ -10,19 +10,24 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MembershipBalanceList from "@/components/list/membershipBalanceList";
 import AccountingModal from "@/components/modal/club/accountingModal";
-import { TRANSACTIONS } from "@/data/clubAccounting";
+import { useFinanceBalanceQuery } from "@/hooks/club/useClubFinanceQuery";
+// import { TRANSACTIONS } from "@/data/clubAccounting";
 import useResponsive from "@/hooks/useResponsive";
 import { MembershipBalance } from "@/types/club";
 import { formatDate } from "@/utils/formatDateToDot";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const AccountingPage = () => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") || "";
   const isMdUp = useResponsive("md");
 
   const [openWrite, setOpenWrite] = useState<boolean>(false);
-  const [transactions, setTransactions] =
-    useState<MembershipBalance[]>(TRANSACTIONS);
+  // const [transactions, setTransactions] =
+  //   useState<MembershipBalance[]>(TRANSACTIONS);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const { balance, isLoading, isError, error } = useFinanceBalanceQuery(clubId);
 
   const handleClose = () => {
     setOpenWrite(false);
@@ -34,27 +39,24 @@ const AccountingPage = () => {
     amount: number;
     details: string;
   }) => {
-    if (!data.date) {
-      console.error("날짜가 없습니다.");
-      return;
-    }
-
-    const formattedDate = formatDate(data.date);
-
-    const newTransaction = {
-      date: formattedDate,
-      title: data.details,
-      amount: data.transaction ? data.amount : -data.amount,
-      balance:
-        transactions.length > 0
-          ? transactions[transactions.length - 1].balance +
-            (data.transaction ? data.amount : -data.amount)
-          : data.amount,
-    };
-
-    setTransactions((prev) => [...prev, newTransaction]);
-    handleClose();
-    setAlertMessage("회계내역이 등록되었습니다.");
+    // if (!data.date) {
+    //   console.error("날짜가 없습니다.");
+    //   return;
+    // }
+    // const formattedDate = formatDate(data.date);
+    // const newTransaction = {
+    //   date: formattedDate,
+    //   title: data.details,
+    //   amount: data.transaction ? data.amount : -data.amount,
+    //   balance:
+    //     transactions.length > 0
+    //       ? transactions[transactions.length - 1].balance +
+    //         (data.transaction ? data.amount : -data.amount)
+    //       : data.amount,
+    // };
+    // setTransactions((prev) => [...prev, newTransaction]);
+    // handleClose();
+    // setAlertMessage("회계내역이 등록되었습니다.");
   };
 
   return (
@@ -67,19 +69,20 @@ const AccountingPage = () => {
             <LeftMenu />
           </div>
           <div className="w-full">
+            {/* 동아리 회비 잔액  */}
             {isMdUp ? (
               <MembershipBalanceBar
-                currentPoint={200}
+                currentPoint={balance ?? 0}
                 className="md:block hidden mb-2.5 md:mt-4 lg:mt-0"
               />
             ) : (
               <MobileMembershipBalanceBar
-                currentPoint={200}
+                currentPoint={balance ?? 0}
                 className="mt-4 mb-3 md:hidden"
               />
             )}
             {/* 리스트 영역 */}
-            <MembershipBalanceList transactions={transactions} />
+            <MembershipBalanceList transactions={[]} />
             <div className="flex justify-center mt-9 md:mt-10">
               <PlusBtn title={"더보기"} onClick={() => {}} />
             </div>
