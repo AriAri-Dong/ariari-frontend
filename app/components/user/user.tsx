@@ -10,7 +10,7 @@ import Notification from "../button/iconBtn/notification";
 import rabbit from "@/images/profile/rabbit.svg";
 import NotificationModal from "../modal/notification/notificationModal";
 import LoginModal from "../modal/login/loginModal";
-import { useUserStore } from "@/providers/user-store-provider";
+import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
 
 const User = () => {

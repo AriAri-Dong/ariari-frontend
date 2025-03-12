@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useUserStore } from "@/providers/user-store-provider";
+import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
 import Image from "next/image";
 import notification_default from "@/images/icon/notification_default.svg";
