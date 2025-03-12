@@ -132,14 +132,14 @@ const ReportModal = ({
               placeholder="신고 사유를 상세히 작성해 주세요."
               value={details}
               onChange={(e) => setDetails(e.target.value)}
-              maxLength={1000}
+              maxLength={500}
               className="w-full p-1.5 h-[310px] border-0 rounded-md resize-none text-body1_r 
             text-subtext1  focus:outline-none  placeholder:text-unselected"
             />
           </div>
           <div className="mt-6 flex justify-end items-center gap-[33px]">
             <p className="text-right text-unselected text-h4">
-              {details.length}/1000
+              {details.length}/500
             </p>
             <SmallBtn onClick={handleSubmit} title={"신고하기"} />
           </div>
