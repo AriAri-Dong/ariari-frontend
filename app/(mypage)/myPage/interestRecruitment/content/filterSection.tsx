@@ -10,6 +10,7 @@ interface FilterSectionProps {
   toggleRecruitmentCheck: () => void;
   sortType: string;
   setSortType: (value: string) => void;
+  dataCount: number;
 }
 
 const FilterSection = ({
@@ -19,6 +20,7 @@ const FilterSection = ({
   toggleRecruitmentCheck,
   sortType,
   setSortType,
+  dataCount,
 }: FilterSectionProps) => {
   const isMdUp = useResponsive("md");
 
@@ -31,7 +33,7 @@ const FilterSection = ({
       {isMdUp ? (
         <div className="flex flex-row justify-between items-center w-full">
           <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-            총 nnn개의 관심 모집공고가 있어요.
+            총 {dataCount}개의 관심 모집공고가 있어요.
           </p>
           <div className="flex gap-4 items-center">
             <RadioBtn
@@ -55,7 +57,7 @@ const FilterSection = ({
         <div className="flex flex-col gap-2">
           <div className="flex flex-row justify-between items-center">
             <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-              총 nnn개의 관심 모집공고가 있어요.
+              총 {dataCount}개의 관심 모집공고가 있어요.
             </p>
             <SubPullDown
               optionData={POPULARITY_SORT_TYPE.slice(1)}
