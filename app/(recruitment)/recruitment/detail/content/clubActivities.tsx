@@ -61,7 +61,7 @@ const ClubActivities = ({
           동아리 합격 후기
         </h1>
         <div className="flex flex-col mt-5 gap-3 md:gap-2.5">
-          {ACCEPTANCE_REVIEWS.map((item, index) => {
+          {ACCEPTANCE_REVIEWS.slice(3).map((item, index) => {
             return (
               <AcceptanceReviewDropdown
                 key={item.id}
