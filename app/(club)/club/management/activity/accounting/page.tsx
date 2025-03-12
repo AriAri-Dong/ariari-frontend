@@ -10,11 +10,11 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MembershipBalanceList from "@/components/list/membershipBalanceList";
 import AccountingModal from "@/components/modal/club/accountingModal";
-import { useFinanceBalanceQuery } from "@/hooks/club/useClubFinanceQuery";
-// import { TRANSACTIONS } from "@/data/clubAccounting";
+import {
+  useFinanceBalanceQuery,
+  useFinancialRecordsQuery,
+} from "@/hooks/club/useClubFinanceQuery";
 import useResponsive from "@/hooks/useResponsive";
-import { MembershipBalance } from "@/types/club";
-import { formatDate } from "@/utils/formatDateToDot";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -24,10 +24,18 @@ const AccountingPage = () => {
   const isMdUp = useResponsive("md");
 
   const [openWrite, setOpenWrite] = useState<boolean>(false);
-  // const [transactions, setTransactions] =
-  //   useState<MembershipBalance[]>(TRANSACTIONS);
+
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const { balance, isLoading, isError, error } = useFinanceBalanceQuery(clubId);
+  const { balance, isLoadingBalance, isBalanceError } =
+    useFinanceBalanceQuery(clubId);
+  const {
+    financialRecords,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isRecordsError,
+    isLoadingRecords,
+  } = useFinancialRecordsQuery(clubId);
 
   const handleClose = () => {
     setOpenWrite(false);
@@ -82,10 +90,12 @@ const AccountingPage = () => {
               />
             )}
             {/* 리스트 영역 */}
-            <MembershipBalanceList transactions={[]} />
-            <div className="flex justify-center mt-9 md:mt-10">
-              <PlusBtn title={"더보기"} onClick={() => {}} />
-            </div>
+            <MembershipBalanceList transactions={financialRecords || []} />
+            {hasNextPage && (
+              <div className="flex justify-center mt-9 md:mt-10">
+                <PlusBtn title={"더보기"} onClick={fetchNextPage} />
+              </div>
+            )}
           </div>
         </div>
         {/* 컴포넌트화 필요 */}
