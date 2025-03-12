@@ -1,8 +1,9 @@
 "use client";
 
 import { logout } from "@/api/login/api";
-import { useUserStore } from "@/providers/userStoreProvider";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import AlertWithMessage from "@/components/alert/alertWithMessage";
 
 interface MenuProps {
   optionData: { id: number; label: string; path: string | null }[];
@@ -10,26 +11,16 @@ interface MenuProps {
 }
 
 /**
- *
  * @param optionData 드롭다운 목록 데이터
  * @param onClose 드롭다운 닫기 핸들러
- * @returns
  */
 const UserDropdown = ({ optionData, onClose }: MenuProps) => {
   const router = useRouter();
-  const { signOut } = useUserStore((state) => state);
+  const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
 
   const handleLogout = async () => {
     try {
-      // 현재 저장된 토큰 가져오기
-      const accessToken = sessionStorage.getItem("accessToken") || "";
-      const refreshToken = sessionStorage.getItem("refreshToken") || "";
-
-      await logout(accessToken, refreshToken);
-
-      // 상태 초기화 및 로그인 페이지로 이동
-      signOut();
-      window.location.href = "/";
+      await logout();
     } catch (error) {
       console.error("로그아웃 오류:", error);
     }
@@ -37,7 +28,9 @@ const UserDropdown = ({ optionData, onClose }: MenuProps) => {
 
   const handleMenuClick = (item: { label: string; path: string | null }) => {
     if (item.label === "로그아웃") {
-      handleLogout();
+      console.log("로그아웃 버튼 클릭됨");
+      setShowLogoutAlert(true);
+      return;
     } else if (item.path) {
       router.push(item.path);
     } else {
@@ -63,6 +56,17 @@ const UserDropdown = ({ optionData, onClose }: MenuProps) => {
           </span>
         </div>
       ))}
+      {/* 로그아웃 확인 알림 */}
+      {showLogoutAlert && (
+        <AlertWithMessage
+          text="로그아웃 하시겠습니까?"
+          description="계정을 로그아웃하면 다시 로그인해야 합니다."
+          leftBtnText="취소"
+          rightBtnText="확인"
+          onLeftBtnClick={() => setShowLogoutAlert(false)}
+          onRightBtnClick={handleLogout}
+        />
+      )}
     </div>
   );
 };
