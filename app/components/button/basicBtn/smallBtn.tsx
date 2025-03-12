@@ -18,8 +18,8 @@ const SmallBtn = ({
 }: ButtonWithTextProps) => {
   return (
     <button
-      className={`py-[13px] px-[22px] text-15 font-medium active:bg-primary_hover
-        bg-primary text-background md:hover:bg-primary_hover md:active:bg-primary_pressed
+      className={`py-2 md:py-[13px] px-[18px] md:px-[22px] text-mobile_body2_sb md:text-body1_sb
+        active:bg-primary_hover bg-primary text-background md:hover:bg-primary_hover md:active:bg-primary_pressed
         ${round ? "rounded-full" : "rounded-lg"} ${className}`}
       onClick={onClick}
     >
