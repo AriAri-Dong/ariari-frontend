@@ -1,5 +1,5 @@
 import axiosInstance from "../axiosInstance";
-import { CLUBS, CLUBS_MY, CLUBS_SEARCH } from "../apiUrl";
+import { CLUBS, CLUBS_MY, CLUBS_MY_BOOKMARKS, CLUBS_SEARCH } from "../apiUrl";
 import {
   ClubResponse,
   ClubSearchCondition,
@@ -114,6 +114,51 @@ export const getClubDetails = async (clubId: string) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching club details:", error);
+    throw error;
+  }
+};
+
+// 동아리 북마크 등록
+export const addClubBookmark = async (clubId: number) => {
+  try {
+    const response = await axiosInstance.post(`${CLUBS}/${clubId}/bookmark`);
+    console.log("북마크 등록 성공:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(" 북마크 등록 실패:", error);
+    throw error;
+  }
+};
+
+// 동아리 북마크 삭제
+export const removeClubBookmark = async (clubId: number) => {
+  try {
+    const response = await axiosInstance.delete(`${CLUBS}/${clubId}/bookmark`);
+    console.log("북마크 삭제 성공:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(" 북마크 삭제 실패:", error);
+    throw error;
+  }
+};
+
+// 북마크 동아리 조회
+export const getBookmarkClubsInfo = async (
+  pageable: Pageable
+): Promise<ClubResponse> => {
+  try {
+    const params = {
+      page: pageable.page,
+      size: pageable.size,
+      ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
+    };
+
+    const response = await axiosInstance.get<ClubResponse>(CLUBS_MY_BOOKMARKS, {
+      params,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching club info:", error);
     throw error;
   }
 };
