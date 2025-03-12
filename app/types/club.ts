@@ -89,7 +89,7 @@ export interface MembershipBalance {
   amount: number; // 입금(양수) 또는 출금(음수)
   recordDateTime: Date;
   createdDateTime: Date;
-  title: string;
+  body: string;
   balance: number; // 현재 잔액
 }
 

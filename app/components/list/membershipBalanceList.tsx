@@ -46,7 +46,7 @@ const MembershipBalanceList: React.FC<MembershipBalanceListProps> = ({
                 {/* 타이틀 */}
                 <div className="flex-1">
                   <p className="text-text1 text-mobile_body1_sb md:text-body1_sb">
-                    {transaction.title}
+                    {transaction.body}
                   </p>
                 </div>
 
