@@ -1,7 +1,7 @@
 "use client";
 
 import { logout } from "@/api/login/api";
-import { useUserStore } from "@/providers/user-store-provider";
+import { useUserStore } from "@/providers/userStoreProvider";
 import { useRouter } from "next/navigation";
 
 interface MenuProps {
@@ -23,7 +23,7 @@ const UserDropdown = ({ optionData, onClose }: MenuProps) => {
     try {
       // 현재 저장된 토큰 가져오기
       const accessToken = sessionStorage.getItem("accessToken") || "";
-      const refreshToken = "";
+      const refreshToken = sessionStorage.getItem("refreshToken") || "";
 
       await logout(accessToken, refreshToken);
 
