@@ -51,7 +51,7 @@ const TestPage = () => {
   useEffect(() => {
     const fetchAppliedList = async () => {
       const result = await getRecruitmentRanking();
-      console.log(result.data);
+      console.log(result);
     };
 
     fetchAppliedList();
@@ -78,20 +78,6 @@ const TestPage = () => {
   }, []);
 
   // 동아리 전체 조회
-  useEffect(() => {
-    const fetchClubsInfo = async () => {
-      try {
-        const data = await getAllClubsInfo();
-        console.log(data);
-      } catch (err) {
-        console.log;
-      } finally {
-      }
-    };
-
-    fetchClubsInfo();
-  }, []);
-
   // 동아리 상세 정보 조회
   // useEffect(() => {
   //   const fetchClubsInfo = async () => {
