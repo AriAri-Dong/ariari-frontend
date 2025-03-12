@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-interface AlertProps {
+export interface AlertProps {
   text: string;
   subText?: string;
   onClose?: () => void;
