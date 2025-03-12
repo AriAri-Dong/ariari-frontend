@@ -4,46 +4,43 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { MdFavorite } from "react-icons/md";
 import { useRouter } from "next/navigation";
-
-interface ClubProfileCardProps {
-  clubName: string;
-  clubImage: string;
-  affiliation: string;
-  field: string;
-  region: string;
-  target: string;
-  heartNumber: number;
-  clubPageUrl: string;
-}
+import { ClubListData } from "@/types/api";
+import defaultImage from "@/images/test/test_image.jpg";
+import {
+  CLUB_FIELD,
+  CLUB_PARTICIPANT,
+  CLUB_REGION,
+} from "@/constants/clubInfo";
 
 /**
  *
- * @param clubName 동아리 이름
- * @param clubImage 동아리 프로필
- * @param affiliation 소속
- * @param field 분야
- * @param region 지역
- * @param target 대상
+ * @param name 동아리 이름
+ * @param profileUri 동아리 프로필
+ * @param afiliationType 소속
+ * @param clubCategoryType 분야
+ * @param clubRegionType 지역
+ * @param participantType 대상
  * @param heartNumber 좋아요 개수
  * @param clubPageUrl 동아리 링크
  * @returns
  */
 const ClubInfoCard = ({
-  clubName,
-  clubImage,
-  affiliation,
-  field,
-  region,
-  target,
-  heartNumber,
-  clubPageUrl,
-}: ClubProfileCardProps) => {
+  id,
+  name,
+  profileUri,
+  bannerUri,
+  clubCategoryType,
+  clubRegionType,
+  participantType,
+  isMyBookmark,
+  schoolData,
+}: ClubListData) => {
   const router = useRouter();
-  const [isHeart, setIsHeart] = useState<boolean>(false);
-  const [heartNumberVal, setHeartNumberVal] = useState<number>(heartNumber);
+  const [isHeart, setIsHeart] = useState<boolean>(isMyBookmark);
+  const [heartNumberVal, setHeartNumberVal] = useState<number>(0);
 
   const onClubProfileClick = () => {
-    router.push(clubPageUrl);
+    router.push(`/club/management/recruitment/applicationStatus?clubId=${id}`);
   };
 
   const onHeartClick = () => {
@@ -56,7 +53,7 @@ const ClubInfoCard = ({
       <div className="flex gap-4 items-center py-[6px] md:gap-5">
         <div className="relative w-[60px] h-[60px] md:w-[73px] md:h-[73px]">
           <Image
-            src={clubImage}
+            src={profileUri || defaultImage}
             alt={"club_profile"}
             fill
             className="rounded-full object-cover cursor-pointer"
@@ -68,10 +65,12 @@ const ClubInfoCard = ({
             className="text-mobile_h3 text-text1 md:text-h3 cursor-pointer"
             onClick={onClubProfileClick}
           >
-            {clubName}
+            {name}
           </h1>
           <p className="text-subtext2 text-mobile_body3_m md:text-body2_m">
-            {affiliation} | {field} | {region} | {target}
+            {schoolData == null ? "연합" : "교내"} |{" "}
+            {CLUB_FIELD[clubCategoryType]} | {CLUB_REGION[clubRegionType]} |{" "}
+            {CLUB_PARTICIPANT[participantType]}
           </p>
         </div>
       </div>
