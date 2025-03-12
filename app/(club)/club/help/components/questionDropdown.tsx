@@ -207,9 +207,9 @@ const QuestionDropdown = ({
                   src={
                     profileImageMap[
                       isFaq
-                        ? clubInfo?.clubMemberData.memberData.profileType!
+                        ? clubInfo?.clubData.profileUri || ""
                         : data.clubAnswerData
-                        ? clubInfo?.clubMemberData.memberData.profileType!
+                        ? clubInfo?.clubData.profileUri || ""
                         : myProfileType!
                     ]
                   }
@@ -253,6 +253,7 @@ const QuestionDropdown = ({
       {reportIsOpen && (
         <div style={{ zIndex: 1000 }}>
           {isMdUp ? (
+            // id, reportTargetType(CLUB_QUESTION)
             <ReportModal
               onClose={() => setReportIsOpen(false)}
               onSubmit={handleReportSubmit}
