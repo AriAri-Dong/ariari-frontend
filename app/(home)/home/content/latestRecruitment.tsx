@@ -48,14 +48,14 @@ const LatestRecruitment = () => {
       </div>
       {isMdUp ? (
         <div className="w-full">
-          <MainRecruitmentCardWithCarousel data={latestRecruitmentData12} />
+          <MainRecruitmentCardWithCarousel data={[]} />
         </div>
       ) : (
         <div
           className="flex flex-col gap-5 md:gap-x-4 md:gap-y-7 md:flex-row md:flex-wrap
         md:grid md:grid-cols-3 lx:grid-cols-4"
         >
-          <MainRecruitmentCard data={latestRecruitmentData.slice(0, 8)} />
+          <MainRecruitmentCard data={[]} />
         </div>
       )}
       {isModalOpen && (
