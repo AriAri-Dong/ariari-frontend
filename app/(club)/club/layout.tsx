@@ -8,7 +8,7 @@ import useResponsive from "@/hooks/useResponsive";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import ClubInfoWrapper from "./content/clubInfoWrapper";
 import { ClubProvider, useClubContext } from "@/context/ClubContext";
-import { useUserStore } from "@/providers/user-store-provider";
+import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
