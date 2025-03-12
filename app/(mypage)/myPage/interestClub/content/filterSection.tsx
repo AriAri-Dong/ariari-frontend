@@ -8,6 +8,7 @@ interface FilterSectionProps {
   toggleCheck: () => void;
   sortType: string;
   setSortType: (value: string) => void;
+  totalCount: number;
 }
 
 const FilterSection = ({
@@ -15,6 +16,7 @@ const FilterSection = ({
   toggleCheck,
   sortType,
   setSortType,
+  totalCount,
 }: FilterSectionProps) => {
   const isMdUp = useResponsive("md");
 
@@ -27,7 +29,7 @@ const FilterSection = ({
       {isMdUp ? (
         <div className="flex flex-row justify-between items-center w-full">
           <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-            총 nnn개의 관심 동아리가 있어요.
+            총 {totalCount}개의 관심 동아리가 있어요.
           </p>
           <div className="flex gap-4 items-center">
             <RadioBtn
@@ -46,7 +48,7 @@ const FilterSection = ({
         <div className="flex flex-col gap-2">
           <div className="flex flex-row justify-between items-center">
             <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-              총 nnn개의 관심 동아리가 있어요.
+              총 {totalCount}개의 관심 동아리가 있어요.
             </p>
             <SubPullDown
               optionData={POPULARITY_SORT_TYPE.slice(1)}
