@@ -1,5 +1,8 @@
+import { PageInfo } from "./pageInfo";
+
 export interface RecruitmentData {
   id: number; // 모집공고 ID
+  clubId: number; // 동아리 ID
   title: string;
   body: string;
   posterUri: string;
@@ -10,4 +13,10 @@ export interface RecruitmentData {
   endDateTime: string;
   isActivated: boolean;
   isMyBookmark: boolean;
+}
+
+// 모집공고 목록 조회
+export interface RecruitmentResponse {
+  recruitmentDataList: RecruitmentData[];
+  pageInfo: PageInfo;
 }
