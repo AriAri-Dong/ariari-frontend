@@ -14,7 +14,6 @@ export const getSchoolData = async (
 ) => {
   try {
     const params = {
-      // query: query,
       page: pageable.page,
       size: pageable.size,
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
@@ -22,16 +21,12 @@ export const getSchoolData = async (
 
     const { data } = await axiosInstance.get<{
       data: SchoolDataResponseType[];
-    }>(SCHOOLS, {
-      params: params,
-    });
+    }>(SCHOOLS, { params });
 
     console.log("학교 정보 조회 성공:", data);
     return data;
   } catch (err) {
     console.error("학교 정보 조회 실패:", err);
-    return {
-      data: [],
-    };
+    throw err;
   }
 };
