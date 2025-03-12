@@ -6,12 +6,13 @@ import SubTap from "@/components/tab/subTap";
 import { MAIN_RECRUITMENT_CARD } from "@/data/main";
 import { AFFILIATION_TYPE } from "@/data/pulldown";
 import { MainRecruitmentCardProps } from "@/types/components/card";
+import { RecruitmentData } from "@/types/recruitment";
 import { useState } from "react";
 
 const PopularRecruitment = () => {
   const [popularRecruitmentData, setPopularRecruitmentData] = useState<
-    MainRecruitmentCardProps[]
-  >(MAIN_RECRUITMENT_CARD);
+    RecruitmentData[]
+  >([]);
 
   const [affiliationType, setAffiliationType] = useState<string[]>([
     AFFILIATION_TYPE[1].label,
