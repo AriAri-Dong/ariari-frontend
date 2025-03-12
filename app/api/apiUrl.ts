@@ -11,6 +11,7 @@ export const MEMBERS_MY_NICKNAME = "/members/my/nickname";
 export const MEMBERS_MY_PROFILE = "/members/my/profile";
 
 // == RECRUITMENT ==
+export const RECRUITMENT = "/recruitments";
 export const RECRUITMENT_RANKING = "/recruitments/external/ranking";
 
 // == CLUB ==
