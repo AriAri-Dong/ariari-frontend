@@ -33,6 +33,7 @@ export interface ClubInfoCard {
     region: ClubRegionType;
     target: ParticipantType;
   };
+  clubId: string;
   isMyRecruitmentScrap: boolean;
   procedureType: ProcedureType;
   recruitmentBookmarks: number;

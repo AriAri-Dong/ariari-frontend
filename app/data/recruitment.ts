@@ -281,6 +281,7 @@ export const CLUB_INFO_DATA: ClubInfoCard = {
     region: "SEOUL_GYEONGGI",
     target: "GRADUATE_STUDENT",
   },
+  clubId: "1",
   isMyRecruitmentScrap: false,
   procedureType: "INTERVIEW",
   recruitmentBookmarks: 15,
