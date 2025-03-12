@@ -5,9 +5,14 @@ import useResponsive from "@/hooks/useResponsive";
 interface FilterSectionProps {
   sortType: string;
   setSortType: (value: string) => void;
+  dataCount: number;
 }
 
-const FilterSection = ({ sortType, setSortType }: FilterSectionProps) => {
+const FilterSection = ({
+  sortType,
+  setSortType,
+  dataCount,
+}: FilterSectionProps) => {
   const isMdUp = useResponsive("md");
 
   return (
@@ -19,7 +24,7 @@ const FilterSection = ({ sortType, setSortType }: FilterSectionProps) => {
       {isMdUp ? (
         <div className="flex flex-row justify-between items-center w-full">
           <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-            총 nnn개의 모집공고가 있어요.
+            총 {dataCount}개의 모집공고가 있어요.
           </p>
           <SubPullDown
             optionData={POPULARITY_SORT_TYPE.slice(1)}
@@ -31,7 +36,7 @@ const FilterSection = ({ sortType, setSortType }: FilterSectionProps) => {
         <div className="flex flex-col gap-2">
           <div className="flex flex-row justify-between items-center">
             <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-              총 nnn개의 모집공고가 있어요.
+              총 {dataCount}개의 모집공고가 있어요.
             </p>
             <SubPullDown
               optionData={POPULARITY_SORT_TYPE.slice(1)}
