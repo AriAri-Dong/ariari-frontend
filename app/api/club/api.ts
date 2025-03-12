@@ -1,29 +1,53 @@
-import { Pageable } from "@/types/api";
-import { CLUBS, CLUBS_MY, CLUBS_SEARCH } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
+import { CLUBS, CLUBS_MY, CLUBS_SEARCH } from "../apiUrl";
+import {
+  ClubResponse,
+  ClubSearchCondition,
+  ClubData,
+  Pageable,
+  ClubInfoResponse,
+} from "@/types/api";
 
 // 동아리 수정
 export const updateClubInfo = async (clubId: number) => {
   try {
-    const response = await axiosInstance.put(CLUBS, clubId);
+    const response = await axiosInstance.put(`${CLUBS}/${clubId}`);
     return response.data;
   } catch (error) {
-    console.error("Error updating user info:", error);
+    console.error("Error updating club info:", error);
     throw error;
   }
 };
 
-interface ClubInfoResponse {
-  data: any;
-}
-
-// 전체 동아리 검색 조회
-export const getAllClubsInfo = async () => {
+// 전체 동아리 조회
+export const getAllClubsInfo = async (
+  condition: ClubSearchCondition,
+  pageable: Pageable
+): Promise<ClubResponse> => {
   try {
-    const response = await axiosInstance.get(CLUBS);
+    const filteredCondition = {
+      clubCategoryTypes: condition.clubCategoryTypes?.length
+        ? condition.clubCategoryTypes
+        : undefined,
+      clubRegionTypes: condition.clubRegionTypes?.length
+        ? condition.clubRegionTypes
+        : undefined,
+      participantTypes: condition.participantTypes?.length
+        ? condition.participantTypes
+        : undefined,
+    };
+
+    const params = {
+      ...filteredCondition,
+      page: pageable.page,
+      size: pageable.size,
+      ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
+    };
+
+    const response = await axiosInstance.get<ClubResponse>(CLUBS, { params });
     return response.data;
   } catch (error) {
-    console.error("Error fetching user info:", error);
+    console.error("Error fetching club info:", error);
     throw error;
   }
 };
@@ -34,17 +58,12 @@ export const createClub = async (clubData: any) => {
     const response = await axiosInstance.post(CLUBS, clubData);
     return response.data;
   } catch (error) {
-    console.error("Error during login:", error);
+    console.error("Error creating club:", error);
     throw error;
   }
 };
 
-/**
- * 동아리 검색 조회 API 호출
- * @param query 검색할 문자열
- * @param pageable 페이지네이션 정보
- * @returns 클럽 정보
- */
+// 동아리 검색 조회
 export const getClubsInfo = async (
   query: string,
   pageable: Pageable
@@ -67,11 +86,7 @@ export const getClubsInfo = async (
   }
 };
 
-/**
- * 내 동아리 목록 조회 API 호출
- * @param pageable 페이지네이션 정보
- * @returns 내 동아리 목록
- */
+// 내 동아리 목록 조회
 export const getMyClubs = async (
   pageable: Pageable
 ): Promise<ClubInfoResponse> => {
