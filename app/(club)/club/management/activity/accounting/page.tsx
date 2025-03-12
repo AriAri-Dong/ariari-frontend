@@ -10,6 +10,7 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MembershipBalanceList from "@/components/list/membershipBalanceList";
 import AccountingModal from "@/components/modal/club/accountingModal";
+import { useAddFinancialRecordMutation } from "@/hooks/club/useClubFinanceMutation";
 import {
   useFinanceBalanceQuery,
   useFinancialRecordsQuery,
@@ -36,6 +37,7 @@ const AccountingPage = () => {
     isRecordsError,
     isLoadingRecords,
   } = useFinancialRecordsQuery(clubId);
+  const { addFinancialRecord } = useAddFinancialRecordMutation({ clubId });
 
   const handleClose = () => {
     setOpenWrite(false);
@@ -47,24 +49,21 @@ const AccountingPage = () => {
     amount: number;
     details: string;
   }) => {
-    // if (!data.date) {
-    //   console.error("날짜가 없습니다.");
-    //   return;
-    // }
-    // const formattedDate = formatDate(data.date);
-    // const newTransaction = {
-    //   date: formattedDate,
-    //   title: data.details,
-    //   amount: data.transaction ? data.amount : -data.amount,
-    //   balance:
-    //     transactions.length > 0
-    //       ? transactions[transactions.length - 1].balance +
-    //         (data.transaction ? data.amount : -data.amount)
-    //       : data.amount,
-    // };
-    // setTransactions((prev) => [...prev, newTransaction]);
-    // handleClose();
-    // setAlertMessage("회계내역이 등록되었습니다.");
+    if (!data.date) {
+      console.error("날짜가 없습니다.");
+      return;
+    }
+    const newTransaction = {
+      recordDateTime: data.date,
+      body: data.details,
+      amount: data.transaction ? data.amount : -data.amount,
+    };
+    addFinancialRecord.mutate({
+      clubId,
+      data: newTransaction,
+    });
+    handleClose();
+    setAlertMessage("회계내역이 등록되었습니다.");
   };
 
   return (

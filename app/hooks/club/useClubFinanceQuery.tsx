@@ -47,9 +47,8 @@ export const useFinancialRecordsQuery = (clubId: string) => {
   });
 
   return {
-    financialRecords: data?.pages.flatMap(
-      (page) => page.financialRecordDataList
-    ),
+    financialRecords:
+      data?.pages.flatMap((page) => page.financialRecordDataList) || [],
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
