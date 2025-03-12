@@ -11,21 +11,30 @@ import login from "@/images/icon/mobile_login.svg";
 import UserModal from "../modal/userModal";
 import MobileNotificationModal from "../modal/notification/mobileNotificationModal";
 import MobileLoginModal from "../modal/login/mobileLoginModal";
+import AlertWithMessage from "../alert/alertWithMessage";
+import { logout } from "@/api/login/api";
 
 const MobileUser = () => {
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] =
+    useState<boolean>(false);
+  const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
   const [notificationStatus, setNotificationStatus] = useState<
     "default" | "pressed" | "unconfirmed"
   >("unconfirmed");
 
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
 
-  const handleCloseModal = () => {
-    setShowModal(false);
+  // 로그아웃 실행 함수
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("로그아웃 오류:", error);
+    }
   };
-
+  // 알림 아이콘 이미지 가져오기
   const getNotificationImage = () => {
     switch (notificationStatus) {
       case "pressed":
@@ -37,31 +46,17 @@ const MobileUser = () => {
     }
   };
 
-  const handleModalOpen = () => {
-    setIsOpenModal(true);
-  };
-
-  const handleLogin = () => {
-    setIsLoginModalOpen(true);
-  };
-
-  const handleCloseLoginModal = () => {
-    setIsLoginModalOpen(false);
-  };
-
-  const handleLogout = () => {
-    setShowModal(true);
-  };
-
+  // 알림 아이콘 클릭 시 동작
   const handleNotificationClick = () => {
     if (notificationStatus === "unconfirmed") {
-      handleModalOpen();
+      setIsNotificationModalOpen(true);
     }
   };
 
   return (
     <>
       <div className="flex items-center gap-4">
+        {/* 알림 아이콘 */}
         <Image
           src={getNotificationImage()}
           alt="notification"
@@ -70,10 +65,12 @@ const MobileUser = () => {
           height={24}
           width={24}
         />
+
+        {/* 로그인 상태 여부에 따라 표시되는 UI */}
         {isSignIn ? (
           <div
-            className="rounded-full w-7 h-7 bg-[#CBCBCB] aspect-square"
-            onClick={handleLogout}
+            className="rounded-full w-7 h-7 bg-[#CBCBCB] aspect-square cursor-pointer"
+            onClick={() => setIsUserModalOpen(true)}
           />
         ) : (
           <Image
@@ -82,22 +79,38 @@ const MobileUser = () => {
             height={24}
             width={24}
             className="cursor-pointer aspect-square"
-            onClick={handleLogin}
+            onClick={() => setIsLoginModalOpen(true)}
           />
         )}
       </div>
-      {showModal && <UserModal onClose={handleCloseModal} />}
-      {isOpenModal && (
-        <MobileNotificationModal
-          onclose={() => {
-            setIsOpenModal(false);
-          }}
+
+      {/* 로그아웃 확인 알림 */}
+      {showLogoutAlert && (
+        <AlertWithMessage
+          text="로그아웃 하시겠습니까?"
+          description="계정을 로그아웃하면 다시 로그인해야 합니다."
+          leftBtnText="취소"
+          rightBtnText="확인"
+          onLeftBtnClick={() => setShowLogoutAlert(false)}
+          onRightBtnClick={handleLogout}
         />
       )}
+
+      {/* 유저 모달 */}
+      {isUserModalOpen && (
+        <UserModal onClose={() => setIsUserModalOpen(false)} />
+      )}
+
+      {/* 알림 모달 */}
+      {isNotificationModalOpen && (
+        <MobileNotificationModal
+          onclose={() => setIsNotificationModalOpen(false)}
+        />
+      )}
+
+      {/* 로그인 모달 */}
       {isLoginModalOpen && (
-        <>
-          <MobileLoginModal onClose={handleCloseLoginModal} />
-        </>
+        <MobileLoginModal onClose={() => setIsLoginModalOpen(false)} />
       )}
     </>
   );
