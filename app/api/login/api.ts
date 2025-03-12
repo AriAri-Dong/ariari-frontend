@@ -55,17 +55,19 @@ export const getTokenWithCode = async (code: string) => {
 };
 
 // 로그아웃
-export const logout = async (accessToken: string, refreshToken: string) => {
+export const logout = async () => {
+  const { accessToken, refreshToken, isFirstLogin, signOut } =
+    authStore.getState();
+
   try {
-    await axiosInstance.post(
-      LOGOUT,
-      { accessToken, refreshToken },
-      { withCredentials: true }
-    );
+    await axios.post(LOGOUT, {
+      accessToken,
+      refreshToken,
+      isFirstLogin,
+    });
 
-    sessionStorage.removeItem("accessToken");
+    signOut();
 
-    // 로그인 페이지로 리디렉트
     window.location.href = "/";
   } catch (err) {
     console.error("로그아웃 실패:", err);
