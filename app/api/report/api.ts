@@ -11,7 +11,7 @@ import {
   REPORT_RECRUITMENT,
   REPORT_CLUB_REVIEW,
 } from "../apiUrl";
-import { ReportReq, ReportTargetType, ReportType } from "@/types/report";
+import { ReportReq, ReportTargetType } from "@/types/report";
 import { AxiosError } from "axios";
 
 const reportUrlMap: Record<ReportTargetType, string> = {
@@ -46,7 +46,7 @@ export const reportItem = async ({
     if (err instanceof AxiosError) {
       if (err.response && err.response.data.code === 409) {
         // 409 - 이미 처리된 신고
-        throw new Error("이미 처리된 신고입니다.");
+        throw new Error("이미 신고한 게시물입니다");
       }
     }
     throw new Error("문제가 발생했습니다.");
