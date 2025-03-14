@@ -12,7 +12,9 @@ export type profileType =
   | "ARIARI_MONKEY"
   | "ARIARI_CHICKEN"
   | "ARIARI_DOG"
-  | "ARIARI_PIG";
+  | "ARIARI_PIG"
+  | null;
+
 export interface MemberData {
   id: number; // $int64
   nickname: string;
