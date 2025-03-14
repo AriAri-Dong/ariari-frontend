@@ -1,4 +1,5 @@
 import { UserDataResponseType } from "@/types/api";
+import { profileType } from "@/types/member";
 import { devtools, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 
@@ -11,7 +12,7 @@ export type UserState = {
   memberData: {
     id: string;
     nickname: string;
-    profileType: string | null;
+    profileType: profileType;
   };
   schoolData: {
     name: string;
@@ -40,13 +41,13 @@ export type UserStore = UserState & UserActions;
 export const defaultInitState: UserState = {
   accessToken: "",
   refreshToken: "",
-  id: "defaultIdValue",
+  id: "",
   isSignIn: false,
   isFirstLogin: false,
   memberData: {
     id: "",
     nickname: "",
-    profileType: null,
+    profileType: "ARIARI_CHICKEN",
   },
   schoolData: null,
 };
@@ -78,11 +79,13 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
               ...state,
               memberData: {
                 ...userData.memberData,
+                profileType: userData.memberData.profileType as profileType,
               },
               schoolData: userData.schoolData
                 ? { ...userData.schoolData }
                 : null,
             })),
+
           setAccessToken: (accessToken) =>
             set((state) => ({
               ...state,
