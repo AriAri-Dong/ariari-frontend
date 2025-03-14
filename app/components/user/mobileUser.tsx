@@ -13,8 +13,13 @@ import MobileNotificationModal from "../modal/notification/mobileNotificationMod
 import MobileLoginModal from "../modal/login/mobileLoginModal";
 import AlertWithMessage from "../alert/alertWithMessage";
 import { logout } from "@/api/login/api";
+import { getProfileImage } from "@/utils/profileImage";
 
 const MobileUser = () => {
+  const profileType = useUserStore((state) => state.memberData.profileType);
+
+  const profileImageSrc = getProfileImage(profileType);
+
   const [isUserModalOpen, setIsUserModalOpen] = useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] =
@@ -66,10 +71,14 @@ const MobileUser = () => {
           width={24}
         />
 
-        {/* 로그인 상태 여부에 따라 표시되는 UI */}
+        {/* 로그인 상태 여부 */}
         {isSignIn ? (
-          <div
-            className="rounded-full w-7 h-7 bg-[#CBCBCB] aspect-square cursor-pointer"
+          <Image
+            src={profileImageSrc}
+            alt="profile"
+            width={28}
+            height={28}
+            className="rounded-full"
             onClick={() => setIsUserModalOpen(true)}
           />
         ) : (
