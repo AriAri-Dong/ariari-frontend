@@ -12,7 +12,6 @@ import { useUserStore } from "@/providers/user-store-provider";
 import { useShallow } from "zustand/shallow";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
-import Loading from "@/components/feedback/loading";
 
 const ClubPage = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -49,7 +48,7 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
   }, [clubInfo, setRole]);
 
   if (isLoading) {
-    return <Loading />;
+    return <h1>Loading</h1>;
   }
 
   return (
@@ -73,7 +72,7 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
 const ClubPageWithProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ClubProvider>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<p>Loading...</p>}>
         <ClubPage>{children}</ClubPage>
       </Suspense>
     </ClubProvider>

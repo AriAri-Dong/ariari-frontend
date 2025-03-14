@@ -13,7 +13,6 @@ interface LoadingProps {
 const Loading = ({ className = "", lottieClassName = "" }: LoadingProps) => {
   const [isForward, setIsForward] = useState<number>(1);
   const lottieRef = useRef<any>(null);
-  // const loading = "/lottie/loading.json";
 
   console.log(loading);
 
