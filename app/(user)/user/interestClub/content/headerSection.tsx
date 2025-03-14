@@ -45,14 +45,14 @@ const HeaderSection = () => {
         onClick={handleAllDelete}
         className="md:hidden cursor-pointer"
       />
-      <div className="hidden md:flex">
+      {/* <div className="hidden md:flex">
         <IconBtn
           type={"trash"}
           size={"large"}
           title={"전체삭제"}
           onClick={handleAllDelete}
         />
-      </div>
+      </div> */}
       {isModalOpen && (
         <NotiPopUp
           onClose={() => setIsModalOpen(false)}
