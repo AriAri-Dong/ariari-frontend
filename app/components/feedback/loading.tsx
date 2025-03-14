@@ -14,8 +14,6 @@ const Loading = ({ className = "", lottieClassName = "" }: LoadingProps) => {
   const [isForward, setIsForward] = useState<number>(1);
   const lottieRef = useRef<any>(null);
 
-  console.log(loading);
-
   // 재생, 역재생 반복
   const handleComplete = () => {
     setIsForward(-isForward);
@@ -30,7 +28,7 @@ const Loading = ({ className = "", lottieClassName = "" }: LoadingProps) => {
 
   return (
     <div
-      className={`flex bg-white flex-col items-center justify-center gap-3 min-h-[300px] md:min-h-[450px] text-center ${className}`}
+      className={`flex flex-col items-center justify-center gap-3 min-h-[300px] md:min-h-[450px] text-center ${className}`}
     >
       <Lottie
         animationData={loading}

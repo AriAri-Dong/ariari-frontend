@@ -10,7 +10,7 @@ interface NotFoundProps {
 const ErrorNotice = ({ title, description, className }: NotFoundProps) => {
   return (
     <div
-      className={`flex bg-white flex-col items-center justify-center min-h-[300px] md:min-h-[450px] text-center ${className}`}
+      className={`flex flex-col items-center justify-center min-h-[300px] md:min-h-[450px] text-center ${className}`}
     >
       <Image
         src={notIcon}
