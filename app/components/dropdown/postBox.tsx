@@ -165,13 +165,14 @@ const PostBox = ({ data, role }: PostBoxProps) => {
       <div className="flex flex-col gap-3.5 md:flex-row justify-between">
         <div className="flex w-full justify-between">
           <div className="flex items-center gap-[14px]">
-            <Image
+            {/* 에러 발생 임시 주석 처리 */}
+            {/* <Image
               src={profileImageMap[post.clubMember.profileType]}
               alt="vector"
               width={32}
               height={32}
               className="md:w-[44px] md:h-[44px]"
-            />
+            /> */}
             <div>
               <p className="text-mobile_body1_m text-subtext2 md:text-h4">
                 {post.clubMember.name}
