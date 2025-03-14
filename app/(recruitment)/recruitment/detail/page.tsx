@@ -1,12 +1,12 @@
-// app/recruitment/detail/page.tsx
+"use client";
+
 import React, { Suspense } from "react";
 import RecruitmentDetail from "./content/recruitmentDetail";
+import Loading from "@/components/feedback/loading";
 
 export default function RecruitmentDetailPage() {
   return (
-    <Suspense
-      fallback={<h4 className="w-full text-center text-h4">로딩 중...</h4>}
-    >
+    <Suspense fallback={<Loading />}>
       <RecruitmentDetail />
     </Suspense>
   );
