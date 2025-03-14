@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from "@/images/logo/logo.svg";
@@ -11,12 +11,15 @@ import User from "../user/user";
 import HeaderTab from "../tab/headerTab";
 import SmallBtn from "../button/basicBtn/smallBtn";
 import MobileUser from "../user/mobileUser";
+import { useUserStore } from "@/providers/userStoreProvider";
+import { getMemberData } from "@/api/member/api";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
 
   const { setSearchTerm } = useContext(SearchTermContext);
+  const { signIn, setUserData } = useUserStore((state) => state);
 
   const handleHomeClick = () => {
     router.push("/");
@@ -31,18 +34,40 @@ const Header = () => {
     console.log("검색어 :", searchTerm);
   };
 
+  // 모바일에서 헤더 숨김 처리
   const isHiddenPath = [
-    "/myPage/myPoint",
-    "/myPage/interestClub",
-    "/myPage/interestRecruitment",
+    "/user/myPoint",
+    "/user/interestClub",
+    "/user/interestRecruitment",
     "/withdrawal",
-    "/club/create",
+    "/user/club/create",
     "/club/recruitment/create",
     "/notification",
     "/club/withdrawal",
     "/club/close",
     "/help",
   ].includes(pathname);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const accessToken = sessionStorage.getItem("accessToken");
+
+      if (!accessToken || accessToken.trim() === "" || accessToken === "null") {
+        console.log("비로그인 상태 → 사용자 정보 요청 생략");
+        return;
+      }
+
+      try {
+        const res = await getMemberData();
+        setUserData(res);
+        console.log("유저 데이터 >>", res);
+      } catch (error) {
+        console.error("유저 데이터 불러오기 실패:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [setUserData]);
 
   return (
     <header
