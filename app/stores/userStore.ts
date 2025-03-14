@@ -47,7 +47,7 @@ export const defaultInitState: UserState = {
   memberData: {
     id: "",
     nickname: "",
-    profileType: "ARIARI_CHICKEN",
+    profileType: null,
   },
   schoolData: null,
 };
