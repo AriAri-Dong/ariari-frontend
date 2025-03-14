@@ -1,5 +1,5 @@
 import axios from "axios";
-import { REISSUE, LOGOUT } from "../apiUrl";
+import { REISSUE, LOGOUT, UNREGISTER } from "../apiUrl";
 import { AuthResponseType } from "@/types/api";
 import axiosInstance from "../axiosInstance";
 import { authStore } from "@/stores/userStore";
@@ -71,5 +71,14 @@ export const logout = async () => {
     window.location.href = "/";
   } catch (err) {
     console.error("로그아웃 실패:", err);
+  }
+};
+
+// 회원 탈퇴
+export const unregister = async () => {
+  try {
+    await axiosInstance.post(UNREGISTER);
+  } catch (err) {
+    console.error("회원탈퇴 실패:", err);
   }
 };
