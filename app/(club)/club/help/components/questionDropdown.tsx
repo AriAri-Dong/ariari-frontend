@@ -186,7 +186,8 @@ const QuestionDropdown = ({
               className={`w-full flex-col justify-start items-start gap-8 flex`}
             >
               <div className="w-full items-start gap-8 flex md:pl-1">
-                <Image
+                {/* 에러 발생 임시 주석 처리 */}
+                {/* <Image
                   src={
                     profileImageMap[
                       isFaq
@@ -200,7 +201,7 @@ const QuestionDropdown = ({
                   width={56}
                   height={56}
                   className="hidden md:block rounded-full"
-                />
+                /> */}
                 <div className="w-full flex justify-start items-start  relative">
                   <Image
                     src={polygon}
