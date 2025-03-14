@@ -1,22 +1,47 @@
 "use client";
-import Lottie from "lottie-react";
-import loading from "@/images/lottie/loading.json";
 
+import { useState, useEffect, useRef } from "react";
+import loading from "@/images/lottie/loading.json";
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 interface LoadingProps {
   className?: string;
   lottieClassName?: string;
 }
-const Loading = ({ className, lottieClassName }: LoadingProps) => {
+
+const Loading = ({ className = "", lottieClassName = "" }: LoadingProps) => {
+  const [isForward, setIsForward] = useState<number>(1);
+  const lottieRef = useRef<any>(null);
+  // const loading = "/lottie/loading.json";
+
+  console.log(loading);
+
+  // 재생, 역재생 반복
+  const handleComplete = () => {
+    setIsForward(-isForward);
+    lottieRef.current.setDirection(-isForward);
+  };
+
+  useEffect(() => {
+    if (lottieRef.current) {
+      lottieRef.current.play();
+    }
+  }, [isForward]);
+
   return (
     <div
-      className={`flex bg-white flex-col items-center justify-center min-h-[300px] md:min-h-[450px] text-center ${className}`}
+      className={`flex bg-white flex-col items-center justify-center gap-3 min-h-[300px] md:min-h-[450px] text-center ${className}`}
     >
       <Lottie
         animationData={loading}
-        loop
+        loop={false}
         autoPlay
-        className={`text-center w-40 h-40 ${lottieClassName}`}
+        className={`text-center w-20 h-20 ${lottieClassName}`}
+        lottieRef={lottieRef}
+        onComplete={handleComplete}
       />
+      <p className="text-mobile_h4_r text-subtext1">Loading..</p>
     </div>
   );
 };
