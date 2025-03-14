@@ -10,8 +10,8 @@ const Step1 = () => {
   const { profileData, updateProfileData } = useProfileContext();
   const [inputValue, setInputValue] = useState<string>(profileData.username);
 
-  const handleProfileClick = (id: number) => {
-    updateProfileData({ selectedProfileId: id });
+  const handleProfileClick = (id: string) => {
+    updateProfileData({ selectedProfileType: id });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +21,7 @@ const Step1 = () => {
   };
 
   const selectedProfileData = PROFILE_SETTING.find(
-    (item) => item.id === profileData.selectedProfileId
+    (item) => item.alias === profileData.selectedProfileType
   );
 
   return (
@@ -53,16 +53,16 @@ const Step1 = () => {
           <div
             key={item.id}
             className="relative flex justify-center items-center w-[76px] h-[76px] cursor-pointer rounded-full"
-            onClick={() => handleProfileClick(item.id)}
+            onClick={() => handleProfileClick(item.alias || "")}
           >
             <Image
               src={item.imageUrl}
-              alt={item.alias}
+              alt={item.alias || ""}
               width={76}
               height={76}
               className="rounded-full"
             />
-            {profileData.selectedProfileId === item.id && (
+            {profileData.selectedProfileType === item.alias && (
               <>
                 <div className="absolute inset-0 bg-black_50 rounded-full z-10 opacity-70"></div>
                 <div className="absolute z-20">
