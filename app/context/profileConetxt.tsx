@@ -2,9 +2,9 @@
 
 import React, { createContext, useContext, useState } from "react";
 
-interface ProfileData {
+export interface ProfileData {
   username: string;
-  selectedProfileId: number;
+  selectedProfileType: string;
   email: string;
   verificationCode: string;
 }
@@ -23,7 +23,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [profileData, setProfileData] = useState<ProfileData>({
     username: "",
-    selectedProfileId: 1,
+    selectedProfileType: "",
     email: "",
     verificationCode: "",
   });
