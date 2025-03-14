@@ -11,16 +11,7 @@ import NotificationModal from "../modal/notification/notificationModal";
 import LoginModal from "../modal/login/loginModal";
 import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
-import { profileType } from "@/types/member";
-
-const getProfileImage = (profileType: profileType | null) => {
-  const defaultProfile = "/images/profile/chicken.svg";
-
-  if (!profileType) return defaultProfile;
-  const profileKey = profileType.replace("ARIARI_", "").toLowerCase();
-
-  return `/images/profile/${profileKey}.svg`;
-};
+import { getProfileImage } from "@/utils/profileImage";
 
 const User = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
