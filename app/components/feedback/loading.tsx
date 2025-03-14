@@ -1,3 +1,4 @@
+"use client";
 import Lottie from "lottie-react";
 import loading from "@/images/lottie/loading.json";
 

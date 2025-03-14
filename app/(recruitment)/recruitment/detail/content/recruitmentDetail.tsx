@@ -20,7 +20,6 @@ import ErrorNotice from "@/components/feedback/error";
 const RecruitmentDetail = () => {
   const params = useSearchParams();
   const recruitmentId = params.get("id");
-  // const clubId = params.get("clubId") ?? "";
 
   const [clubId, setClubId] = useState<string>("");
 
