@@ -1,6 +1,7 @@
 import { Pageable } from "@/types/api";
 import { CLUBS, CLUBS_MY, CLUBS_SEARCH } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
+import { AxiosError } from "axios";
 
 // 동아리 수정
 export const updateClubInfo = async (clubId: number) => {
@@ -109,7 +110,12 @@ export const postClubBookmark = async (clubId: string) => {
     const response = await axiosInstance.post(`/clubs/${clubId}/bookmark`);
     return response.status;
   } catch (err) {
-    console.log("동아리 북마크 실패", err);
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
   }
 };
 
@@ -119,6 +125,11 @@ export const deleteClubBookmark = async (clubId: string) => {
     const response = await axiosInstance.delete(`/clubs/${clubId}/bookmark`);
     return response.status;
   } catch (err) {
-    console.log("동아리 북마크 취소 실패", err);
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
   }
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import ClubInfo from "./clubInfo";
@@ -10,16 +10,19 @@ import { ClubInfoCard } from "@/types/components/card";
 import { RecruitmentData, RecruitmentNoteData } from "@/types/recruitment";
 import { transformRecruitmentToMainCard } from "../util/transformRecruitmentToMainCard";
 
-import axios from "axios";
 import {
   getClubRecruitmentList,
   getRecruitmentDetail,
 } from "@/api/recruitment/api";
+import Loading from "@/components/feedback/loading";
+import ErrorNotice from "@/components/feedback/error";
 
 const RecruitmentDetail = () => {
   const params = useSearchParams();
   const recruitmentId = params.get("id");
-  const clubId = params.get("clubId") ?? "";
+  // const clubId = params.get("clubId") ?? "";
+
+  const [clubId, setClubId] = useState<string>("");
 
   // 이전 모집공고
   const [prevRecruitmentList, setPrevRecruitmentList] = useState<
@@ -39,30 +42,22 @@ const RecruitmentDetail = () => {
 
   useEffect(() => {
     if (recruitmentId) {
-      const fetchRecruitmentDetail = async () => {
-        try {
+      getRecruitmentDetail(recruitmentId)
+        .then((res) => {
           setLoading(true);
           setRecruitmentData(null);
-          const data = await getRecruitmentDetail(recruitmentId);
-          const parsedData = transformRecruitmentToMainCard(data!);
+          setClubId(res.clubData.id);
+          const parsedData = transformRecruitmentToMainCard(res!);
           setRecruitmentData(parsedData);
-          setRecruitmentNoteDataList(data!.recruitmentNoteDataList);
+          setRecruitmentNoteDataList(res!.recruitmentNoteDataList);
           setError(null);
-        } catch (error) {
-          if (axios.isAxiosError(error)) {
-            const errorMessage =
-              (error.response?.data as { message?: string })?.message ||
-              "문제가 발생했습니다.";
-            setError(errorMessage);
-            console.log("error", errorMsg);
-          } else {
-            console.error("Unexpected error", error);
-          }
-        } finally {
+        })
+        .catch((err) => {
+          setError(err.message);
+        })
+        .finally(() => {
           setLoading(false);
-        }
-      };
-      fetchRecruitmentDetail();
+        });
     }
     if (clubId) {
       const fetchPrevRecruitment = async () => {
@@ -78,18 +73,14 @@ const RecruitmentDetail = () => {
   }, [recruitmentId, clubId, errorMsg]);
 
   if (loading) {
-    return <h4 className="w-full text-center text-h4">Loading...</h4>;
+    return <Loading />;
   }
   if (errorMsg) {
-    return <h4 className="w-full text-center text-h4">{errorMsg}</h4>;
+    return <ErrorNotice description={errorMsg} />;
   }
 
   if (!recruitmentData || !recruitmentId) {
-    return (
-      <h4 className="w-full text-center text-h4">
-        모집공고를 찾을 수 없습니다.
-      </h4>
-    );
+    return <ErrorNotice title="" description="모집공고를 찾을 수 없습니다." />;
   }
   return (
     <>

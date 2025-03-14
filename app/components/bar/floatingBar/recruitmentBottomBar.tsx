@@ -13,6 +13,8 @@ import {
   postRecruitmentBookmark,
 } from "@/api/recruitment/api";
 import Alert from "@/components/alert/alert";
+import { useUserStore } from "@/providers/user-store-provider";
+import { useShallow } from "zustand/shallow";
 interface RecruitmentBottomBar {
   isMyBookmark: boolean;
   bookmarks: number;
@@ -29,6 +31,7 @@ const RecruitmentBottomBar = ({
   const id = params.get("id");
   const isMdUp = useResponsive("md");
   const router = useRouter();
+  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
 
   const [count, setCount] = useState<number>(bookmarks);
   const [isScrap, setIsScrap] = useState<boolean>(isMyBookmark);
@@ -41,6 +44,10 @@ const RecruitmentBottomBar = ({
   const isApplyAvailable = dDay !== "마감" && !isMyApply;
 
   const onHeartClick = () => {
+    if (!isSignIn) {
+      setAlertMessage("로그인 후 이용 가능합니다.");
+      return;
+    }
     if (id) {
       if (isScrap) {
         deleteRecruitmentBookmark(id).then(() => {

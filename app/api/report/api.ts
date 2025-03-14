@@ -48,6 +48,9 @@ export const reportItem = async ({
         // 409 - 이미 처리된 신고
         throw new Error("이미 신고한 게시물입니다");
       }
+      if (err.response && err.response.data.code === 401) {
+        throw new Error("로그인이 필요합니다.");
+      }
     }
     throw new Error("문제가 발생했습니다.");
   }

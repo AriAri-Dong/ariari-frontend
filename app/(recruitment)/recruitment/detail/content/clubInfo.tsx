@@ -24,6 +24,8 @@ import {
   regionMap,
 } from "@/utils/clubCategoryMapping";
 import { deleteClubBookmark, postClubBookmark } from "@/api/club/api";
+import { useShallow } from "zustand/shallow";
+import { useUserStore } from "@/providers/user-store-provider";
 
 interface ClubInfoProps {
   recruitmentId?: string;
@@ -42,8 +44,9 @@ const ClubInfo = ({
   isPreview = false,
 }: ClubInfoProps) => {
   const params = useSearchParams();
-  // const clubId = params.get("clubId");
+  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
   const id = params.get("id") ?? "";
+
   const [isClubHeart, setIsClubHeart] = useState<boolean>(
     recruitmentData.isMyClubBookmark
   );
@@ -52,14 +55,26 @@ const ClubInfo = ({
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const onClubHeartClick = () => {
+    if (!isSignIn) {
+      setAlertMessage("로그인 후 이용 가능합니다.");
+      return;
+    }
     if (isClubHeart) {
-      deleteClubBookmark(recruitmentData.clubId).then(() => {
-        setIsClubHeart(!isClubHeart);
-      });
+      deleteClubBookmark(recruitmentData.clubId)
+        .then(() => {
+          setIsClubHeart(!isClubHeart);
+        })
+        .catch((err) => {
+          setAlertMessage(err.message);
+        });
     } else {
-      postClubBookmark(recruitmentData.clubId).then(() => {
-        setIsClubHeart(!isClubHeart);
-      });
+      postClubBookmark(recruitmentData.clubId)
+        .then(() => {
+          setIsClubHeart(!isClubHeart);
+        })
+        .catch((err) => {
+          setAlertMessage(err.message);
+        });
     }
   };
   const toggleBottomSheet = () => {

@@ -20,8 +20,6 @@ const ClubActivities = ({
   recruitmentNoteDataList,
   prevRecruitmentList,
 }: ClubActivitiesProps) => {
-  const params = useSearchParams();
-  const clubId = params.get("clubId");
   const router = useRouter();
 
   const [openDropdowns, setOpenDropdowns] = useState<boolean[]>(
