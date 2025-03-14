@@ -8,6 +8,7 @@ import { useState } from "react";
 import AlertWithMessage from "@/components/alert/alertWithMessage";
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
+import { getProfileImage } from "@/utils/profileImage";
 
 interface UserModalProps {
   onClose: () => void;
@@ -19,7 +20,11 @@ interface UserModalProps {
 const UserModal = ({ onClose }: UserModalProps) => {
   const router = useRouter();
   const username = useUserStore((state) => state.memberData.nickname);
+  const profileType = useUserStore((state) => state.memberData.profileType);
+
   const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
+
+  const profileImageSrc = getProfileImage(profileType);
 
   const handleLogout = async () => {
     try {
@@ -47,7 +52,13 @@ const UserModal = ({ onClose }: UserModalProps) => {
           {/* 유저 프로필 영역 */}
           <div className="flex justify-between mt-10 mb-4">
             <div className="flex items-center gap-3">
-              <div className="rounded-full w-9 h-9 bg-[#CBCBCB]" />
+              <Image
+                src={profileImageSrc}
+                alt="profile"
+                width={36}
+                height={36}
+                className="rounded-full"
+              />
               <span className="text-subtext2 text-mobile_body1_m">
                 {username}
               </span>
