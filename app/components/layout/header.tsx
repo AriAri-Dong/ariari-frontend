@@ -39,6 +39,7 @@ const Header = () => {
     "/user/myPoint",
     "/user/interestClub",
     "/user/interestRecruitment",
+    "/user/userInfo",
     "/withdrawal",
     "/user/club/create",
     "/club/recruitment/create",
