@@ -243,15 +243,19 @@ const QuestionDropdown = ({
         </div>
       )}
       {reportIsOpen && (
-        <div style={{ zIndex: 1000 }}>
+        <div style={{ zIndex: 9999 }}>
           {isMdUp ? (
             // id, reportTargetType(CLUB_QUESTION)
             <ReportModal
+              id={data.id.toString()}
+              reportTargetType="CLUB_QUESTION"
               onClose={() => setReportIsOpen(false)}
               onSubmit={handleReportSubmit}
             />
           ) : (
             <ReportBottomSheet
+              id={data.id.toString()}
+              reportTargetType="CLUB_QUESTION"
               onClose={() => setReportIsOpen(false)}
               onSubmit={handleReportSubmit}
             />
