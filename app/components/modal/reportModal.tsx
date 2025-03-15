@@ -12,8 +12,8 @@ import { ReportTargetType, ReportType } from "@/types/report";
 import { reportItem } from "@/api/report/api";
 
 interface ReportBottomSheetProps {
-  id: string;
-  reportTargetType: ReportTargetType;
+  id?: string;
+  reportTargetType?: ReportTargetType;
   onClose: () => void;
   onSubmit: () => void;
 }
