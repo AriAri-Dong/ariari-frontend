@@ -15,7 +15,7 @@ const FaqSection = ({
   const params = useSearchParams();
   const clubId = params.get("clubId") ?? "";
 
-  const { clubInfo, role } = useClubContext();
+  const { role } = useClubContext();
 
   const {
     faqList,
@@ -37,7 +37,6 @@ const FaqSection = ({
           <QuestionDropdown
             data={item}
             myRoleType={role}
-            myProfileType={clubInfo?.clubMemberData.profileType}
             isOpen={item.id == selectedFaq}
             setSelected={setSelectedFaq}
           />

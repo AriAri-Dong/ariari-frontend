@@ -28,7 +28,6 @@ import { useAddAnswerMutation } from "@/hooks/club/useClubHelpMutation";
 interface QuestionDropdownProps {
   data: ClubQuestionData | ClubFaqData;
   myRoleType: clubMemberRoleType | null | undefined;
-  myProfileType: profileType | null | undefined;
   isOpen: boolean;
   setSelected: (value: number | null) => void;
 }
@@ -36,7 +35,6 @@ interface QuestionDropdownProps {
  *
  * @param data QNA 데이터 or FAQ 데이터
  * @param myRoleType 로그인 유저 role - "GENERAL":일반, "MANAGER":매니저, "ADMIN":관리자
- * @param myProfileType 유저 이미지타입
  * @param isOpen 답변 open 여부
  * @param setSelected set 열린 답변
  * @returns
@@ -45,7 +43,6 @@ interface QuestionDropdownProps {
 const QuestionDropdown = ({
   data,
   myRoleType,
-  myProfileType,
   isOpen,
   setSelected,
 }: QuestionDropdownProps) => {
@@ -205,20 +202,15 @@ const QuestionDropdown = ({
               <div className="w-full items-start gap-8 flex md:pl-1">
                 <Image
                   src={
-                    profileImageMap[
-                      isFaq
-                        ? clubInfo?.clubData.profileUri || ""
-                        : data.clubAnswerData
-                        ? clubInfo?.clubData.profileUri || ""
-                        : myProfileType!
-                    ]
+                    clubInfo?.clubData.profileUri ||
+                    profileImageMap["ARIARI_CHICKEN"]
                   }
                   alt={"club_img"}
                   width={56}
                   height={56}
                   className="hidden md:block rounded-full"
                 />
-                <div className="w-full flex justify-start items-start  relative">
+                <div className="w-full flex justify-start items-start relative">
                   <Image
                     src={polygon}
                     alt={"polygon"}

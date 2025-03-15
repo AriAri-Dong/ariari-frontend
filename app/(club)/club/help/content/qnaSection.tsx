@@ -14,7 +14,7 @@ const QnaSection = ({
 
   const params = useSearchParams();
   const clubId = params.get("clubId") ?? "";
-  const { clubInfo, role } = useClubContext();
+  const { role } = useClubContext();
 
   const {
     qnaList,
@@ -36,7 +36,6 @@ const QnaSection = ({
           <QuestionDropdown
             data={item}
             myRoleType={role}
-            myProfileType={clubInfo?.clubMemberData.memberData.profileType}
             isOpen={item.id == selectedQna}
             setSelected={setSelectedQna}
           />
