@@ -4,16 +4,10 @@ import { Suspense, useState } from "react";
 import QuestionDropdown from "@/(club)/club/help/components/questionDropdown";
 import ClubNoticeHeader from "@/(club)/club/management/activity/notice/components/clubNoticeHeader";
 import { FAQ_DATA } from "@/data/faq";
-import { profileType } from "@/types/member";
-import { PROFILE_TYPES } from "@/data/profileType";
 import { NOTICE_DATA } from "@/data/clubNotice";
 import ClubNoticeDropdown from "@/components/dropdown/clubNoticeDropdown";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MobileHeaderSection from "./components/mobileHeaderSection";
-
-const getProfileByIndex = (index: number): profileType => {
-  return PROFILE_TYPES[index % PROFILE_TYPES.length];
-};
 
 const HelpPage = () => {
   const [selectedFaq, setSelectedFaq] = useState<number | null>(null);
@@ -45,7 +39,6 @@ const HelpPage = () => {
                 key={item.id}
                 data={item}
                 myRoleType={"GENERAL"}
-                myProfileType={getProfileByIndex(index)}
                 isOpen={item.id === selectedFaq}
                 setSelected={setSelectedFaq}
               />
