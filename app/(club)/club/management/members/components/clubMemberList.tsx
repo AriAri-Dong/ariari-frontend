@@ -25,6 +25,7 @@ import {
   clubMemberRoleType,
   clubMemberStatusType,
 } from "@/types/member";
+import Alert from "@/components/alert/alert";
 
 interface ClubMemberListProps {
   data: ClubMemberData;
@@ -51,6 +52,8 @@ const ClubMemberList = ({
 
   const [isManagerModalOpen, setIsManagerModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
   return (
     <div className="w-full flex flex-col items-center gap-2.5 pr-3 py-2.5 rounded-[8px] bg-background md:flex-row md:px-6 md:py-2.5 md:gap-0">
       <div className="w-full md:flex md:justify-start md:items-center md:flex-[6]">
@@ -112,7 +115,8 @@ const ClubMemberList = ({
               onClick={
                 role === "ADMIN"
                   ? null
-                  : () => alert("관리자만 권한수정이 가능합니다.")
+                  : () =>
+                      setAlertMessage("권한 수정은 관리자만 할 수 있습니다.")
               }
             />
           }
@@ -187,6 +191,10 @@ const ClubMemberList = ({
               : setIsDeleteModalOpen(false);
           }}
         />
+      )}
+      {/* ====== 알림 ======*/}
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
     </div>
   );

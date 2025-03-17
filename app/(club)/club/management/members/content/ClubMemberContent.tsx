@@ -106,7 +106,9 @@ const ClubMemberContent = () => {
     } else {
       // ADMIN이 본인 권한 수정
       if (role == "ADMIN" && memberId == clubInfo?.clubMemberData.id) {
-        setAlertMessage("관리자는 본인의 권한을 변경할 수 없습니다.");
+        setAlertMessage(
+          "관리자는 본인의 권한을 직접 변경할 수 없지만, 다른 사용자에게 권한을 위임할 수 있습니다."
+        );
         return;
       }
       // 권한 수정
