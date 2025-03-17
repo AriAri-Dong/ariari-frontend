@@ -79,11 +79,17 @@ const ClubMemberContent = () => {
   };
   // 멤버 전체 선택 toggle
   const toggleSelectAll = () => {
-    setIsAllSelected(!isAllSelected);
+    setIsAllSelected((prev) => !prev);
     if (isAllSelected) {
       setSelectedMember([]);
     } else {
-      const allMemberIds = clubMember?.map((member) => member.memberData.id);
+      // role이 MANAGER인 경우 ADMIN 선택 불가
+      const allMemberIds =
+        role === "ADMIN"
+          ? clubMember?.map((member) => member.memberData.id)
+          : clubMember
+              ?.filter((member) => member.clubMemberRoleType !== "ADMIN")
+              .map((member) => member.memberData.id);
       setSelectedMember(allMemberIds!);
     }
   };
@@ -166,14 +172,18 @@ const ClubMemberContent = () => {
   // 전체 선택 여부
   useEffect(() => {
     if (
-      clubMember?.length != 0 &&
-      clubMember?.length == selectedMember.length
+      (role === "ADMIN" &&
+        clubMember?.length != 0 &&
+        clubMember?.length == selectedMember.length) ||
+      (role === "MANAGER" &&
+        clubMember?.length != 0 &&
+        clubMember?.length == selectedMember.length + 1)
     ) {
       setIsAllSelected(true);
     } else {
       setIsAllSelected(false);
     }
-  }, [selectedMember, clubMember]);
+  }, [selectedMember, clubMember, role]);
 
   // 동아리 멤버 리스트
   useEffect(() => {

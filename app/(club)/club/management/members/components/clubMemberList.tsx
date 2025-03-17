@@ -63,19 +63,30 @@ const ClubMemberList = ({
             alt="checkbox"
             width={16}
             height={16}
-            onClick={() => toggleMember(data.memberData.id)}
+            onClick={() => {
+              if (role === "MANAGER" && data.clubMemberRoleType === "ADMIN") {
+                setAlertMessage("관리자는 선택할 수 없습니다");
+                return;
+              }
+              toggleMember(data.memberData.id);
+            }}
             className="md:w-5 md:h-5 cursor-pointer"
           />
           <div className="md:hidden">
             <TokenPullDown
               optionData={MEMBER_STATUS_TYPE.slice(2)}
               selectedOption={MAP_STATUS_TO_KO[data.clubMemberStatusType]}
-              handleOption={(value) =>
-                handleStatusChange(
-                  [data.memberData.id],
-                  MAP_STATUS_TO_EN[value]
-                )
-              }
+              handleOption={(value) => {
+                if (role === "MANAGER" && data.clubMemberRoleType === "ADMIN") {
+                  setAlertMessage("관리자의 활동 상태를 변경할 수 없습니다");
+                  return;
+                } else {
+                  handleStatusChange(
+                    [data.memberData.id],
+                    MAP_STATUS_TO_EN[value]
+                  );
+                }
+              }}
               ImageTokenComponent={
                 <ImageToken
                   bgColor={MAP_STATUS_STYLES[data.clubMemberStatusType].bgColor}
@@ -125,9 +136,17 @@ const ClubMemberList = ({
           <TokenPullDown
             optionData={MEMBER_STATUS_TYPE.slice(2)}
             selectedOption={MAP_STATUS_TO_KO[data.clubMemberStatusType]}
-            handleOption={(value) =>
-              handleStatusChange([data.memberData.id], MAP_STATUS_TO_EN[value])
-            }
+            handleOption={(value) => {
+              if (role === "MANAGER" && data.clubMemberRoleType === "ADMIN") {
+                setAlertMessage("관리자의 활동 상태를 변경할 수 없습니다");
+                return;
+              } else {
+                handleStatusChange(
+                  [data.memberData.id],
+                  MAP_STATUS_TO_EN[value]
+                );
+              }
+            }}
             ImageTokenComponent={
               <ImageToken
                 bgColor={MAP_STATUS_STYLES[data.clubMemberStatusType].bgColor}
