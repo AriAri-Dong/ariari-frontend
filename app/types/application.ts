@@ -3,7 +3,7 @@ import { PageInfo } from "./pageInfo";
 
 export type ApplyStatusType = "PENDENCY" | "APPROVE" | "REFUSAL" | "INTERVIEW";
 
-interface ApplyData {
+export interface ApplyData {
   id: string;
   name: string;
   applyStatusType: ApplyStatusType;
@@ -13,12 +13,12 @@ interface ApplyData {
   clubName: string;
 }
 
-interface ApplyListRes {
+export interface ApplyListRes {
   applyDataList: ApplyData[];
   pageInfo: PageInfo;
 }
 
-interface ApplyTempData {
+export interface ApplyTempData {
   id: string;
   name: string;
   createdDateTime: string;
@@ -26,7 +26,7 @@ interface ApplyTempData {
   clubName: string;
 }
 
-interface ApplyTempListRes {
+export interface ApplyTempListRes {
   applyDataList: ApplyTempData[];
   pageInfo: PageInfo;
 }
