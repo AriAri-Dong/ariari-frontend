@@ -8,7 +8,7 @@ interface LoadingProps {
 const Loading = ({ className, lottieClassName }: LoadingProps) => {
   return (
     <div
-      className={`flex bg-white flex-col items-center justify-center min-h-[300px] md:min-h-[450px] text-center ${className}`}
+      className={`flex flex-col items-center justify-center min-h-[300px] md:min-h-[450px] text-center ${className}`}
     >
       <Lottie
         animationData={loading}
