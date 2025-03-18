@@ -103,29 +103,14 @@ const Application = () => {
             setErrorMessage(err.message);
           });
       } else {
-        setErrorMessage(
-          "로그인하여 지원서를 조회하고 지원 내역을 쉽게 관리하세요."
-        );
+        setErrorMessage("로그인하여 지원서를 조회하고 지원 내역을 관리하세요.");
         setErrorTitle("Member Only");
       }
     };
     fetchApplications();
   }, []);
-  useEffect(() => {
-    // 지원서 개수 업데이트
-    setOptions(
-      [
-        {
-          id: 0,
-          label: "전체",
-          number: [...tempList, ...allApplications].length,
-        },
-        { id: 1, label: "작성중", number: tempList.length },
-        { id: 2, label: "전형 진행중", number: inProgressApplications.length },
-        { id: 3, label: "최종발표 완료", number: finishedApplications.length },
-      ].map(({ number, ...rest }) => (number > 0 ? { ...rest, number } : rest))
-    );
 
+  useEffect(() => {
     // 전형 진행중, 최종발표 완료 업데이트
     const inProgress = allApplications.filter(
       (item) =>
@@ -140,7 +125,21 @@ const Application = () => {
 
     setInProgressApplications(inProgress);
     setFinishedApplications(finished);
-  }, [allApplications, finishedApplications, inProgressApplications, tempList]);
+
+    // 지원서 개수 업데이트
+    setOptions(
+      [
+        {
+          id: 0,
+          label: "전체",
+          number: [...tempList, ...allApplications].length,
+        },
+        { id: 1, label: "작성중", number: tempList.length },
+        { id: 2, label: "전형 진행중", number: inProgress.length },
+        { id: 3, label: "최종발표 완료", number: finished.length },
+      ].map(({ number, ...rest }) => (number > 0 ? { ...rest, number } : rest))
+    );
+  }, [allApplications, tempList]);
 
   // 옵션 별 데이터
   const filteredApplications = useMemo(() => {
