@@ -14,7 +14,7 @@ const Loading = ({ className, lottieClassName }: LoadingProps) => {
         animationData={loading}
         loop
         autoPlay
-        className={`text-center w-40 h-40 ${lottieClassName}`}
+        className={`text-center w-20 h-20 ${lottieClassName}`}
       />
     </div>
   );
