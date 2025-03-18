@@ -88,7 +88,7 @@ const ApplicationCard = ({
   return (
     <div
       tabIndex={0}
-      className="w-full flex flex-col gap-3 py-3.5 px-4 mb-2.5 bg-background rounded-[8px] cursor-pointer focus:bg-hover md:hover:bg-hover md:focus:bg-pressed md:px-6 md:py-[26px] md:mb-2.5 md:gap-5 "
+      className="w-full flex flex-col gap-3 py-3.5 px-4 mb-2.5 bg-background rounded-[8px] cursor-pointer focus:bg-hover md:hover:bg-hover md:active:bg-pressed md:px-6 md:py-[26px] md:mb-2.5 md:gap-5 "
       onClick={onApplicationClick}
     >
       <div className="flex justify-between items-center">
@@ -176,8 +176,16 @@ const ApplicationCard = ({
         <NotiPopUp
           onClose={() => setIsModalOpen(false)}
           icon="delete"
-          title="지원서 삭제"
-          description={`지원서를 삭제하시겠습니까?`}
+          title={
+            applicationStatus === "DRAFT"
+              ? "작성중인 지원서 삭제"
+              : "지원서 삭제"
+          }
+          description={
+            applicationStatus === "DRAFT"
+              ? "작성중인 지원서를 정말 삭제하시겠습니까?"
+              : "지원서를 정말 삭제하시겠습니까?"
+          }
           firstButton={() => {
             onDeleteClick();
             setIsModalOpen(false);
