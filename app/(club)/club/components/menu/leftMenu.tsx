@@ -5,7 +5,7 @@ import file from "@/images/icon/file.svg";
 import vector from "@/images/icon/pullDown.svg";
 import active from "@/images/icon/active_vector.svg";
 import notice from "@/images/icon/notice.svg";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   CLUB_LEFT_MENU_ADMIN,
   CLUB_LEFT_MENU_MEMBER,
@@ -14,6 +14,8 @@ import {
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import ModifyClubInfoModal from "@/components/modal/club/modifyClubInfoModal";
 import Alert from "@/components/alert/alert";
+import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
+import { useClubContext } from "@/context/ClubContext";
 
 /**
  * 임시 메뉴 컴포넌트
@@ -22,21 +24,25 @@ import Alert from "@/components/alert/alert";
 const LeftMenu = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const clubId = searchParams.get("clubId") || "";
+
+  const { clubInfo, isLoading } = useClubInfoQuery(clubId);
+  const { role } = useClubContext();
+  const clubData = clubInfo?.clubData;
+  console.log(role);
+  console.log(clubData);
+
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  // 임시 권한 설정 (API 연동 전)
-  const [authority, setAuthority] = useState<"USER" | "MEMBER" | "ADMIN">(
-    "ADMIN"
-  );
-
   // 권한에 따른 메뉴 데이터
   const CLUB_LEFT_MENU =
-    authority === "ADMIN"
+    role === "ADMIN"
       ? CLUB_LEFT_MENU_ADMIN
-      : authority === "MEMBER"
+      : role === "MANAGER"
       ? CLUB_LEFT_MENU_MEMBER
       : CLUB_LEFT_MENU_USER;
 
@@ -93,6 +99,12 @@ const LeftMenu = () => {
 
   const handleSubmitSuccess = () => {
     setAlertMessage("동아리 정보가 수정되었습니다.");
+
+    // 알럿 메시지 표시 후 3초 뒤 페이지 새로고침
+    setTimeout(() => {
+      window.location.reload();
+      // 2초 후 새로고침
+    }, 2000);
   };
 
   return (
@@ -107,16 +119,16 @@ const LeftMenu = () => {
               <div className="flex gap-[6px]">
                 <Image src={file} alt={"profile"} width={14} height={18} />
                 <p className="text-primary text-body3_m">
-                  {authority === "ADMIN"
+                  {role === "ADMIN"
                     ? "관리자"
-                    : authority === "MEMBER"
+                    : role === "MANAGER"
                     ? "일반회원"
                     : ""}
                 </p>
               </div>
             </div>
           </div>
-          {authority === "ADMIN" && (
+          {role === "ADMIN" && (
             <SmallBtn
               title={"동아리 정보 수정"}
               onClick={handleModifyClubInfo}
