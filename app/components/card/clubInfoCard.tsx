@@ -66,12 +66,13 @@ const ClubInfoCard = ({
   return (
     <div className="flex justify-between items-center">
       <div className="flex gap-4 items-center py-[6px] md:gap-5">
-        <div className="relative w-[60px] h-[60px] md:w-[73px] md:h-[73px]">
+        <div className="relative">
           <Image
             src={profileUri || defaultImage}
             alt={"club_profile"}
-            fill
-            className="rounded-full object-cover cursor-pointer"
+            width={60}
+            height={60}
+            className="rounded-full object-cover cursor-pointer md:w-[73px] md:h-[73px]"
             onClick={onClubProfileClick}
           />
         </div>
