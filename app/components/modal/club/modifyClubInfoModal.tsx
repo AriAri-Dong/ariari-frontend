@@ -137,46 +137,82 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
   // 수정하기
   const handleSubmit = async () => {
     setSubmit(true);
-    const bodyData = { body: clubIntroduction };
 
-    // 프로필 이미지
+    // 기존 clubData에서 기본 값 가져오기
+    const bodyData = { body: clubIntroduction || "" };
+
+    // 프로필 이미지 처리
     let profileFile = null;
     if (uploadedImage) {
-      const base64Image = uploadedImage.split(",")[1];
-      const byteArray = new Uint8Array(
-        atob(base64Image)
-          .split("")
-          .map((c) => c.charCodeAt(0))
-      );
-      profileFile = new File([byteArray], "profile_image", {
-        type: "image/jpeg",
-      });
+      // Base64로 인코딩된 이미지인지 확인하고, 해당 부분만 추출
+      const base64Image = uploadedImage.includes("base64,")
+        ? uploadedImage.split("base64,")[1]
+        : null; // base64, 부분을 제외한 실제 Base64 데이터만 추출
+
+      if (base64Image) {
+        try {
+          const byteArray = new Uint8Array(
+            atob(base64Image)
+              .split("")
+              .map((c) => c.charCodeAt(0))
+          );
+          profileFile = new File([byteArray], "profile_image", {
+            type: "image/jpeg",
+          });
+        } catch (error) {
+          console.error("Invalid Base64 string", error);
+          setAlertMsg("이미지가 유효하지 않습니다.");
+          setAlertVisible(true);
+          setSubmit(false);
+          return;
+        }
+      } else {
+        // Base64 형식이 아니면 그대로 파일을 보내지 않음
+        profileFile = null;
+      }
     }
 
-    // 배너 이미지
+    // 배너 이미지 처리
     let bannerFile = null;
     if (bannerImage) {
-      const base64Banner = bannerImage.split(",")[1];
-      const byteArray = new Uint8Array(
-        atob(base64Banner)
-          .split("")
-          .map((c) => c.charCodeAt(0))
-      );
-      bannerFile = new File([byteArray], "banner_image", {
-        type: "image/jpeg",
-      });
+      // Base64로 인코딩된 배너 이미지 처리
+      const base64Banner = bannerImage.includes("base64,")
+        ? bannerImage.split("base64,")[1]
+        : null; // base64, 부분을 제외한 실제 Base64 데이터만 추출
+
+      if (base64Banner) {
+        try {
+          const byteArray = new Uint8Array(
+            atob(base64Banner)
+              .split("")
+              .map((c) => c.charCodeAt(0))
+          );
+          bannerFile = new File([byteArray], "banner_image", {
+            type: "image/jpeg",
+          });
+        } catch (error) {
+          console.error("Invalid Base64 string", error);
+          setAlertMsg("배너 이미지가 유효하지 않습니다.");
+          setAlertVisible(true);
+          setSubmit(false);
+          return;
+        }
+      } else {
+        // Base64 형식이 아니면 그대로 파일을 보내지 않음
+        bannerFile = null;
+      }
     }
 
     try {
-      // 동아리 정보 수정 API
+      // 동아리 정보 수정 API 호출
       await updateClubWithFiles(clubId, bodyData, profileFile, bannerFile);
-      setSubmit(false);
-      onClose();
+      setSubmit(false); // 수정 완료 후 상태 초기화
+      onClose(); // 모달 닫기
     } catch (error) {
       console.error("Error updating club info:", error);
       setAlertMsg("동아리 정보 수정에 실패했습니다.");
       setAlertVisible(true);
-      setSubmit(false);
+      setSubmit(false); // 실패 후 상태 초기화
     }
   };
 
