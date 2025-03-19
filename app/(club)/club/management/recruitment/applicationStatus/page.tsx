@@ -19,39 +19,36 @@ import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 
-const OPTIONS = [
-  { id: 0, label: "전체", number: 14 },
-  { id: 1, label: "대기중", number: 14 },
-  { id: 2, label: "면접중", number: 14 },
-  { id: 3, label: "합격", number: 14 },
-  { id: 4, label: "불합격", number: 14 },
+// 상단 필터링 탭
+const FILTER_TABS = [
+  { id: 1, label: "전체" },
+  { id: 2, label: "대기중" },
 ];
+const MOBILE_FILTER_TABS = [{ id: 0, label: "지원 상태" }, ...FILTER_TABS];
 
-const MOBILE_OPTIONS = [
-  { id: 0, label: "지원 상태", number: 14 },
-  { id: 1, label: "대기중", number: 14 },
-  { id: 2, label: "면접중", number: 14 },
-  { id: 3, label: "합격", number: 14 },
-  { id: 4, label: "불합격", number: 14 },
+// 지원현황 - 지원서별 지원 상태 변경
+const OPTIONS = [
+  { id: 1, label: "대기중" },
+  { id: 2, label: "면접중" },
+  { id: 3, label: "합격" },
+  { id: 4, label: "불합격" },
 ];
 
 const ApplicationStatusPage = () => {
   const isMdUp = useResponsive("md");
   const optionsRef = useRef<HTMLDivElement | null>(null);
 
-  const [option, setOption] = useState<string>(OPTIONS[0].label);
-  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [openForm, setOpenForm] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState<string>("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
-  const [selectedSortOption, setSelectedSortOption] = useState<string[]>([]);
-  const [selectedApplications, setSelectedApplications] = useState<number[]>(
-    []
+  const [selectedFilter, setSelectedFilter] = useState<string>(
+    FILTER_TABS[0].label
   );
+  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false); // 지원상태 변경 옵션 목록 open 여부
+  const [selectedStatus, setSelectedStatus] = useState<string>(""); // 변경하고자 하는 지원 상태
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 지원상태 변경 확인 모달 open 여부
+
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false); // 지원서 상세 열람 모달 open 여부
+  const [checkedApplications, setCheckedApplications] = useState<number[]>([]);
 
   const handleMenuClick = (label: string) => {
-    setSelectedOption("");
     setSelectedStatus(label);
     setIsOptionsOpen(false);
     setIsModalOpen(true);
@@ -59,17 +56,17 @@ const ApplicationStatusPage = () => {
 
   const handleAllCheck = (isChecked: boolean) => {
     if (isChecked) {
-      setSelectedApplications(APPLICATION_FORM_DATA.map((item) => item.id));
+      setCheckedApplications(APPLICATION_FORM_DATA.map((item) => item.id));
     } else {
-      setSelectedApplications([]);
+      setCheckedApplications([]);
     }
   };
 
   const handleSingleCheck = (id: number, isChecked: boolean) => {
     if (isChecked) {
-      setSelectedApplications((prev) => [...prev, id]);
+      setCheckedApplications((prev) => [...prev, id]);
     } else {
-      setSelectedApplications((prev) => prev.filter((item) => item !== id));
+      setCheckedApplications((prev) => prev.filter((item) => item !== id));
     }
   };
 
@@ -78,7 +75,7 @@ const ApplicationStatusPage = () => {
   };
 
   const handleOpenForm = () => {
-    setOpenForm(true);
+    setIsFormOpen(true);
   };
 
   useEffect(() => {
@@ -107,9 +104,9 @@ const ApplicationStatusPage = () => {
             <div className="w-full">
               <div className="overflow-x-auto no-scrollbar hidden lg:block">
                 <SubTap
-                  optionData={OPTIONS}
-                  selectedOption={option}
-                  handleOption={setOption}
+                  optionData={FILTER_TABS}
+                  selectedOption={selectedFilter}
+                  handleOption={(label: string) => setSelectedFilter(label)}
                 />
               </div>
 
@@ -130,16 +127,21 @@ const ApplicationStatusPage = () => {
                   />
                   <div className="lg:hidden flex items-center">
                     <PullDown
-                      optionData={MOBILE_OPTIONS}
+                      optionData={MOBILE_FILTER_TABS}
                       multiple={false}
-                      selectedOption={selectedSortOption}
-                      handleOption={setSelectedSortOption}
+                      selectedOption={[selectedFilter]}
+                      handleOption={(label: string[]) => {
+                        if (label[0] !== "지원 상태") {
+                          setSelectedFilter(label[0]);
+                        } else return;
+                      }}
                       optionSize={"small"}
                     />
                   </div>
                   <div className="smm:block hidden">
                     <RangeCalendar />
                   </div>
+
                   <SubSearchInput
                     onSearch={() => {}}
                     placeholder={"이름 또는 공고 제목"}
@@ -162,13 +164,13 @@ const ApplicationStatusPage = () => {
                 >
                   <AllCheckBox
                     isChecked={
-                      selectedApplications.length ===
+                      checkedApplications.length ===
                       APPLICATION_FORM_DATA.length
                     }
                     label={"전체 선택"}
                     onClick={() =>
                       handleAllCheck(
-                        selectedApplications.length !==
+                        checkedApplications.length !==
                           APPLICATION_FORM_DATA.length
                       )
                     }
@@ -185,13 +187,8 @@ const ApplicationStatusPage = () => {
                         className="absolute top-full mt-2 z-50 left-12"
                       >
                         <SingleSelectOptions
-                          selectedOption={selectedOption}
-                          optionData={[
-                            { id: 1, label: "합격" },
-                            { id: 2, label: "불합격" },
-                            { id: 3, label: "대기중" },
-                            { id: 4, label: "면접중" },
-                          ]}
+                          selectedOption={""}
+                          optionData={OPTIONS}
                           size="medium"
                           handleMenuClick={handleMenuClick}
                         />
@@ -203,13 +200,13 @@ const ApplicationStatusPage = () => {
                 <div className="flex justify-between mb-4">
                   <AllCheckBox
                     isChecked={
-                      selectedApplications.length ===
+                      checkedApplications.length ===
                       APPLICATION_FORM_DATA.length
                     }
                     label={"전체 선택"}
                     onClick={() =>
                       handleAllCheck(
-                        selectedApplications.length !==
+                        checkedApplications.length !==
                           APPLICATION_FORM_DATA.length
                       )
                     }
@@ -234,7 +231,7 @@ const ApplicationStatusPage = () => {
                       serviceNickname={item.nickname}
                       status={item.status}
                       recruitmentTitle={item.jobTitle}
-                      isChecked={selectedApplications.includes(item.id)}
+                      isChecked={checkedApplications.includes(item.id)}
                       onClick={handleOpenForm}
                       onCheck={(isChecked) =>
                         handleSingleCheck(item.id, isChecked)
@@ -249,16 +246,12 @@ const ApplicationStatusPage = () => {
             </div>
           </div>
         </div>
-        {isMdUp ? openForm && null : openForm && null}
+        {isMdUp ? isFormOpen && null : isFormOpen && null}
         {isOptionsOpen && !isMdUp && (
           <CommonBottomSheet
             optionData={OPTIONS}
-            selectedOption={selectedStatus}
-            handleMenuClick={(label: string) => {
-              setSelectedStatus(label);
-              setIsOptionsOpen(false);
-              setIsModalOpen(true);
-            }}
+            selectedOption={""}
+            handleMenuClick={handleMenuClick}
             onClose={() => setIsOptionsOpen(false)}
           />
         )}
