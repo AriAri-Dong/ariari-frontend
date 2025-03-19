@@ -3,9 +3,9 @@ import { CLUBS, CLUBS_MY, CLUBS_MY_BOOKMARKS, CLUBS_SEARCH } from "../apiUrl";
 import {
   ClubResponse,
   ClubSearchCondition,
-  ClubData,
   Pageable,
   ClubInfoResponse,
+  CreateClubData,
 } from "@/types/api";
 
 // 동아리 수정
@@ -159,6 +159,61 @@ export const getBookmarkClubsInfo = async (
     return response.data;
   } catch (error) {
     console.error("Error fetching club info:", error);
+    throw error;
+  }
+};
+
+// 동아리 등록
+export const createClubWithFile = async (
+  clubData: CreateClubData,
+  file: File
+) => {
+  try {
+    const formData = new FormData();
+    formData.append("saveReq", JSON.stringify(clubData));
+    formData.append("file", file);
+
+    const response = await axiosInstance.post(CLUBS, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error creating club with file:", error);
+    throw error;
+  }
+};
+
+// 동아리 수정
+export const updateClubWithFiles = async (
+  clubId: number,
+  bodyData: { body: string },
+  profileFile: File | null,
+  bannerFile: File | null
+) => {
+  try {
+    const formData = new FormData();
+    formData.append("modifyReq", JSON.stringify(bodyData));
+
+    if (profileFile) {
+      formData.append("profileFile", profileFile);
+    }
+
+    if (bannerFile) {
+      formData.append("bannerFile", bannerFile);
+    }
+
+    const response = await axiosInstance.put(`/clubs/${clubId}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating club with files:", error);
     throw error;
   }
 };

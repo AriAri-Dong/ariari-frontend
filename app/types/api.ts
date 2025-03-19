@@ -1,4 +1,9 @@
-import { ClubFieldType, ClubRegionType, ParticipantType } from "./club";
+import {
+  ClubAffiliationType,
+  ClubFieldType,
+  ClubRegionType,
+  ParticipantType,
+} from "./club";
 
 export type AuthResponseType = {
   accessToken: string;
@@ -113,3 +118,20 @@ export type PageInfo = {
   totalSize: number;
   totalPages: number;
 };
+
+// 동아리 정보 타입 정의
+export interface CreateClubData {
+  name: string;
+  body: string;
+  affiliationType: ClubAffiliationType;
+  categoryType: ClubFieldType;
+  regionType: ClubRegionType;
+  participantType: ParticipantType;
+}
+
+export interface CreateClubTypeData {
+  affiliationType: ClubAffiliationType;
+  categoryType: ClubFieldType;
+  regionType: ClubRegionType;
+  participantType: ParticipantType;
+}
