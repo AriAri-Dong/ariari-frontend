@@ -4,10 +4,10 @@ import close from "@/images/icon/close.svg";
 import Alert from "@/components/alert/alert";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import defaultImg from "@/images/icon/defaultAriari.svg";
+import defaultBgImg from "@/images/defaultAriariBg.svg";
 import { ModalProps } from "@/types/components/modal";
 import TextInputWithCounter from "@/components/input/textInputWithCounter";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
-import test_image from "@/images/test/test_image.jpg";
 import CustomInput from "@/components/input/customInput";
 import NotiPopUp from "../notiPopUp";
 import trash from "@/images/icon/delete.svg";
@@ -287,7 +287,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
               onChange={(e) => handleBannerFileChange(e, setBannerImage)}
             />
             <Image
-              src={bannerImage || test_image}
+              src={bannerImage || defaultBgImg}
               alt={"Banner Image"}
               className="rounded-20 w-full h-[196px] transition-all duration-300"
               height={196}
@@ -398,7 +398,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
       {alertVisible && <Alert text={alertMsg} />}
-      {/* {submit && (
+      {submit && (
         <NotiPopUp
           onClose={() => {
             setSubmit(false);
@@ -418,7 +418,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
           }}
           secondButtonText={"수정하기"}
         />
-      )} */}
+      )}
     </div>
   );
 };

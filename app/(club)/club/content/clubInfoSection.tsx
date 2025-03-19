@@ -21,6 +21,7 @@ import {
   CLUB_PARTICIPANT,
   CLUB_REGION,
 } from "@/constants/clubInfo";
+import ModifyClubInfoBottomSheet from "@/components/bottomSheet/modifyClubInfoBottomSheet";
 
 /**
  * Club 페이지에서 사용되는 clubInfo 공통 section
@@ -34,6 +35,8 @@ const ClubInfoSection = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [isModifyBottomSheetOpen, setIsModifyBottomSheetOpen] =
+    useState<boolean>(false);
 
   const { clubInfo } = useClubContext();
   if (!clubInfo) return;
@@ -41,8 +44,8 @@ const ClubInfoSection = () => {
   // prettier-ignore
   const { clubData: { name, body, profileUri, bannerUri, clubCategoryType, clubRegionType, participantType, isMyBookmark, schoolData}} = clubInfo;
 
-  const handleModify = () => {
-    console.log("동아리 정보 수정 핸들러");
+  const handleModifyClubInfo = () => {
+    setIsModifyBottomSheetOpen(true);
   };
 
   const handleReport = () => {
@@ -100,6 +103,16 @@ const ClubInfoSection = () => {
     { id: 2, label: "활동 지역", type: "region", value: CLUB_REGION[clubRegionType]},
     { id: 3, label: "활동 대상", type: "target", value: CLUB_PARTICIPANT[participantType]},
   ];
+
+  const handleSubmitSuccess = () => {
+    setAlertMessage("동아리 정보가 수정되었습니다.");
+
+    // 알럿 메시지 표시 후 3초 뒤 페이지 새로고침
+    setTimeout(() => {
+      window.location.reload();
+      // 2초 후 새로고침
+    }, 2000);
+  };
 
   return (
     <>
@@ -171,7 +184,7 @@ const ClubInfoSection = () => {
         </div>
         {/* === api 연동 과정에서 따로 분리할 가능성 있음 === */}
         <div className="block mt-4 mb-4 md:hidden">
-          <LargeBtn title={"동아리 정보 수정"} onClick={handleModify} />
+          <LargeBtn title={"동아리 정보 수정"} onClick={handleModifyClubInfo} />
         </div>
         {/* === === */}
         <div className="md:flex flex-row w-full md:justify-between md:max-w-[642px] hidden">
@@ -213,6 +226,14 @@ const ClubInfoSection = () => {
           handleMenuClick={handleMenuClick}
           onClose={() => setIsBottomSheetOpen(false)}
           alignType="center"
+        />
+      )}
+      {isModifyBottomSheetOpen && (
+        <ModifyClubInfoBottomSheet
+          onClose={() => {
+            setIsModifyBottomSheetOpen(false);
+          }}
+          onSubmit={handleSubmitSuccess}
         />
       )}
     </>

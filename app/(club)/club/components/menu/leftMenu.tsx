@@ -99,11 +99,6 @@ const LeftMenu = () => {
     setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    if (alertMessage) {
-    }
-  }, [alertMessage]);
-
   const handleSubmitSuccess = () => {
     setAlertMessage("동아리 정보가 수정되었습니다.");
 
