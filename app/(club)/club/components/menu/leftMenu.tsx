@@ -130,7 +130,7 @@ const LeftMenu = () => {
                     ? "관리자"
                     : role === "MANAGER"
                     ? "일반회원"
-                    : ""}
+                    : "일반회원"}
                 </p>
               </div>
             </div>

@@ -15,6 +15,7 @@ import NotiPopUp from "../modal/notiPopUp";
 import { useSearchParams } from "next/navigation";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import { updateClubWithFiles } from "@/api/club/api";
+import { useClubContext } from "@/context/ClubContext";
 
 const OPTIONS = [
   { label: "동아리 소속", value: "아리아리" },
@@ -26,6 +27,8 @@ const OPTIONS = [
 const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
   const searchParams = useSearchParams();
   const clubId = searchParams.get("clubId") || "";
+
+  const { role } = useClubContext();
   const { clubInfo } = useClubInfoQuery(clubId);
   const clubData = clubInfo?.clubData;
 
@@ -367,9 +370,12 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
           </div>
         </div>
         {/* 고정 버튼 영역 */}
-        <div className="pb-6 pt-[6px]">
-          <LargeBtn title={"등록하기"} onClick={handleSubmit} />
-        </div>
+        {role === "ADMIN" ||
+          (role === "MANAGER" && (
+            <div className="pb-6 pt-[6px]">
+              <LargeBtn title={"등록하기"} onClick={handleSubmit} />
+            </div>
+          ))}
       </div>
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
