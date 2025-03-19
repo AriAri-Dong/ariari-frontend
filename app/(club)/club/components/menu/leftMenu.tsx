@@ -12,6 +12,8 @@ import {
   CLUB_LEFT_MENU_USER,
 } from "@/data/club";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
+import ModifyClubInfoModal from "@/components/modal/club/modifyClubInfoModal";
+import Alert from "@/components/alert/alert";
 
 /**
  * 임시 메뉴 컴포넌트
@@ -22,6 +24,8 @@ const LeftMenu = () => {
   const pathname = usePathname();
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   // 임시 권한 설정 (API 연동 전)
   const [authority, setAuthority] = useState<"USER" | "MEMBER" | "ADMIN">(
@@ -78,6 +82,19 @@ const LeftMenu = () => {
     });
   }, [pathname, CLUB_LEFT_MENU]);
 
+  const handleModifyClubInfo = () => {
+    setIsModalOpen(true);
+  };
+
+  useEffect(() => {
+    if (alertMessage) {
+    }
+  }, [alertMessage]);
+
+  const handleSubmitSuccess = () => {
+    setAlertMessage("동아리 정보가 수정되었습니다.");
+  };
+
   return (
     <div className="hidden lg:block">
       <div className="w-[256px] bg-white rounded-16 py-7 px-4">
@@ -102,7 +119,7 @@ const LeftMenu = () => {
           {authority === "ADMIN" && (
             <SmallBtn
               title={"동아리 정보 수정"}
-              onClick={() => {}}
+              onClick={handleModifyClubInfo}
               className="mt-5"
             />
           )}
@@ -172,6 +189,17 @@ const LeftMenu = () => {
           </div>
         ))}
       </div>
+      {isModalOpen && (
+        <ModifyClubInfoModal
+          onClose={() => {
+            setIsModalOpen(false);
+          }}
+          onSubmit={handleSubmitSuccess}
+        />
+      )}
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+      )}
     </div>
   );
 };

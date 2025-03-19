@@ -188,7 +188,7 @@ export const createClubWithFile = async (
 
 // 동아리 수정
 export const updateClubWithFiles = async (
-  clubId: number,
+  clubId: string,
   bodyData: { body: string },
   profileFile: File | null,
   bannerFile: File | null

@@ -12,6 +12,9 @@ import CustomInput from "@/components/input/customInput";
 import NotiPopUp from "../notiPopUp";
 import trash from "@/images/icon/delete.svg";
 import NoticeBanner from "@/components/banner/noticeBanner";
+import { updateClubWithFiles } from "@/api/club/api";
+import { useSearchParams } from "next/navigation";
+import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 
 const OPTIONS = [
   { label: "동아리 소속", value: "아리아리" },
@@ -20,14 +23,32 @@ const OPTIONS = [
   { label: "활동 대상", value: "대학생 및 직장인" },
 ];
 
+/**
+ * 동아리 정보 수정 모달
+ * @param onClose: 모달 닫기 함수
+ * @param onSubmit: 제출 함수
+ */
 const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
+  const searchParams = useSearchParams();
+  const clubId = searchParams.get("clubId") || "";
+  const { clubInfo, isLoading } = useClubInfoQuery(clubId);
+  const clubData = clubInfo?.clubData;
+
+  console.log(clubData);
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const bannerFileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [clubName, setClubName] = useState<string>("");
-  const [clubIntroduction, setClubIntroduction] = useState<string>("");
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [bannerImage, setBannerImage] = useState<string | null>(null);
+  const [clubName, setClubName] = useState<string>(clubData?.name || "");
+  const [clubIntroduction, setClubIntroduction] = useState<string>(
+    clubData?.body || ""
+  );
+  const [uploadedImage, setUploadedImage] = useState<string | null>(
+    clubData?.profileUri || null
+  );
+  const [bannerImage, setBannerImage] = useState<string | null>(
+    clubData?.bannerUri || null
+  );
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
   const [alertMsg, setAlertMsg] = useState<string>("");
@@ -114,9 +135,49 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
   };
 
   // 수정하기
-  const handleSubmit = () => {
-    onSubmit();
-    // onClose();
+  const handleSubmit = async () => {
+    setSubmit(true);
+    const bodyData = { body: clubIntroduction };
+
+    // 프로필 이미지
+    let profileFile = null;
+    if (uploadedImage) {
+      const base64Image = uploadedImage.split(",")[1];
+      const byteArray = new Uint8Array(
+        atob(base64Image)
+          .split("")
+          .map((c) => c.charCodeAt(0))
+      );
+      profileFile = new File([byteArray], "profile_image", {
+        type: "image/jpeg",
+      });
+    }
+
+    // 배너 이미지
+    let bannerFile = null;
+    if (bannerImage) {
+      const base64Banner = bannerImage.split(",")[1];
+      const byteArray = new Uint8Array(
+        atob(base64Banner)
+          .split("")
+          .map((c) => c.charCodeAt(0))
+      );
+      bannerFile = new File([byteArray], "banner_image", {
+        type: "image/jpeg",
+      });
+    }
+
+    try {
+      // 동아리 정보 수정 API
+      await updateClubWithFiles(clubId, bodyData, profileFile, bannerFile);
+      setSubmit(false);
+      onClose();
+    } catch (error) {
+      console.error("Error updating club info:", error);
+      setAlertMsg("동아리 정보 수정에 실패했습니다.");
+      setAlertVisible(true);
+      setSubmit(false);
+    }
   };
 
   // 닫기
@@ -303,7 +364,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
       {alertVisible && <Alert text={alertMsg} />}
-      {submit && (
+      {/* {submit && (
         <NotiPopUp
           onClose={() => {
             setSubmit(false);
@@ -323,7 +384,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
           }}
           secondButtonText={"수정하기"}
         />
-      )}
+      )} */}
     </div>
   );
 };

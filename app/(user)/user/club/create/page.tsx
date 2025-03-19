@@ -84,7 +84,6 @@ const CreateClubPage = () => {
 
       const reader = new FileReader();
       reader.onload = () => {
-        // file을 base64로 저장
         setUploadedImage(reader.result as string);
       };
       reader.readAsDataURL(file);
