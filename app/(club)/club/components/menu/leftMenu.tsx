@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import rabbit from "@/images/profile/rabbit.svg";
 import file from "@/images/icon/file.svg";
 import vector from "@/images/icon/pullDown.svg";
 import active from "@/images/icon/active_vector.svg";
@@ -16,9 +15,12 @@ import ModifyClubInfoModal from "@/components/modal/club/modifyClubInfoModal";
 import Alert from "@/components/alert/alert";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import { useClubContext } from "@/context/ClubContext";
+import { useUserStore } from "@/providers/userStoreProvider";
+import defaultImg from "@/images/icon/defaultAriari.svg";
+import { getProfileImage } from "@/utils/profileImage";
 
 /**
- * 임시 메뉴 컴포넌트
+ * 메뉴 컴포넌트
  * @returns
  */
 const LeftMenu = () => {
@@ -27,16 +29,21 @@ const LeftMenu = () => {
   const searchParams = useSearchParams();
   const clubId = searchParams.get("clubId") || "";
 
-  const { clubInfo, isLoading } = useClubInfoQuery(clubId);
+  const { clubInfo } = useClubInfoQuery(clubId);
   const { role } = useClubContext();
   const clubData = clubInfo?.clubData;
   console.log(role);
   console.log(clubData);
 
+  const nickname = useUserStore((state) => state.memberData.nickname);
+  const profileType = useUserStore((state) => state.memberData.profileType);
+
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const profileImageSrc = getProfileImage(profileType);
 
   // 권한에 따른 메뉴 데이터
   const CLUB_LEFT_MENU =
@@ -113,9 +120,14 @@ const LeftMenu = () => {
         {/* 프로필 영역 */}
         <div className="flex flex-col">
           <div className="flex gap-3">
-            <Image src={rabbit} alt={"profile"} width={52} height={52} />
+            <Image
+              src={profileImageSrc || defaultImg}
+              alt={"profile"}
+              width={52}
+              height={52}
+            />
             <div className="flex flex-col gap-1">
-              <h3 className="text-body1_sb text-text1">백설공주</h3>
+              <h3 className="text-body1_sb text-text1">{nickname}</h3>
               <div className="flex gap-[6px]">
                 <Image src={file} alt={"profile"} width={14} height={18} />
                 <p className="text-primary text-body3_m">

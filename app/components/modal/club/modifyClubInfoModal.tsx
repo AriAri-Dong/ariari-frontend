@@ -37,7 +37,6 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const bannerFileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [clubName, setClubName] = useState<string>(clubData?.name || "");
   const [clubIntroduction, setClubIntroduction] = useState<string>(
     clubData?.body || ""
   );
@@ -360,7 +359,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
             동아리 이름
           </h3>
           <CustomInput
-            value={clubName}
+            value={clubData?.name || ""}
             onChange={() => {}}
             placeholder={""}
             disable={true}
