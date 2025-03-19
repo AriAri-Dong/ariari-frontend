@@ -31,10 +31,8 @@ const OPTIONS = [
 const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
   const searchParams = useSearchParams();
   const clubId = searchParams.get("clubId") || "";
-  const { clubInfo, isLoading } = useClubInfoQuery(clubId);
+  const { clubInfo } = useClubInfoQuery(clubId);
   const clubData = clubInfo?.clubData;
-
-  console.log(clubData);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const bannerFileInputRef = useRef<HTMLInputElement | null>(null);
@@ -207,6 +205,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
       // 동아리 정보 수정 API 호출
       await updateClubWithFiles(clubId, bodyData, profileFile, bannerFile);
       setSubmit(false); // 수정 완료 후 상태 초기화
+      onSubmit();
       onClose(); // 모달 닫기
     } catch (error) {
       console.error("Error updating club info:", error);
