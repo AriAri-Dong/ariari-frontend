@@ -69,10 +69,10 @@ const CreateClubPage = () => {
     const file = event.target.files?.[0];
     if (file) {
       // 파일 용량 및 확장자 확인
-      const maxFileSize = 100 * 1024 * 1024;
+      const maxFileSize = 100 * 1024 * 1024; // 100MB
       const allowedExtensions = ["image/png", "image/jpeg", "image/svg+xml"];
       if (file.size > maxFileSize) {
-        setAlertMessage("파일 용량은 100MB 를 초과할 수 없습니다.");
+        setAlertMessage("파일 용량은 100MB를 초과할 수 없습니다.");
         setAlertVisible(true);
         return;
       }
@@ -84,6 +84,7 @@ const CreateClubPage = () => {
 
       const reader = new FileReader();
       reader.onload = () => {
+        // file을 base64로 저장
         setUploadedImage(reader.result as string);
       };
       reader.readAsDataURL(file);
@@ -123,13 +124,12 @@ const CreateClubPage = () => {
 
     // 선택된 값들을 서버 형식에 맞게 변환
     const convertedData = convertToServerFormat(
-      selections.affiliationType[0], // 선택된 소속
-      selections.fieldType[0], // 선택된 분야
-      selections.areaType[0], // 선택된 지역
-      selections.targetType[0] // 선택된 대상
+      selections.affiliationType[0],
+      selections.fieldType[0],
+      selections.areaType[0],
+      selections.targetType[0]
     );
 
-    // 클럽 데이터 준비
     const clubData: CreateClubData = {
       name: clubName,
       body: clubIntroduction,
@@ -137,19 +137,33 @@ const CreateClubPage = () => {
     };
 
     try {
-      // uploadedImage가 있을 경우 실제 파일을, 없을 경우 빈 파일로 처리
-      const fileToSend = uploadedImage
-        ? new File([uploadedImage], "club_image")
-        : new File([], "default_image");
+      let fileToSend = null;
+      if (uploadedImage) {
+        const base64Image = uploadedImage.split(",")[1];
+        const byteArray = new Uint8Array(
+          atob(base64Image)
+            .split("")
+            .map((c) => c.charCodeAt(0))
+        );
+        const file = new File([byteArray], "club_image", {
+          type: "image/jpeg",
+        });
+        fileToSend = file;
+      }
 
-      await createClubWithFile(clubData, fileToSend);
-      setSubmit(false); // 폼 제출 후 초기화
-      router.push("/exploration"); // 동아리 리스트로 이동
+      if (fileToSend) {
+        await createClubWithFile(clubData, fileToSend);
+      } else {
+        await createClubWithFile(clubData, new File([], ""));
+      }
+
+      setSubmit(false);
+      router.push("/exploration");
     } catch (error) {
       console.error("Error creating club:", error);
       setAlertMessage("동아리 생성에 실패했습니다.");
       setAlertVisible(true);
-      setSubmit(false); // 실패 후 폼 제출 상태 초기화
+      setSubmit(false);
     }
   };
 
