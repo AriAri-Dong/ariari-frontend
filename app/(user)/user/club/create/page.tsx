@@ -18,6 +18,9 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import vector from "@/images/icon/backVector.svg";
 import Alert from "@/components/alert/alert";
 import NotiPopUp from "@/components/modal/notiPopUp";
+import { createClubWithFile } from "@/api/club/api";
+import { convertToServerFormat } from "@/utils/convertToServerFormat";
+import { CreateClubData } from "@/types/api";
 
 const OPTIONS = [
   { label: "동아리 소속", key: "affiliationType", data: AFFILIATION_TYPE },
@@ -106,7 +109,7 @@ const CreateClubPage = () => {
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       setAlertVisible(false);
       setTimeout(() => {
@@ -117,18 +120,49 @@ const CreateClubPage = () => {
     }
     setSubmit(true);
     setAlertVisible(false);
+
+    // 선택된 값들을 서버 형식에 맞게 변환
+    const convertedData = convertToServerFormat(
+      selections.affiliationType[0], // 선택된 소속
+      selections.fieldType[0], // 선택된 분야
+      selections.areaType[0], // 선택된 지역
+      selections.targetType[0] // 선택된 대상
+    );
+
+    // 클럽 데이터 준비
+    const clubData: CreateClubData = {
+      name: clubName,
+      body: clubIntroduction,
+      ...convertedData,
+    };
+
+    try {
+      // uploadedImage가 있을 경우 실제 파일을, 없을 경우 빈 파일로 처리
+      const fileToSend = uploadedImage
+        ? new File([uploadedImage], "club_image")
+        : new File([], "default_image");
+
+      await createClubWithFile(clubData, fileToSend);
+      setSubmit(false); // 폼 제출 후 초기화
+      router.push("/exploration"); // 동아리 리스트로 이동
+    } catch (error) {
+      console.error("Error creating club:", error);
+      setAlertMessage("동아리 생성에 실패했습니다.");
+      setAlertVisible(true);
+      setSubmit(false); // 실패 후 폼 제출 상태 초기화
+    }
   };
 
   const handleWritePosting = () => {
     setSubmit(false);
     // 임시 경로
-    router.push("/club");
+    router.push("/exploration");
   };
 
   const handleTakeALook = () => {
     setSubmit(false);
     // 임시 경로
-    router.push("/club");
+    router.push("/exploration");
   };
 
   return (
