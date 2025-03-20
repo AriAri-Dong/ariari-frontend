@@ -11,12 +11,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 interface ClubActivitiesProps {
   recruitmentId: string;
+  body: string;
   recruitmentNoteDataList?: RecruitmentNoteData[] | null;
   prevRecruitmentList: RecruitmentData[];
 }
 
 const ClubActivities = ({
   recruitmentId,
+  body,
   recruitmentNoteDataList,
   prevRecruitmentList,
 }: ClubActivitiesProps) => {
@@ -42,6 +44,12 @@ const ClubActivities = ({
               동아리 모집 안내
             </h1>
             <div className="flex flex-col gap-8 w-full py-5 px-4 rounded-2xl bg-background md:p-6 md:gap-[40px]">
+              <div>
+                <h3 className="mb-2.5 text-text1 text-mobile_h3 md:text-h3">
+                  {"활동 내용"}
+                </h3>
+                <p className="text-mobile_body1_r text-subtext1">{body}</p>
+              </div>
               {recruitmentNoteDataList?.map((item, index) => (
                 <div key={index}>
                   <h3 className="mb-2.5 text-text1 text-mobile_h3 md:text-h3">
