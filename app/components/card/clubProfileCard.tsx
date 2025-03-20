@@ -1,3 +1,5 @@
+"use client";
+
 interface ClubProfileCardProps {
   clubName: string;
   affiliation: string;

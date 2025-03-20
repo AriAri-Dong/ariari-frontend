@@ -35,3 +35,15 @@ export const SCHOOLS = "/schools";
 // == APPLY_TEMPS ==
 export const APPLY_TEMPS = "/apply-temp";
 export const APPLY_TEMPS_MY = "/apply-temp/my";
+
+// == REPORT ==
+
+export const REPORT_CLUB = "/report/clubs";
+export const REPORT_MEMBER = "/report/members";
+export const REPORT_PASSREVIEW = "/report/passReview";
+export const REPORT_CLUB_ACTIVITY = "/report/clubActivitys";
+export const REPORT_CLUB_ACTIVITY_COMMENT = "/report/clubActivityComments";
+export const REPORT_CLUB_QUESTION = "/reports/clubQuestions";
+export const REPORT_APPLY = "/report/apply";
+export const REPORT_RECRUITMENT = "/report/recruitments";
+export const REPORT_CLUB_REVIEW = "/report/clubReviews";

@@ -1,6 +1,5 @@
 import { ClubQuestionData } from "@/types/club";
 import { PageInfo } from "@/types/pageInfo";
-
 export const pageInfo: PageInfo = {
   contentSize: 10,
   totalSize: 20,

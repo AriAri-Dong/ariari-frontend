@@ -16,13 +16,13 @@ export type profileType =
   | "ARIARI_DOG"
   | "ARIARI_PIG";
 export interface MemberData {
-  id: string;
+  id: string; // $int64
   nickname: string;
   profileType: profileType;
 }
 
 export interface ClubMemberData {
-  id: string;
+  id: string; // $int64
   name: string;
   clubMemberRoleType: clubMemberRoleType;
   clubMemberStatusType: clubMemberStatusType;

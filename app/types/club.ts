@@ -30,7 +30,7 @@ export interface SchoolData {
 }
 
 export interface ClubData {
-  id: number;
+  id: string;
   name: string;
   profileUri: string;
   body: string;

@@ -1,6 +1,7 @@
 import { Pageable } from "@/types/api";
 import { CLUBS, CLUBS_MY, CLUBS_SEARCH } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
+import { AxiosError } from "axios";
 
 // 동아리 수정
 export const updateClubInfo = async (clubId: number) => {
@@ -100,5 +101,35 @@ export const getClubDetails = async (clubId: string) => {
   } catch (error) {
     console.error("Error fetching club details:", error);
     throw error;
+  }
+};
+
+// 동아리 북마크
+export const postClubBookmark = async (clubId: string) => {
+  try {
+    const response = await axiosInstance.post(`/clubs/${clubId}/bookmark`);
+    return response.status;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
+
+// 동아리 북마크 취소
+export const deleteClubBookmark = async (clubId: string) => {
+  try {
+    const response = await axiosInstance.delete(`/clubs/${clubId}/bookmark`);
+    return response.status;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
   }
 };
