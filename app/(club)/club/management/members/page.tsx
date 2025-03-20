@@ -19,7 +19,7 @@ const ClubMemberPage = () => {
     useState<ClubMemberData[]>(CLUB_MEMBER_DATA);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
-  const [selectedMember, setSelectedMember] = useState<number[]>([]);
+  const [selectedMember, setSelectedMember] = useState<string[]>([]);
 
   const handleSearch = () => {
     if (searchTerm.trim()) {
@@ -27,7 +27,7 @@ const ClubMemberPage = () => {
     }
   };
 
-  function toggleMember(memberId: number) {
+  function toggleMember(memberId: string) {
     setSelectedMember((prevSelected) => {
       if (prevSelected.includes(memberId)) {
         return prevSelected.filter((id) => id !== memberId);

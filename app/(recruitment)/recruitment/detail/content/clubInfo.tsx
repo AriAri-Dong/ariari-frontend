@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import test_image from "@/images/test/test_image.jpg";
 import Keyword from "@/components/button/keyword";
@@ -16,11 +17,20 @@ import ClubProfileCard from "@/components/card/clubProfileCard";
 import ReportBottomSheet from "@/components/bottomSheet/report/reportBottomSheet";
 import Alert from "@/components/alert/alert";
 import ReportModal from "@/components/modal/reportModal";
-import { MainRecruitmentCardProps } from "@/types/components/card";
+import { ClubInfoCard } from "@/types/components/card";
+import {
+  fieldMap,
+  participantMap,
+  regionMap,
+} from "@/utils/clubCategoryMapping";
+import { deleteClubBookmark, postClubBookmark } from "@/api/club/api";
+import { useShallow } from "zustand/shallow";
+import { useUserStore } from "@/providers/user-store-provider";
 
 interface ClubInfoProps {
-  recruitmentId?: number;
-  recruitmentData?: MainRecruitmentCardProps;
+  recruitmentId?: string;
+  recruitmentData: ClubInfoCard;
+
   isPreview?: boolean;
 }
 
@@ -33,23 +43,39 @@ const ClubInfo = ({
   recruitmentData,
   isPreview = false,
 }: ClubInfoProps) => {
-  const [isHeart, setIsHeart] = useState<boolean>(false);
+  const params = useSearchParams();
+  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const id = params.get("id") ?? "";
+
+  const [isClubHeart, setIsClubHeart] = useState<boolean>(
+    recruitmentData.isMyClubBookmark
+  );
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
   const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const clubImageSrc =
-    typeof recruitmentData?.clubImageUrl === "string"
-      ? recruitmentData?.clubImageUrl
-      : recruitmentData?.clubImageUrl?.src || test_image;
-
-  const imageSrc =
-    typeof recruitmentData?.imageUrl === "string"
-      ? recruitmentData?.imageUrl
-      : recruitmentData?.imageUrl?.src || test_image;
-
-  const onHeartClick = () => {
-    setIsHeart(!isHeart);
+  const onClubHeartClick = () => {
+    if (!isSignIn) {
+      setAlertMessage("로그인 후 이용 가능합니다.");
+      return;
+    }
+    if (isClubHeart) {
+      deleteClubBookmark(recruitmentData.clubId)
+        .then(() => {
+          setIsClubHeart(!isClubHeart);
+        })
+        .catch((err) => {
+          setAlertMessage(err.message);
+        });
+    } else {
+      postClubBookmark(recruitmentData.clubId)
+        .then(() => {
+          setIsClubHeart(!isClubHeart);
+        })
+        .catch((err) => {
+          setAlertMessage(err.message);
+        });
+    }
   };
   const toggleBottomSheet = () => {
     setIsBottomSheetOpen((prev) => !prev);
@@ -70,8 +96,8 @@ const ClubInfo = ({
       <div className="flex flex-col mt-2 sm_md:flex-row sm_md:gap-[27px] md:pb-10 md:pt-8 md:flex-row md:gap-14 w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5">
         <div className="w-full max-w-[792px]">
           <Image
-            src={clubImageSrc}
-            alt={"test_image"}
+            src={recruitmentData.imageUrl || test_image}
+            alt={"main_image"}
             width={792}
             height={792}
             layout="responsive"
@@ -82,8 +108,7 @@ const ClubInfo = ({
         <div>
           <div className="flex justify-between items-start mt-[18px] md:hidden">
             <p className="text-mobile_h1_contents_title text-text1">
-              모집공고 제목 혹은 <br />
-              동아리 한줄 소개 작성
+              {recruitmentData.title}
             </p>
             <IconBtn
               type={"declaration"}
@@ -92,41 +117,41 @@ const ClubInfo = ({
               onClick={toggleBottomSheet}
             />
           </div>
-          <div className="h-0.5 bg-menuborder sm_md:w-[350px] mt-6 mb-6 md:hidden" />
+          <div className="border-t border-menuborder sm_md:w-[350px] mt-6 mb-6 md:hidden" />
           <div className="flex flex-col md:pt-[6px]">
             <div className="block md:hidden">
               <div className="flex flex-col">
                 <div className="flex justify-between items-center">
                   <div className="flex gap-3 items-center">
                     <Image
-                      src={imageSrc}
-                      alt={"Test Image"}
+                      src={recruitmentData.clubImageUrl || test_image}
+                      alt={"club_image"}
                       width={68}
                       height={68}
                       className="relative w-[68px] h-[68px] rounded-full overflow-hidden"
                     />
                     <ClubProfileCard
-                      clubName={"동아리 이름"}
-                      affiliation={"소속"}
-                      field={"분야"}
-                      region={"지역"}
-                      target={"대상"}
+                      clubName={recruitmentData.clubName}
+                      affiliation={recruitmentData.tag.affiliation}
+                      field={fieldMap[recruitmentData.tag.field]}
+                      region={regionMap[recruitmentData.tag.region]}
+                      target={participantMap[recruitmentData.tag.target]}
                     />
                   </div>
-                  <div className="cursor-pointer" onClick={onHeartClick}>
-                    {isHeart ? (
+                  <div className="cursor-pointer" onClick={onClubHeartClick}>
+                    {isClubHeart ? (
                       <MdFavorite size={24} color="#D1F75D" />
                     ) : (
                       <MdFavorite size={24} color="#E3E3E3" />
                     )}
                   </div>
                 </div>
-                <div className="h-0.5 bg-menuborder mt-6 mb-6" />
+                <div className="border-t border-menuborder mt-6 mb-6" />
                 <RecruitmentSummary
-                  members={6}
-                  startDate={"2024.10.07"}
-                  endDate={"2024.11.02"}
-                  email={"123Sysys@gamil.com"}
+                  members={recruitmentData.limits}
+                  startDate={recruitmentData.startDate}
+                  endDate={recruitmentData.endDate}
+                  procedureType={recruitmentData.procedureType}
                 />
               </div>
             </div>
@@ -135,44 +160,57 @@ const ClubInfo = ({
               <div className="flex items-center md:gap-5">
                 <div className="relative w-[60px] h-[60px]">
                   <Image
-                    src={imageSrc}
-                    alt={"Test Image"}
+                    src={recruitmentData.clubImageUrl || test_image}
+                    alt={"club_image"}
                     width={60}
                     height={60}
                     className="relative w-[60px] h-[60px] rounded-full overflow-hidden"
                   />
                   <div
                     className="absolute bottom-0 right-0 cursor-pointer"
-                    onClick={onHeartClick}
+                    onClick={onClubHeartClick}
                   >
-                    {isHeart ? (
+                    {isClubHeart ? (
                       <MdFavorite size={20} color="#D1F75D" />
                     ) : (
                       <MdFavorite size={20} color="#E3E3E3" />
                     )}
                   </div>
                 </div>
-                <h3 className="text-subtext1 text-h3">동아리 이름</h3>
+                <h3 className="text-subtext1 text-h3">
+                  {recruitmentData.clubName}
+                </h3>
               </div>
               <h1 className="text-h1_contents_title md:mt-8 md:mb-12">
-                모집공고 제목 혹은 <br />
-                동아리 한줄 소개 작성
+                {recruitmentData.title}
               </h1>
               <div className="w-[340px] mt-10">
-                <Keyword />
+                <Keyword
+                  tags={[
+                    recruitmentData.tag.affiliation,
+                    fieldMap[recruitmentData.tag.field],
+                    regionMap[recruitmentData.tag.region],
+                    participantMap[recruitmentData.tag.target],
+                  ]}
+                />
               </div>
-              <div className="h-0.5 bg-menuborder mt-8 mb-7" />
+              <div className="border-t border-menuborder mt-8 mb-7" />
               <RecruitmentSummary
-                members={6}
-                startDate={"2024.10.07"}
-                endDate={"2024.11.02"}
-                email={"123Sysys@gamil.com"}
+                members={recruitmentData.limits}
+                startDate={recruitmentData.startDate}
+                endDate={recruitmentData.endDate}
+                procedureType={recruitmentData.procedureType}
               />
             </div>
             {!isPreview && (
               <div className="fixed bottom-0 left-0 right-0 md:static mt-10">
                 <div className="bg-background px-4 pt-2 pb-6 md:px-0 md:pt-0 md:pb-0">
-                  <RecruitmentBottomBar />
+                  <RecruitmentBottomBar
+                    isMyBookmark={recruitmentData.isMyRecruitmentScrap}
+                    bookmarks={recruitmentData.recruitmentBookmarks}
+                    endDate={recruitmentData.endDate}
+                    isMyApply={recruitmentData.isMyApply}
+                  />
                 </div>
               </div>
             )}
@@ -193,12 +231,16 @@ const ClubInfo = ({
         {/* <MobilePointStatusFloatingBar /> */}
         {isBottomSheetOpen && (
           <ReportBottomSheet
+            id={id}
+            reportTargetType="RECRUITMENT"
             onClose={() => setIsBottomSheetOpen(false)}
             onSubmit={handleReportSubmit}
           />
         )}
         {isBottomModalOpen && (
           <ReportModal
+            id={id}
+            reportTargetType="RECRUITMENT"
             onClose={() => setIsBottomModalOpen(false)}
             onSubmit={handleReportSubmit}
           />

@@ -11,6 +11,7 @@ const ClubRecruitmentPage = () => {
     >
       <ClubRecruitmentContent />
     </Suspense>
+
   );
 };
 

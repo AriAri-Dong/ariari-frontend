@@ -53,7 +53,7 @@ const RecruitmentCard = (props: RecruitmentCardProps) => {
         <div className="w-full flex flex-col items-start md:flex-row  md:items-center gap-3 md:gap-10 md:w-fit">
           <div className="w-full flex justify-between md:w-fit">
             <Badge status={status} />
-            {!isMdUp && isManager && status != "OPEN" && (
+            {!isMdUp && isManager && status !== "OPEN" && (
               <div onClick={(e) => handleDelete(e)}>
                 <DeleteBtn onClick={() => {}} />
               </div>
@@ -74,7 +74,7 @@ const RecruitmentCard = (props: RecruitmentCardProps) => {
           <p className="text-subtext2 text-body4_r md:px-3.5 md:text-body3_r">
             {date}
           </p>
-          {isMdUp && isManager && status != "OPEN" && (
+          {isMdUp && isManager && status !== "OPEN" && (
             <div onClick={(e) => handleDelete(e)}>
               <DeleteBtn onClick={() => {}} />
             </div>
