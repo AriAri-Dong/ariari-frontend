@@ -20,7 +20,13 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/management/activity/accounting",
   ];
   const bgPaths = ["/application", "/help"];
-  const mobileBgPaths = ["/club/create", "/withdrawal", "/club/close"];
+  // md 이상만 bg 적용하는 path
+  const mobileBgPaths = [
+    "/club/create",
+    "/withdrawal",
+    "/club/close",
+    "/club/management/recruitment/create",
+  ];
 
   const isSpecialComponent = specialPaths.some((path) =>
     pathname.includes(path)
