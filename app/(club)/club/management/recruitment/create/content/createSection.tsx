@@ -18,7 +18,7 @@ import RangeCalendar from "@/components/calendar/rangeCalendar";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import NotiPopUp from "@/components/modal/notiPopUp";
 
-import { RecruitmentData, RecruitmentNote } from "@/types/recruitment";
+import { RecruitmentData, RecruitmentNoteData } from "@/types/recruitment";
 import {
   RECRUITMENT_GUIDE_DATA_MOBILE,
   RECRUITMENT_GUIDE_DATA_PC,
@@ -51,7 +51,7 @@ const CreateSection = () => {
   const [date, setDate] = useState<[Date | null, Date | null]>([null, null]); // [시작날짜.마감날짜]
   const [limits, setLimits] = useState<number | null>(null); //모집 인원
   const [body, setBody] = useState<string>(""); //활동 내용
-  const [items, setItems] = useState<RecruitmentNote[]>([
+  const [items, setItems] = useState<RecruitmentNoteData[]>([
     {
       question: "",
       answer: "",
