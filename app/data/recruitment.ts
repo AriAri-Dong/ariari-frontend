@@ -82,6 +82,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
     id: "2",
@@ -96,6 +97,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: true,
+    recruitmentNoteDataList: [],
   },
   {
     id: "3",
@@ -110,6 +112,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
     id: "4",
@@ -124,6 +127,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "CLOSED",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
     id: "5",
@@ -138,6 +142,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "CLOSED",
     isMyBookmark: true,
+    recruitmentNoteDataList: [],
   },
   {
     id: "6",
@@ -152,6 +157,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
     id: "7",
@@ -166,6 +172,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
     id: "8",
@@ -180,6 +187,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
     id: "9",
@@ -194,6 +202,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: true,
+    recruitmentNoteDataList: [],
   },
   {
     id: "10",
@@ -208,6 +217,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
     id: "11",
@@ -222,6 +232,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
     id: "12",
@@ -236,6 +247,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: true,
+    recruitmentNoteDataList: [],
   },
   {
     id: "13",
@@ -250,6 +262,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
     id: "14",
@@ -264,6 +277,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     // isActivated: true,
     recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
 ];
 export const CLUB_INFO_DATA: ClubInfoCard = {

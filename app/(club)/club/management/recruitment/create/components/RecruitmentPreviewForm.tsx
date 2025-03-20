@@ -97,7 +97,7 @@ const RecruitmentPreviewForm = ({
   };
 
   return !isTapOver ? (
-    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 backdrop-blur-sm z-50 flex flex-col justify-between pt-[46px] pb-5  md:hidden">
+    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 backdrop-blur-sm z-50 flex flex-col justify-between pt-[46px] ">
       <div className="bg-background rounded-t-2xl">
         <div className="flex justify-between items-center px-4  pt-[22px] pb-4 border-b md:pb-5">
           <h2 className="text-mobile_h1_contents_title md:h1_contents_title">
@@ -152,15 +152,19 @@ const RecruitmentPreviewForm = ({
       >
         <Image src={close} alt={"닫기"} width={24} height={24} />
       </div>
-      <div className="relative w-3/4 h-4/5 p-5 pb-6 bg-white rounded-[16px] overflow-y-scroll no-scrollbar">
+      <div className="relative w-3/4 h-[calc(100vh-130px)] bg-white rounded-[16px] overflow-y-scroll no-scrollbar">
         <div style={{ pointerEvents: "none" }}>
-          <ClubInfo isPreview={true} recruitmentData={recruitmentData} />
-          <ClubActivities
-            recruitmentId={""}
-            body={body}
-            recruitmentNoteDataList={recruitmentNoteDataList}
-            prevRecruitmentList={prevRecruitmentList}
-          />
+          <div className="md:px-[60px] md:pt-[30px] lg:px-[100px] lg:pt-[50px] ">
+            <ClubInfo isPreview={true} recruitmentData={recruitmentData} />
+          </div>
+          <div className="bg-sub_bg md:px-[60px] md:pt-[30px] lg:px-[100px] lg:pt-[50px] ">
+            <ClubActivities
+              recruitmentId={""}
+              body={body}
+              recruitmentNoteDataList={recruitmentNoteDataList}
+              prevRecruitmentList={prevRecruitmentList}
+            />
+          </div>
         </div>
       </div>
     </div>
