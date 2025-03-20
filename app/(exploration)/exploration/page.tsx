@@ -16,6 +16,7 @@ const Exploration = () => {
   const [clubData, setClubData] = useState<ClubListData[]>([]);
   const [page, setPage] = useState<number>(0);
   const [more, setMore] = useState<boolean>(true);
+  const [totalSize, setTotalSize] = useState<number>(0);
 
   // 동아리 리스트 조회
   const fetchClubs = async (newPage = 0, reset = false) => {
@@ -41,6 +42,8 @@ const Exploration = () => {
         setClubData((prev) => [...prev, ...response.clubDataList]);
       }
 
+      setTotalSize(response.pageInfo.totalSize);
+
       if (
         response.clubDataList.length === 0 ||
         newPage + 1 >= response.pageInfo.totalPages
@@ -63,7 +66,7 @@ const Exploration = () => {
           동아리 탐색
         </h1>
         <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-          총 {clubData.length}개의 동아리가 있어요.
+          총 {totalSize}개의 동아리가 있어요.
         </p>
       </div>
       {/* 데이터가 없을 경우 최소 높이 추가 (**통일 필요**) */}
@@ -94,19 +97,15 @@ const Exploration = () => {
           ))}
         </div>
         <div className="self-center mt-9 mb-[80px] md:mt-10 md:mb-[124px]">
-          {clubData.length > 10 && (
-            <>
-              {more && (
-                <PlusBtn
-                  title={"더보기"}
-                  onClick={() => {
-                    const nextPage = page + 1;
-                    setPage(nextPage);
-                    fetchClubs(nextPage);
-                  }}
-                />
-              )}
-            </>
+          {totalSize > 10 && clubData.length < totalSize && more && (
+            <PlusBtn
+              title={"더보기"}
+              onClick={() => {
+                const nextPage = page + 1;
+                setPage(nextPage);
+                fetchClubs(nextPage);
+              }}
+            />
           )}
         </div>
       </div>
