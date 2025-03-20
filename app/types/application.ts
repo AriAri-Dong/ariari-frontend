@@ -144,6 +144,6 @@ export interface ApplyDetailRes {
 export interface ApplicationListConditionReq {
   isPendent: boolean;
   query?: string;
-  startDateTime?: Date;
-  endDateTime?: Date;
+  startDateTime?: string;
+  endDateTime?: string;
 }
