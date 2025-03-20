@@ -9,7 +9,9 @@ import {
   CLUBS,
   RECRUITMENT,
 } from "../apiUrl";
+import { APPLY_TEMPS_MY } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
+import { ApplicationListConditionReq, ApplyListRes } from "@/types/application";
 
 import { IdResponse } from "@/types/api";
 import {
@@ -258,5 +260,32 @@ export const getApplicationDetail = async (applyId: string) => {
   } catch (error) {
     console.log("Error fetching application detail");
     throw error;
+  }
+};
+
+// 동아리 상세 - 지원 현황 리스트
+export const getApplicationsList = async (
+  clubId: string,
+  condition: ApplicationListConditionReq,
+  page: Pageable["page"]
+) => {
+  try {
+    const res = await axiosInstance.get<ApplyListRes>(
+      `club/${clubId}/applies`,
+      {
+        params: {
+          ...condition,
+          page: page,
+          size: 1,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log("Error fetching applications list", error);
+    return {
+      applyDataList: [],
+      pageInfo: { contentSize: 0, totalSize: 0, totalPages: 0 },
+    };
   }
 };
