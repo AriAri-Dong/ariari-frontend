@@ -69,24 +69,18 @@ const AcceptanceReviewDropdown = ({
     rounded-lg bg-background cursor-pointer"
     >
       {/* 기본 내용 */}
-      <div
-        className="flex flex-col items-start gap-3 md:gap-0 md:flex-row md:justify-between md:items-center"
-        onClick={onToggle}
-      >
+      <div className="flex flex-col items-start gap-3 md:gap-0 md:flex-row md:justify-between md:items-center">
         <div className="flex flex-col w-full items-start md:flex-row gap-3 md:gap-12">
           <div className="flex flex-col w-full gap-4 md:gap-5">
             <div className="flex items-center justify-between">
               <h3 className="text-body1_m md:text-h4_sb text-text1">{title}</h3>
-              <div
-                className="md:flex hidden sm:justify-between sm:items-center sm:w-full
-        md:w-auto md:self-startmd:m-w-[194px] md:gap-7"
-              >
+              <div className="md:flex hidden sm:justify-between sm:items-center sm:w-full md:w-auto md:self-startmd:m-w-[194px] md:gap-7">
                 <p className="text-subtext2 text-body4_r content-center md:text-body3_r">
                   {date}
                 </p>
                 <TransparentSmallBtn
                   title={"열람하기"}
-                  onClick={onBtnClick}
+                  onClick={onToggle}
                   round={true}
                 />
               </div>
@@ -106,7 +100,7 @@ const AcceptanceReviewDropdown = ({
           </p>
           <TransparentSmallBtn
             title={"열람하기"}
-            onClick={onBtnClick}
+            onClick={onToggle}
             round={true}
           />
         </div>
@@ -118,7 +112,7 @@ const AcceptanceReviewDropdown = ({
           isOpen ? "opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="flex flex-col md:flex-row w-full justify-between mb-4 mt-7 md:mt-9 md:mb-2">
+        <div className="flex flex-col md:flex-row w-full justify-between mb-4 mt-7 md:mt-9 md:mb-2 md: gap-[56px]">
           <div className="flex md:flex-col w-full justify-between md:justify-normal md:w-[183px] md:gap-[44px]">
             {["합격전형", "면접방식", "면접인원"].map((label, index) => (
               <div key={index} className="flex flex-col gap-2.5 md:gap-[14px]">
@@ -139,7 +133,7 @@ const AcceptanceReviewDropdown = ({
               <h3 className="text-mobile_body1_sb md:text-h4_sb text-text1">
                 면접분위기
               </h3>
-              <ProgressBar disabled={true} initialStep={2} />
+              <ProgressBar disabled={true} initialStep={4} />
             </div>
           </div>
           {/* 모바일 */}
@@ -149,7 +143,7 @@ const AcceptanceReviewDropdown = ({
             </h3>
             <ProgressBar disabled={true} initialStep={2} />
           </div>
-          <div className="flex flex-col w-full max-w-[669px] md:gap-10 md:max-h-none">
+          <div className="flex flex-col w-full  md:gap-10 md:max-h-none">
             {SECTIONS.map((section, sectionIdx) => (
               <div key={sectionIdx}>
                 <h3 className="md:block hidden text-body1_m md:text-h4_sb mb-6 text-text1">
