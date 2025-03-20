@@ -156,8 +156,7 @@ const CreateClubPage = () => {
         await createClubWithFile(clubData, new File([], ""));
       }
 
-      setSubmit(false);
-      router.push("/exploration");
+      // router.push("/exploration");
     } catch (error) {
       console.error("Error creating club:", error);
       setAlertMessage("동아리 생성에 실패했습니다.");
