@@ -116,3 +116,10 @@ export interface ApplyTempDetailRes {
   portfolioUrl: string;
   specialAnswerList: SpecialQuestionList;
 }
+
+export interface ApplicationListConditionReq {
+  isPendent: boolean;
+  query?: string;
+  startDateTime?: Date;
+  endDateTime?: Date;
+}
