@@ -2,14 +2,14 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import test_image from "@/images/test/test12.png";
+import defaultImg from "@/images/icon/defaultAriari.svg";
+import defaultImgBg from "@/images/defaultAriariBg.svg";
 import share from "@/images/icon/share.svg";
 import dotMenu from "@/images/icon/dotMenu.svg";
 import { MdFavorite } from "react-icons/md";
 import Alert from "@/components/alert/alert";
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
-import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
 import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
 import { MENU_DATA } from "@/data/club";
 import useResponsive from "@/hooks/useResponsive";
@@ -118,9 +118,9 @@ const ClubInfoSection = () => {
     <>
       <div className="relative">
         <Image
-          src={bannerUri ?? test_image}
+          src={bannerUri || defaultImgBg}
           alt={"Test Image"}
-          className="rounded-20 w-full md:h-[312px] h-[82px]"
+          className="rounded-20 w-full h-full object-cover"
         />
         <div
           className="bg-white p-2 border-[1px] rounded-full border-menuborder
@@ -136,7 +136,7 @@ const ClubInfoSection = () => {
         </div>
         <div className="absolute bottom-[-40px] md:bottom-[-60px] left-2 md:left-6 w-[80px] h-[80px] md:w-[130px] md:h-[130px]">
           <Image
-            src={profileUri ?? test_image}
+            src={profileUri || defaultImg}
             alt={"프로필 이미지"}
             fill
             className="rounded-full object-cover p-[3px] md:p-[6px] bg-white"
