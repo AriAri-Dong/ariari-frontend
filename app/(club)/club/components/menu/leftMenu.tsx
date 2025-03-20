@@ -102,11 +102,10 @@ const LeftMenu = () => {
   const handleSubmitSuccess = () => {
     setAlertMessage("동아리 정보가 수정되었습니다.");
 
-    // 알럿 메시지 표시 후 3초 뒤 페이지 새로고침
     setTimeout(() => {
       window.location.reload();
-      // 2초 후 새로고침
-    }, 2000);
+      // 0.5초 후 새로고침
+    }, 500);
   };
 
   return (
@@ -129,7 +128,7 @@ const LeftMenu = () => {
                   {role === "ADMIN"
                     ? "관리자"
                     : role === "MANAGER"
-                    ? "일반회원"
+                    ? "매니저"
                     : "일반회원"}
                 </p>
               </div>
