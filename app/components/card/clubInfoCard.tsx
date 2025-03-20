@@ -5,7 +5,7 @@ import Image from "next/image";
 import { MdFavorite } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { ClubListData } from "@/types/api";
-import defaultImage from "@/images/test/test_image.jpg";
+import defaultImg from "@/images/icon/defaultAriari.svg";
 import {
   CLUB_FIELD,
   CLUB_PARTICIPANT,
@@ -68,7 +68,7 @@ const ClubInfoCard = ({
       <div className="flex gap-4 items-center py-[6px] md:gap-5">
         <div className="relative">
           <Image
-            src={profileUri || defaultImage}
+            src={profileUri || defaultImg}
             alt={"club_profile"}
             width={60}
             height={60}
