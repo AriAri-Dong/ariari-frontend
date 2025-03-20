@@ -140,3 +140,10 @@ export interface ApplyDetailRes {
   fileUri?: string;
   portfolioUrl?: string;
 }
+
+export interface ApplicationListConditionReq {
+  isPendent: boolean;
+  query?: string;
+  startDateTime?: Date;
+  endDateTime?: Date;
+}
