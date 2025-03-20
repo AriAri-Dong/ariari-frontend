@@ -133,18 +133,17 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
 
   // 수정하기
   const handleSubmit = async () => {
-    setSubmit(true);
-
-    // 기존 clubData에서 기본 값 가져오기
+    // 동아리 한 줄 소개 값
     const bodyData = { body: clubIntroduction || "" };
 
     // 프로필 이미지 처리
-    let profileFile = null;
+    let profileFile: File | null = null;
+
     if (uploadedImage) {
-      // Base64로 인코딩된 이미지인지 확인하고, 해당 부분만 추출
+      // 새 프로필 이미지가 업로드된 경우
       const base64Image = uploadedImage.includes("base64,")
         ? uploadedImage.split("base64,")[1]
-        : null; // base64, 부분을 제외한 실제 Base64 데이터만 추출
+        : null;
 
       if (base64Image) {
         try {
@@ -158,24 +157,42 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
           });
         } catch (error) {
           console.error("Invalid Base64 string", error);
-          setAlertMsg("이미지가 유효하지 않습니다.");
+          setAlertMsg("프로필 이미지가 유효하지 않습니다.");
           setAlertVisible(true);
-          setSubmit(false);
           return;
         }
-      } else {
-        // Base64 형식이 아니면 그대로 파일을 보내지 않음
-        profileFile = null;
+      }
+    } else if (uploadedImage === null) {
+      // 프로필 이미지 삭제 요청 시, 기본 이미지를 설정
+      const defaultImgFile = new File(
+        [new Blob([defaultImg], { type: "image/svg+xml" })],
+        "default_profile_image.svg",
+        { type: "image/svg+xml" }
+      );
+      // profileFile = defaultImgFile; // 기본 이미지 파일을 보내도록 설정
+      // 서버 에러 발생하는 부분!!!
+      profileFile = null;
+    } else {
+      // 프로필 이미지가 수정되지 않은 경우, 기본 이미지를 그대로 사용
+      if (clubData?.profileUri) {
+        // 기존 이미지를 그대로 보내기 위해 기본 이미지를 사용할 수 있음
+        const defaultImgFile = new File(
+          [new Blob([defaultImg], { type: "image/svg+xml" })],
+          "default_profile_image.svg",
+          { type: "image/svg+xml" }
+        );
+        profileFile = defaultImgFile;
       }
     }
 
     // 배너 이미지 처리
-    let bannerFile = null;
+    // 서버 에러 발생하는 부분!!! (배너 이미지 전송 시 서버 에러 발생)
+    let bannerFile: File | null = null;
+
     if (bannerImage) {
-      // Base64로 인코딩된 배너 이미지 처리
       const base64Banner = bannerImage.includes("base64,")
         ? bannerImage.split("base64,")[1]
-        : null; // base64, 부분을 제외한 실제 Base64 데이터만 추출
+        : null;
 
       if (base64Banner) {
         try {
@@ -191,26 +208,40 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
           console.error("Invalid Base64 string", error);
           setAlertMsg("배너 이미지가 유효하지 않습니다.");
           setAlertVisible(true);
-          setSubmit(false);
           return;
         }
-      } else {
-        // Base64 형식이 아니면 그대로 파일을 보내지 않음
-        bannerFile = null;
+      }
+    } else if (bannerImage === null) {
+      // 배너 이미지 삭제 요청 시, 기본 배너 이미지를 설정
+      const defaultBgFile = new File(
+        [new Blob([defaultBgImg], { type: "image/svg+xml" })],
+        "default_banner_image.svg",
+        { type: "image/svg+xml" }
+      );
+      // bannerFile = defaultBgFile; // 기본 배너 이미지를 보내도록 설정
+      bannerFile = null;
+    } else {
+      // 배너 이미지가 수정되지 않은 경우, 기본 배너 이미지를 그대로 사용
+      if (clubData?.bannerUri) {
+        // 기존 배너 이미지를 그대로 보내기 위해 기본 배너 이미지를 사용할 수 있음
+        const defaultBgFile = new File(
+          [new Blob([defaultBgImg], { type: "image/svg+xml" })],
+          "default_banner_image.svg",
+          { type: "image/svg+xml" }
+        );
+        bannerFile = defaultBgFile;
       }
     }
 
     try {
       // 동아리 정보 수정 API 호출
       await updateClubWithFiles(clubId, bodyData, profileFile, bannerFile);
-      setSubmit(false); // 수정 완료 후 상태 초기화
       onSubmit();
       onClose(); // 모달 닫기
     } catch (error) {
       console.error("Error updating club info:", error);
       setAlertMsg("동아리 정보 수정에 실패했습니다.");
       setAlertVisible(true);
-      setSubmit(false); // 실패 후 상태 초기화
     }
   };
 
