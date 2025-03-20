@@ -19,7 +19,7 @@ import { ClubMemberData } from "@/types/member";
 interface ClubMemberListProps {
   data: ClubMemberData;
   isSelected: boolean;
-  toggleMember: (memberId: number) => void;
+  toggleMember: (memberId: string) => void;
 }
 
 const ClubMemberList = ({
