@@ -6,3 +6,12 @@ export const calculateRemainingDays = (date: string): string => {
 
   return remainingDays < 0 ? "마감" : `D - ${remainingDays}`;
 };
+
+/**
+ * LocalDateTime format으로 변환(Z 제거)
+ * @param {Date} date
+ * @returns {string} LocalDateTime string
+ */
+export const formatLocalDateTime = (date: Date): string => {
+  return date.toISOString().slice(0, -1);
+};
