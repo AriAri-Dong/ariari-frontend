@@ -21,6 +21,7 @@ import { useApplicationQuery } from "@/hooks/apply/useApplicationQuery";
 import { useSearchParams } from "next/navigation";
 import { formatLocalDateTime } from "@/utils/dateFormatter";
 import { ApplyData } from "@/types/application";
+import { APPLY_STATUS } from "@/constants/application";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
@@ -279,7 +280,7 @@ const ApplicationStatusPage = () => {
                       isChecked={checkedApplications.includes(item.id)}
                       onClick={handleOpenForm}
                       onCheck={(isChecked) =>
-                        handleSingleCheck(item.id, isChecked)
+                        handleSingleCheck(Number(item.id), isChecked)
                       }
                     />
                   );
