@@ -30,7 +30,6 @@ import { useUserStore } from "@/providers/user-store-provider";
 interface ClubInfoProps {
   recruitmentId?: string;
   recruitmentData: ClubInfoCard;
-
   isPreview?: boolean;
 }
 
@@ -101,7 +100,7 @@ const ClubInfo = ({
             width={792}
             height={792}
             layout="responsive"
-            className="rounded-48 object-cover"
+            className="rounded-48 object-cover aspect-[1/1]"
           />
         </div>
         {/* 모바일 화면 */}

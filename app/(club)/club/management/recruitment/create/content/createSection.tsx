@@ -403,17 +403,14 @@ const CreateSection = () => {
       </section>
 
       <section className="flex flex-col items-center gap-5 md:hidden mt-[40px] mb-[80px]">
-        <LargeBtn
-          title={"미리보기"}
+        <LargeBtn title={"등록하기"} onClick={checkValidity} />
+        <button
           onClick={() => {
             setIsPreviewOpen(true);
           }}
-        />
-        <button
-          onClick={checkValidity}
           className="border-none py-1 px-1.5 text-subtext2 text-mobile_body3_m"
         >
-          등록하기
+          미리보기
         </button>
       </section>
       {alertMessage && (
@@ -443,6 +440,14 @@ const CreateSection = () => {
       )}
       {isPreviewOpen && (
         <RecruitmentPreviewForm
+          title={title}
+          body={body}
+          imageUrl={imageUrl}
+          date={date}
+          limits={limits}
+          procedureType={procedureType}
+          recruitmentNoteDataList={items}
+          prevRecruitmentList={previousRecruitmentList}
           onClose={() => {
             setIsPreviewOpen(false);
           }}
