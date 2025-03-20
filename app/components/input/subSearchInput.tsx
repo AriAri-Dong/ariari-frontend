@@ -45,7 +45,7 @@ const SubSearchInput = ({
         md:text-body1_r focus:outline-none rounded-3xl"
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            onSearch;
+            onSearch(inputValue);
           }
         }}
       />

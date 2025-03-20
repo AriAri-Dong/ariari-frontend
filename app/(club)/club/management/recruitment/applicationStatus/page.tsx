@@ -18,11 +18,15 @@ import RangeCalendar from "@/components/calendar/rangeCalendar";
 import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
+import { useApplicationQuery } from "@/hooks/apply/useApplicationQuery";
+import { useSearchParams } from "next/navigation";
+import { APPLY_STATUS } from "@/constants/application";
+import { formatLocalDateTime } from "@/utils/dateFormatter";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
-  { id: 1, label: "전체" },
-  { id: 2, label: "대기중" },
+  { id: 1, label: "전체", number: 0 },
+  { id: 2, label: "대기중", number: 0 },
 ];
 const MOBILE_FILTER_TABS = [{ id: 0, label: "지원 상태" }, ...FILTER_TABS];
 
@@ -35,9 +39,13 @@ const OPTIONS = [
 ];
 
 const ApplicationStatusPage = () => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") ?? "";
+
   const isMdUp = useResponsive("md");
   const optionsRef = useRef<HTMLDivElement | null>(null);
 
+  const [filters, setFilters] = useState(FILTER_TABS);
   const [selectedFilter, setSelectedFilter] = useState<string>(
     FILTER_TABS[0].label
   );
@@ -45,13 +53,39 @@ const ApplicationStatusPage = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>(""); // 변경하고자 하는 지원 상태
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 지원상태 변경 확인 모달 open 여부
 
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
+
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false); // 지원서 상세 열람 모달 open 여부
   const [checkedApplications, setCheckedApplications] = useState<number[]>([]);
+
+  const {
+    allTabSize,
+    pendingTabSize,
+    applicationsList,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    totalSize,
+    isError,
+  } = useApplicationQuery(clubId, {
+    isPendent: selectedFilter === "대기중",
+    query: searchQuery,
+    startDateTime: dateRange[0] ? formatLocalDateTime(dateRange[0]) : undefined,
+    endDateTime: dateRange[1] ? formatLocalDateTime(dateRange[1]) : undefined,
+  });
 
   const handleMenuClick = (label: string) => {
     setSelectedStatus(label);
     setIsOptionsOpen(false);
     setIsModalOpen(true);
+  };
+
+  const handleSearchQuery = (query: string) => {
+    setSearchQuery(query);
   };
 
   const handleAllCheck = (isChecked: boolean) => {
@@ -93,6 +127,13 @@ const ApplicationStatusPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    setFilters((prev) => [
+      { ...prev[0], number: allTabSize },
+      { ...prev[1], number: pendingTabSize },
+    ]);
+  }, [allTabSize, pendingTabSize]);
+
   return (
     <>
       <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
@@ -104,7 +145,7 @@ const ApplicationStatusPage = () => {
             <div className="w-full">
               <div className="overflow-x-auto no-scrollbar hidden lg:block">
                 <SubTap
-                  optionData={FILTER_TABS}
+                  optionData={filters}
                   selectedOption={selectedFilter}
                   handleOption={(label: string) => setSelectedFilter(label)}
                 />
@@ -115,7 +156,7 @@ const ApplicationStatusPage = () => {
               lg:items-center mb-4 lg:mb-[22px] lg:mt-[22px] lg:gap-0"
               >
                 <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-                  총 {APPLICATION_FORM_DATA.length}개의 지원서가 있어요.
+                  총 {totalSize}개의 지원서가 있어요.
                 </p>
                 <div className="flex items-center flex-row-reverse md:flex-row gap-2.5 md:gap-5">
                   <IconBtn
@@ -139,20 +180,20 @@ const ApplicationStatusPage = () => {
                     />
                   </div>
                   <div className="smm:block hidden">
-                    <RangeCalendar />
+                    <RangeCalendar onDateChange={setDateRange} />
                   </div>
 
                   <SubSearchInput
-                    onSearch={() => {}}
+                    onSearch={handleSearchQuery}
                     placeholder={"이름 또는 공고 제목"}
                     className="lg:block hidden"
                   />
                 </div>
                 <div className="smm:hidden block">
-                  <RangeCalendar />
+                  <RangeCalendar onDateChange={setDateRange} />
                 </div>
                 <SubSearchInput
-                  onSearch={() => {}}
+                  onSearch={handleSearchQuery}
                   placeholder={"이름 또는 공고 제목"}
                   className="lg:hidden"
                 />
@@ -223,26 +264,28 @@ const ApplicationStatusPage = () => {
                 </div>
               )}
               <div className="flex flex-col  gap-2.5">
-                {APPLICATION_FORM_DATA.map((item) => {
+                {applicationsList.map((item) => {
                   return (
                     <ApplicationFormCard
                       key={item.id}
-                      clubName={item.activityName}
-                      serviceNickname={item.nickname}
-                      status={item.status}
-                      recruitmentTitle={item.jobTitle}
-                      isChecked={checkedApplications.includes(item.id)}
+                      clubName={item.name}
+                      serviceNickname={item.memberData.nickname}
+                      status={APPLY_STATUS[item.applyStatusType]}
+                      recruitmentTitle={item.recruitmentTitle}
+                      isChecked={checkedApplications.includes(Number(item.id))}
                       onClick={handleOpenForm}
                       onCheck={(isChecked) =>
-                        handleSingleCheck(item.id, isChecked)
+                        handleSingleCheck(Number(item.id), isChecked)
                       }
                     />
                   );
                 })}
               </div>
-              <div className="flex justify-center mt-9 md:mt-10">
-                <PlusBtn title={"더보기"} onClick={() => {}} />
-              </div>
+              {hasNextPage && (
+                <div className="flex justify-center mt-9 md:mt-10">
+                  <PlusBtn title={"더보기"} onClick={fetchNextPage} />
+                </div>
+              )}
             </div>
           </div>
         </div>
