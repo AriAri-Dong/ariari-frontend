@@ -10,7 +10,7 @@ const QnaSection = ({
 }: {
   onListCount: (cnt: number) => void;
 }) => {
-  const [selectedQna, setSelectedQna] = useState<number | null>(null);
+  const [selectedQna, setSelectedQna] = useState<string | null>(null);
 
   const params = useSearchParams();
   const clubId = params.get("clubId") ?? "";

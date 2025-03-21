@@ -10,7 +10,7 @@ const FaqSection = ({
 }: {
   onListCount: (cnt: number) => void;
 }) => {
-  const [selectedFaq, setSelectedFaq] = useState<number | null>(null);
+  const [selectedFaq, setSelectedFaq] = useState<string | null>(null);
 
   const params = useSearchParams();
   const clubId = params.get("clubId") ?? "";

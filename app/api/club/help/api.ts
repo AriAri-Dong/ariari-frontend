@@ -98,7 +98,7 @@ export const addQuestion = async ({
 // 동아리 상세 Q&A 답변 등록(role - ADMIN, MANAGER)
 type AddAnswer = {
   clubId: string;
-  clubQuestionId: number;
+  clubQuestionId: string;
   data: { body: string };
 };
 export const addAnswer = async ({
