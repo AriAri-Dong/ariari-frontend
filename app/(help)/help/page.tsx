@@ -10,7 +10,7 @@ import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MobileHeaderSection from "./components/mobileHeaderSection";
 
 const HelpPage = () => {
-  const [selectedFaq, setSelectedFaq] = useState<number | null>(null);
+  const [selectedFaq, setSelectedFaq] = useState<string | null>(null);
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
 
   return (
