@@ -235,7 +235,7 @@ export const getApplicationsList = async (
         params: {
           ...condition,
           page: page,
-          size: 1,
+          size: 10,
         },
       }
     );
