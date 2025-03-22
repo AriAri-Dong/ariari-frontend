@@ -10,7 +10,6 @@ import AllCheckBox from "@/components/checkBox/allCheckBox";
 import ApplicationFormCard from "@/components/card/applicationFormCard";
 import vector from "@/images/icon/sub_pull_down.svg";
 import SingleSelectOptions from "@/components/pulldown/singleSelectOptions";
-import { APPLICATION_FORM_DATA } from "@/data/application";
 import NotiPopUp from "@/components/modal/notiPopUp";
 import PullDown from "@/components/pulldown/pullDown";
 import SubSearchInput from "@/components/input/subSearchInput";
@@ -60,7 +59,7 @@ const ApplicationStatusPage = () => {
   ]);
 
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false); // 지원서 상세 열람 모달 open 여부
-  const [checkedApplications, setCheckedApplications] = useState<number[]>([]);
+  const [checkedApplications, setCheckedApplications] = useState<string[]>([]);
 
   const {
     allTabSize,
@@ -84,19 +83,25 @@ const ApplicationStatusPage = () => {
     setIsModalOpen(true);
   };
 
+  const handleReset = () => {
+    setDateRange([null, null]);
+    setSearchQuery("");
+    setCheckedApplications([]);
+  };
+
   const handleSearchQuery = (query: string) => {
     setSearchQuery(query);
   };
 
   const handleAllCheck = (isChecked: boolean) => {
     if (isChecked) {
-      setCheckedApplications(APPLICATION_FORM_DATA.map((item) => item.id));
+      setCheckedApplications(applicationsList.map((item) => item.id));
     } else {
       setCheckedApplications([]);
     }
   };
 
-  const handleSingleCheck = (id: number, isChecked: boolean) => {
+  const handleSingleCheck = (id: string, isChecked: boolean) => {
     if (isChecked) {
       setCheckedApplications((prev) => [...prev, id]);
     } else {
@@ -163,7 +168,7 @@ const ApplicationStatusPage = () => {
                     type={"reset"}
                     size={"small"}
                     title={isMdUp ? "초기화" : ""}
-                    onClick={() => {}}
+                    onClick={handleReset}
                     className="whitespace-nowrap lg:mr-3.5"
                   />
                   <div className="lg:hidden flex items-center">
@@ -180,7 +185,10 @@ const ApplicationStatusPage = () => {
                     />
                   </div>
                   <div className="smm:block hidden">
-                    <RangeCalendar onDateChange={setDateRange} />
+                    <RangeCalendar
+                      onDateChange={setDateRange}
+                      selectedRange={dateRange}
+                    />
                   </div>
 
                   <SubSearchInput
@@ -190,7 +198,10 @@ const ApplicationStatusPage = () => {
                   />
                 </div>
                 <div className="smm:hidden block">
-                  <RangeCalendar onDateChange={setDateRange} />
+                  <RangeCalendar
+                    onDateChange={setDateRange}
+                    selectedRange={dateRange}
+                  />
                 </div>
                 <SubSearchInput
                   onSearch={handleSearchQuery}
@@ -205,14 +216,12 @@ const ApplicationStatusPage = () => {
                 >
                   <AllCheckBox
                     isChecked={
-                      checkedApplications.length ===
-                      APPLICATION_FORM_DATA.length
+                      checkedApplications.length === applicationsList.length
                     }
                     label={"전체 선택"}
                     onClick={() =>
                       handleAllCheck(
-                        checkedApplications.length !==
-                          APPLICATION_FORM_DATA.length
+                        checkedApplications.length !== applicationsList.length
                       )
                     }
                   />
@@ -241,14 +250,12 @@ const ApplicationStatusPage = () => {
                 <div className="flex justify-between mb-4">
                   <AllCheckBox
                     isChecked={
-                      checkedApplications.length ===
-                      APPLICATION_FORM_DATA.length
+                      checkedApplications.length === applicationsList.length
                     }
                     label={"전체 선택"}
                     onClick={() =>
                       handleAllCheck(
-                        checkedApplications.length !==
-                          APPLICATION_FORM_DATA.length
+                        checkedApplications.length !== applicationsList.length
                       )
                     }
                   />
@@ -272,10 +279,10 @@ const ApplicationStatusPage = () => {
                       serviceNickname={item.memberData.nickname}
                       status={APPLY_STATUS[item.applyStatusType]}
                       recruitmentTitle={item.recruitmentTitle}
-                      isChecked={checkedApplications.includes(Number(item.id))}
+                      isChecked={checkedApplications.includes(item.id)}
                       onClick={handleOpenForm}
                       onCheck={(isChecked) =>
-                        handleSingleCheck(Number(item.id), isChecked)
+                        handleSingleCheck(item.id, isChecked)
                       }
                     />
                   );
