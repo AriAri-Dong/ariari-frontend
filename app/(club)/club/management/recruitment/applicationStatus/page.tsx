@@ -19,8 +19,8 @@ import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import { useApplicationQuery } from "@/hooks/apply/useApplicationQuery";
 import { useSearchParams } from "next/navigation";
-import { APPLY_STATUS } from "@/constants/application";
 import { formatLocalDateTime } from "@/utils/dateFormatter";
+import { ApplyData } from "@/types/application";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
@@ -30,7 +30,7 @@ const FILTER_TABS = [
 const MOBILE_FILTER_TABS = [{ id: 0, label: "지원 상태" }, ...FILTER_TABS];
 
 // 지원현황 - 지원서별 지원 상태 변경
-const OPTIONS = [
+export const STATUS_OPTIONS = [
   { id: 1, label: "대기중" },
   { id: 2, label: "면접중" },
   { id: 3, label: "합격" },
@@ -238,7 +238,7 @@ const ApplicationStatusPage = () => {
                       >
                         <SingleSelectOptions
                           selectedOption={""}
-                          optionData={OPTIONS}
+                          optionData={STATUS_OPTIONS}
                           size="medium"
                           handleMenuClick={handleMenuClick}
                         />
@@ -270,15 +270,13 @@ const ApplicationStatusPage = () => {
                   </div>
                 </div>
               )}
+              {/* 지원서 목록 */}
               <div className="flex flex-col  gap-2.5">
-                {applicationsList.map((item) => {
+                {applicationsList.map((item: ApplyData) => {
                   return (
                     <ApplicationFormCard
                       key={item.id}
-                      clubName={item.name}
-                      serviceNickname={item.memberData.nickname}
-                      status={APPLY_STATUS[item.applyStatusType]}
-                      recruitmentTitle={item.recruitmentTitle}
+                      applyInfo={item}
                       isChecked={checkedApplications.includes(item.id)}
                       onClick={handleOpenForm}
                       onCheck={(isChecked) =>
@@ -299,7 +297,7 @@ const ApplicationStatusPage = () => {
         {isMdUp ? isFormOpen && null : isFormOpen && null}
         {isOptionsOpen && !isMdUp && (
           <CommonBottomSheet
-            optionData={OPTIONS}
+            optionData={STATUS_OPTIONS}
             selectedOption={""}
             handleMenuClick={handleMenuClick}
             onClose={() => setIsOptionsOpen(false)}

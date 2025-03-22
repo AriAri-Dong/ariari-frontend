@@ -9,21 +9,20 @@ import Alert from "../alert/alert";
 import ApplicationFormPreviewModal from "../modal/club/applicationFormViewModal";
 import testImage from "@/images/icon/calender.svg";
 import MobileApplicationFormViewModal from "../modal/club/mobileApplicationFormViewModal";
+import { ApplyData } from "@/types/application";
+import { APPLY_STATUS } from "@/constants/application";
 
 interface ApplicationFormCardProps {
-  clubName: string;
-  serviceNickname: string;
-  status: "합격" | "불합격" | "대기중" | "면접중";
-  recruitmentTitle: string;
+  applyInfo: ApplyData;
   isChecked: boolean;
   onClick: () => void;
   onCheck: (isChecked: boolean) => void;
 }
 
 const SAMOLE_DATA = [
-  { label: "이름", value: "김아리" },
-  { label: "성별", value: "남자" },
-  { label: "생년월일", value: "2000년 00월 00일" },
+  { label: "이름", key: "name" },
+  { label: "성별", key: "name" },
+  { label: "생년월일", key: "name" },
   { label: "연락처", value: "010-0000-0000" },
   { label: "이메일", value: "example@gmail.com" },
   { label: "자유 항목 제목 1", value: "Default Text" },
@@ -31,14 +30,14 @@ const SAMOLE_DATA = [
 ];
 
 const ApplicationFormCard = ({
-  clubName,
-  serviceNickname,
-  status,
-  recruitmentTitle,
+  applyInfo,
   isChecked,
   onClick,
   onCheck,
 }: ApplicationFormCardProps) => {
+  const { id, clubName, name, applyStatusType, recruitmentTitle } = applyInfo;
+  const applyStatus = APPLY_STATUS[applyStatusType];
+
   const isMdUp = useResponsive("md");
 
   const [openFormModal, setOpenFormModal] = useState<boolean>(false);
@@ -72,14 +71,14 @@ const ApplicationFormCard = ({
                 onClick={() => onCheck(!isChecked)}
               />
               <p className="text-subtext2 self-start text-mobile_body2_m md:text-body3_m md:self-center">
-                {serviceNickname}
+                {name}
               </p>
             </div>
             <div
               onClick={handleBadgeClick}
-              className={`${status === "대기중" && "cursor-pointer"}`}
+              className={`${applyStatus === "대기중" && "cursor-pointer"}`}
             >
-              <ResultBadge status={status} />
+              <ResultBadge status={applyStatus} />
             </div>
           </div>
           <div className="flex justify-between gap-3">
@@ -117,13 +116,13 @@ const ApplicationFormCard = ({
       {isMdUp
         ? openFormModal && (
             <ApplicationFormPreviewModal
+              applyId={id}
               onClose={() => setOpenFormModal(false)}
               data={{
                 name: "김아리",
                 image: testImage,
                 nickname: "백설공주",
               }}
-              fields={SAMOLE_DATA}
               portfolio={true}
               portfolioData={{
                 portfolioPurpose: "프로젝트 목적s",
@@ -134,13 +133,13 @@ const ApplicationFormCard = ({
           )
         : openFormModal && (
             <MobileApplicationFormViewModal
+              applyId={id}
               onClose={() => setOpenFormModal(false)}
               data={{
                 name: "김아리",
                 image: testImage,
                 nickname: "백설공주",
               }}
-              fields={SAMOLE_DATA}
               portfolio={true}
               portfolioData={{
                 portfolioPurpose: "프로젝트 목적s",

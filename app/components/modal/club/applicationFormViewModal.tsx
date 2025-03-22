@@ -7,8 +7,10 @@ import close from "@/images/icon/close.svg";
 import FileBadge from "@/components/badge/fileBadge";
 import CustomInput from "@/components/input/customInput";
 import PDFDownloadBtn from "@/components/button/pdfDownloadBtn";
+import { STATUS_OPTIONS } from "@/(club)/club/management/recruitment/applicationStatus/page";
 
 export interface ApplicationFormViewModalProps {
+  applyId: string;
   onClose: () => void;
   portfolio: boolean;
   portfolioData?: {
@@ -25,6 +27,7 @@ export interface ApplicationFormViewModalProps {
 }
 
 const ApplicationFormViewModal = ({
+  applyId,
   onClose,
   data,
   portfolio,
@@ -92,12 +95,7 @@ const ApplicationFormViewModal = ({
               >
                 <SingleSelectOptions
                   selectedOption={selectedStatus}
-                  optionData={[
-                    { id: 1, label: "합격" },
-                    { id: 2, label: "불합격" },
-                    { id: 3, label: "대기중" },
-                    { id: 4, label: "면접중" },
-                  ]}
+                  optionData={[...STATUS_OPTIONS]}
                   size="medium"
                   handleMenuClick={handleMenuClick}
                 />
@@ -112,6 +110,7 @@ const ApplicationFormViewModal = ({
       <div className="bg-white w-[900px] max-h-[75vh] rounded-2xl shadow-modal flex flex-col p-6">
         <div className="custom-scrollbar overflow-y-auto">
           <div className="flex flex-col gap-10 ">
+            {/* 지원서 항목 리스트 */}
             {fields.map((field, index) => (
               <div key={index} className="flex flex-col gap-3">
                 <h3 className="text-text1 text-h3">{field.label}</h3>
