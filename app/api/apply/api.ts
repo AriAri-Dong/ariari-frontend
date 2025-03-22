@@ -1,7 +1,11 @@
 import { Pageable } from "@/types/api";
 import { APPLY_TEMPS_MY } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
-import { ApplicationListConditionReq, ApplyListRes } from "@/types/application";
+import {
+  ApplicationListConditionReq,
+  ApplyDetailRes,
+  ApplyListRes,
+} from "@/types/application";
 
 export const getAppliedList = async (
   page: number = 0,
@@ -55,5 +59,16 @@ export const getApplicationsList = async (
       applyDataList: [],
       pageInfo: { contentSize: 0, totalSize: 0, totalPages: 0 },
     };
+  }
+};
+
+// 지원현황 - 지원서 상세 조회
+export const getApplicationDetail = async (applyId: string) => {
+  try {
+    const res = await axiosInstance.get<ApplyDetailRes>(`/applies/${applyId}`);
+    return res.data;
+  } catch (error) {
+    console.log("Error fetching application detail");
+    throw error;
   }
 };

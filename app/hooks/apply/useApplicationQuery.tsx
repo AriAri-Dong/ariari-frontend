@@ -1,5 +1,9 @@
-import { getApplicationsList } from "@/api/apply/api";
-import { ApplicationListConditionReq, ApplyListRes } from "@/types/application";
+import { getApplicationDetail, getApplicationsList } from "@/api/apply/api";
+import {
+  ApplicationListConditionReq,
+  ApplyDetailRes,
+  ApplyListRes,
+} from "@/types/application";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
@@ -50,6 +54,23 @@ export const useApplicationQuery = (
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isError,
+  };
+};
+
+// 동아리 상세 지원현황 - 지원서 상세 조회
+export const useApplyDetailQuery = (applyId: string) => {
+  const {
+    data: applyDetail,
+    isLoading,
+    isError,
+  } = useQuery<ApplyDetailRes, AxiosError>({
+    queryKey: ["club", "application", applyId],
+    queryFn: () => getApplicationDetail(applyId),
+  });
+  return {
+    applyDetail,
+    isLoading,
     isError,
   };
 };
