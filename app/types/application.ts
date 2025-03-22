@@ -2,6 +2,7 @@ import { MemberData } from "./member";
 import { PageInfo } from "./pageInfo";
 
 export type ApplyStatusType = "PENDENCY" | "APPROVE" | "REFUSAL" | "INTERVIEW";
+export type AppyStatusText = "대기중" | "합격" | "불합격" | "면접중";
 
 export interface ApplyData {
   id: string;
