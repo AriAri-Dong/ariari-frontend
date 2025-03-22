@@ -23,7 +23,6 @@ export interface ApplicationFormViewModalProps {
     image: string;
     nickname: string;
   };
-  fields: { label: string; value: string }[];
 }
 
 const ApplicationFormViewModal = ({
