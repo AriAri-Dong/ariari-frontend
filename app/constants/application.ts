@@ -1,9 +1,6 @@
-import { ApplyStatusType } from "@/types/application";
+import { ApplyStatusType, AppyStatusText } from "@/types/application";
 
-export const APPLY_STATUS: Record<
-  ApplyStatusType,
-  "대기중" | "면접중" | "합격" | "불합격"
-> = {
+export const APPLY_STATUS: Record<ApplyStatusType, AppyStatusText> = {
   PENDENCY: "대기중",
   INTERVIEW: "면접중",
   APPROVE: "합격",
