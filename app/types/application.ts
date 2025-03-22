@@ -147,3 +147,19 @@ export interface ApplicationListConditionReq {
   startDateTime?: string;
   endDateTime?: string;
 }
+
+export interface ApplyAnswerData {
+  body: string;
+  applyQuestionData: {
+    id: string;
+    body: string;
+  };
+}
+
+// 추가 예정
+export interface ApplyDetailRes {
+  applyData: ApplyData;
+  applyAnswerDataList: ApplyAnswerData[];
+  fileUri?: string;
+  portfolioUrl?: string;
+}
