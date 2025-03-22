@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import ClubInfoSection from "../../../content/clubInfoSection";
 import Alert from "@/components/alert/alert";
 import useResponsive from "@/hooks/useResponsive";
 import NoticeBanner from "@/components/banner/noticeBanner";
@@ -20,7 +19,6 @@ import MobileApplicationFromPreviewModal from "@/components/modal/club/preview/m
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import ApplicationFormPeviewBottomSheet from "@/components/bottomSheet/preview/applicationPreviewBottomSheet";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
-import ClubInfoWrapper from "@/(club)/club/content/clubInfoWrapper";
 
 const ApplicationFormPage = () => {
   const isMdUp = useResponsive("md");

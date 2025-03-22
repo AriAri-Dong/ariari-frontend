@@ -9,6 +9,7 @@ import CustomInput from "@/components/input/customInput";
 import PDFDownloadBtn from "@/components/button/pdfDownloadBtn";
 
 export interface ApplicationFromViewModalProps {
+  applyId: string;
   onClose: () => void;
   portfolio: boolean;
   portfolioData?: {
@@ -21,10 +22,10 @@ export interface ApplicationFromViewModalProps {
     image: string;
     nickname: string;
   };
-  fields: { label: string; value: string }[];
 }
 
 const ApplicationFromViewModal = ({
+  applyId,
   onClose,
   data,
   portfolio,
@@ -92,12 +93,7 @@ const ApplicationFromViewModal = ({
               >
                 <SingleSelectOptions
                   selectedOption={selectedStatus}
-                  optionData={[
-                    { id: 1, label: "합격" },
-                    { id: 2, label: "불합격" },
-                    { id: 3, label: "대기중" },
-                    { id: 4, label: "면접중" },
-                  ]}
+                  optionData={[...STATUS_OPTIONS]}
                   size="medium"
                   handleMenuClick={handleMenuClick}
                 />
@@ -112,6 +108,7 @@ const ApplicationFromViewModal = ({
       <div className="bg-white w-[900px] max-h-[75vh] rounded-2xl shadow-modal flex flex-col p-6">
         <div className="custom-scrollbar overflow-y-auto">
           <div className="flex flex-col gap-10 ">
+            {/* 지원서 항목 리스트 */}
             {fields.map((field, index) => (
               <div key={index} className="flex flex-col gap-3">
                 <h3 className="text-text1 text-h3">{field.label}</h3>
