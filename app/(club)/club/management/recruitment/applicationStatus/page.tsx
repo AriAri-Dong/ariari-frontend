@@ -280,7 +280,7 @@ const ApplicationStatusPage = () => {
                       isChecked={checkedApplications.includes(item.id)}
                       onClick={handleOpenForm}
                       onCheck={(isChecked) =>
-                        handleSingleCheck(Number(item.id), isChecked)
+                        handleSingleCheck(item.id, isChecked)
                       }
                     />
                   );
