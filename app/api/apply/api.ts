@@ -16,6 +16,7 @@ import {
   ApplyFormData,
   ApplyFormRes,
   ApplyListRes,
+  ApplyDetailRes,
   ApplySaveReq,
   ApplyTempListRes,
   ApplyTempDetailRes,
@@ -246,5 +247,16 @@ export const getApplicationsList = async (
       applyDataList: [],
       pageInfo: { contentSize: 0, totalSize: 0, totalPages: 0 },
     };
+  }
+};
+
+// 지원현황 - 지원서 상세 조회
+export const getApplicationDetail = async (applyId: string) => {
+  try {
+    const res = await axiosInstance.get<ApplyDetailRes>(`/applies/${applyId}`);
+    return res.data;
+  } catch (error) {
+    console.log("Error fetching application detail");
+    throw error;
   }
 };
