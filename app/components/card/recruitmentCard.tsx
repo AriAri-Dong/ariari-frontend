@@ -33,7 +33,6 @@ const RecruitmentCard = (props: RecruitmentCardProps) => {
   const handleDelete = (event: React.MouseEvent | React.TouchEvent) => {
     if (isManager) {
       event.stopPropagation();
-      alert("모집 삭제");
       props.onDelete(id);
     }
   };
@@ -41,7 +40,6 @@ const RecruitmentCard = (props: RecruitmentCardProps) => {
   const handleEnd = (event: React.MouseEvent | React.TouchEvent) => {
     if (isManager) {
       event.stopPropagation();
-      alert("모집 종료");
       props.onEnd(id);
     }
   };

@@ -19,6 +19,40 @@ export const getRecruitmentRanking = async () => {
     // };
   }
 };
+
+// 해당 동아리 모집공고 리스트
+export const getClubRecruitment = async (clubId: string) => {
+  try {
+    const { data } = await axiosInstance.get<ClubRecruitmentListResponse>(
+      `/clubs/${clubId}/recruitments`
+    );
+    return data;
+  } catch (err) {
+    console.log("동아리 모집공고 리스트 조회 실패", err);
+  }
+};
+
+// 모집 종료
+export const endRecruitment = async (recruitmentId: string) => {
+  try {
+    const { data } = await axiosInstance.put(`/recruitments/${recruitmentId}`);
+    return data;
+  } catch (err) {
+    console.log("모집종료 실패", err);
+  }
+};
+
+// 모집 삭제
+export const deleteRecruitment = async (recruitmentId: string) => {
+  try {
+    const { data } = await axiosInstance.delete(
+      `/recruitments/${recruitmentId}`
+    );
+    return data;
+  } catch (err) {
+    console.log("모집삭제 실패", err);
+  }
+};
 // 모집공고 상세
 export const getRecruitmentDetail = async (recruitmentId: string) => {
   try {
