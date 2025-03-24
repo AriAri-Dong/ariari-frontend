@@ -1,3 +1,5 @@
+import { PageInfo } from "./pageInfo";
+
 export type clubMemberRoleType = "GENERAL" | "MANAGER" | "ADMIN";
 export type clubMemberStatusType = "ACTIVE" | "INACTIVE" | "WITHDRAWN";
 export type profileType =
@@ -26,4 +28,13 @@ export interface ClubMemberData {
   clubMemberStatusType: clubMemberStatusType;
   profileType: profileType;
   memberData: MemberData;
+}
+
+export interface ClubMemberListRes {
+  clubMemberDataList: ClubMemberData[];
+  pageInfo: PageInfo;
+}
+
+export interface MemberListRes {
+  memberDataList: MemberData[];
 }
