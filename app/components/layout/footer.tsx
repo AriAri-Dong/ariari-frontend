@@ -11,9 +11,10 @@ const Footer = () => {
   const pathname = usePathname();
 
   const LINKS = [
-    { text: "개인정보처리방침", href: "/privacyPolicy" },
-    { text: "회원약관", href: "/terms" },
+    { text: "개인정보처리방침", href: "/terms/privacy" },
+    { text: "회원약관", href: "/terms/user" },
     { text: "고객센터", href: "/support" },
+    { text: "동아리 운영수칙", href: "/terms/club" },
   ];
 
   return (
@@ -54,7 +55,7 @@ const Footer = () => {
           </div>
           <div className="flex flex-row text-xs text-subtext2 tmd:ext-15 md:space-x-[19px] font-medium">
             <p>서비스 문의 메일</p>
-            <p>ariari2024.official@gmail.com</p>
+            <p>ariariservice@gmail.com</p>
           </div>
         </div>
         <div className="flex justify-between items-center w-full mt-6">
