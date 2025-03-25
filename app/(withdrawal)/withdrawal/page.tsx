@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import HeaderSection from "./content/headerSection";
-import WithdrawalCard from "@/components/card/withdrawalCard";
+import NoticeCard from "@/components/card/NoticeCard";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 
@@ -108,7 +108,7 @@ const WithDrawal = () => {
         <div className="flex flex-col gap-10 md:gap-12">
           {WITHDRAWAL_INFO.map((info, index) => (
             <div key={index}>
-              <WithdrawalCard info={info} />
+              <NoticeCard info={info} />
             </div>
           ))}
         </div>
