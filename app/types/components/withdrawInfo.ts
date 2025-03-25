@@ -9,9 +9,9 @@ export type WithdrawalButton = {
   onClick: (router: AppRouterInstance) => void;
 };
 
-export type WithdrawalInfoItem = {
+export type NoticeItem = {
   title: string;
-  description: string | null;
+  description?: string | null;
   sections: string[];
   button?: WithdrawalButton;
 };
