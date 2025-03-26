@@ -13,8 +13,8 @@ const Footer = () => {
   const LINKS = [
     { text: "개인정보처리방침", href: "/terms/privacy" },
     { text: "회원약관", href: "/terms/user" },
+    { text: "동아리 운영원칙", href: "/terms/club" },
     { text: "고객센터", href: "/support" },
-    { text: "동아리 운영수칙", href: "/terms/club" },
   ];
 
   return (
