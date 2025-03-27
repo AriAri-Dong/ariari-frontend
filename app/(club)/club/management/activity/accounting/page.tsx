@@ -89,7 +89,11 @@ const AccountingPage = () => {
               />
             )}
             {/* 리스트 영역 */}
-            <MembershipBalanceList transactions={financialRecords || []} />
+            {financialRecords.length ? (
+              <MembershipBalanceList transactions={financialRecords} />
+            ) : (
+              <p className="text-center">등록된 회계 내역이 없습니다</p>
+            )}
             {hasNextPage && (
               <div className="flex justify-center mt-9 md:mt-10">
                 <PlusBtn title={"더보기"} onClick={fetchNextPage} />
