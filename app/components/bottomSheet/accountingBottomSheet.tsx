@@ -46,8 +46,7 @@ const AccountingBottomSheet = ({ onClose, onSubmit }: AccountingProps) => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      onSubmit({ date, transaction, amount, details });
-      onClose();
+      onSubmit({ date: date!, transaction: transaction!, amount, details });
     }
   };
 
