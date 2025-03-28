@@ -3,16 +3,10 @@
 import React from "react";
 import Image from "next/image";
 import { REVIEW_BADGE_LIST } from "@/data/reviewBadge";
+import { TagIconType } from "@/types/club";
 
 interface ReviewBadgeProps {
-  type:
-    | "employment"
-    | "experience"
-    | "health"
-    | "interest"
-    | "relationship"
-    | "selfDevelopment"
-    | "skill";
+  type: TagIconType;
 }
 
 /**

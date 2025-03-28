@@ -6,6 +6,7 @@ import IconBtn from "../button/withIconBtn/IconBtn";
 import ReportModal from "../modal/reportModal";
 import Alert from "../alert/alert";
 import ReviewBadge from "../badge/review/reviewBadge";
+import { TagIconType } from "@/types/club";
 
 interface ActivityReviewDropdownProps {
   onClick: () => void;
@@ -14,15 +15,7 @@ interface ActivityReviewDropdownProps {
   date: string;
   username: string;
   detail: string;
-  badgeType: (
-    | "employment"
-    | "experience"
-    | "health"
-    | "interest"
-    | "relationship"
-    | "selfDevelopment"
-    | "skill"
-  )[];
+  badgeType: TagIconType[];
 }
 
 const ActivityReviewDropdown = ({
