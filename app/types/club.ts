@@ -87,8 +87,8 @@ export interface ClubQnaListRes {
 export interface MembershipBalance {
   id: string;
   amount: number; // 입금(양수) 또는 출금(음수)
-  recordDateTime: Date;
-  createdDateTime: Date;
+  recordDateTime: string;
+  createdDateTime: string;
   body: string;
   balance: number; // 현재 잔액
 }

@@ -9,7 +9,6 @@ export const getClubFinanceBalance = async (clubId: string) => {
     const res = await axiosInstance.get<number>(
       `${CLUBS}/${clubId}/financial-records/balance`
     );
-    console.log("get club finance balance res", res);
     return res.data;
   } catch (error) {
     console.log("failed to get club finance balance", error);
@@ -32,7 +31,6 @@ export const getClubFinancialRecords = async (
         },
       }
     );
-    console.log("get club financial records", res);
     return res.data;
   } catch (error) {
     console.log("failed to get club financial records", error);
@@ -56,7 +54,6 @@ export const addFinancialRecord = async ({
       `${CLUBS}/${clubId}/financial-records`,
       data
     );
-    console.log("add financial record res", res);
     return res;
   } catch (error) {
     console.log("add financial record error", error);

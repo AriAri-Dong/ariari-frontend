@@ -44,29 +44,30 @@ const AccountingPage = () => {
   };
 
   const handleSubmit = (data: {
-    date: Date | null;
-    transaction: boolean | null;
+    date: Date;
+    transaction: boolean;
     amount: number;
     details: string;
   }) => {
-    if (!data.date) {
-      console.error("날짜가 없습니다.");
-      return;
-    }
+    const { date, transaction, amount, details } = data;
+
+    const utcDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    const formattedDate = utcDate.toISOString();
+
     const newTransaction = {
-      recordDateTime: data.date,
-      body: data.details,
-      amount: data.transaction ? data.amount : -data.amount,
+      recordDateTime: formattedDate,
+      body: details,
+      amount: transaction ? amount : -amount,
     };
     addFinancialRecord.mutate(
       {
-      clubId,
-      data: newTransaction,
+        clubId,
+        data: newTransaction,
       },
       {
         onSuccess: () => {
-    handleClose();
-    setAlertMessage("회계내역이 등록되었습니다.");
+          handleClose();
+          setAlertMessage("회계내역이 등록되었습니다.");
         },
         onError: () => {
           setAlertMessage("회계내역 등록에 실패했습니다.");
