@@ -22,7 +22,7 @@ interface ModalProps {
   documentQuestions: { question: string }[];
 }
 
-const ApplicationFromPreviewModal = ({
+const ApplicationFormPreviewModal = ({
   onClose,
   selectedFields,
   portfolioCollected,
@@ -163,4 +163,4 @@ const ApplicationFromPreviewModal = ({
   );
 };
 
-export default ApplicationFromPreviewModal;
+export default ApplicationFormPreviewModal;
