@@ -35,7 +35,7 @@ const ApplicationFormCard = ({
   onClick,
   onCheck,
 }: ApplicationFormCardProps) => {
-  const { id, clubName, name, applyStatusType, recruitmentTitle } = applyInfo;
+  const { id, memberData, name, applyStatusType, recruitmentTitle } = applyInfo;
   const applyStatus = APPLY_STATUS[applyStatusType];
 
   const isMdUp = useResponsive("md");
@@ -67,7 +67,7 @@ const ApplicationFormCard = ({
             <div className="flex flex-col items-center gap-1 md:flex-row md:gap-3">
               <CheckBox
                 isChecked={isChecked}
-                label={clubName}
+                label={memberData.nickname}
                 onClick={() => onCheck(!isChecked)}
               />
               <p className="text-subtext2 self-start text-mobile_body2_m md:text-body3_m md:self-center">
