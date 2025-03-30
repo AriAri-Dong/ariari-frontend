@@ -4,16 +4,12 @@ import file from "@/images/icon/file.svg";
 import vector from "@/images/icon/pullDown.svg";
 import active from "@/images/icon/active_vector.svg";
 import notice from "@/images/icon/notice.svg";
+import test_image from "@/images/profile/ariari.svg";
 import { usePathname, useRouter } from "next/navigation";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import { useClubContext } from "@/context/ClubContext";
 import { CLUB_MENU_MAP, CLUB_MENU_ROLE_LABELS } from "@/constants/clubMenu";
-import { profileImageMap } from "@/utils/mappingProfile";
 
-/**
- * 임시 메뉴 컴포넌트
- * @returns
- */
 const LeftMenu = () => {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState<number | null>(null);
@@ -77,11 +73,7 @@ const LeftMenu = () => {
           <div className="flex flex-col">
             <div className="flex gap-3">
               <Image
-                src={
-                  profileImageMap[
-                    clubInfo?.clubMemberData.memberData.profileType
-                  ]
-                }
+                src={clubInfo.clubData.profileUri || test_image}
                 alt={"profile"}
                 width={52}
                 height={52}
