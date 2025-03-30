@@ -1,40 +1,30 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import rabbit from "@/images/profile/rabbit.svg";
 import file from "@/images/icon/file.svg";
 import vector from "@/images/icon/pullDown.svg";
 import active from "@/images/icon/active_vector.svg";
 import notice from "@/images/icon/notice.svg";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  CLUB_LEFT_MENU_ADMIN,
-  CLUB_LEFT_MENU_MEMBER,
-  CLUB_LEFT_MENU_USER,
-} from "@/data/club";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
+import { useClubContext } from "@/context/ClubContext";
+import { CLUB_MENU_MAP, CLUB_MENU_ROLE_LABELS } from "@/constants/clubMenu";
+import { profileImageMap } from "@/utils/mappingProfile";
 
 /**
  * 임시 메뉴 컴포넌트
  * @returns
  */
 const LeftMenu = () => {
-  const router = useRouter();
-  const pathname = usePathname();
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState<number | null>(null);
 
-  // 임시 권한 설정 (API 연동 전)
-  const [authority, setAuthority] = useState<"USER" | "MEMBER" | "ADMIN">(
-    "ADMIN"
-  );
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const { role, clubInfo } = useClubContext();
 
   // 권한에 따른 메뉴 데이터
-  const CLUB_LEFT_MENU =
-    authority === "ADMIN"
-      ? CLUB_LEFT_MENU_ADMIN
-      : authority === "MEMBER"
-      ? CLUB_LEFT_MENU_MEMBER
-      : CLUB_LEFT_MENU_USER;
+  const CLUB_LEFT_MENU = CLUB_MENU_MAP[role ?? "USER"];
 
   const isActive = (url: string) => pathname === url;
 
@@ -76,41 +66,51 @@ const LeftMenu = () => {
         });
       }
     });
-  }, [pathname, CLUB_LEFT_MENU]);
+  }, [pathname]);
 
+  if (!clubInfo) return null;
   return (
     <div className="hidden lg:block">
       <div className="w-[256px] bg-white rounded-16 py-7 px-4">
-        {/* 프로필 영역 */}
-        <div className="flex flex-col">
-          <div className="flex gap-3">
-            <Image src={rabbit} alt={"profile"} width={52} height={52} />
-            <div className="flex flex-col gap-1">
-              <h3 className="text-body1_sb text-text1">백설공주</h3>
-              <div className="flex gap-[6px]">
-                <Image src={file} alt={"profile"} width={14} height={18} />
-                <p className="text-primary text-body3_m">
-                  {authority === "ADMIN"
-                    ? "관리자"
-                    : authority === "MEMBER"
-                    ? "일반회원"
-                    : ""}
-                </p>
+        {/* 프로필 영역 - 동아리 회원인 경우만 노출 */}
+        {role && (
+          <div className="flex flex-col">
+            <div className="flex gap-3">
+              <Image
+                src={
+                  profileImageMap[
+                    clubInfo?.clubMemberData.memberData.profileType
+                  ]
+                }
+                alt={"profile"}
+                width={52}
+                height={52}
+              />
+              <div className="flex flex-col gap-1">
+                <h3 className="text-body1_sb text-text1">
+                  {clubInfo.clubMemberData.name}
+                </h3>
+                <div className="flex gap-[6px]">
+                  <Image src={file} alt={"profile"} width={14} height={18} />
+                  <p className="text-primary text-body3_m">
+                    {CLUB_MENU_ROLE_LABELS[role]}
+                  </p>
+                </div>
               </div>
             </div>
+            {role === "ADMIN" && (
+              <SmallBtn
+                title={"동아리 정보 수정"}
+                onClick={() => {}}
+                className="mt-5"
+              />
+            )}
           </div>
-          {authority === "ADMIN" && (
-            <SmallBtn
-              title={"동아리 정보 수정"}
-              onClick={() => {}}
-              className="mt-5"
-            />
-          )}
-        </div>
+        )}
 
         {/* 메뉴 항목 */}
         {CLUB_LEFT_MENU.map((menu) => (
-          <div className="flex items-center mt-6" key={menu.id}>
+          <div className="flex items-center mt-6 first:mt-0" key={menu.id}>
             {isParentActive(menu) ? (
               <Image
                 src={active}

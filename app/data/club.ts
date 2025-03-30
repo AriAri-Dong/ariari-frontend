@@ -274,6 +274,7 @@ export const BADGE_TITLES = [
   "동아리를 알게 된 경로",
 ];
 
+// 일반 사용자(동아리 소속 x)
 export const CLUB_LEFT_MENU_USER = [
   {
     id: 1,
@@ -306,6 +307,7 @@ export const CLUB_LEFT_MENU_USER = [
   },
 ];
 
+// 동아리 일반 회원(role- GENERAL)
 export const CLUB_LEFT_MENU_MEMBER = [
   {
     id: 1,
@@ -362,6 +364,7 @@ export const CLUB_LEFT_MENU_MEMBER = [
   },
 ];
 
+// 동아리 관리자(role- ADMIN, MANAGER)
 export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 1,
