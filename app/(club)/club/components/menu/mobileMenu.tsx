@@ -5,29 +5,18 @@ import { useRouter, usePathname } from "next/navigation";
 import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound";
 import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import SubTap from "@/components/tab/subTap";
+import { CLUB_MENU_MAP } from "@/constants/clubMenu";
+import { useClubContext } from "@/context/ClubContext";
 import Tabs from "../tabs/mobileTabs";
-import {
-  CLUB_LEFT_MENU_ADMIN,
-  CLUB_LEFT_MENU_MEMBER,
-  CLUB_LEFT_MENU_USER,
-} from "@/data/club";
 
 const MobileMenu = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  // 임시 권한 설정 (API 연동 전)
-  const [authority, setAuthority] = useState<"USER" | "MEMBER" | "ADMIN">(
-    "ADMIN"
-  );
+  const { role } = useClubContext();
 
-  const CLUB_LEFT_MENU =
-    authority === "ADMIN"
-      ? CLUB_LEFT_MENU_ADMIN
-      : authority === "MEMBER"
-      ? CLUB_LEFT_MENU_MEMBER
-      : CLUB_LEFT_MENU_USER;
-
+  // 권한에 따른 메뉴 데이터
+  const CLUB_LEFT_MENU = CLUB_MENU_MAP[role ?? "USER"];
   const [menuRefs, setMenuRefs] = useState<(HTMLDivElement | null)[]>([]);
 
   // ✅ 현재 URL과 일치하는 메뉴 옵션 찾기
