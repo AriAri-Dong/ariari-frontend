@@ -123,34 +123,3 @@ export interface ClubDetailRes {
   clubData: ClubData;
   clubMemberData: ClubMemberData;
 }
-
-export interface TagData {
-  id: string;
-  body: string;
-  icon: TagIconType;
-  rate: number;
-}
-
-export type TagIconType =
-  | "CAREER_PREPARATION"
-  | "NETWORKING"
-  | "INTEREST_EXPLORATION"
-  | "SELF_DEVELOPMENT"
-  | "ACADEMIC_IMPROVEMENT"
-  | "HEALTH_ENHANCEMENT"
-  | "DIVERSE_EXPERIENCE";
-
-export interface ClubReviewData {
-  id: string;
-  title: string;
-  body: string;
-  wasAccessed: boolean;
-  createdDateTime: string;
-  tagDataList: TagData[];
-  creator: boolean;
-}
-
-export interface ClubReviewListRes {
-  clubReviewDataList: ClubReviewData[];
-  pageInfo: PageInfo;
-}

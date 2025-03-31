@@ -2,7 +2,52 @@ import test_image from "@/images/logo/ariari.svg";
 import test_image2 from "@/images/icon/region.svg";
 import test_image3 from "@/images/icon/target.svg";
 import baby from "@/images/test/baby.png";
+import { TagData } from "@/types/review";
 
+export const TAG_DATA: TagData[] = [
+  {
+    id: "694065668406683860",
+    body: "취업준비에 도움이 돼요",
+    icon: "CAREER_PREPARATION",
+    rate: 18.18,
+  },
+  {
+    id: "694065668406683861",
+    body: "인간관계를 넓힐 수 있어요",
+    icon: "NETWORKING",
+    rate: 18.18,
+  },
+  {
+    id: "694065668406683862",
+    body: "관심분야를 탐구할 수 있어요",
+    icon: "INTEREST_EXPLORATION",
+    rate: 9.09,
+  },
+  {
+    id: "694065668406683863",
+    body: "자기 계발에 도움이 돼요",
+    icon: "SELF_DEVELOPMENT",
+    rate: 9.09,
+  },
+  {
+    id: "694065668406683864",
+    body: "전공 실력이나 성적을 높일 수 있어요",
+    icon: "ACADEMIC_IMPROVEMENT",
+    rate: 18.18,
+  },
+  {
+    id: "694065668406683865",
+    body: "건강증진에 도움이 돼요",
+    icon: "HEALTH_ENHANCEMENT",
+    rate: 9.09,
+  },
+  {
+    id: "694065668406683866",
+    body: "다양한 경험을 할 수 있어요",
+    icon: "DIVERSE_EXPERIENCE",
+    rate: 18.18,
+  },
+];
 export const CLUB_PROFILE_DATA = [
   {
     id: 1,
@@ -14,7 +59,7 @@ export const CLUB_PROFILE_DATA = [
     target: "대학생",
     heartNumber: 25,
     introductionText: "해당 동아리만 활성화 되었습니다. 여기서 확인해주세요.",
-    badgeType: "skill" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/club/management/recruitment/applicationStatus",
   },
   {
@@ -27,7 +72,7 @@ export const CLUB_PROFILE_DATA = [
     target: "대학생",
     heartNumber: 15,
     introductionText: "introductionText",
-    badgeType: "employment" as const,
+    badgeType: TAG_DATA[1],
     clubPageUrl: "/",
   },
   {
@@ -40,7 +85,7 @@ export const CLUB_PROFILE_DATA = [
     target: "직장인",
     heartNumber: 8,
     introductionText: "introductionText",
-    badgeType: "employment" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -53,7 +98,7 @@ export const CLUB_PROFILE_DATA = [
     target: "청소년",
     heartNumber: 30,
     introductionText: "introductionText",
-    badgeType: "interest" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -66,7 +111,7 @@ export const CLUB_PROFILE_DATA = [
     target: "고등학생",
     heartNumber: 12,
     introductionText: "introductionText",
-    badgeType: "health" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -79,7 +124,7 @@ export const CLUB_PROFILE_DATA = [
     target: "성인",
     heartNumber: 20,
     introductionText: "introductionText",
-    badgeType: "employment" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -92,7 +137,7 @@ export const CLUB_PROFILE_DATA = [
     target: "대학생",
     heartNumber: 18,
     introductionText: "introductionText",
-    badgeType: "selfDevelopment" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -105,7 +150,7 @@ export const CLUB_PROFILE_DATA = [
     target: "직장인",
     heartNumber: 10,
     introductionText: "introductionText",
-    badgeType: "employment" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -118,7 +163,7 @@ export const CLUB_PROFILE_DATA = [
     target: "청소년",
     heartNumber: 5,
     introductionText: "introductionText",
-    badgeType: "experience" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -131,7 +176,7 @@ export const CLUB_PROFILE_DATA = [
     target: "고등학생",
     heartNumber: 22,
     introductionText: "introductionText",
-    badgeType: "health" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -144,7 +189,7 @@ export const CLUB_PROFILE_DATA = [
     target: "대학생",
     heartNumber: 19,
     introductionText: "introductionText",
-    badgeType: "interest" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -157,7 +202,7 @@ export const CLUB_PROFILE_DATA = [
     target: "성인",
     heartNumber: 25,
     introductionText: "introductionText",
-    badgeType: "employment" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -170,7 +215,7 @@ export const CLUB_PROFILE_DATA = [
     target: "고등학생",
     heartNumber: 9,
     introductionText: "introductionText",
-    badgeType: "employment" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -183,7 +228,7 @@ export const CLUB_PROFILE_DATA = [
     target: "대학생",
     heartNumber: 11,
     introductionText: "introductionText",
-    badgeType: "interest" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -196,7 +241,7 @@ export const CLUB_PROFILE_DATA = [
     target: "직장인",
     heartNumber: 16,
     introductionText: "introductionText",
-    badgeType: "employment" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -209,7 +254,7 @@ export const CLUB_PROFILE_DATA = [
     target: "청소년",
     heartNumber: 13,
     introductionText: "introductionText",
-    badgeType: "experience" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -222,7 +267,7 @@ export const CLUB_PROFILE_DATA = [
     target: "고등학생",
     heartNumber: 21,
     introductionText: "introductionText",
-    badgeType: "employment" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -235,7 +280,7 @@ export const CLUB_PROFILE_DATA = [
     target: "대학생",
     heartNumber: 28,
     introductionText: "introductionText",
-    badgeType: "relationship" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -248,7 +293,7 @@ export const CLUB_PROFILE_DATA = [
     target: "직장인",
     heartNumber: 14,
     introductionText: "introductionText",
-    badgeType: "selfDevelopment" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
   {
@@ -261,7 +306,7 @@ export const CLUB_PROFILE_DATA = [
     target: "청소년",
     heartNumber: 7,
     introductionText: "introductionText",
-    badgeType: "skill" as const,
+    badgeType: TAG_DATA[0],
     clubPageUrl: "/",
   },
 ];
