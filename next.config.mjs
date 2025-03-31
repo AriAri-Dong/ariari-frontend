@@ -9,19 +9,24 @@ const nextConfig = {
   },
   output: "standalone",
   webpack: (config) => {
+    // current file loader rule
+    const fileLoaderRule = config.module.rules.find((rule) =>
+      rule.test?.test?.(".svg")
+    );
     config.resolve.fallback = { fs: false };
-    config.module.rules.push({
-      test: /\.svg$/i,
-      issuer: /\.[jt]sx?$/,
-      resourceQuery: /svgr/,
-      use: ["@svgr/webpack"],
-    });
-
-    config.module.rules.push({
-      test: /\.svg$/i,
-      type: "asset/resource",
-      resourceQuery: { not: [/svgr/] },
-    });
+    config.module.rules.push(
+      {
+        ...fileLoaderRule,
+        test: /\.svg$/i,
+        resourceQuery: { not: [/svgr/] },
+      },
+      {
+        test: /\.svg$/i,
+        issuer: fileLoaderRule.issuer,
+        resourceQuery: /svgr/,
+        use: ["@svgr/webpack"],
+      }
+    );
 
     return config;
   },
