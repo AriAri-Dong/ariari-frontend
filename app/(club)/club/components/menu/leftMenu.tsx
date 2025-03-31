@@ -4,7 +4,7 @@ import file from "@/images/icon/file.svg";
 import vector from "@/images/icon/pullDown.svg";
 import active from "@/images/icon/active_vector.svg";
 import test_image from "@/images/profile/ariari.svg";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import { useClubContext } from "@/context/ClubContext";
 import { CLUB_MENU_MAP, CLUB_MENU_ROLE_LABELS } from "@/constants/clubMenu";
@@ -17,6 +17,8 @@ const LeftMenu = () => {
 
   const router = useRouter();
   const pathname = usePathname();
+  const params = useSearchParams();
+  const clubId = params.get("clubId");
 
   const { role, clubInfo } = useClubContext();
 
@@ -37,13 +39,13 @@ const LeftMenu = () => {
       // 서브 메뉴가 없는 경우: URL 이동
       setActiveMenu(menuId);
       setIsSubMenuOpen(null);
-      router.push(url);
+      router.push(`${url}?clubId=${clubId}`);
     }
   };
 
   // 서브 메뉴 클릭 시 URL로 이동 + 부모 메뉴 활성화
   const handleSubMenuClick = (subUrl: string, parentMenuId: number) => {
-    router.push(subUrl);
+    router.push(`${subUrl}?clubId=${clubId}`);
     setActiveMenu(parentMenuId);
     setIsSubMenuOpen(parentMenuId);
   };

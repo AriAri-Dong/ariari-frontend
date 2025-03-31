@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import NotificationRoundBtn from "@/components/button/iconBtn/notificationRound";
 import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import SubTap from "@/components/tab/subTap";
@@ -12,6 +12,8 @@ import Tabs from "../tabs/mobileTabs";
 const MobileMenu = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const params = useSearchParams();
+  const clubId = params.get("clubId");
 
   const { role } = useClubContext();
 
@@ -64,19 +66,19 @@ const MobileMenu = () => {
       if (!isCurrentSubMenu) {
         // ✅ 현재 URL이 `subUrl` 중 하나가 아닐 경우, 첫 번째 `subUrl`로 이동
         setTimeout(() => {
-          router.push(selectedMenu.subUrl[0].url);
+          router.push(`${selectedMenu.subUrl[0].url}?clubId=${clubId}`);
         }, 0);
       }
     } else if (selectedMenu?.url) {
       setOption(label);
-      router.push(selectedMenu.url);
+      router.push(`${selectedMenu.url}?clubId=${clubId}`);
     }
   };
 
   // ✅ 하위 메뉴 클릭 시 부모 메뉴 활성화
   const handleSubMenuClick = (parentLabel: string, url: string) => {
     setOption(parentLabel);
-    router.push(url);
+    router.push(`${url}?clubId=${clubId}`);
   };
 
   const activeTabs =
