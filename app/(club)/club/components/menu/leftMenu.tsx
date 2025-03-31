@@ -3,12 +3,13 @@ import Image from "next/image";
 import file from "@/images/icon/file.svg";
 import vector from "@/images/icon/pullDown.svg";
 import active from "@/images/icon/active_vector.svg";
-import notice from "@/images/icon/notice.svg";
 import test_image from "@/images/profile/ariari.svg";
 import { usePathname, useRouter } from "next/navigation";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import { useClubContext } from "@/context/ClubContext";
 import { CLUB_MENU_MAP, CLUB_MENU_ROLE_LABELS } from "@/constants/clubMenu";
+import { MENU_ICONS } from "@/constants/clubMenu";
+import { Icon } from "@/components/icon";
 
 const LeftMenu = () => {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
@@ -123,12 +124,11 @@ const LeftMenu = () => {
                 onClick={() => handleMenuClick(menu.id, menu.url, menu.subUrl)}
               >
                 <div className="flex gap-3 items-center">
-                  <Image
-                    src={notice}
-                    alt={"notice"}
-                    width={24}
-                    height={24}
-                    className="ml-1"
+                  <Icon
+                    name={menu.icon}
+                    color={isParentActive(menu) ? "#589BFF" : "#A1A6B0"}
+                    iconMap={MENU_ICONS}
+                    className="icon-svg"
                   />
                   <h3 className="text-h4_sb">{menu.label}</h3>
                 </div>
