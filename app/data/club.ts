@@ -279,29 +279,34 @@ export const CLUB_LEFT_MENU_USER = [
   {
     id: 1,
     label: "활동내역",
+    icon: "activity_history",
     url: "/club/activityHistory",
   },
   {
     id: 2,
     label: "모집공고",
+    icon: "recruit_announcement",
     url: "/",
     subUrl: [],
   },
   {
     id: 3,
     label: "FAQ / Q&A",
+    icon: "help",
     url: "/club/help",
     subUrl: [],
   },
   {
     id: 4,
     label: "활동후기",
+    icon: "activity_history",
     url: "/club/review/activity",
     subUrl: [],
   },
   {
     id: 5,
     label: "합격후기",
+    icon: "acceptance_review",
     url: "/club/review/acceptance",
     subUrl: [],
   },
@@ -312,53 +317,62 @@ export const CLUB_LEFT_MENU_MEMBER = [
   {
     id: 1,
     label: "활동내역",
+    icon: "activity_history",
     url: "/club/activityHistory",
   },
   {
     id: 2,
     label: "공지사항",
+    icon: "announcement",
     url: "/club/notice",
     subUrl: [],
   },
   {
     id: 3,
     label: "일정 (미구현)",
+    icon: "schedule",
     url: "/club/create",
     subUrl: [],
   },
   {
     id: 4,
     label: "회계내역",
+    icon: "accounting",
     url: "/club/review/activity",
     subUrl: [],
   },
   {
     id: 5,
     label: "모집공고",
+    icon: "recruit_announcement",
     url: "/club/review/acceptance",
     subUrl: [],
   },
   {
     id: 6,
     label: "활동후기",
+    icon: "activity_history",
     url: "/club/review/activity",
     subUrl: [],
   },
   {
     id: 7,
     label: "합격후기",
+    icon: "acceptance_review",
     url: "/club/review/acceptance",
     subUrl: [],
   },
   {
     id: 8,
     label: "FAQ / Q&A",
+    icon: "help",
     url: "/club/help",
     subUrl: [],
   },
   {
     id: 9,
     label: "동아리 탈퇴 ",
+    icon: "withdrawal",
     url: "/club/withdrawal",
     subUrl: [],
   },
@@ -369,6 +383,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 1,
     label: "모집관리",
+    icon: "recruit_management",
     url: "/",
     subUrl: [
       {
@@ -391,12 +406,14 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 2,
     label: "동아리 멤버 관리",
+    icon: "members",
     url: "/club/management/members",
     subUrl: [],
   },
   {
     id: 3,
     label: "활동관리",
+    icon: "activity_management",
     url: "/",
     subUrl: [
       {
@@ -419,36 +436,42 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 4,
     label: "활동내역",
+    icon: "activity_history",
     url: "/club/activityHistory",
     subUrl: [],
   },
   {
     id: 5,
     label: "FAQ / Q&A",
+    icon: "help",
     url: "/club/help",
     subUrl: [],
   },
   {
     id: 6,
     label: "활동후기",
+    icon: "activity_history",
     url: "/club/review/activity",
     subUrl: [],
   },
   {
     id: 7,
     label: "합격후기",
+    icon: "acceptance_review",
     url: "/club/review/acceptance",
     subUrl: [],
   },
   {
     id: 8,
     label: "동아리 탈퇴",
+    icon: "withdrawal",
     url: "/club/withdrawal",
     subUrl: [],
   },
   {
     id: 9,
     label: "동아리 폐쇠",
+    icon: "close_club",
     url: "/club/close",
     subUrl: [],
   },
