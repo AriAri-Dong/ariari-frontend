@@ -10,6 +10,19 @@ const nextConfig = {
   output: "standalone",
   webpack: (config) => {
     config.resolve.fallback = { fs: false };
+    config.module.rules.push({
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      resourceQuery: /svgr/,
+      use: ["@svgr/webpack"],
+    });
+
+    config.module.rules.push({
+      test: /\.svg$/i,
+      type: "asset/resource",
+      resourceQuery: { not: [/svgr/] },
+    });
+
     return config;
   },
   async rewrites() {
