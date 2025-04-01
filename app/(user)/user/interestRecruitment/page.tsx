@@ -7,7 +7,7 @@ import FilterSection from "./content/filterSection";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MainRecruitmentCard from "@/components/card/mainRecruitmentCard";
 import { RecruitmentData, RecruitmentResponse } from "@/types/recruitment";
-import { getBookmarkClubsInfo } from "@/api/recruitment/api";
+import { getBookmarkRecruitment } from "@/api/recruitment/api";
 import { Pageable } from "@/types/api";
 
 const InterestRecruitmentPage = () => {
@@ -38,7 +38,7 @@ const InterestRecruitmentPage = () => {
         sort: sortType === "정렬 기준" ? [""] : [sortType],
       };
 
-      const response: RecruitmentResponse = await getBookmarkClubsInfo(
+      const response: RecruitmentResponse = await getBookmarkRecruitment(
         pageable
       );
 
