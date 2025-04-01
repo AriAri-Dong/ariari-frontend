@@ -19,15 +19,17 @@ interface PulldownProps {
   handleOption: (label: string[]) => void;
   optionSize: "small" | "medium" | "large" | "mobile";
   forceDropdown?: boolean;
+  placeholder?: string;
 }
 /**
  *
- * @property optionData - 선택 가능한 옵션 데이터 배열
- * @property multiple - 여러 개 옵션 선택 여부. 기본값은 false
- * @property selectedOption - 선택된 옵션 배열, 선택되지 않은 경우 기본값(ex-["분야"])
- * @property handleOption - 선택된 옵션을 처리 *(문자열로 처리)
- * @property optionSize - 옵션 드롭다운의 크기. {"small" | "medium" | "large" | "mobile"}
- * @property forceDropdown- 드롭다운이 강제로 열려 있도록 할지 여부. 기본값은 false
+ * @param optionData - 선택 가능한 옵션 데이터 배열
+ * @param multiple - 여러 개 옵션 선택 여부. 기본값은 false
+ * @param selectedOption - 선택된 옵션 배열, 선택되지 않은 경우 기본값(ex-["분야"])
+ * @param handleOption - 선택된 옵션을 처리 *(문자열로 처리)
+ * @param optionSize - 옵션 드롭다운의 크기. {"small" | "medium" | "large" | "mobile"}
+ * @param forceDropdown - 드롭다운이 강제로 열려 있도록 할지 여부. 기본값은 false
+ * @param placeholder - 선택되지 않았을 때 보여줄 placeholder
  */
 
 const PullDown = ({
@@ -37,6 +39,7 @@ const PullDown = ({
   selectedOption,
   handleOption,
   forceDropdown = false,
+  placeholder,
 }: PulldownProps) => {
   const pulldownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -99,7 +102,7 @@ const PullDown = ({
     ? !multiple || (multiple && selectedOption.length === 1)
       ? selectedOption[0]
       : `${selectedOption[0]} 외 ${selectedOption.length - 1}`
-    : optionData[0].label;
+    : placeholder || optionData[0].label;
 
   const getDynamicStyle = () => {
     const length = selectedOptionText.replace(/\s/g, "").length;
