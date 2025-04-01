@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import LargeBtn from "../../button/basicBtn/largeBtn";
 import Alert from "@/components/alert/alert";
@@ -26,6 +24,14 @@ const ModifyProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
       PROFILE_SETTING[0]
   );
 
+  // 프로필 타입이 null일 때 첫 번째 프로필을 기본 선택
+  useEffect(() => {
+    if (!profileType && !selectedProfileType) {
+      setSelectedProfileType(PROFILE_SETTING[0].alias);
+      setSelectedProfileData(PROFILE_SETTING[0]);
+    }
+  }, [profileType]);
+
   // 프로필 선택
   const handleProfileClick = (alias: string | null) => {
     setSelectedProfileType(alias);
@@ -41,10 +47,11 @@ const ModifyProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
     }
 
     try {
-      await updateProfileType(selectedProfileType);
+      const profileToUpdate = selectedProfileType || PROFILE_SETTING[0].alias!;
+      await updateProfileType(profileToUpdate);
       const res = await getMemberData();
       setUserData(res);
-      console.log("프로필 변경 완료 ::::::", selectedProfileType);
+      console.log("프로필 변경 완료 ::::::", profileToUpdate);
       onClose();
     } catch (error) {
       setAlertMessage("프로필 변경에 실패했습니다. 다시 시도해주세요.");
