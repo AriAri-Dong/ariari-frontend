@@ -27,15 +27,15 @@ const Step1 = () => {
     updateProfileData({ username: value });
   };
 
-  const selectedProfileData = PROFILE_SETTING.find(
-    (item) => item.alias === selectedProfileId
-  );
+  const selectedProfileData =
+    PROFILE_SETTING.find((item) => item.alias === selectedProfileId) ||
+    PROFILE_SETTING[0];
 
   return (
     <>
       <Image
-        src={selectedProfileData?.imageUrl || ""}
-        alt={selectedProfileData?.alias || "프로필 기본 이미지"}
+        src={selectedProfileData.imageUrl || ""}
+        alt={selectedProfileData.alias || "프로필 기본 이미지"}
         width={90}
         height={90}
         className={`rounded-full border border-menuborder p-1
