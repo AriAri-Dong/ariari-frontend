@@ -23,10 +23,14 @@ import { convertToServerFormat } from "@/utils/convertToServerFormat";
 import { CreateClubData } from "@/types/api";
 
 const OPTIONS = [
-  { label: "동아리 소속", key: "affiliationType", data: AFFILIATION_TYPE },
-  { label: "동아리 분야", key: "fieldType", data: FIELD_TYPE },
-  { label: "동아리 지역", key: "areaType", data: AREA_TYPE },
-  { label: "동아리 대상", key: "targetType", data: TARGET_TYPE },
+  {
+    label: "동아리 소속",
+    key: "affiliationType",
+    data: AFFILIATION_TYPE.slice(1),
+  },
+  { label: "동아리 분야", key: "fieldType", data: FIELD_TYPE.slice(1) },
+  { label: "동아리 지역", key: "areaType", data: AREA_TYPE.slice(1) },
+  { label: "동아리 대상", key: "targetType", data: TARGET_TYPE.slice(1) },
 ];
 
 const CreateClubPage = () => {
