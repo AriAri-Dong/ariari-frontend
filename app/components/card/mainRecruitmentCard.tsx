@@ -6,6 +6,10 @@ import { calculateRemainingDays } from "@/utils/dateFormatter";
 import { useRouter } from "next/navigation";
 import { RecruitmentData } from "@/types/recruitment";
 import defaultImg from "@/images/icon/defaultAriari.svg";
+import {
+  addRecruitmentBookmark,
+  removeRecruitmentBookmark,
+} from "@/api/recruitment/api";
 
 interface CardProps {
   data: RecruitmentData[];
@@ -19,16 +23,28 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
     setCardData(data);
   }, [data]);
 
-  const toggleScrap = (
+  const toggleScrap = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     index: number
   ) => {
     e.stopPropagation();
-    setCardData((prevData) =>
-      prevData.map((item, idx) =>
-        idx === index ? { ...item, isScrap: !item.isMyBookmark } : item
-      )
-    );
+    const updatedCardData = [...cardData];
+
+    const targetItem = updatedCardData[index];
+
+    try {
+      if (targetItem.isMyBookmark) {
+        await removeRecruitmentBookmark(targetItem.id);
+        targetItem.isMyBookmark = false;
+      } else {
+        await addRecruitmentBookmark(targetItem.id);
+        targetItem.isMyBookmark = true;
+      }
+
+      setCardData(updatedCardData);
+    } catch (error) {
+      console.error("북마크 처리 중 오류가 발생했습니다.", error);
+    }
   };
 
   if (cardData.length === 0) {
