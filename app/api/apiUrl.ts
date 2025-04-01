@@ -1,7 +1,7 @@
 // == LOGIN ==
 export const LOGIN = "/login/kakao";
 export const REISSUE = "/reissue/token";
-export const LOGOUT = "/logout";
+export const LOGOUT = "/auth/logout";
 export const UNREGISTER = "/unregister";
 
 // == MEMBER ==
