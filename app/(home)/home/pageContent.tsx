@@ -10,12 +10,16 @@ import ClubRanking from "@/(home)/home/content/clubRanking";
 import PopularRecruitment from "@/(home)/home/content/popularRecruitment";
 import LatestRecruitment from "@/(home)/home/content/latestRecruitment";
 import { useUserStore } from "@/providers/userStoreProvider";
+import MobileSnackBar from "@/components/bar/mobileSnackBar";
+import { getMemberData } from "@/api/member/api";
 
 const HomePageContent = () => {
   const router = useRouter();
-  const isMdUp = useResponsive("md");
   const searchParams = useSearchParams();
-  const [isFirstLogin, setIsFirstLogin] = useState<string | null>(null);
+  const isMdUp = useResponsive("md");
+
+  const [isFirstLogin, setIsFirstLogin] = useState<boolean>(false); // 첫 로그인 여부
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // 로그인 완료 여부
   const { setUserData } = useUserStore((state) => state);
 
   const accessToken =
@@ -24,19 +28,22 @@ const HomePageContent = () => {
       : "";
 
   const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] =
-    useState<boolean>(false);
+    useState<boolean>(false); // 첫 로그인 모달 상태
 
   const handleFirstLoginModalClose = () => {
     setIsFirstLoginModalOpen(false);
-    router.replace("/", undefined);
+    router.replace("/", undefined); // 페이지를 리셋하는 방식으로 이동
   };
 
+  // 첫 로그인 쿼리 파라미터 확인
   useEffect(() => {
     const searchParamFirstLogin = searchParams.get("firstLogin");
-    setIsFirstLogin(searchParamFirstLogin);
-    setIsFirstLoginModalOpen(searchParamFirstLogin === "1");
+    if (searchParamFirstLogin === "1") {
+      setIsFirstLogin(true); // 첫 로그인 확인
+    }
   }, [searchParams]);
 
+  // 토큰 설정
   useEffect(() => {
     if (accessToken) {
       HeaderToken.set(accessToken);
@@ -57,11 +64,30 @@ const HomePageContent = () => {
   //   })();
   // }, [setUserData]);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getMemberData();
+        console.log(res);
+        if (res) {
+          setUserData(res);
+          setIsLoggedIn(true);
+          console.log("유저 정보 불러오기 성공:", res);
+        }
+      } catch (error) {
+        console.error("유저 정보 불러오기 실패:", error);
+      }
+    })();
+  }, [setUserData]);
+
   return (
     <div className="w-full ">
       <ClubRanking />
       <PopularRecruitment />
       <LatestRecruitment />
+      {isFirstLogin && isLoggedIn && (
+        <MobileSnackBar text={"로그인이 완료되었습니다."} />
+      )}
       {isFirstLogin &&
         isFirstLoginModalOpen &&
         (isMdUp ? (
