@@ -20,9 +20,11 @@ import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn
 import { getRecruitmentRanking } from "@/api/recruitment/api";
 import { getSchoolData } from "@/api/school/api";
 import { getAllClubsInfo, getMyClubs } from "@/api/club/api";
+import { useRouter } from "next/navigation";
 
 const TestPage = () => {
   const isMdUp = useResponsive("md");
+  const router = useRouter();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
@@ -109,6 +111,17 @@ const TestPage = () => {
     fetchClubsInfo();
   }, []);
 
+  useEffect(() => {
+    if (!isFirstLogin) {
+      setIsProfileOpen(false); // Ensure profile settings modal is closed when first login state changes
+    }
+  }, [isFirstLogin]);
+
+  const handleProfileSetting = () => {
+    setIsFirstLogin(false);
+    router.push("/");
+  };
+
   return (
     <div>
       <button
@@ -173,12 +186,6 @@ const TestPage = () => {
           <MobileProfileSettingModal onClose={() => setIsProfileOpen(false)} />
         </>
       )}
-      {/* {isInvitationModalOpen && (
-        <InviteDialog
-          clubName={"아리아리"}
-          onClose={() => setIsInvitationModalOpen(false)}
-        />
-      )} */}
 
       {/* Button Components */}
       {isButtonVisible && (
@@ -197,7 +204,6 @@ const TestPage = () => {
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
-      {!isProfileOpen && <MobileSnackBar text={"로그인이 완료되었습니다."} />}
       {isMdUp
         ? openReview && (
             <ModifyClubInfoModal
@@ -214,17 +220,9 @@ const TestPage = () => {
       {!openReview && <ReviewFloatingBtn onClick={handleWrite} />}
 
       {isFirstLogin && isMdUp ? (
-        <ProfileSettingModal
-          onClose={() => {
-            setIsFirstLogin(false);
-          }}
-        />
+        <ProfileSettingModal onClose={handleProfileSetting} />
       ) : (
-        <MobileProfileSettingModal
-          onClose={() => {
-            setIsFirstLogin(false);
-          }}
-        />
+        <MobileProfileSettingModal onClose={handleProfileSetting} />
       )}
     </div>
   );
