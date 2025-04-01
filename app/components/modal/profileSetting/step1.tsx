@@ -9,8 +9,12 @@ import { useProfileContext } from "@/context/profileConetxt";
 const Step1 = () => {
   const { profileData, updateProfileData } = useProfileContext();
   const [inputValue, setInputValue] = useState<string>(profileData.username);
+  const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
+    null
+  );
 
   const handleProfileClick = (id: string) => {
+    setSelectedProfileId(id);
     updateProfileData({ selectedProfileType: id });
   };
 
@@ -20,16 +24,16 @@ const Step1 = () => {
     updateProfileData({ username: value });
   };
 
-  const selectedProfileData = PROFILE_SETTING.find(
-    (item) => item.alias === profileData.selectedProfileType
-  );
+  const selectedProfileData =
+    PROFILE_SETTING.find((item) => item.alias === selectedProfileId) ||
+    PROFILE_SETTING[0];
 
   return (
     <>
       <div className="flex justify-center mb-4 mt-8">
         <Image
-          src={selectedProfileData?.imageUrl || ""}
-          alt={selectedProfileData?.alias || "프로필 기본 이미지"}
+          src={selectedProfileData.imageUrl || ""}
+          alt={selectedProfileData.alias || "프로필 기본 이미지"}
           width={112}
           height={112}
           className="rounded-full border border-menuborder p-1"
@@ -62,7 +66,7 @@ const Step1 = () => {
               height={76}
               className="rounded-full"
             />
-            {profileData.selectedProfileType === item.alias && (
+            {item.alias === selectedProfileId && (
               <>
                 <div className="absolute inset-0 bg-black_50 rounded-full z-10 opacity-70"></div>
                 <div className="absolute z-20">
