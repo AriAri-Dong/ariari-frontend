@@ -29,17 +29,18 @@ export const getAllRecruitments = async (
 ): Promise<RecruitmentResponse> => {
   try {
     const filteredCondition = {
-      clubCategoryTypes: condition.clubCategoryTypes?.length
-        ? condition.clubCategoryTypes
+      clubCategoryTypes: condition.clubCategoryTypes
+        ? condition.clubCategoryTypes[0]
         : undefined,
-      clubRegionTypes: condition.clubRegionTypes?.length
-        ? condition.clubRegionTypes
+      clubRegionTypes: condition.clubRegionTypes
+        ? condition.clubRegionTypes[0]
         : undefined,
-      participantTypes: condition.participantTypes?.length
-        ? condition.participantTypes
+      participantTypes: condition.participantTypes
+        ? condition.participantTypes[0]
         : undefined,
     };
 
+    // 쿼리 파라미터 생성
     const params = {
       ...filteredCondition,
       page: pageable.page,
@@ -47,9 +48,12 @@ export const getAllRecruitments = async (
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
     };
 
+    console.log("API 요청 파라미터:", params);
+
     const response = await axiosInstance.get<RecruitmentResponse>(RECRUITMENT, {
       params,
     });
+
     return response.data;
   } catch (error) {
     console.error("Error fetching recruitment info:", error);
