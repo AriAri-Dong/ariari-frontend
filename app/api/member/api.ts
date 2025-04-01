@@ -20,7 +20,7 @@ export const updateNickname = async (nickname: string) => {
 };
 
 // 프로필 변경 API
-export const updateProfileType = async (profileType: string) => {
+export const updateProfileType = async (profileType: string | null) => {
   try {
     const { data } = await axiosInstance.put(MEMBERS_MY_PROFILE, {
       profileType,
