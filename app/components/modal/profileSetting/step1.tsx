@@ -5,17 +5,19 @@ import Image from "next/image";
 import { PROFILE_SETTING } from "@/data/profileSetting";
 import check from "@/images/icon/check.svg";
 import { useProfileContext } from "@/context/profileConetxt";
+import { profileType } from "@/types/member";
 
 const Step1 = () => {
   const { profileData, updateProfileData } = useProfileContext();
-  const [inputValue, setInputValue] = useState<string>(profileData.username);
-  const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
-    null
-  );
 
-  const handleProfileClick = (id: string) => {
-    setSelectedProfileId(id);
-    updateProfileData({ selectedProfileType: id });
+  const [inputValue, setInputValue] = useState<string>(profileData.username);
+  const [selectedProfileAlias, setSelectedProfileAlias] = useState<
+    string | null
+  >(null);
+
+  const handleProfileClick = (alias: string | null) => {
+    setSelectedProfileAlias(alias);
+    updateProfileData({ selectedProfileType: alias as profileType });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,8 +26,9 @@ const Step1 = () => {
     updateProfileData({ username: value });
   };
 
+  // 선택된 프로필 데이터 가져오기
   const selectedProfileData =
-    PROFILE_SETTING.find((item) => item.alias === selectedProfileId) ||
+    PROFILE_SETTING.find((item) => item.alias === selectedProfileAlias) ||
     PROFILE_SETTING[0];
 
   return (
@@ -57,7 +60,7 @@ const Step1 = () => {
           <div
             key={item.id}
             className="relative flex justify-center items-center w-[76px] h-[76px] cursor-pointer rounded-full"
-            onClick={() => handleProfileClick(item.alias || "")}
+            onClick={() => handleProfileClick(item.alias)}
           >
             <Image
               src={item.imageUrl}
@@ -66,7 +69,7 @@ const Step1 = () => {
               height={76}
               className="rounded-full"
             />
-            {item.alias === selectedProfileId && (
+            {item.alias === selectedProfileAlias && (
               <>
                 <div className="absolute inset-0 bg-black_50 rounded-full z-10 opacity-70"></div>
                 <div className="absolute z-20">
