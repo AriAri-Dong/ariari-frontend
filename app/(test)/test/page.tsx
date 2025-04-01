@@ -30,6 +30,7 @@ const TestPage = () => {
   const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(true);
   const [openReview, setOpenReview] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [isFirstLogin, setIsFirstLogin] = useState<boolean>(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -126,7 +127,14 @@ const TestPage = () => {
       >
         {isBadgeVisible ? "Hidden Badge Components" : "Show Badge Components"}
       </button>
-
+      <button
+        className="py-2 px-4 mb-3 bg-indigo-400 text-white rounded-lg hover:bg-indigo-500"
+        onClick={() => {
+          setIsFirstLogin(true);
+        }}
+      >
+        회원가입 모달
+      </button>
       <button
         className="py-2 px-4 mb-3 bg-green-400 text-white rounded-lg hover:bg-green-500"
         onClick={handleOpenModal}
@@ -204,6 +212,20 @@ const TestPage = () => {
             />
           )}
       {!openReview && <ReviewFloatingBtn onClick={handleWrite} />}
+
+      {isFirstLogin && isMdUp ? (
+        <ProfileSettingModal
+          onClose={() => {
+            setIsFirstLogin(false);
+          }}
+        />
+      ) : (
+        <MobileProfileSettingModal
+          onClose={() => {
+            setIsFirstLogin(false);
+          }}
+        />
+      )}
     </div>
   );
 };
