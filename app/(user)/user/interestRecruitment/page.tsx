@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { POPULARITY_SORT_TYPE } from "@/data/pulldown";
 import HeaderSection from "./content/headerSection";
 import FilterSection from "./content/filterSection";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MainRecruitmentCard from "@/components/card/mainRecruitmentCard";
-import { RECRUITMENT_CARD } from "@/data/main";
 import { RecruitmentData, RecruitmentResponse } from "@/types/recruitment";
-import { getAllRecruitments } from "@/api/recruitment/api";
-import { ClubSearchCondition, Pageable } from "@/types/api";
+import { getBookmarkClubsInfo } from "@/api/recruitment/api";
+import { Pageable } from "@/types/api";
 
 const InterestRecruitmentPage = () => {
   const [recruitmentData, setRecruitmentData] = useState<RecruitmentData[]>([]);
@@ -33,26 +32,18 @@ const InterestRecruitmentPage = () => {
   // 모집 목록
   const fetchRecruitments = async (newPage = 0, reset = false) => {
     try {
-      const condition: ClubSearchCondition = {
-        clubCategoryTypes: undefined,
-        clubRegionTypes: undefined,
-        participantTypes: undefined,
-      };
-
       const pageable: Pageable = {
         page: newPage,
         size: 10,
-        sort: [""],
+        sort: sortType === "정렬 기준" ? [""] : [sortType],
       };
 
-      const response: RecruitmentResponse = await getAllRecruitments(
-        condition,
+      const response: RecruitmentResponse = await getBookmarkClubsInfo(
         pageable
       );
 
       if (reset) {
         setRecruitmentData(response.recruitmentDataList);
-        console.log("모집 리스트 조회 >>>", response);
       } else {
         setRecruitmentData((prev) => [
           ...prev,
