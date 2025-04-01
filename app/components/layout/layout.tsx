@@ -21,7 +21,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/management/members",
   ];
   const bgPaths = ["/application", "/help"];
-  const mobileBgPaths = ["/club/create", "/withdrawal", "/club/close"];
+  const mobileBgPaths = [
+    "/club/create",
+    "/withdrawal",
+    "/club/close",
+    "/terms",
+  ];
 
   const isSpecialComponent = specialPaths.some((path) =>
     pathname.includes(path)

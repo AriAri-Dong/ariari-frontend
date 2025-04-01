@@ -7,7 +7,7 @@ import Image from "next/image";
 import checkIcon from "@/images/icon/radio_button_checked.svg";
 import uncheckIcon from "@/images/icon/radio_button_unchecked.svg";
 
-import WithdrawalCard from "@/components/card/withdrawalCard";
+import NoticeCard from "@/components/card/NoticeCard";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
@@ -70,7 +70,7 @@ const ClubWithdrawalCard = ({
       <div className="flex flex-col gap-10 md:gap-12">
         {withdrawalInfo.map((info, index) => (
           <div key={index}>
-            <WithdrawalCard info={info} />
+            <NoticeCard info={info} />
           </div>
         ))}
       </div>

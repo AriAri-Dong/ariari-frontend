@@ -1,6 +1,6 @@
-import { WithdrawalInfoItem } from "@/types/components/withdrawInfo";
+import { NoticeItem } from "@/types/components/withdrawInfo";
 
-export const WITHDRAWAL_INFO: WithdrawalInfoItem[] = [
+export const WITHDRAWAL_INFO: NoticeItem[] = [
   {
     title: "탈퇴 후 데이터 삭제 관련 안내",
     description:
@@ -49,7 +49,7 @@ export const WITHDRAWAL_INFO: WithdrawalInfoItem[] = [
   },
 ];
 
-export const CLUB_WITHDRAWAL_INFO_MANAGER: WithdrawalInfoItem[] = [
+export const CLUB_WITHDRAWAL_INFO_MANAGER: NoticeItem[] = [
   {
     title: "동아리 폐쇄 조건",
     description:
@@ -94,7 +94,7 @@ export const CLUB_WITHDRAWAL_INFO_MANAGER: WithdrawalInfoItem[] = [
   },
 ];
 
-export const CLUB_WITHDRAWAL_INFO_GENERAL: WithdrawalInfoItem[] = [
+export const CLUB_WITHDRAWAL_INFO_GENERAL: NoticeItem[] = [
   {
     title: "자율적 탈퇴 권한",
     description: null,
