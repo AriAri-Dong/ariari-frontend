@@ -3,7 +3,6 @@ import Image from "next/image";
 import file from "@/images/icon/file.svg";
 import vector from "@/images/icon/pullDown.svg";
 import active from "@/images/icon/active_vector.svg";
-import rightArrow from "@/images/icon/vector.svg";
 import test_image from "@/images/profile/ariari.svg";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
@@ -12,7 +11,7 @@ import { CLUB_MENU_MAP, CLUB_MENU_ROLE_LABELS } from "@/constants/clubMenu";
 import { MENU_ICONS } from "@/constants/clubMenu";
 import { Icon } from "@/components/icon";
 import { CLUB_LEFT_MENU_TABS } from "@/data/club";
-import { TEMP_DATA } from "@/data/notification";
+import ClubNotificationList from "@/components/list/clubNotificationList";
 
 const LeftMenu = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -211,27 +210,7 @@ const LeftMenu = () => {
           ))}
 
         {/* 동아리 알림 */}
-        {activeTab === 1 && (
-          <ul className="max-h-[556px] overflow-y-auto no-scrollbar">
-            {TEMP_DATA.map((item, index) => (
-              <li
-                key={index}
-                className="flex items-center justify-between py-[14px] px-2.5 cursor-pointer border-b last:border-b-0"
-              >
-                <div className="flex flex-col gap-[6px]">
-                  <h3 className="text-text1 text-body2_m">{item.title}</h3>
-                  <p className="text-unselected text-body4_r">{item.date}</p>
-                </div>
-                <Image
-                  src={rightArrow}
-                  alt={"알림 바로가기"}
-                  width={24}
-                  height={24}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+        {activeTab === 1 && <ClubNotificationList />}
       </div>
     </div>
   );
