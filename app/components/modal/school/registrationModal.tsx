@@ -32,14 +32,18 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
   };
 
   // 현재 단계 검증
-  const validateCurrentStep = async (): Promise<boolean> => {
+  const validateCurrentStep = async () => {
     if (step === 1) {
-      // 이메일 검증 (***테스트 후 학교 이메일 인증 스키마로 변경 필요)
+      // 이메일 검증
+      if (!email || email.trim() === "") {
+        setAlertMessage("이메일을 입력해주세요.");
+        return;
+      }
 
       const emailValidationError = validateEmail(email);
       if (emailValidationError) {
         setAlertMessage(emailValidationError);
-        return false;
+        return false; // 이메일 검증 실패 시 false 반환
       }
     } else if (step === 2) {
       try {
@@ -48,14 +52,17 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
       } catch (error) {
         setVerificationFailed(true);
         setAlertMessage("인증번호가 올바르지 않습니다. 다시 확인해주세요.");
+        // 인증 실패 시 false 반환
         return false;
       }
     }
+    // 모든 검증이 통과하면 true 반환
     return true;
   };
 
   const handleNextStep = async () => {
-    if (!validateCurrentStep()) {
+    const isValid = await validateCurrentStep();
+    if (!isValid) {
       return;
     }
 
