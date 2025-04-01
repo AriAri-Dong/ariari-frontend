@@ -274,6 +274,11 @@ export const BADGE_TITLES = [
   "동아리를 알게 된 경로",
 ];
 
+export const CLUB_LEFT_MENU_TABS = [
+  { id: 0, label: "동아리 메뉴" },
+  { id: 1, label: "동아리 알림" },
+];
+
 // 일반 사용자(동아리 소속 x)
 export const CLUB_LEFT_MENU_USER = [
   {
