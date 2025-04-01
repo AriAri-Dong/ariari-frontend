@@ -11,6 +11,10 @@ import Step3 from "./step3";
 import { validateEmail } from "@/schema/email";
 import { useProfileContext } from "@/context/profileConetxt";
 import { formatTime } from "@/utils/timeFormatter";
+import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
+import MobileSnackBar from "@/components/bar/mobileSnackBar";
+import { updateNickname, updateProfileType } from "@/api/member/api";
+import { useRouter } from "next/navigation";
 
 interface ProfileSettingProps {
   step: number;
@@ -29,48 +33,99 @@ const MobileProfileSetting = ({
   onNextStep,
   onClose,
 }: ProfileSettingProps) => {
+  const router = useRouter();
   const { profileData } = useProfileContext();
 
   const [timeLeft, setTimeLeft] = useState<number>(300);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [verificationFailed, setVerificationFailed] = useState<boolean>(false);
+  const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
 
   // 인증 번호 재전송
-  const resetTimer = () => {
-    setTimeLeft(300);
-    setAlertMessage("인증번호를 전송했습니다.");
+  const resetTimer = async () => {
+    try {
+      await sendSchoolAuthEmail(profileData.email);
+      setTimeLeft(300);
+      setAlertMessage("인증번호를 전송했습니다.");
+    } catch (error) {
+      setAlertMessage(
+        "학교 인증 이메일 발송에 실패했습니다. 다시 시도해주세요."
+      );
+    }
   };
 
   const handleSkip = () => {
     onClose();
   };
 
-  const validateCurrentStep = (): boolean => {
+  const validateCurrentStep = async () => {
     if (step === 2) {
-      // 이메일 검증
       const emailValidationError = validateEmail(profileData.email);
       if (emailValidationError) {
         setAlertMessage(emailValidationError);
         return false;
       }
     } else if (step === 3) {
-      // 인증 번호 검증 (현재 임시 인증 번호: 123456)
-      if (profileData.verificationCode !== "123456") {
+      try {
+        // 학교 인증 코드 검증
+        await validateSchoolAuthCode(profileData.verificationCode);
+        setVerificationFailed(false);
+        // 인증 성공 후 프로필 열림 상태 변경
+        setIsProfileOpen(true);
+        // onClose() 호출은 인증 완료 후 마지막에 처리
+      } catch (error) {
         setVerificationFailed(true);
+        setAlertMessage("인증번호가 올바르지 않습니다. 다시 확인해주세요.");
         return false;
       }
-      setVerificationFailed(false);
     }
     return true;
   };
 
-  const handleNextStep = () => {
-    if (!validateCurrentStep()) {
-      return;
-    }
+  const handleNextStep = async () => {
     setAlertMessage(null);
-    if (step === 3) {
-      onClose();
+
+    if (step === 1) {
+      // 사용자 이름 유효성 검사
+      if (!profileData.username || profileData.username.trim() === "") {
+        setAlertMessage("사용자 이름을 입력해주세요.");
+        return;
+      }
+      onNextStep(2);
+    }
+
+    if (step === 2) {
+      if (!profileData.email || profileData.email.trim() === "") {
+        setAlertMessage("이메일을 입력해주세요.");
+        return;
+      }
+
+      resetTimer();
+      onNextStep(3);
+    } else if (step === 3) {
+      const isValid = await validateCurrentStep();
+      if (!isValid) {
+        return;
+      }
+
+      // 인증 완료 후 API 호출
+      try {
+        // 닉네임 변경 API 호출
+        await updateNickname(profileData.username);
+
+        // 프로필 변경 API 호출
+        await updateProfileType(profileData.selectedProfileType);
+
+        // 두 API 호출이 성공적으로 완료된 후 페이지 이동
+        onClose(); // 인증 완료 후 모달을 닫기
+
+        // 페이지 이동 시 firstLogin=1 쿼리 파라미터 추가
+        router.push("/home?firstLogin=1");
+      } catch (error) {
+        setAlertMessage(
+          "닉네임 또는 프로필 변경에 실패했습니다. 다시 시도해주세요."
+        );
+      }
     } else {
       onNextStep(step + 1);
     }
@@ -97,6 +152,12 @@ const MobileProfileSetting = ({
       return () => clearInterval(timer);
     }
   }, [step]);
+
+  useEffect(() => {
+    if (isProfileOpen) {
+      setIsProfileOpen(false);
+    }
+  }, [isProfileOpen]);
 
   return (
     <div
@@ -141,6 +202,8 @@ const MobileProfileSetting = ({
           <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
       </div>
+      {/* 프로필 인증 후 MobileSnackBar 표시 */}
+      {isProfileOpen && <MobileSnackBar text={"로그인이 완료되었습니다."} />}
     </div>
   );
 };
