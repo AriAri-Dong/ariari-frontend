@@ -1,17 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { MainRecruitmentCardProps } from "@/types/components/card";
 import DdayBadge from "../badge/dDayBadge";
 import { MdBookmark } from "react-icons/md";
 import { calculateRemainingDays } from "@/utils/dateFormatter";
 import { useRouter } from "next/navigation";
 import { RecruitmentData } from "@/types/recruitment";
 import defaultImg from "@/images/icon/defaultAriari.svg";
-import {
-  CLUB_FIELD,
-  CLUB_PARTICIPANT,
-  CLUB_REGION,
-} from "@/constants/clubInfo";
 
 interface CardProps {
   data: RecruitmentData[];
@@ -20,6 +14,10 @@ interface CardProps {
 const MainRecruitmentCard = ({ data }: CardProps) => {
   const router = useRouter();
   const [cardData, setCardData] = useState<RecruitmentData[]>(data);
+
+  useEffect(() => {
+    setCardData(data);
+  }, [data]);
 
   const toggleScrap = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -65,7 +63,6 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
                 <DdayBadge date={item.endDateTime} />
               </div>
             </div>
-
             <div className="flex flex-col w-full md:px-2 md:mt-2.5 md:mb-6">
               <div className="flex justify-between">
                 <p className="text-subtext1 text-mobile_body3_m mb-[6px] md:text-h4">
@@ -90,7 +87,7 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
                 {item.title}
               </h3>
               <p className="text-subtext2 text-mobile_body3_m md:text-body2_m">
-                지금 | 데이터가 | 안들어오고 | 있습니다.
+                서버에 | 데이터를 | 요청 | 해야합니다.
                 {/* {schoolData == null ? "연합" : "교내"} |{" "}
                 {CLUB_FIELD[clubCategoryType]} | {CLUB_REGION[clubRegionType]} |{" "}
                 {CLUB_PARTICIPANT[participantType]} */}
