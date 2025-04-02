@@ -88,6 +88,7 @@ const Exploration = () => {
                 participantType={club.participantType || "-"}
                 isMyBookmark={club.isMyBookmark}
                 schoolData={club.schoolData}
+                bookmarkCount={club.bookmarkCount}
               />
               <ClubIntroduction
                 introductionText={club.body}
