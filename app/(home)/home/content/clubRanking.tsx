@@ -34,24 +34,18 @@ const ClubRanking = () => {
     useState<boolean>(false);
 
   const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn));
-  const schoolCertification = authStore.getState().schoolData === null;
-
-  console.log(isAuthenticated);
+  const schoolCertification = useUserStore(
+    useShallow((state) => state.schoolData)
+  );
 
   const handleFieldOption = (value: string[]) => {
-    console.log("fieldType value??", value);
     setFieldType(value[0]);
   };
 
   const handleAffiliationOption = (value: string) => {
-    console.log("affiliationType value??", value);
     if (!isAuthenticated) {
       setIsLoginNotiPopUpOpen(true);
-    } else if (
-      schoolCertification &&
-      value === AFFILIATION_TYPE[0].value &&
-      !isSchoolNotiPopUpOpen
-    ) {
+    } else if (!schoolCertification && value === "교내") {
       setIsSchoolNotiPopUpOpen(true);
     } else {
       setAffiliationType([value]);
@@ -159,7 +153,7 @@ const ClubRanking = () => {
       {isLoginNotiPopUpOpen && (
         <NotiPopUp
           onClose={() => setIsLoginNotiPopUpOpen(false)}
-          icon="school"
+          icon="login"
           title="로그인이 필요한 서비스입니다."
           description={`교내 인기 동아리를 확인하기 위해서는\n로그인이 필요합니다.`}
           firstButton={handleLoginRedirect}
