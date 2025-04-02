@@ -144,3 +144,20 @@ export interface MyClubData {
 export interface MyClubListRes {
   myClubDataList: MyClubData[];
 }
+
+export interface ClubNoticeData {
+  id: string;
+  title: string;
+  body: string;
+  isFixed: true;
+  createdDateTime: string;
+  clubNoticeImageData: {
+    id: string;
+    imageUri: string;
+  };
+}
+
+export interface ClubNoticeDataRes {
+  clubNoticeDataList: ClubNoticeData[];
+  pageInfo: PageInfo;
+}
