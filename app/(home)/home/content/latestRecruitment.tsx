@@ -34,18 +34,15 @@ const LatestRecruitment = () => {
     useState<boolean>(false);
 
   const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn)); // 로그인 상태 확인
-  const schoolCertification = authStore.getState().schoolData === null; // 학교 인증 여부 확인
+  const schoolCertification = useUserStore(
+    useShallow((state) => state.schoolData)
+  ); // 학교 인증 여부 확인
 
   const handleOption = (value: string) => {
     if (!isAuthenticated) {
       // 로그인되지 않으면 로그인 팝업 띄우기
       setIsLoginNotiPopUpOpen(true);
-    } else if (
-      schoolCertification &&
-      value === "교내" &&
-      !isSchoolNotiPopUpOpen
-    ) {
-      // 로그인 되어 있고, 학교 인증이 안되어 있으면 학교 인증 팝업 띄우기
+    } else if (!schoolCertification && value === "교내") {
       setIsSchoolNotiPopUpOpen(true);
     } else {
       // 로그인 및 학교 인증이 된 상태에서 교내 동아리를 선택한 경우
@@ -130,7 +127,7 @@ const LatestRecruitment = () => {
       {isLoginNotiPopUpOpen && (
         <NotiPopUp
           onClose={() => setIsLoginNotiPopUpOpen(false)}
-          icon="school"
+          icon="login"
           title="로그인이 필요한 서비스입니다."
           description={`교내 인기 동아리를 확인하기 위해서는\n로그인이 필요합니다.`}
           firstButton={handleLoginRedirect}
