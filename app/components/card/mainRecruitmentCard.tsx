@@ -113,9 +113,10 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
                   )}
                 </button>
               </div>
-              <h3 className="flex flex-wrap max-w-[166px] text-text1 text-mobile_body1_sb mb-5 md:text-h3 md:h-[54px]">
+              <h3 className="line-clamp-2 overflow-hidden text-ellipsis max-w-[166px] text-text1 text-mobile_body1_sb mb-5 md:text-h3 md:h-[54px]">
                 {item.body}
               </h3>
+
               <p className="text-subtext2 text-mobile_body3_m md:text-body2_m">
                 서버에 | 데이터를 | 요청 | 해야합니다.
               </p>
