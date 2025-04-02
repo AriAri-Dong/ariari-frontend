@@ -1,5 +1,14 @@
 import axiosInstance from "../axiosInstance";
-import { CLUBS, CLUBS_MY, CLUBS_MY_BOOKMARKS, CLUBS_SEARCH } from "../apiUrl";
+import {
+  CLUBS,
+  CLUBS_EXTERNAL,
+  CLUBS_EXTERNAL_RANKING,
+  CLUBS_INTERNAL,
+  CLUBS_INTERNAL_RANKING,
+  CLUBS_MY,
+  CLUBS_MY_BOOKMARKS,
+  CLUBS_SEARCH,
+} from "../apiUrl";
 import {
   ClubResponse,
   ClubSearchCondition,
@@ -7,6 +16,7 @@ import {
   ClubInfoResponse,
   CreateClubData,
 } from "@/types/api";
+import axios from "axios";
 
 // 동아리 수정
 export const updateClubInfo = async (clubId: number) => {
@@ -45,6 +55,74 @@ export const getAllClubsInfo = async (
     };
 
     const response = await axiosInstance.get<ClubResponse>(CLUBS, { params });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching club info:", error);
+    throw error;
+  }
+};
+
+// 교내 동아리 검색 조회
+export const getInternalClubsInfo = async (
+  condition: ClubSearchCondition,
+  pageable: Pageable
+): Promise<ClubResponse> => {
+  try {
+    const filteredCondition = {
+      clubCategoryTypes: condition.clubCategoryTypes?.length
+        ? condition.clubCategoryTypes
+        : undefined,
+      clubRegionTypes: condition.clubRegionTypes?.length
+        ? condition.clubRegionTypes
+        : undefined,
+      participantTypes: condition.participantTypes?.length
+        ? condition.participantTypes
+        : undefined,
+    };
+
+    const params = {
+      ...filteredCondition,
+      page: pageable.page,
+      size: pageable.size,
+      ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
+    };
+
+    const response = await axiosInstance.get<ClubResponse>(CLUBS_INTERNAL, {
+      params,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching club info:", error);
+    throw error;
+  }
+};
+
+// 교외 동아리 검색 조회
+export const getExternalClubsInfo = async (
+  condition: ClubSearchCondition,
+  pageable: Pageable
+): Promise<ClubResponse> => {
+  try {
+    const filteredCondition = {
+      clubCategoryTypes: condition.clubCategoryTypes?.length
+        ? condition.clubCategoryTypes
+        : undefined,
+      clubRegionTypes: condition.clubRegionTypes?.length
+        ? condition.clubRegionTypes
+        : undefined,
+      participantTypes: condition.participantTypes?.length
+        ? condition.participantTypes
+        : undefined,
+    };
+
+    const params = {
+      ...filteredCondition,
+      page: pageable.page,
+      size: pageable.size,
+      ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
+    };
+
+    const response = await axios.get<ClubResponse>(CLUBS_EXTERNAL, { params });
     return response.data;
   } catch (error) {
     console.error("Error fetching club info:", error);
@@ -216,4 +294,30 @@ export const updateClubWithFiles = async (
     console.error("Error updating club with files:", error);
     throw error;
   }
+};
+
+// 교내 동아리 랭킹 조회
+export const getInternalClubRanking = (fieldType: string) => {
+  return axiosInstance
+    .get<ClubResponse>(CLUBS_INTERNAL_RANKING, {
+      params: { categoryType: fieldType },
+    })
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching internal recruitments:", error);
+      throw error;
+    });
+};
+
+// 교외 동아리 랭킹 조회
+export const getExternalClubRanking = (fieldType: string) => {
+  return axios
+    .get<ClubResponse>(CLUBS_EXTERNAL_RANKING, {
+      params: { categoryType: fieldType },
+    })
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching external recruitments:", error);
+      throw error;
+    });
 };
