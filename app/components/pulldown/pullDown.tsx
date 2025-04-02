@@ -9,7 +9,6 @@ import SingleSelectOptions from "./singleSelectOptions";
 import MultiSelectOptions from "./multiSelectOptions";
 
 import BottomSheet from "./bottomSheet";
-import NotiPopUp from "../modal/notiPopUp";
 import { OptionType } from "@/types/components/pulldown";
 
 interface PulldownProps {
@@ -50,9 +49,6 @@ const PullDown = ({
     optionData.some((option) => option.label === selectedOption[0]);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
-
-  const schoolCertification = false; // 학교 인증 여부 임시값
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => {
@@ -63,10 +59,6 @@ const PullDown = ({
   };
 
   const handleMenuClick = (label: string) => {
-    if (!schoolCertification && label == "교내") {
-      setModalOpen(true);
-      return;
-    }
     if (!multiple) {
       handleOption([label]);
       toggleDropdown();
@@ -182,20 +174,6 @@ const PullDown = ({
             multiple={true}
           />
         ))}
-
-      {isModalOpen && (
-        <NotiPopUp
-          onClose={() => setModalOpen(false)}
-          icon="school"
-          title="학교 등록이 필요합니다"
-          description={`교내 인기 동아리를 확인하기 위해서는\n학교 등록이 필요합니다.`}
-          firstButton={() => {}}
-          firstButtonText="학교 등록하기"
-          secondButton={() => setModalOpen(false)}
-          secondButtonText="다음에 할게요"
-          modalType="button"
-        />
-      )}
     </div>
   );
 };
