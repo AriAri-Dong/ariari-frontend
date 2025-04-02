@@ -135,7 +135,7 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
           className={`absolute rotate-180 top-[calc(50%-24px)] left-[-10px] ${
             isFirstSlide ? "hidden" : "block"
           }`}
-          style={{ zIndex: 1 }} 
+          style={{ zIndex: 1 }}
         >
           <RoundVectorBtn
             className="p-[9px]"
@@ -168,13 +168,13 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
                 }`}
                 onClick={() => handleRouter}
               >
-                <div className="relative min-w-[114px] md:w-full mb-[20px]">
+                <div className="relative min-w-[114px] md:w-full aspect-square">
                   <Image
                     src={item.posterUri || defaultImg}
                     alt={item.title}
-                    width={114}
-                    height={114}
-                    className="rounded-3xl md:w-full shadow-default"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-3xl shadow-default"
                   />
                   <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 md:bottom-5">
                     <DdayBadge date={item.endDateTime} />
@@ -196,11 +196,8 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
                       )}
                     </button>
                   </div>
-                  <h3
-                    className="flex flex-wrap max-w-[166px] text-text1 text-mobile_body1_sb mb-5
-              md:text-h3 md:h-[54px]"
-                  >
-                    {item.title}
+                  <h3 className="line-clamp-2 overflow-hidden text-ellipsis max-w-[166px] text-text1 text-mobile_body1_sb mb-5 md:text-h3 md:h-[54px]">
+                    {item.body}
                   </h3>
                   <p className="text-subtext2 text-mobile_body3_m md:text-body2_m">
                     서버에 | 데이터를 | 요청 | 해야합니다.
