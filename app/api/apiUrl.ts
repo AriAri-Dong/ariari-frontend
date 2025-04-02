@@ -12,8 +12,11 @@ export const MEMBERS_MY_PROFILE = "/members/my/profile";
 
 // == RECRUITMENT ==
 export const RECRUITMENT = "/recruitments";
+export const RECRUITMENT_EXTERNAL = "/recruitments/external";
+export const RECRUITMENT_INTERNAL = "/recruitments/internal";
 export const RECRUITMENT_BOOKMARKS = "/recruitments/my-bookmarks";
-export const RECRUITMENT_RANKING = "/recruitments/external/ranking";
+export const RECRUITMENT_RANKING_EXTERNAL = "/recruitments/external/ranking";
+export const RECRUITMENT_RANKING_INTERNAL = "/recruitments/internal/ranking";
 
 // == CLUB ==
 export const CLUBS = "/clubs";
