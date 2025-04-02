@@ -15,6 +15,8 @@ import {
   getExternalRecruitments,
 } from "@/api/recruitment/api";
 import { RecruitmentData } from "@/types/recruitment";
+import { useUserStore } from "@/providers/userStoreProvider";
+import { useShallow } from "zustand/shallow";
 
 const LatestRecruitment = () => {
   const isMdUp = useResponsive("md");
@@ -31,7 +33,7 @@ const LatestRecruitment = () => {
   const [isSchoolNotiPopUpOpen, setIsSchoolNotiPopUpOpen] =
     useState<boolean>(false);
 
-  const isAuthenticated = authStore.getState().isSignIn; // 로그인 상태 확인
+  const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn)); // 로그인 상태 확인
   const schoolCertification = authStore.getState().schoolData === null; // 학교 인증 여부 확인
 
   const handleOption = (value: string) => {
@@ -64,6 +66,7 @@ const LatestRecruitment = () => {
       // 교내 모집 공고 조회
       getInternalRecruitments(condition, pageable)
         .then((data) => {
+          console.log("교내입니다.");
           setLatestRecruitmentData(data.recruitmentDataList);
         })
         .catch((error) => {
@@ -73,13 +76,14 @@ const LatestRecruitment = () => {
       // 교외 모집 공고 조회
       getExternalRecruitments(condition, pageable)
         .then((data) => {
+          console.log("교외입니다.");
           setLatestRecruitmentData(data.recruitmentDataList);
         })
         .catch((error) => {
           console.error("Error fetching external recruitments:", error);
         });
     }
-  }, []);
+  }, [affiliationType]);
 
   const handleLoginRedirect = () => {
     setIsLoginModalOpen(true);
