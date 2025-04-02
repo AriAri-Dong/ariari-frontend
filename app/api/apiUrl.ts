@@ -38,6 +38,7 @@ export const TEST_ADMIN = "/test/auth/ADMIN";
 export const SCHOOLS = "/schools";
 export const SCHOOLS_VALIDATE = "/schools/auth/validate";
 export const SCHOOLS_SEND = "/schools/auth/send";
+export const SCHOOLS_CANCEL = "/schools/auth/cancel";
 
 // == APPLY_TEMPS ==
 export const APPLY_TEMPS = "/apply-temp";
