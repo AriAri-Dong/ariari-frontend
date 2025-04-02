@@ -48,8 +48,6 @@ export const getAllRecruitments = async (
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
     };
 
-    console.log("API 요청 파라미터:", params);
-
     const response = await axiosInstance.get<RecruitmentResponse>(RECRUITMENT, {
       params,
     });
