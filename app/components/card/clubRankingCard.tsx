@@ -1,4 +1,5 @@
 import { ClubData } from "@/types/club";
+import { useRouter } from "next/navigation";
 
 interface ClubRankingCardProps {
   clubs: ClubData[];
@@ -11,6 +12,8 @@ const gradientClasses = [
 ];
 
 const ClubRankingCard = ({ clubs }: ClubRankingCardProps) => {
+  const router = useRouter();
+
   return (
     <div className="grid grid-cols-1 mt-5 mb-[18px] md:grid-cols-2 md:gap-[18px] lg:grid-cols-3 lg:gap-4 lg:mb-[32px]">
       {clubs.map((club, index) => {
@@ -20,6 +23,9 @@ const ClubRankingCard = ({ clubs }: ClubRankingCardProps) => {
           <div
             key={club.id}
             className={`w-full rounded-lg cursor-pointer ${gradientClass}`}
+            onClick={() => {
+              router.push(`/club/activityHistory?clubId=${club.id}`);
+            }}
           >
             <div
               className={`flex items-center gap-[16px] px-[24px] py-[16px] md:py-[32px] md:gap-[28px]`}
