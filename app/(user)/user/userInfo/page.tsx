@@ -21,7 +21,11 @@ import { unregister } from "@/api/login/api";
 import AlertWithMessage from "@/components/alert/alertWithMessage";
 import useResponsive from "@/hooks/useResponsive";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
-import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
+import {
+  cancelSchoolAuth,
+  sendSchoolAuthEmail,
+  validateSchoolAuthCode,
+} from "@/api/school/api";
 import { validateEmail } from "@/schema/email";
 import useScreenHeight from "@/hooks/useScreenHeight";
 import check from "@/images/icon/check.svg";
@@ -134,9 +138,18 @@ const UserInfoPage = () => {
   };
 
   // 학교 등록 취소 확인
-  const handleCancellationConfirmation = () => {
-    showAlert("학교 등록이 취소되었습니다.");
-    setCancelModal(false);
+  const handleCancellationConfirmation = async () => {
+    try {
+      await cancelSchoolAuth();
+      showAlert("학교 등록이 취소되었습니다.");
+      setCancelModal(false);
+
+      // 화면 새로고침
+      window.location.reload();
+    } catch (error) {
+      console.error("학교 등록 취소 실패:", error);
+      showAlert("학교 등록 취소 중 오류가 발생했습니다.");
+    }
   };
 
   // 회원 탈퇴 처리
