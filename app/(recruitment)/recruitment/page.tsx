@@ -5,10 +5,14 @@ import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import FilterSection from "./content/filterSection";
 import MainRecruitmentCard from "@/components/card/mainRecruitmentCard";
 import HeaderSection from "./content/headerSection";
-import { POPULARITY_SORT_TYPE } from "@/data/pulldown";
+import { AFFILIATION_TYPE, POPULARITY_SORT_TYPE } from "@/data/pulldown";
 import { RecruitmentData, RecruitmentResponse } from "@/types/recruitment";
 import { ClubSearchCondition, Pageable } from "@/types/api";
-import { getAllRecruitments } from "@/api/recruitment/api";
+import {
+  getAllRecruitments,
+  getExternalRecruitments,
+  getInternalRecruitments,
+} from "@/api/recruitment/api";
 
 const Recruitment = () => {
   const [recruitmentData, setRecruitmentData] = useState<RecruitmentData[]>([]);
@@ -28,7 +32,6 @@ const Recruitment = () => {
   const fetchRecruitments = async (newPage = 0, reset = false) => {
     try {
       const condition: ClubSearchCondition = {
-        // clubCategoryTypes: affiliationFilter ? [affiliationFilter] : undefined,
         clubCategoryTypes: fieldFilter ? [fieldFilter] : undefined,
         clubRegionTypes: areaFilter ? [areaFilter] : undefined,
         participantTypes: targetFilter ? [targetFilter] : undefined,
@@ -40,10 +43,18 @@ const Recruitment = () => {
         sort: sortType === "정렬 기준" ? [] : [sortType],
       };
 
-      const response: RecruitmentResponse = await getAllRecruitments(
-        condition,
-        pageable
-      );
+      let response: RecruitmentResponse;
+
+      if (affiliationFilter === "INTERNAL") {
+        response = await getInternalRecruitments(condition, pageable);
+        console.log("교내입니다.");
+      } else if (affiliationFilter === "EXTERNAL") {
+        response = await getExternalRecruitments(condition, pageable);
+        console.log("교외입니다.");
+      } else {
+        response = await getAllRecruitments(condition, pageable);
+        console.log("전체입니다.");
+      }
 
       if (reset) {
         setRecruitmentData(response.recruitmentDataList);
