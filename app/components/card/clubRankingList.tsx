@@ -30,8 +30,11 @@ const ClubRankingList = ({ clubs }: ClubRankingListProps) => {
                 <Image
                   src={club.profileUri || defaultImg}
                   alt={club.name}
-                  className="w-[56px] h-[56px] rounded-full object-cover md:w-[98px] md:h-[98px]"
+                  width={98}
+                  height={98}
+                  className="w-[56px] h-[56px] rounded-full object-cover"
                 />
+                
                 <div className="text-base font-semibold md:text-2xl">
                   {index + 4}
                 </div>
