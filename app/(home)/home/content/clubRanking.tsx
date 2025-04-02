@@ -8,15 +8,17 @@ import { useEffect, useState } from "react";
 import useResponsive from "@/hooks/useResponsive";
 import FilterBtn from "@/components/button/iconBtn/filterBtn";
 import NotiPopUp from "@/components/modal/notiPopUp";
-import { authStore } from "@/stores/userStore";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import { getExternalClubRanking, getInternalClubRanking } from "@/api/club/api";
 import { ClubData } from "@/types/api";
 import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
+import { useRouter } from "next/navigation";
 
 const ClubRanking = () => {
+  const router = useRouter();
+
   const isTab = useResponsive("md");
   const isDesktop = useResponsive("lg");
 
@@ -170,7 +172,9 @@ const ClubRanking = () => {
           icon="school"
           title="학교 등록이 필요한 서비스입니다."
           description={`교내 인기 동아리를 확인하기 위해서는\n학교 등록이 필요합니다.`}
-          firstButton={() => {}}
+          firstButton={() => {
+            router.push("/user/userInfo");
+          }}
           firstButtonText="학교 등록하기"
           secondButton={() => setIsSchoolNotiPopUpOpen(false)}
           secondButtonText="다음에 할게요"
