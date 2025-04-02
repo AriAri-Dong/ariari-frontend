@@ -10,14 +10,27 @@ import {
   addRecruitmentBookmark,
   removeRecruitmentBookmark,
 } from "@/api/recruitment/api";
+import NotiPopUp from "../modal/notiPopUp";
+import LoginModal from "../modal/login/loginModal";
+import MobileLoginModal from "../modal/login/mobileLoginModal";
+import { authStore } from "@/stores/userStore";
 
 interface CardProps {
   data: RecruitmentData[];
 }
 
+/**
+ * 모집 공고 데이터를 보여주는 카드 컴포넌트
+ * @param data 모집 공고 데이터
+ * @returns
+ */
 const MainRecruitmentCard = ({ data }: CardProps) => {
   const router = useRouter();
   const [cardData, setCardData] = useState<RecruitmentData[]>(data);
+  const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const isAuthenticated = authStore.getState().isSignIn;
 
   useEffect(() => {
     setCardData(data);
@@ -29,8 +42,12 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
   ) => {
     e.stopPropagation();
     const updatedCardData = [...cardData];
-
     const targetItem = updatedCardData[index];
+
+    if (!isAuthenticated) {
+      setIsNotiPopUpOpen(true);
+      return;
+    }
 
     try {
       if (targetItem.isMyBookmark) {
@@ -47,12 +64,13 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
     }
   };
 
-  if (cardData.length === 0) {
-    return null;
-  }
-
   const handleRouter = (id: number) => {
     router.push(`/recruitment/detail?id=${id}`);
+  };
+
+  const handleLoginRedirect = () => {
+    setIsNotiPopUpOpen(false);
+    setIsLoginModalOpen(true);
   };
 
   return (
@@ -95,22 +113,37 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
                   )}
                 </button>
               </div>
-              <h3
-                className="flex flex-wrap max-w-[166px] text-text1 text-mobile_body1_sb mb-5
-              md:text-h3 md:h-[54px]"
-              >
+              <h3 className="flex flex-wrap max-w-[166px] text-text1 text-mobile_body1_sb mb-5 md:text-h3 md:h-[54px]">
                 {item.body}
               </h3>
               <p className="text-subtext2 text-mobile_body3_m md:text-body2_m">
                 서버에 | 데이터를 | 요청 | 해야합니다.
-                {/* {schoolData == null ? "연합" : "교내"} |{" "}
-                {CLUB_FIELD[clubCategoryType]} | {CLUB_REGION[clubRegionType]} |{" "}
-                {CLUB_PARTICIPANT[participantType]} */}
               </p>
             </div>
           </div>
         );
       })}
+
+      {isNotiPopUpOpen && (
+        <NotiPopUp
+          onClose={() => setIsNotiPopUpOpen(false)}
+          icon={"login"}
+          title="로그인이 필요한 서비스입니다."
+          description={`북마크를 등록하려면\n아리아리 서비스 로그인이 필요합니다.`}
+          modalType={"button"}
+          firstButton={handleLoginRedirect}
+          firstButtonText="로그인 후 이용하기"
+          secondButton={() => setIsNotiPopUpOpen(false)}
+          secondButtonText="다음에 할게요"
+        />
+      )}
+
+      {isLoginModalOpen && (
+        <>
+          <LoginModal onClose={() => setIsLoginModalOpen(false)} />
+          <MobileLoginModal onClose={() => setIsLoginModalOpen(false)} />
+        </>
+      )}
     </>
   );
 };
