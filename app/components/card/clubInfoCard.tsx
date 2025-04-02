@@ -43,7 +43,7 @@ const ClubInfoCard = ({
   );
 
   const onClubProfileClick = () => {
-    router.push(`/club/management/recruitment/applicationStatus?clubId=${id}`);
+    router.push(`/club/activityHistory?clubId=${id}`);
   };
 
   const onHeartClick = async () => {
