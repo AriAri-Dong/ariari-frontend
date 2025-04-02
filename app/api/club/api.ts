@@ -222,10 +222,12 @@ export const removeClubBookmark = async (clubId: number) => {
 
 // 북마크 동아리 조회
 export const getBookmarkClubsInfo = async (
+  hasActiveRecruitment: boolean,
   pageable: Pageable
 ): Promise<ClubResponse> => {
   try {
     const params = {
+      hasActiveRecruitment: hasActiveRecruitment,
       page: pageable.page,
       size: pageable.size,
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),

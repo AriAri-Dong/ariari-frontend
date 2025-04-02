@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import ClubInfoCard from "@/components/card/clubInfoCard";
 import ClubIntroduction from "@/components/card/clubIntroduction";
@@ -33,7 +32,10 @@ const InterestClub = () => {
         sort: [""],
       };
 
-      const response: ClubResponse = await getBookmarkClubsInfo(pageable);
+      const response: ClubResponse = await getBookmarkClubsInfo(
+        isChecked,
+        pageable
+      );
       console.log("북마크 동아리 리스트:", response);
 
       if (reset) {
@@ -55,7 +57,7 @@ const InterestClub = () => {
 
   useEffect(() => {
     fetchClubs(0, true);
-  }, []);
+  }, [isChecked]);
 
   return (
     <div>
