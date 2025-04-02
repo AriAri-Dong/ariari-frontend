@@ -1,15 +1,7 @@
-"use client";
-
-interface Club {
-  id: number;
-  title: string;
-  description: string;
-  rank: number;
-  imageSrc?: string;
-}
+import { ClubData } from "@/types/club";
 
 interface ClubRankingCardProps {
-  clubs: Club[];
+  clubs: ClubData[];
 }
 
 const gradientClasses = [
@@ -33,15 +25,15 @@ const ClubRankingCard = ({ clubs }: ClubRankingCardProps) => {
               className={`flex items-center gap-[16px] px-[24px] py-[16px] md:py-[32px] md:gap-[28px]`}
             >
               <div className="w-[38px] text-[32px] text-center leading-none md:w-[38px] md:text-[58px]">
-                {club.rank}
+                {index + 1}
               </div>
 
               <div className="flex-1 overflow-hidden">
                 <div className="text-mobile_h3 truncate mb-2 md:text-h2">
-                  {club.title}
+                  {club.name}
                 </div>
                 <p className="text-mobile_body3_m truncate text-background md:text-body1_r">
-                  {club.description}
+                  {club.body}
                 </p>
               </div>
             </div>
