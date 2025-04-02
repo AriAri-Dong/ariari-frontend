@@ -28,7 +28,8 @@ const Recruitment = () => {
   const fetchRecruitments = async (newPage = 0, reset = false) => {
     try {
       const condition: ClubSearchCondition = {
-        clubCategoryTypes: affiliationFilter ? [affiliationFilter] : undefined,
+        // clubCategoryTypes: affiliationFilter ? [affiliationFilter] : undefined,
+        clubCategoryTypes: fieldFilter ? [fieldFilter] : undefined,
         clubRegionTypes: areaFilter ? [areaFilter] : undefined,
         participantTypes: targetFilter ? [targetFilter] : undefined,
       };
@@ -62,19 +63,8 @@ const Recruitment = () => {
   };
 
   useEffect(() => {
-    console.log("렌더링 >>>");
     fetchRecruitments(0, true);
-    // }, []);
   }, [affiliationFilter, fieldFilter, areaFilter, targetFilter, sortType]);
-
-  useEffect(() => {
-    console.log("필터 상태:", {
-      affiliationFilter,
-      fieldFilter,
-      areaFilter,
-      targetFilter,
-    });
-  }, [affiliationFilter, fieldFilter, areaFilter, targetFilter]);
 
   return (
     <div>
