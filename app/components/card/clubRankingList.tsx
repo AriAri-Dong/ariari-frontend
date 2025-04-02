@@ -3,12 +3,15 @@
 import Image from "next/image";
 import { ClubData } from "@/types/club";
 import defaultImg from "@/images/icon/defaultAriari.svg";
+import { useRouter } from "next/navigation";
 
 interface ClubRankingListProps {
   clubs: ClubData[];
 }
 
 const ClubRankingList = ({ clubs }: ClubRankingListProps) => {
+  const router = useRouter();
+
   return (
     <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
       <div
@@ -18,6 +21,9 @@ const ClubRankingList = ({ clubs }: ClubRankingListProps) => {
           <div
             key={club.id}
             className="min-w-[204px] rounded-lg flex-shrink-0 cursor-pointer "
+            onClick={() => {
+              router.push(`/club/activityHistory?clubId=${club.id}`);
+            }}
           >
             <div className="flex items-center gap-[18px] md:gap-[30px]">
               <div className="flex items-center gap-[14px] md:gap-[26px]">
