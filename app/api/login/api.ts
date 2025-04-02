@@ -6,12 +6,13 @@ import { authStore } from "@/stores/userStore";
 
 // 토큰 갱신
 export const refreshAccessToken = async () => {
+  const { refreshToken, signOut } = authStore.getState();
+
   // 디버깅 목적 로그 추가 (추후 삭제 예정)
   try {
-    const refreshToken = sessionStorage.getItem("refreshToken");
-
     if (!refreshToken) {
       console.error("RefreshToken이 없음. 로그아웃 처리 필요");
+      signOut();
       window.location.href = "/";
       return null;
     }
@@ -35,8 +36,10 @@ export const refreshAccessToken = async () => {
 
     return newAccessToken;
   } catch (error) {
+    console.error("토큰 갱신 실패");
+    signOut();
     window.location.href = "/";
-    console.error("refreshAccessToken 요청 실패:", error);
+    alert("세션이 만료되었습니다.\n다시 로그인해주세요.");
     return null;
   }
 };
