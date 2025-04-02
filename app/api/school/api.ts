@@ -1,5 +1,10 @@
 import { Pageable } from "@/types/api";
-import { SCHOOLS, SCHOOLS_VALIDATE, SCHOOLS_SEND } from "../apiUrl";
+import {
+  SCHOOLS,
+  SCHOOLS_VALIDATE,
+  SCHOOLS_SEND,
+  SCHOOLS_CANCEL,
+} from "../apiUrl";
 import axiosInstance from "../axiosInstance";
 
 export interface SchoolDataResponseType {
@@ -53,6 +58,18 @@ export const getSchoolData = async (
     return data;
   } catch (err) {
     console.error("학교 정보 조회 실패:", err);
+    throw err;
+  }
+};
+
+// 학교 인증 취소
+export const cancelSchoolAuth = async () => {
+  try {
+    const { data } = await axiosInstance.put(SCHOOLS_CANCEL);
+    console.log("학교 인증 취소 성공:", data);
+    return data;
+  } catch (err) {
+    console.error("학교 인증 취소 실패:", err);
     throw err;
   }
 };
