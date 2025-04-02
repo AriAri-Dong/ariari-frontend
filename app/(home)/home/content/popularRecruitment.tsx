@@ -11,6 +11,8 @@ import { RecruitmentData } from "@/types/recruitment";
 import { authStore } from "@/stores/userStore";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
+import { useUserStore } from "@/providers/userStoreProvider";
+import { useShallow } from "zustand/shallow";
 
 const PopularRecruitment = () => {
   const [popularRecruitmentData, setPopularRecruitmentData] = useState<
@@ -25,7 +27,7 @@ const PopularRecruitment = () => {
   const [isSchoolNotiPopUpOpen, setIsSchoolNotiPopUpOpen] =
     useState<boolean>(false); // 학교 인증 팝업 상태
 
-  const isAuthenticated = authStore.getState().isSignIn; // 로그인 상태 확인
+  const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn)); // 로그인 상태 확인
   const schoolCertification = authStore.getState().schoolData === null; // 학교 인증 여부 확인
 
   useEffect(() => {
@@ -61,6 +63,7 @@ const PopularRecruitment = () => {
   const fetchExternal = async () => {
     try {
       const res = await getExternalRecruitmentRanking();
+      console.log("교외입니다.");
       setPopularRecruitmentData(res.recruitmentDataList);
     } catch (error) {
       console.error("Error fetching external recruitment ranking:", error);
@@ -70,6 +73,7 @@ const PopularRecruitment = () => {
   const fetchInternal = async () => {
     try {
       const res = await getInternalRecruitmentRanking();
+      console.log("교내입니다.");
       setPopularRecruitmentData(res.recruitmentDataList);
     } catch (error) {
       console.error("Error fetching internal recruitment ranking:", error);
