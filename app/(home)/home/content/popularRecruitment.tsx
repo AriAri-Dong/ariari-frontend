@@ -13,8 +13,10 @@ import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
+import { useRouter } from "next/navigation";
 
 const PopularRecruitment = () => {
+  const router = useRouter();
   const [popularRecruitmentData, setPopularRecruitmentData] = useState<
     RecruitmentData[]
   >([]);
@@ -117,7 +119,7 @@ const PopularRecruitment = () => {
           onClose={() => setIsLoginNotiPopUpOpen(false)}
           icon="login"
           title="로그인이 필요한 서비스입니다."
-          description={`교내 인기 동아리를 확인하기 위해서는\n로그인이 필요합니다.`}
+          description={`교내 인기 모집공고를 확인하기 위해서는\n로그인이 필요합니다.`}
           firstButton={handleLoginRedirect}
           firstButtonText="로그인 후 이용하기"
           secondButton={() => setIsLoginNotiPopUpOpen(false)}
@@ -132,8 +134,10 @@ const PopularRecruitment = () => {
           onClose={() => setIsSchoolNotiPopUpOpen(false)}
           icon="school"
           title="학교 등록이 필요한 서비스입니다."
-          description={`교내 인기 동아리를 확인하기 위해서는\n학교 등록이 필요합니다.`}
-          firstButton={() => {}}
+          description={`교내 인기 모집공고를 확인하기 위해서는\n학교 등록이 필요합니다.`}
+          firstButton={() => {
+            router.push("/user/userInfo");
+          }}
           firstButtonText="학교 등록하기"
           secondButton={() => setIsSchoolNotiPopUpOpen(false)}
           secondButtonText="다음에 할게요"
