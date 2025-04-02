@@ -17,9 +17,8 @@ import Alert from "@/components/alert/alert";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import helpText from "@/images/icon/mobile_point_Helptext.svg";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
-import { getRecruitmentRanking } from "@/api/recruitment/api";
 import { getSchoolData } from "@/api/school/api";
-import { getAllClubsInfo, getMyClubs } from "@/api/club/api";
+import { getMyClubs } from "@/api/club/api";
 import { useRouter } from "next/navigation";
 
 const TestPage = () => {
@@ -50,15 +49,6 @@ const TestPage = () => {
     setAlertMessage("활동후기가 등록되었습니다.");
     setOpenReview(false);
   };
-
-  useEffect(() => {
-    const fetchAppliedList = async () => {
-      const result = await getRecruitmentRanking();
-      console.log(result);
-    };
-
-    fetchAppliedList();
-  }, []);
 
   useEffect(() => {
     const fetchSchoolList = async () => {
