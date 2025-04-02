@@ -27,8 +27,8 @@ interface CardProps {
 const MainRecruitmentCard = ({ data }: CardProps) => {
   const router = useRouter();
   const [cardData, setCardData] = useState<RecruitmentData[]>(data);
-  const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState<boolean>(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
 
   const isAuthenticated = authStore.getState().isSignIn;
 
