@@ -132,3 +132,20 @@ export interface ClubDetailRes {
   clubData: ClubData;
   clubMemberData: ClubMemberData;
 }
+
+export interface ClubNoticeData {
+  id: string;
+  title: string;
+  body: string;
+  isFixed: true;
+  createdDateTime: string;
+  clubNoticeImageData: {
+    id: string;
+    imageUri: string;
+  };
+}
+
+export interface ClubNoticeDataRes {
+  clubNoticeDataList: ClubNoticeData[];
+  pageInfo: PageInfo;
+}
