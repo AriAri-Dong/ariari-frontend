@@ -50,6 +50,7 @@ export type ClubData = {
   schoolData: {
     name: string;
   };
+  bookmarkCount: number;
 };
 
 // 동아리 목록 API 응답 타입
@@ -107,6 +108,7 @@ export type ClubListData = {
   isMyBookmark: boolean;
   schoolData: SchoolData;
   badgeType?: any;
+  bookmarkCount: number;
 };
 
 export type SchoolData = {
