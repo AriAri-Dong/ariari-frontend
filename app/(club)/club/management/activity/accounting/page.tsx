@@ -86,28 +86,30 @@ const AccountingPage = () => {
             <LeftMenu />
           </div>
           <div className="w-full">
-            {/* 동아리 회비 잔액  */}
-            {isMdUp ? (
-              <MembershipBalanceBar
-                currentPoint={balance ?? 0}
-                className="md:block hidden mb-2.5 md:mt-4 lg:mt-0"
-              />
-            ) : (
-              <MobileMembershipBalanceBar
-                currentPoint={balance ?? 0}
-                className="mt-4 mb-3 md:hidden"
-              />
-            )}
-            {/* 리스트 영역 */}
-            {financialRecords.length ? (
-              <MembershipBalanceList transactions={financialRecords} />
-            ) : (
+            {!financialRecords.length ? (
               <p className="text-center">등록된 회계 내역이 없습니다</p>
-            )}
-            {hasNextPage && (
-              <div className="flex justify-center mt-9 md:mt-10">
-                <PlusBtn title={"더보기"} onClick={fetchNextPage} />
-              </div>
+            ) : (
+              <>
+                {/* 동아리 회비 잔액  */}
+                {isMdUp ? (
+                  <MembershipBalanceBar
+                    currentPoint={balance ?? 0}
+                    className="md:block hidden mb-2.5 md:mt-4 lg:mt-0"
+                  />
+                ) : (
+                  <MobileMembershipBalanceBar
+                    currentPoint={balance ?? 0}
+                    className="mt-4 mb-3 md:hidden"
+                  />
+                )}
+                {/* 리스트 영역 */}
+                <MembershipBalanceList transactions={financialRecords} />
+                {hasNextPage && (
+                  <div className="flex justify-center mt-9 md:mt-10">
+                    <PlusBtn title={"더보기"} onClick={fetchNextPage} />
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

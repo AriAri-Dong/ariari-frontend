@@ -2,9 +2,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import close from "@/images/icon/close.svg";
 
-import { REVIEW_BADGE_LIST } from "@/data/reviewBadge";
 import Alert from "@/components/alert/alert";
-import ReviewBadgeContainer from "@/components/badge/review/reviewBadgeContainer";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import CustomInput from "@/components/input/customInput";
 import { AccountingProps } from "../modal/club/accountingModal";
@@ -114,7 +112,7 @@ const AccountingBottomSheet = ({ onClose, onSubmit }: AccountingProps) => {
           {/* 금액 입력 */}
           <div className="flex justify-between mt-[30px] mb-[14px] items-center">
             <h3 className="flex text-text1 text-mobile_h2">
-              활동후기
+              금액
               <span className="text-noti text-mobile_body3_m pl-1">*</span>
             </h3>
           </div>
