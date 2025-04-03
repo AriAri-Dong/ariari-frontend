@@ -13,12 +13,14 @@ import {
 export const getClubReview = async (
   clubId: string,
   page?: number,
-  size?: number
+  size?: number,
+  sort?: string
 ) => {
   try {
     const params: Record<string, any> = {
       ...(page && { page }),
       ...(size && { size }),
+      ...(sort && { sort }),
     };
     const { data } = await axiosInstance.get<ClubReviewListRes>(
       `/club-review/${clubId}`,
