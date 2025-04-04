@@ -136,7 +136,7 @@ export const getExternalRecruitments = async (
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
     };
 
-    const response = await axiosInstance.get<RecruitmentResponse>(
+    const response = await axios.get<RecruitmentResponse>(
       RECRUITMENT_EXTERNAL,
       {
         params,
