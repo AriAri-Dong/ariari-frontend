@@ -8,6 +8,7 @@ import SubTap from "@/components/tab/subTap";
 import { CLUB_MENU_MAP } from "@/constants/clubMenu";
 import { useClubContext } from "@/context/ClubContext";
 import Tabs from "../tabs/mobileTabs";
+import MobileNotificationModal from "@/components/modal/notification/mobileNotificationModal";
 
 const MobileMenu = () => {
   const router = useRouter();
@@ -20,6 +21,7 @@ const MobileMenu = () => {
   // 권한에 따른 메뉴 데이터
   const CLUB_LEFT_MENU = CLUB_MENU_MAP[role ?? "USER"];
   const [menuRefs, setMenuRefs] = useState<(HTMLDivElement | null)[]>([]);
+  const [isOpenNotification, setIsOpenNotification] = useState<boolean>(false);
 
   // ✅ 현재 URL과 일치하는 메뉴 옵션 찾기
   const currentOption = CLUB_LEFT_MENU.find(
@@ -85,41 +87,60 @@ const MobileMenu = () => {
     CLUB_LEFT_MENU.find((menu) => menu.label === option)?.subUrl ?? null;
 
   return (
-    <div className="flex flex-col">
-      <div className="flex mb-4 mt-6 md:mt-0 lg:hidden">
-        <div className="w-10 h-10">
-          <NotificationRoundBtn onClick={() => {}} />
-        </div>
-        <div className="flex overflow-x-auto no-scrollbar ml-2 relative">
-          <div className="flex whitespace-nowrap">
-            <SubTap
-              optionData={CLUB_LEFT_MENU}
-              selectedOption={option}
-              handleOption={handleOptionChange}
-              setMenuRefs={setMenuRefs}
+    <>
+      <div className="flex flex-col">
+        <div className="flex mb-4 mt-6 md:mt-0 lg:hidden">
+          <div className="w-10 h-10">
+            <NotificationRoundBtn
+              onClick={() => setIsOpenNotification((prev) => !prev)}
+            />
+          </div>
+          <div className="flex overflow-x-auto no-scrollbar ml-2 relative">
+            <div className="flex whitespace-nowrap">
+              <SubTap
+                optionData={CLUB_LEFT_MENU}
+                selectedOption={option}
+                handleOption={handleOptionChange}
+                setMenuRefs={setMenuRefs}
+              />
+            </div>
+          </div>
+          <div className="flex items-center">
+            <RoundVectorBtn
+              imageSize={20}
+              className="md:hidden w-7 h-7 rotate-90"
+              btnSize="small"
+              onClick={() => {}}
             />
           </div>
         </div>
-        <div className="flex items-center">
-          <RoundVectorBtn
-            imageSize={20}
-            className="md:hidden w-7 h-7 rotate-90"
-            btnSize="small"
-            onClick={() => {}}
-          />
-        </div>
-      </div>
 
-      {/* 하위 탭이 존재하는 경우만 렌더링 */}
-      {activeTabs && activeTabs.length > 0 && (
-        <Tabs
-          data={activeTabs.map((tab) => ({
-            ...tab,
-            onClick: () => handleSubMenuClick(option, tab.url),
-          }))}
+        {/* 하위 탭이 존재하는 경우만 렌더링 */}
+        {activeTabs && activeTabs.length > 0 && (
+          <Tabs
+            data={activeTabs.map((tab) => ({
+              ...tab,
+              onClick: () => handleSubMenuClick(option, tab.url),
+            }))}
+          />
+        )}
+      </div>
+      {isOpenNotification && (
+        <MobileNotificationModal
+          onclose={() => setIsOpenNotification(false)}
+          notificationList={[
+            {
+              id: "1",
+              title: "title",
+              clubAlarmType: "apply",
+              createdDateTime: "2025-01-31T09:08:18.467Z",
+              isChecked: false,
+              uri: "/",
+            },
+          ]}
         />
       )}
-    </div>
+    </>
   );
 };
 

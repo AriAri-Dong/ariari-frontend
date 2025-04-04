@@ -76,72 +76,77 @@ const LeftMenu = () => {
       <div className="w-[256px] h-max max-h-[817px] bg-white rounded-16 py-7 px-4">
         {/* 프로필 영역 - 동아리 회원인 경우만 노출 */}
         {role && (
-          <div className="flex flex-col">
-            <div className="flex gap-3">
-              <Image
-                src={clubInfo.clubData.profileUri || test_image}
-                alt={"profile"}
-                width={52}
-                height={52}
-              />
-              <div className="flex flex-col gap-1">
-                <h3 className="text-body1_sb text-text1">
-                  {clubInfo.clubMemberData.name}
-                </h3>
-                <div className="flex gap-[6px]">
-                  <Image src={file} alt={"profile"} width={14} height={18} />
-                  <p className="text-primary text-body3_m">
-                    {CLUB_MENU_ROLE_LABELS[role]}
-                  </p>
+          <>
+            <div className="flex flex-col">
+              <div className="flex gap-3 items-center ">
+                <Image
+                  src={clubInfo.clubData.profileUri || test_image}
+                  alt={"profile"}
+                  width={52}
+                  height={52}
+                  layout="fixed"
+                  className="rounded-full h-[52px] bg-cover object-fill"
+                />
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-body1_sb text-text1">
+                    {clubInfo.clubMemberData.name}
+                  </h3>
+                  <div className="flex gap-[6px]">
+                    <Image src={file} alt={"profile"} width={14} height={18} />
+                    <p className="text-primary text-body3_m">
+                      {CLUB_MENU_ROLE_LABELS[role]}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            {role === "ADMIN" && (
-              <SmallBtn
-                title={"동아리 정보 수정"}
-                onClick={() => {}}
-                className="mt-5"
-              />
-            )}
-          </div>
-        )}
-
-        {/* 동아리 메뉴/알림 탭 */}
-        <div className="flex mt-7">
-          {CLUB_LEFT_MENU_TABS.map((tab, idx) => (
-            <div
-              key={tab.id}
-              className="flex-1 text-center"
-              onClick={() => setActiveTab(tab.id)}
-            >
-              <button>
-                <div className="flex gap-1 justify-center mb-[10px] min-h-6">
-                  <p
-                    className={`text-body1_sb ${
-                      tab.id === activeTab ? "text-primary" : "text-unselected"
-                    }`}
-                  >
-                    {tab.label}
-                  </p>
-                  {/* 동아리 알림 개수 */}
-                  {tab.id === 1 && (
-                    <span className="w-6 h-6 bg-token_bg text-subtext2 text-10 font-medium rounded-full flex justify-center items-center">
-                      {14}
-                    </span>
-                  )}
-                </div>
-              </button>
-              {activeTab === tab.id && (
-                <div className="h-[3px] bg-primary pr-1" />
+              {role === "ADMIN" && (
+                <SmallBtn
+                  title={"동아리 정보 수정"}
+                  onClick={() => {}}
+                  className="mt-5"
+                />
               )}
             </div>
-          ))}
-        </div>
+            {/* 동아리 메뉴/알림 탭 */}
+            <div className="flex mt-7">
+              {CLUB_LEFT_MENU_TABS.map((tab, idx) => (
+                <div
+                  key={tab.id}
+                  className="flex-1 text-center"
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  <button>
+                    <div className="flex gap-1 justify-center items-center mb-[10px] min-h-6">
+                      <p
+                        className={`text-body1_sb ${
+                          tab.id === activeTab
+                            ? "text-primary"
+                            : "text-unselected"
+                        }`}
+                      >
+                        {tab.label}
+                      </p>
+                      {/* 동아리 알림 개수 */}
+                      {tab.id === 1 && (
+                        <span className="w-6 h-6 bg-token_bg text-subtext2 text-10 font-medium rounded-full flex justify-center items-center">
+                          {14}
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                  {activeTab === tab.id && (
+                    <div className="h-[3px] bg-primary pr-1" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
 
         {/* 메뉴 항목 */}
         {activeTab === 0 &&
           CLUB_LEFT_MENU.map((menu) => (
-            <div className="flex items-center mt-6 first:mt-0" key={menu.id}>
+            <div className="flex items-center mt-7 first:mt-0" key={menu.id}>
               {isParentActive(menu) ? (
                 <Image
                   src={active}

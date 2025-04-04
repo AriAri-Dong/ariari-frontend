@@ -92,6 +92,16 @@ const MobileUser = () => {
           onclose={() => {
             setIsOpenModal(false);
           }}
+          notificationList={[
+            {
+              id: "1",
+              title: "title",
+              clubAlarmType: "apply",
+              createdDateTime: "2025-01-31T09:08:18.467Z",
+              isChecked: false,
+              uri: "/",
+            },
+          ]}
         />
       )}
       {isLoginModalOpen && (

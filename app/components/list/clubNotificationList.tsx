@@ -7,7 +7,7 @@ const ClubNotificationList = () => {
   const isMdUp = useResponsive("md");
 
   return (
-    <ul className="max-h-[556px] overflow-y-auto no-scrollbar">
+    <ul className="max-h-[556px] mt-[14px] overflow-y-auto no-scrollbar">
       {TEMP_DATA.map((item, index) => (
         <li
           key={index}
