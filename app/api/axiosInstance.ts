@@ -1,6 +1,6 @@
 import axios from "axios";
 import { refreshAccessToken } from "./login/api";
-import { authStore } from "@/stores/userStore";
+import { authStore } from "@/app/stores/userStore";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -14,7 +14,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use((config) => {
   const { accessToken } = authStore.getState();
   if (accessToken) {
-    config.headers["Authorization"] = `${accessToken}`;
+    config.headers["Authorization"] = `Bearer ${accessToken}`;
   }
   return config;
 });
@@ -25,7 +25,10 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (!error.response || error.response.status === 401) {
+    if (
+      !error.response ||
+      (error.response.status === 401 && !originalRequest._retry)
+    ) {
       originalRequest._retry = true;
 
       try {
@@ -39,7 +42,7 @@ axiosInstance.interceptors.response.use(
         axiosInstance.defaults.headers.common["Authorization"] = newAccessToken;
 
         // 기존 요청 헤더 업데이트
-        originalRequest.headers["Authorization"] = `${newAccessToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         console.error("RefreshToken 만료됨. 로그아웃 처리.");
