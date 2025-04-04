@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ClubData } from "@/types/club";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import { useRouter } from "next/navigation";
+import useResponsive from "@/hooks/useResponsive";
 
 interface ClubRankingListProps {
   clubs: ClubData[];
@@ -11,6 +12,9 @@ interface ClubRankingListProps {
 
 const ClubRankingList = ({ clubs }: ClubRankingListProps) => {
   const router = useRouter();
+
+  const isTab = useResponsive("md");
+  const isDesktop = useResponsive("lg");
 
   return (
     <div className="overflow-x-auto [&::-webkit-scrollbar]:hidden">
@@ -30,13 +34,13 @@ const ClubRankingList = ({ clubs }: ClubRankingListProps) => {
                 <Image
                   src={club.profileUri || defaultImg}
                   alt={club.name}
-                  width={98}
-                  height={98}
-                  className="w-[56px] h-[56px] rounded-full object-cover"
+                  width={56}
+                  height={56}
+                  className="md:w-[98px] md:h-[98px] rounded-full object-cover"
                 />
-                
+
                 <div className="text-base font-semibold md:text-2xl">
-                  {index + 4}
+                  {isDesktop ? index + 4 : isTab ? index + 3 : index + 2}
                 </div>
               </div>
               <div className="flex-1 overflow-hidden">
