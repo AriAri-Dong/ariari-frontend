@@ -291,7 +291,7 @@ export const CLUB_LEFT_MENU_USER = [
     id: 2,
     label: "모집공고",
     icon: "recruit_announcement",
-    url: "/",
+    url: "/club/recruitment",
     subUrl: [],
   },
   {
@@ -350,7 +350,7 @@ export const CLUB_LEFT_MENU_MEMBER = [
     id: 5,
     label: "모집공고",
     icon: "recruit_announcement",
-    url: "/club/review/acceptance",
+    url: "/club/recruitment",
     subUrl: [],
   },
   {
