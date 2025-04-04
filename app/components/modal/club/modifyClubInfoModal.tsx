@@ -15,13 +15,7 @@ import NoticeBanner from "@/components/banner/noticeBanner";
 import { updateClubWithFiles } from "@/api/club/api";
 import { useSearchParams } from "next/navigation";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
-
-const OPTIONS = [
-  { label: "동아리 소속", value: "아리아리" },
-  { label: "활동 분야", value: "프로그래밍" },
-  { label: "활동 지역", value: "서울" },
-  { label: "활동 대상", value: "대학생 및 직장인" },
-];
+import { getClubOptions } from "@/utils/convertToServerFormat";
 
 /**
  * 동아리 정보 수정 모달
@@ -33,6 +27,8 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
   const clubId = searchParams.get("clubId") || "";
   const { clubInfo } = useClubInfoQuery(clubId);
   const clubData = clubInfo?.clubData;
+
+  const options = clubData ? getClubOptions(clubData) : [];
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const bannerFileInputRef = useRef<HTMLInputElement | null>(null);
@@ -409,14 +405,12 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
             동아리 세부 카테고리
           </h3>
           <div className="flex justify-between mb-10 text-center">
-            {OPTIONS.map((item) => {
-              return (
-                <div className="flex flex-col gap-[14px]" key={item.label}>
-                  <p className="text-subtext2 text-body2_m">{item.label}</p>
-                  <h3 className="text-h4_sb text-text1">{item.value}</h3>
-                </div>
-              );
-            })}
+            {options.map((item) => (
+              <div className="flex flex-col gap-[14px]" key={item.label}>
+                <p className="text-subtext2 text-body2_m">{item.label}</p>
+                <h3 className="text-h4_sb text-text1">{item.value}</h3>
+              </div>
+            ))}
           </div>
         </div>
 
