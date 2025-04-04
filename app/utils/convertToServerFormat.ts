@@ -1,4 +1,17 @@
+import {
+  CLUB_FIELD,
+  CLUB_PARTICIPANT,
+  CLUB_REGION,
+} from "@/constants/clubInfo";
 import { CreateClubTypeData } from "@/types/api";
+import { ClubFieldType, ClubRegionType, ParticipantType } from "@/types/club";
+
+type ClubData = {
+  schoolData: any;
+  clubCategoryType: ClubFieldType;
+  clubRegionType: ClubRegionType;
+  participantType: ParticipantType;
+};
 
 export const convertToServerFormat = (
   affiliation: string,
@@ -88,4 +101,26 @@ export const convertToServerFormat = (
     regionType,
     participantType,
   };
+};
+
+export const getClubOptions = (clubData: ClubData) => {
+  if (!clubData) return [];
+
+  const isSchoolClub = clubData.schoolData ? "교내" : "연합";
+
+  return [
+    { label: "동아리 소속", value: isSchoolClub },
+    {
+      label: "활동 분야",
+      value: CLUB_FIELD[clubData.clubCategoryType] || "기타",
+    },
+    {
+      label: "활동 지역",
+      value: CLUB_REGION[clubData.clubRegionType] || "지역 정보 없음",
+    },
+    {
+      label: "활동 대상",
+      value: CLUB_PARTICIPANT[clubData.participantType] || "정보 없음",
+    },
+  ];
 };
