@@ -18,6 +18,10 @@ export interface NotificationData {
   createdDateTime: string;
 }
 
+export interface NotificationPageInfo extends PageInfo {
+  unreadCount: number;
+}
+
 // 동아리 알림
 export interface ClubNotificationData extends NotificationData {
   clubAlarmType: ClubNotificationType;
@@ -25,15 +29,15 @@ export interface ClubNotificationData extends NotificationData {
 
 export interface ClubNotificationListRes {
   clubAlarmDataList: ClubNotificationData[];
-  pageInfo: PageInfo;
+  alarmPageInfo: NotificationPageInfo;
 }
 
-// 유저 알림
+// 멤버 알림
 export interface MemberNotificationData extends NotificationData {
   clubAlarmType: MemberNotificationType;
 }
 
 export interface MemberNotificationListRes {
   memberAlarmDataList: MemberNotificationData[];
-  pageInfo: PageInfo;
+  alarmPageInfo: NotificationPageInfo;
 }
