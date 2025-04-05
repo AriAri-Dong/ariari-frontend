@@ -1,11 +1,19 @@
 import { PageInfo } from "./pageInfo";
 
+export type NotificationType =
+  | "APPLY"
+  | "MEMBER"
+  | "RECRUITMENT"
+  | "SYSTEM"
+  | "ACTIVITY"
+  | "QUESTION";
+
 export interface NotificationData {
   id: string;
   title: string;
   uri: string;
   isChecked: boolean;
-  clubAlarmType: "club" | "apply"; // 추가 예정
+  clubAlarmType: NotificationType;
   createdDateTime: string;
 }
 
