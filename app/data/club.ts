@@ -275,8 +275,8 @@ export const BADGE_TITLES = [
 ];
 
 export const CLUB_LEFT_MENU_TABS = [
-  { id: 0, label: "동아리 메뉴" },
-  { id: 1, label: "동아리 알림" },
+  { id: 0, type: "menu", label: "동아리 메뉴" },
+  { id: 1, type: "notification", label: "동아리 알림" },
 ];
 
 // 일반 사용자(동아리 소속 x)

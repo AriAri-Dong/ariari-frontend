@@ -14,7 +14,7 @@ import { CLUB_LEFT_MENU_TABS } from "@/data/club";
 import ClubNotificationList from "@/components/list/clubNotificationList";
 
 const LeftMenu = () => {
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeTab, setActiveTab] = useState<"menu" | "notification">("menu");
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState<number | null>(null);
 
@@ -113,13 +113,15 @@ const LeftMenu = () => {
                 <div
                   key={tab.id}
                   className="flex-1 text-center"
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() =>
+                    setActiveTab(tab.type as "menu" | "notification")
+                  }
                 >
                   <button>
                     <div className="flex gap-1 justify-center items-center mb-[10px] min-h-6">
                       <p
                         className={`text-body1_sb ${
-                          tab.id === activeTab
+                          tab.type === activeTab
                             ? "text-primary"
                             : "text-unselected"
                         }`}
@@ -127,14 +129,14 @@ const LeftMenu = () => {
                         {tab.label}
                       </p>
                       {/* 동아리 알림 개수 */}
-                      {tab.id === 1 && (
+                      {tab.type === "notification" && (
                         <span className="w-6 h-6 bg-token_bg text-subtext2 text-10 font-medium rounded-full flex justify-center items-center">
                           {14}
                         </span>
                       )}
                     </div>
                   </button>
-                  {activeTab === tab.id && (
+                  {tab.type === activeTab && (
                     <div className="h-[3px] bg-primary pr-1" />
                   )}
                 </div>
@@ -144,7 +146,7 @@ const LeftMenu = () => {
         )}
 
         {/* 메뉴 항목 */}
-        {activeTab === 0 &&
+        {activeTab === "menu" &&
           CLUB_LEFT_MENU.map((menu) => (
             <div className="flex items-center mt-7 first:mt-0" key={menu.id}>
               {isParentActive(menu) ? (
@@ -215,7 +217,9 @@ const LeftMenu = () => {
           ))}
 
         {/* 동아리 알림 */}
-        {activeTab === 1 && <ClubNotificationList />}
+        {activeTab === "notification" && (
+          <ClubNotificationList notificationList={clubNotifications} />
+        )}
       </div>
     </div>
   );
