@@ -12,6 +12,7 @@ import { MENU_ICONS } from "@/constants/clubMenu";
 import { Icon } from "@/components/icon";
 import { CLUB_LEFT_MENU_TABS } from "@/data/club";
 import ClubNotificationList from "@/components/list/clubNotificationList";
+import { useClubNotificationQuery } from "@/hooks/notification/useNotificationQuery";
 
 const LeftMenu = () => {
   const [activeTab, setActiveTab] = useState<"menu" | "notification">("menu");
@@ -21,9 +22,10 @@ const LeftMenu = () => {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
-  const clubId = params.get("clubId");
+  const clubId = params.get("clubId") || "";
 
   const { role, clubInfo } = useClubContext();
+  const { clubNotifications, unreadCount } = useClubNotificationQuery(clubId);
 
   // 권한에 따른 메뉴 데이터
   const CLUB_LEFT_MENU = CLUB_MENU_MAP[role ?? "USER"];
@@ -131,7 +133,7 @@ const LeftMenu = () => {
                       {/* 동아리 알림 개수 */}
                       {tab.type === "notification" && (
                         <span className="w-6 h-6 bg-token_bg text-subtext2 text-10 font-medium rounded-full flex justify-center items-center">
-                          {14}
+                          {unreadCount}
                         </span>
                       )}
                     </div>

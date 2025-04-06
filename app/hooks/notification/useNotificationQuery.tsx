@@ -19,7 +19,7 @@ export const useClubNotificationQuery = (clubId: string) => {
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = allPages.length;
-      const totalPages = lastPage.pageInfo.totalPages;
+      const totalPages = lastPage.alarmPageInfo.totalPages;
 
       return totalPages > nextPage ? nextPage : undefined;
     },
@@ -28,6 +28,7 @@ export const useClubNotificationQuery = (clubId: string) => {
   return {
     clubNotifications:
       data?.pages.flatMap((page) => page.clubAlarmDataList) || [],
+    unreadCount: data?.pages[0].alarmPageInfo.unreadCount,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,

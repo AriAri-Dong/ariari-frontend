@@ -23,7 +23,12 @@ export const getClubNotifications = async (
     console.log("Failed to fetch club notifications", error);
     return {
       clubAlarmDataList: [],
-      pageInfo: { contentSize: 0, totalSize: 0, totalPages: 0 },
+      alarmPageInfo: {
+        contentSize: 0,
+        totalSize: 0,
+        totalPages: 0,
+        unreadCount: 0,
+      },
     };
   }
 };

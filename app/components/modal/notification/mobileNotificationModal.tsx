@@ -2,11 +2,15 @@ import { useEffect } from "react";
 import Image from "next/image";
 import backVector from "@/images/icon/backVector.svg";
 import vector from "@/images/icon/vector.svg";
-import { NotificationData } from "@/types/notification";
+import {
+  ClubNotificationData,
+  MemberNotificationData,
+} from "@/types/notification";
+import formatDateToDot, { formatTime } from "@/utils/formatDateToDot";
 
 interface ModalProps {
   onclose: () => void;
-  notificationList: NotificationData[];
+  notificationList: (ClubNotificationData | MemberNotificationData)[];
 }
 
 const MobileNotificationModal = ({ onclose, notificationList }: ModalProps) => {
@@ -19,7 +23,7 @@ const MobileNotificationModal = ({ onclose, notificationList }: ModalProps) => {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-white z-50 px-4 md:hidden">
+    <div className="fixed inset-0 bg-white z-50 px-4 lg:hidden">
       <div className="flex flex-row justify-between pt-[46px]">
         <div className="flex gap-2 mb-5">
           <Image
@@ -39,22 +43,26 @@ const MobileNotificationModal = ({ onclose, notificationList }: ModalProps) => {
       >
         {!notificationList ||
           (!notificationList?.length && <p>새로운 알림이 없습니다.</p>)}
-        {notificationList.map((item, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-between px-2.5 cursor-pointer py-[14px] border-b first:pt-[6px] last:pb-[6px] last:border-b-0"
-          >
-            <div className="flex flex-col">
-              <h3 className="text-text1 text-mobile_body1_m">{item.title}</h3>
-              <p className="text-unselected text-mobile_body4_r">
-                {item.createdDateTime}
-              </p>
+        {notificationList.map((item, index) => {
+          const { id, title, uri, isChecked, clubAlarmType, createdDateTime } =
+            item;
+          return (
+            <div
+              key={id}
+              className="flex items-center justify-between px-2.5 cursor-pointer py-[14px] border-b first:pt-[6px] last:pb-[6px] last:border-b-0"
+            >
+              <div className="flex flex-col gap-2">
+                <h3 className="text-text1 text-mobile_body1_m">{title}</h3>
+                <div className="flex gap-2 text-unselected text-mobile_body4_r text-body4_r">
+                  <p>{formatDateToDot(createdDateTime, false)}</p>
+                  <p>{formatTime(new Date(createdDateTime))}</p>
+                </div>
+              </div>
+              <Image src={vector} alt={"바로가기"} width={16} height={16} />
             </div>
-            <Image src={vector} alt={"바로가기"} width={16} height={16} />
-          </div>
-        ))}
+          );
+        })}
       </div>
-      <div className="h-5" />
     </div>
   );
 };

@@ -9,12 +9,13 @@ import { CLUB_MENU_MAP } from "@/constants/clubMenu";
 import { useClubContext } from "@/context/ClubContext";
 import Tabs from "../tabs/mobileTabs";
 import MobileNotificationModal from "@/components/modal/notification/mobileNotificationModal";
+import { useClubNotificationQuery } from "@/hooks/notification/useNotificationQuery";
 
 const MobileMenu = () => {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
-  const clubId = params.get("clubId");
+  const clubId = params.get("clubId") || "";
 
   const { role } = useClubContext();
 
@@ -22,6 +23,8 @@ const MobileMenu = () => {
   const CLUB_LEFT_MENU = CLUB_MENU_MAP[role ?? "USER"];
   const [menuRefs, setMenuRefs] = useState<(HTMLDivElement | null)[]>([]);
   const [isOpenNotification, setIsOpenNotification] = useState<boolean>(false);
+
+  const { clubNotifications } = useClubNotificationQuery(clubId);
 
   // ✅ 현재 URL과 일치하는 메뉴 옵션 찾기
   const currentOption = CLUB_LEFT_MENU.find(
@@ -128,16 +131,7 @@ const MobileMenu = () => {
       {isOpenNotification && (
         <MobileNotificationModal
           onclose={() => setIsOpenNotification(false)}
-          notificationList={[
-            {
-              id: "1",
-              title: "title",
-              clubAlarmType: "apply",
-              createdDateTime: "2025-01-31T09:08:18.467Z",
-              isChecked: false,
-              uri: "/",
-            },
-          ]}
+          notificationList={clubNotifications}
         />
       )}
     </>
