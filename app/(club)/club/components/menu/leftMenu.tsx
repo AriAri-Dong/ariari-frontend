@@ -11,8 +11,8 @@ import { CLUB_MENU_MAP, CLUB_MENU_ROLE_LABELS } from "@/constants/clubMenu";
 import { MENU_ICONS } from "@/constants/clubMenu";
 import { Icon } from "@/components/icon";
 import { CLUB_LEFT_MENU_TABS } from "@/data/club";
-import ClubNotificationList from "@/components/list/clubNotificationList";
 import { useClubNotificationQuery } from "@/hooks/notification/useNotificationQuery";
+import NotificationList from "@/components/list/notificationList";
 
 const LeftMenu = () => {
   const [activeTab, setActiveTab] = useState<"menu" | "notification">("menu");
@@ -26,6 +26,10 @@ const LeftMenu = () => {
 
   const { role, clubInfo } = useClubContext();
   const { clubNotifications, unreadCount } = useClubNotificationQuery(clubId);
+
+  useEffect(() => {
+    console.log("reole", role);
+  }, []);
 
   // 권한에 따른 메뉴 데이터
   const CLUB_LEFT_MENU = CLUB_MENU_MAP[role ?? "USER"];
@@ -220,7 +224,12 @@ const LeftMenu = () => {
 
         {/* 동아리 알림 */}
         {activeTab === "notification" && (
-          <ClubNotificationList notificationList={clubNotifications} />
+          <div className="max-h-[556px] mt-[14px] overflow-y-auto no-scrollbar">
+            <NotificationList
+              notificationList={clubNotifications}
+              className="last:pb-0"
+            />
+          </div>
         )}
       </div>
     </div>

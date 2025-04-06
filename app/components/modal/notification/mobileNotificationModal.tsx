@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import backVector from "@/images/icon/backVector.svg";
-import vector from "@/images/icon/vector.svg";
 import {
   ClubNotificationData,
   MemberNotificationData,
 } from "@/types/notification";
-import formatDateToDot, { formatTime } from "@/utils/formatDateToDot";
+import ClubNotificationList from "@/components/list/notificationList";
 
 interface ModalProps {
   onclose: () => void;
@@ -41,27 +40,10 @@ const MobileNotificationModal = ({ onclose, notificationList }: ModalProps) => {
         className="flex flex-col overflow-y-scroll custom-scrollbar"
         style={{ maxHeight: "calc(100vh - 113px)" }}
       >
-        {!notificationList ||
-          (!notificationList?.length && <p>새로운 알림이 없습니다.</p>)}
-        {notificationList.map((item, index) => {
-          const { id, title, uri, isChecked, clubAlarmType, createdDateTime } =
-            item;
-          return (
-            <div
-              key={id}
-              className="flex items-center justify-between px-2.5 cursor-pointer py-[14px] border-b first:pt-[6px] last:pb-[6px] last:border-b-0"
-            >
-              <div className="flex flex-col gap-2">
-                <h3 className="text-text1 text-mobile_body1_m">{title}</h3>
-                <div className="flex gap-2 text-unselected text-mobile_body4_r text-body4_r">
-                  <p>{formatDateToDot(createdDateTime, false)}</p>
-                  <p>{formatTime(new Date(createdDateTime))}</p>
-                </div>
-              </div>
-              <Image src={vector} alt={"바로가기"} width={16} height={16} />
-            </div>
-          );
-        })}
+        <ClubNotificationList
+          notificationList={notificationList}
+          className="first:pt-[6px] last:pb-[6px]"
+        />
       </div>
     </div>
   );
