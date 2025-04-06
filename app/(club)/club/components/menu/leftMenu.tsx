@@ -13,6 +13,7 @@ import { Icon } from "@/components/icon";
 import { CLUB_LEFT_MENU_TABS } from "@/data/club";
 import { useClubNotificationQuery } from "@/hooks/notification/useNotificationQuery";
 import NotificationList from "@/components/list/notificationList";
+import WhiteButton from "@/components/button/basicBtn/whiteBtn";
 
 const LeftMenu = () => {
   const [activeTab, setActiveTab] = useState<"menu" | "notification">("menu");
@@ -25,11 +26,13 @@ const LeftMenu = () => {
   const clubId = params.get("clubId") || "";
 
   const { role, clubInfo } = useClubContext();
-  const { clubNotifications, unreadCount } = useClubNotificationQuery(clubId);
-
-  useEffect(() => {
-    console.log("reole", role);
-  }, []);
+  const {
+    clubNotifications,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    unreadCount,
+  } = useClubNotificationQuery(clubId);
 
   // 권한에 따른 메뉴 데이터
   const CLUB_LEFT_MENU = CLUB_MENU_MAP[role ?? "USER"];
@@ -229,6 +232,14 @@ const LeftMenu = () => {
               notificationList={clubNotifications}
               className="last:pb-0"
             />
+            {hasNextPage && (
+              <div className="w-full mt-6 flex justify-center">
+                <WhiteButton
+                  title={isFetchingNextPage ? "불러오는 중" : "더보기"}
+                  onClick={fetchNextPage}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>

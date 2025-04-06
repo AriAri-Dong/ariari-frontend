@@ -10,7 +10,10 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 // 동아리 알림 전체 조회
-export const useClubNotificationQuery = (clubId: string) => {
+export const useClubNotificationQuery = (
+  clubId: string,
+  options?: { enabled: boolean }
+) => {
   const {
     data,
     fetchNextPage,
@@ -22,6 +25,7 @@ export const useClubNotificationQuery = (clubId: string) => {
     queryKey: ["club", clubId, "notifications"],
     queryFn: ({ pageParam = 0 }) =>
       getClubNotifications(clubId, pageParam as number),
+    enabled: options?.enabled ?? true,
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = allPages.length;
@@ -44,7 +48,7 @@ export const useClubNotificationQuery = (clubId: string) => {
 };
 
 // 멤버 알림 전체 조회
-export const useMyNotificationQuery = () => {
+export const useMyNotificationQuery = (options?: { enabled: boolean }) => {
   const {
     data,
     fetchNextPage,
@@ -55,6 +59,7 @@ export const useMyNotificationQuery = () => {
   } = useInfiniteQuery<MemberNotificationListRes, AxiosError>({
     queryKey: ["my", "notifications"],
     queryFn: ({ pageParam = 0 }) => getMyNotifications(pageParam as number),
+    enabled: options?.enabled ?? true,
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = allPages.length;

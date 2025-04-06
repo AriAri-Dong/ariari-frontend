@@ -9,7 +9,7 @@ interface TooltipProps {
 }
 
 /**
- *
+ * PC 화면- 헤더 유저 알림
  * @param children 클릭 했을 때 툴팁이 보여져야하는 컴포넌트
  * @returns
  */
