@@ -5,8 +5,10 @@ import {
   ClubReviewDetail,
   ClubReviewListRes,
   ClubReviewSaveReq,
+  PassReviewDetail,
+  PassReviewListRes,
+  PassReviewSaveReq,
   TagData,
-  TagIconType,
 } from "@/types/review";
 
 // 동아리 활동후기 리스트
@@ -93,6 +95,71 @@ export const postClubReview = async (
 ) => {
   try {
     const res = await axiosInstance.post(`/club-review/${clubId}`, data);
+    return res.status;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
+
+// --------------- 합격 후기 -----------------
+
+// 동아리 합격후기 리스트
+export const getAcceptanceReview = async (
+  clubId: string,
+  page?: number,
+  size?: number,
+  sort?: string
+) => {
+  try {
+    const params: Record<string, any> = {
+      ...(page && { page }),
+      ...(size && { size }),
+      ...(sort && { sort }),
+    };
+    const { data } = await axiosInstance.get<PassReviewListRes>(
+      `/pass-review/${clubId}`,
+      { params }
+    );
+    console.log(data);
+    return data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
+
+// 동아리 활동후기 상세 조회
+export const getAccectanceReviewDetail = async (clubReviewId: string) => {
+  try {
+    const { data } = await axiosInstance.get<PassReviewDetail>(
+      `/pass-review/detail/${clubReviewId}`
+    );
+    return data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
+// 합격후기 작성하기
+export const postAcceptanceReview = async (
+  clubId: string,
+  data: PassReviewSaveReq
+) => {
+  try {
+    const res = await axiosInstance.post(`/pass-review/${clubId}`, data);
     return res.status;
   } catch (err) {
     if (err instanceof AxiosError) {
