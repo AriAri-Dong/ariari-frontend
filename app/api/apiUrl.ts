@@ -9,6 +9,7 @@ export const MEMBERS = "/members";
 export const MEMBERS_MY = "/members/my";
 export const MEMBERS_MY_NICKNAME = "/members/my/nickname";
 export const MEMBERS_MY_PROFILE = "/members/my/profile";
+export const MEMBER_MY_NOTIFICATION = "/member/alarm";
 
 // == RECRUITMENT ==
 export const RECRUITMENT_RANKING = "/recruitments/external/ranking";

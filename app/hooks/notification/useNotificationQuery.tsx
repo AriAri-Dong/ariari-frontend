@@ -1,5 +1,11 @@
-import { getClubNotifications } from "@/api/notification/api";
-import { ClubNotificationListRes } from "@/types/notification";
+import {
+  getClubNotifications,
+  getMyNotifications,
+} from "@/api/notification/api";
+import {
+  ClubNotificationListRes,
+  MemberNotificationListRes,
+} from "@/types/notification";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
@@ -29,6 +35,38 @@ export const useClubNotificationQuery = (clubId: string) => {
     clubNotifications:
       data?.pages.flatMap((page) => page.clubAlarmDataList) || [],
     unreadCount: data?.pages[0].alarmPageInfo.unreadCount,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    isLoading,
+    isError,
+  };
+};
+
+// 멤버 알림 전체 조회
+export const useMyNotificationQuery = () => {
+  const {
+    data,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    isError,
+    isLoading,
+  } = useInfiniteQuery<MemberNotificationListRes, AxiosError>({
+    queryKey: ["my", "notifications"],
+    queryFn: ({ pageParam = 0 }) => getMyNotifications(pageParam as number),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      const nextPage = allPages.length;
+      const totalPages = lastPage.alarmPageInfo.totalPages;
+
+      return totalPages > nextPage ? nextPage : undefined;
+    },
+  });
+
+  return {
+    myNotifications:
+      data?.pages.flatMap((page) => page.memberAlarmDataList) || [],
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
