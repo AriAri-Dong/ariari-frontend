@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import tooltip from "@/images/icon/triangle.svg";
 import vector from "@/images/icon/vector.svg";
-import { TEMP_DATA } from "@/data/notification";
+import { useMyNotificationQuery } from "@/hooks/notification/useNotificationQuery";
+import formatDateToDot, { formatTime } from "@/utils/formatDateToDot";
 
 interface TooltipProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ interface TooltipProps {
  */
 const NotificationModal = ({ children }: TooltipProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { myNotifications } = useMyNotificationQuery();
 
   const toggleModal = () => {
     setIsOpen((prev) => !prev);
@@ -48,19 +50,29 @@ const NotificationModal = ({ children }: TooltipProps) => {
               rounded-xl w-[400px] max-h-[548px] shadow-default
               overflow-y-scroll custom-scrollbar"
             >
-              {TEMP_DATA.map((item, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center justify-between py-[14px] px-2.5 cursor-pointer
-                  ${index === TEMP_DATA.length - 1 ? "" : "border-b"}`}
-                >
-                  <div className="flex flex-col">
-                    <h3 className="text-text1 text-body2_m">{item.title}</h3>
-                    <p className="text-unselected text-body4_r">{item.date}</p>
+              {myNotifications.map((item, index) => {
+                const { id, title, uri, isChecked, createdDateTime } = item;
+                return (
+                  <div
+                    key={id}
+                    className="flex items-center justify-between py-[14px] px-2.5 cursor-pointer border-b last:border-0"
+                  >
+                    <div className="flex flex-col gap-[6px]">
+                      <h3 className="text-text1 text-body2_m">{title}</h3>
+                      <div className="flex gap-[10px] text-unselected text-body4_r">
+                        <p>{formatDateToDot(createdDateTime, false)}</p>
+                        <p>{formatTime(new Date(createdDateTime))}</p>{" "}
+                      </div>
+                    </div>
+                    <Image
+                      src={vector}
+                      alt={"바로가기"}
+                      width={24}
+                      height={24}
+                    />
                   </div>
-                  <Image src={vector} alt={"바로가기"} width={24} height={24} />
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </>

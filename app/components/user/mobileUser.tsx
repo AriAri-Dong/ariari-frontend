@@ -11,6 +11,7 @@ import login from "@/images/icon/mobile_login.svg";
 import UserModal from "../modal/userModal";
 import MobileNotificationModal from "../modal/notification/mobileNotificationModal";
 import MobileLoginModal from "../modal/login/mobileLoginModal";
+import { useMyNotificationQuery } from "@/hooks/notification/useNotificationQuery";
 
 const MobileUser = () => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
@@ -19,6 +20,7 @@ const MobileUser = () => {
   const [notificationStatus, setNotificationStatus] = useState<
     "default" | "pressed" | "unconfirmed"
   >("unconfirmed");
+  const { myNotifications } = useMyNotificationQuery();
 
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
 
@@ -92,16 +94,7 @@ const MobileUser = () => {
           onclose={() => {
             setIsOpenModal(false);
           }}
-          notificationList={[
-            {
-              id: "1",
-              title: "title",
-              clubAlarmType: "apply",
-              createdDateTime: "2025-01-31T09:08:18.467Z",
-              isChecked: false,
-              uri: "/",
-            },
-          ]}
+          notificationList={myNotifications}
         />
       )}
       {isLoginModalOpen && (
