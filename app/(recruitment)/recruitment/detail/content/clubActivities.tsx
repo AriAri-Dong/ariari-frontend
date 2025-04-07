@@ -1,39 +1,53 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAcceptanceReviews } from "@/hooks/club/useAcceptanceReviews";
+
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import RecruitmentCard from "@/components/card/recruitmentCard";
 import AcceptanceReviewDropdown from "@/components/dropdown/acceptanceReviewDropdown";
-import { ACCEPTANCE_REVIEWS } from "@/data/club";
-
-
 import { RecruitmentData, RecruitmentNoteData } from "@/types/recruitment";
 import formatDateToDot from "@/utils/formatDateToDot";
-import { useRouter, useSearchParams } from "next/navigation";
+
+const CONTENT_SIZE = 3;
+const SORT = "createdDateTime,desc";
 
 interface ClubActivitiesProps {
+  clubId: string;
   recruitmentId: string;
   recruitmentNoteDataList?: RecruitmentNoteData[] | null;
   prevRecruitmentList: RecruitmentData[];
 }
 
 const ClubActivities = ({
+  clubId,
   recruitmentId,
   recruitmentNoteDataList,
   prevRecruitmentList,
 }: ClubActivitiesProps) => {
   const router = useRouter();
 
-  const [openDropdowns, setOpenDropdowns] = useState<boolean[]>(
-    new Array(ACCEPTANCE_REVIEWS.length).fill(false)
-  );
-  const [prevRecruitmentListLength, setPrevRecruitmentListLength] = useState(3);
+  const [prevRecruitmentListLength, setPrevRecruitmentListLength] = useState(4);
+  const [visibleRecruitmentList, setVisibleRecruitmentList] = useState<
+    RecruitmentData[]
+  >([]);
 
-  const handleDropdownToggle = (index: number) => {
-    setOpenDropdowns((prevState) => {
-      return prevState.map((_, idx) => idx === index);
-    });
-  };
+  const {
+    review,
+    pageInfo,
+    openReview,
+    page,
+    handleLoadMore,
+    handleOpenReview,
+  } = useAcceptanceReviews(clubId, CONTENT_SIZE, SORT);
+
+  useEffect(() => {
+    const list = prevRecruitmentList
+      .filter((item) => item.id !== recruitmentId)
+      .slice(0, prevRecruitmentListLength);
+    setVisibleRecruitmentList(list);
+  }, [prevRecruitmentListLength, prevRecruitmentList]);
 
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full">
@@ -57,39 +71,38 @@ const ClubActivities = ({
             </div>
           </>
         )}
-        <h1 className="text-mobile_h1_contents_title md:text-h1_contents_title text-text1 mt-[68px]">
-          동아리 합격 후기
-        </h1>
-        <div className="flex flex-col mt-5 gap-3 md:gap-2.5">
-          {ACCEPTANCE_REVIEWS.slice(3).map((item, index) => {
-            return (
-              <AcceptanceReviewDropdown
-                key={item.id}
-                title={item.title}
-                date={item.date}
-                onClick={() => {}}
-                onBtnClick={() => {}}
-                document={0}
-                interview={0}
-                isOpen={openDropdowns[index]}
-                onToggle={() => handleDropdownToggle(index)}
-              />
-            );
-          })}
-        </div>
-        <div className="flex justify-center mt-9 md:mt-10">
-          <PlusBtn title={"더보기"} onClick={() => {}} />
-        </div>
-        <h1 className="text-mobile_h1_contents_title mt-12 md:text-h1_contents_title text-text1 md:mt-[68px]">
-          이전 모집 공고
-        </h1>
+        {review.length > 0 && (
+          <>
+            <h1 className="text-mobile_h1_contents_title md:text-h1_contents_title text-text1 mt-[68px]">
+              동아리 합격 후기
+            </h1>
+            <div className="flex flex-col mt-5 gap-3 md:gap-2.5">
+              {review.map((item, index) => {
+                return (
+                  <AcceptanceReviewDropdown
+                    key={item.id}
+                    review={item}
+                    onClick={() => handleOpenReview(item)}
+                    isOpenReview={openReview === item.id}
+                  />
+                );
+              })}
+            </div>
+            {pageInfo && pageInfo?.totalPages > page + 1 && (
+              <div className="flex justify-center mt-9 md:mt-10">
+                <PlusBtn title={"더보기"} onClick={handleLoadMore} />
+              </div>
+            )}
+          </>
+        )}
+        {visibleRecruitmentList.length > 0 && (
+          <>
+            <h1 className="text-mobile_h1_contents_title mt-12 md:text-h1_contents_title text-text1 md:mt-[68px]">
+              이전 모집 공고
+            </h1>
 
-        <div className="flex flex-col mt-5 gap-3 md:gap-2.5">
-          {prevRecruitmentList.length > 1 ? (
-            prevRecruitmentList
-              .slice(0, prevRecruitmentListLength)
-              .filter((item) => item.id !== recruitmentId)
-              .map((item) => (
+            <div className="flex flex-col mt-5 gap-3 md:gap-2.5">
+              {visibleRecruitmentList.map((item) => (
                 <RecruitmentCard
                   key={item.id}
                   id={item.id}
@@ -102,20 +115,22 @@ const ClubActivities = ({
                   onClick={() => {}}
                   status={item.recruitmentStatusType}
                 />
-              ))
-          ) : (
-            <p className="text-gray-500 text-center">이전 모집이 없습니다.</p>
-          )}
-        </div>
+              ))}
+            </div>
 
-        <div className="flex justify-center pb-[80px] md:pb-[124px] mt-9 md:mt-10">
-          {prevRecruitmentListLength < prevRecruitmentList.length && (
-            <PlusBtn
-              title={"더보기"}
-              onClick={() => setPrevRecruitmentListLength((prev) => prev + 3)}
-            />
-          )}
-        </div>
+            <div className="flex justify-center  mt-9 md:mt-10">
+              {prevRecruitmentListLength < prevRecruitmentList.length && (
+                <PlusBtn
+                  title={"더보기"}
+                  onClick={() =>
+                    setPrevRecruitmentListLength((prev) => prev + 3)
+                  }
+                />
+              )}
+            </div>
+          </>
+        )}
+        <div className="h-[80px] md:h-[124px]"></div>
       </div>
     </div>
   );

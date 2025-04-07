@@ -81,7 +81,7 @@ const AcceptanceReviewDropdown = ({
                   {formatDateToDot(review.createdDateTime)}
                 </p>
                 <TransparentSmallBtn
-                  title={"열람하기"}
+                  title={isOpenReview ? "후기닫기" : "열람하기"}
                   onClick={handleToggleDropdown}
                   round={true}
                 />

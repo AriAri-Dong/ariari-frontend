@@ -125,7 +125,6 @@ export const getAcceptanceReview = async (
       `/pass-review/${clubId}`,
       { params }
     );
-    console.log(data);
     return data;
   } catch (err) {
     if (err instanceof AxiosError) {

@@ -85,6 +85,7 @@ const RecruitmentDetail = () => {
     <>
       <ClubInfo recruitmentData={recruitmentData} />
       <ClubActivities
+        clubId={clubId}
         recruitmentId={recruitmentId}
         recruitmentNoteDataList={recruitmentNoteDataList}
         prevRecruitmentList={prevRecruitmentList || []}
