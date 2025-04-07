@@ -14,14 +14,14 @@ const CONTENT_SIZE = 3;
 const SORT = "createdDateTime,desc";
 
 interface ClubActivitiesProps {
-  clubId: string;
+  clubId?: string;
   recruitmentId: string;
   recruitmentNoteDataList?: RecruitmentNoteData[] | null;
   prevRecruitmentList: RecruitmentData[];
 }
 
 const ClubActivities = ({
-  clubId,
+  clubId = "",
   recruitmentId,
   recruitmentNoteDataList,
   prevRecruitmentList,
