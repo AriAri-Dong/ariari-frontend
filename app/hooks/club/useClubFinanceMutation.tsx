@@ -14,10 +14,10 @@ export const useAddFinancialRecordMutation = ({
     mutationFn: addFinancialRecord,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["club-financial-records", clubId],
+        queryKey: ["club", clubId, "finance-records"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["finance-balance", clubId],
+        queryKey: ["club", clubId, "finance-balance"],
       });
     },
     onError: (error) => {

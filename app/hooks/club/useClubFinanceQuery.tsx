@@ -13,7 +13,7 @@ export const useFinanceBalanceQuery = (clubId: string) => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["finance-balance", clubId],
+    queryKey: ["club", clubId, "finance-balance"],
     queryFn: () => getClubFinanceBalance(clubId),
   });
 
@@ -34,7 +34,7 @@ export const useFinancialRecordsQuery = (clubId: string) => {
     isError,
     isLoading,
   } = useInfiniteQuery<MembershipBalanceRes, AxiosError>({
-    queryKey: ["club-financial-records", clubId],
+    queryKey: ["club", clubId, "finance-records"],
     queryFn: ({ pageParam = 0 }) =>
       getClubFinancialRecords(clubId, pageParam as number),
     initialPageParam: 0,
