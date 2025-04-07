@@ -99,8 +99,8 @@ export interface PassReviewNote {
 export interface PassReviewSaveReq {
   title: string;
   procedureType: ProcedureType;
-  interviewType: InterviewType;
-  interviewRatioType: InterviewRatioType;
-  interviewMood: number;
   passReviewNotes: PassReviewNote[];
+  interviewType?: InterviewType;
+  interviewRatioType?: InterviewRatioType;
+  interviewMood?: number;
 }

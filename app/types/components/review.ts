@@ -1,4 +1,4 @@
-import { ClubReviewSaveReq, TagIconType } from "../review";
+import { ClubReviewSaveReq, PassReviewSaveReq } from "../review";
 
 export interface ActivityReviewProps {
   onClose: () => void;
@@ -7,6 +7,6 @@ export interface ActivityReviewProps {
 
 export interface AcceptanceReviewProps {
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (data: PassReviewSaveReq) => void;
   className?: string;
 }
