@@ -255,10 +255,18 @@ const CreateSection = () => {
           />
         </div>
         <div>
-          <h3 className="flex mb-[14px] text-mobile_h3 md:mb-[18px] md:text-h3">
+          <h3 className="flex mb-[14px] text-mobile_h3 md:mb-2.5 md:text-h3">
             모집공고 이미지
             <span className="pl-1 text-noti text-mobile_body3_m ">*</span>
           </h3>
+          {isMdUp && (
+            <p className="md:mb-[18px] text-subtext2 md:text-body1_r">
+              유해한 내용이 포함된 사진일 경우, 별도의 안내 없이 사진이 삭제
+              처리되며 서비스 이용에 제한이 있을 수 있습니다.
+              <br />
+              이미지 파일 업로드(JPG, JPEG, PNG 지원)
+            </p>
+          )}
           <ImageUpload
             uploadedImage={imageUrl}
             setUploadedImage={setImageUrl}
