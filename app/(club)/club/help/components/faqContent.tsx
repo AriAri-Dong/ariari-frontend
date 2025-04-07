@@ -7,6 +7,9 @@ import Alert from "../../../../components/alert/alert";
 import LargeBtn from "../../../../components/button/basicBtn/largeBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import { colorMapping, tokenBg } from "../../../../utils/colorMapping";
+import { useSearchParams } from "next/navigation";
+import { TokenType } from "@/types/club";
+import { useAddFaqMutation } from "@/hooks/club/useClubHelpMutation";
 
 interface FaqFormContentProps {
   title: string;
@@ -40,22 +43,33 @@ const QnaFormContent = ({
   onSubmit,
 }: FaqFormContentProps) => {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [selectedColor, setSelectedColor] = useState<number>(1);
+  const [selectedColor, setSelectedColor] = useState<TokenType>("C_TOKEN_1");
+  const params = useSearchParams();
+  const clubId = params.get("clubId") ?? "";
+  const { addFaq } = useAddFaqMutation({ clubId, onSubmit });
 
   // 클릭 시 색상 변경
-  const handleColorClick = (index: number) => {
-    setSelectedColor(index);
+  const handleColorClick = (color: TokenType) => {
+    setSelectedColor(color);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!title || !classification || !detail) {
       setAlertMessage("미입력한 항목이 있습니다");
       return;
     }
+    addFaq.mutate({
+      clubId,
+      data: {
+        title,
+        body: detail,
+        clubFaqClassification: classification,
+        clubFaqColorType: selectedColor,
+      },
+    });
 
     setTitle("");
     setDetail("");
-    onSubmit();
     onClose();
   };
 
@@ -120,13 +134,13 @@ const QnaFormContent = ({
                 {tokenBg.map((color, index) => {
                   const c = colorMapping[color];
                   const bg = c.bg;
-                  const isSelected = index + 1 === selectedColor;
+                  const isSelected = color === selectedColor;
 
                   return (
                     <div
                       key={index}
                       className={`w-5 h-5 justify-center items-center flex `}
-                      onClick={() => handleColorClick(index + 1)}
+                      onClick={() => handleColorClick(color)}
                     >
                       <div
                         className={`justify-center items-center flex  rounded-full ${bg} ${

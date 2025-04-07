@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 
 import close from "@/images/icon/close.svg";
@@ -9,6 +9,8 @@ import LargeBtn from "../../../../components/button/basicBtn/largeBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import GuideBox from "@/components/card/guideBox";
 import { QNA_GUIDE_DATA } from "@/data/guideBox";
+import { useAddQuestionMutation } from "@/hooks/club/useClubHelpMutation";
+import { useSearchParams } from "next/navigation";
 
 interface QnaFormContentProps {
   title: string;
@@ -38,17 +40,27 @@ const QnaFormContent = ({
   onClose,
   onSubmit,
 }: QnaFormContentProps) => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") ?? "";
+
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const { addQuestion } = useAddQuestionMutation({ clubId, onSubmit });
 
   const handleSubmit = () => {
     if (!title || !detail) {
       setAlertMessage("미입력한 항목이 있습니다");
       return;
     }
+    addQuestion.mutate({
+      clubId,
+      data: {
+        title,
+        body: detail,
+      },
+    });
 
     setTitle("");
     setDetail("");
-    onSubmit();
     onClose();
   };
 
