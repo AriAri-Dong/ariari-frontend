@@ -10,3 +10,8 @@ export interface AcceptanceReviewProps {
   onSubmit: (data: PassReviewSaveReq) => void;
   className?: string;
 }
+
+export interface InterviewNoticeProps {
+  onClose: () => void;
+  onSubmit: () => void;
+}
