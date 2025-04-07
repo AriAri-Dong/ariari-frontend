@@ -122,6 +122,7 @@ const RecruitmentPreviewForm = ({
           <div style={{ pointerEvents: "none" }}>
             <ClubInfo isPreview={true} recruitmentData={recruitmentData} />
             <ClubActivities
+              clubId={clubId}
               recruitmentId={""}
               body={body}
               recruitmentNoteDataList={recruitmentNoteDataList}
@@ -159,6 +160,7 @@ const RecruitmentPreviewForm = ({
           </div>
           <div className="bg-sub_bg md:px-[60px] md:pt-[30px] lg:px-[100px] lg:pt-[50px] ">
             <ClubActivities
+              clubId={clubId}
               recruitmentId={""}
               body={body}
               recruitmentNoteDataList={recruitmentNoteDataList}

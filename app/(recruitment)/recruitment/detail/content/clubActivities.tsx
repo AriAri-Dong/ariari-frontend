@@ -10,6 +10,7 @@ import formatDateToDot from "@/utils/formatDateToDot";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface ClubActivitiesProps {
+  clubId: string;
   recruitmentId: string;
   body: string;
   recruitmentNoteDataList?: RecruitmentNoteData[] | null;
@@ -17,6 +18,7 @@ interface ClubActivitiesProps {
 }
 
 const ClubActivities = ({
+  clubId = "",
   recruitmentId,
   body,
   recruitmentNoteDataList,
