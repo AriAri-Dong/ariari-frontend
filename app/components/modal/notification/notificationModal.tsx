@@ -15,7 +15,9 @@ interface TooltipProps {
  */
 const NotificationModal = ({ children }: TooltipProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { myNotifications } = useMyNotificationQuery();
+  const { myNotifications, isLoading } = useMyNotificationQuery({
+    enabled: !!isOpen,
+  });
 
   const toggleModal = () => {
     setIsOpen((prev) => !prev);
@@ -49,7 +51,9 @@ const NotificationModal = ({ children }: TooltipProps) => {
               rounded-xl w-[400px] max-h-[548px] shadow-default
               overflow-y-scroll custom-scrollbar"
             >
-              <NotificationList notificationList={myNotifications} />
+              {!isLoading && (
+                <NotificationList notificationList={myNotifications} />
+              )}
             </div>
           </div>
         </>
