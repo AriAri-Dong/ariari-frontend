@@ -64,7 +64,7 @@ const BottomSheet = ({
                 !isSelected
                   ? "text-subtext1"
                   : selectedOptions.includes(item.label)
-                  ? "text-primary font-semibold"
+                  ? "text-primary text-mobile_h4_sb"
                   : "text-unselected"
               } ${
                 !multiple && `justify-center`

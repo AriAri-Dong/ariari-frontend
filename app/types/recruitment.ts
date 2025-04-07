@@ -1,3 +1,4 @@
+
 import { ClubData } from "@/types/club";
 import { PageInfo } from "@/types/pageInfo";
 
