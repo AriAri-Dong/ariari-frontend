@@ -1,14 +1,17 @@
+import { ClubReviewSaveReq, PassReviewSaveReq } from "../review";
+
 export interface ActivityReviewProps {
   onClose: () => void;
-  onSubmit: (data: {
-    title: string;
-    details: string;
-    badges: number[];
-  }) => void;
+  onSubmit: (data: ClubReviewSaveReq) => void;
 }
 
 export interface AcceptanceReviewProps {
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (data: PassReviewSaveReq) => void;
   className?: string;
+}
+
+export interface InterviewNoticeProps {
+  onClose: () => void;
+  onSubmit: () => void;
 }

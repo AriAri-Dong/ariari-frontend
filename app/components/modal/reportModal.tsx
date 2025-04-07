@@ -81,10 +81,10 @@ const ReportModal = ({
       onClick={(e) =>
         (e.target as HTMLDivElement).id === "background" && onClose()
       }
+      style={{ zIndex: 1000 }}
     >
       <div
         className={`bg-white p-5 shadow-modal rounded-2xl w-[826px] max-h-[90vh] flex flex-col`}
-        style={{ zIndex: 1000 }}
       >
         <div className="flex justify-between items-center pb-5 border-b">
           <h2 className="text-h1_contents_title">신고하기</h2>

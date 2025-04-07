@@ -2,43 +2,31 @@
 
 import React from "react";
 import Image from "next/image";
-import { REVIEW_BADGE_LIST } from "@/data/reviewBadge";
+import { TagData } from "@/types/review";
+import { tagMap } from "@/utils/tagMapping";
 
 interface ReviewBadgeProps {
-  type:
-    | "employment"
-    | "experience"
-    | "health"
-    | "interest"
-    | "relationship"
-    | "selfDevelopment"
-    | "skill";
+  tag: TagData;
 }
 
 /**
  * ReviewBadge 컴포넌트
- * @param type 배지 유형
+ * @param tag 배지 유형
  */
-const ReviewBadge = ({ type }: ReviewBadgeProps) => {
-  const badgeData = REVIEW_BADGE_LIST.find((badge) => badge.type === type);
-
-  if (!badgeData) {
-    return null;
-  }
-
-  const { imageUrl, title } = badgeData;
+const ReviewBadge = ({ tag }: ReviewBadgeProps) => {
+  const tagIcon = tagMap[tag.icon];
 
   return (
     <div className="flex items-center py-[3px] px-2.5 gap-[6px] rounded bg-selectedoption_default">
       <Image
-        src={imageUrl}
-        alt={title}
+        src={tagIcon}
+        alt={tag.body}
         width={16}
         height={16}
         className="md:w-5 md:h-5"
       />
       <p className="text-mobile_body3_m text-subtext2 md:text-body3_m">
-        {title}
+        {tag.body}
       </p>
     </div>
   );

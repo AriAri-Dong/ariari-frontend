@@ -3,9 +3,7 @@
 import React from "react";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
-import Image from "next/image";
-import helpText from "@/images/icon/helptextFaqMobile.svg";
-import { usePathname } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface DayFloatingBarProps {
   deadline: Date;
@@ -23,9 +21,9 @@ const RecruitmentGuideFloatingBar = ({
   isWriteButtonVisible,
   handleWrite = () => {},
 }: DayFloatingBarProps) => {
-  const pathname = usePathname();
-
-  const imageVisible = pathname === "/club/review/acceptance";
+  const params = useSearchParams();
+  const clubId = params.get("clubId");
+  const router = useRouter();
 
   const formattedDeadline = `${
     deadline.getMonth() + 1
@@ -35,23 +33,16 @@ const RecruitmentGuideFloatingBar = ({
     .padStart(2, "0")} 모집 마감`;
 
   const handleView = () => {
-    console.log("모집 공고 보기");
+    router.push(`/club/recruitment?clubId=${clubId}`);
   };
 
   return (
     <div
       className="hidden md:flex fixed bottom-0 w-full max-w-[1248px] mb-9
       justify-center left-1/2 transform -translate-x-1/2 px-5"
-      style={{ zIndex: 1000 }}
+      style={{ zIndex: 50 }}
     >
       <div className="flex flex-col w-full">
-        {imageVisible && (
-          <Image
-            src={helpText}
-            alt={"helpText"}
-            className="self-end mr-[-12px] mb-[-8px]"
-          />
-        )}
         <div className="flex gap-5">
           <div
             className="w-full bg-white70 shadow-default rounded-56
