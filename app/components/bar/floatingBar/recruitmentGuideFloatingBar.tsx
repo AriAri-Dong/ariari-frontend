@@ -3,9 +3,7 @@
 import React from "react";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
-import Image from "next/image";
-import helpText from "@/images/icon/helptextFaqMobile.svg";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface DayFloatingBarProps {
   deadline: Date;
@@ -27,9 +25,6 @@ const RecruitmentGuideFloatingBar = ({
   const clubId = params.get("clubId");
   const router = useRouter();
 
-  const pathname = usePathname();
-  const imageVisible = pathname === "/club/review/acceptance";
-
   const formattedDeadline = `${
     deadline.getMonth() + 1
   }월 ${deadline.getDate()}일 ${deadline.getHours()}:${deadline
@@ -48,13 +43,6 @@ const RecruitmentGuideFloatingBar = ({
       style={{ zIndex: 50 }}
     >
       <div className="flex flex-col w-full">
-        {imageVisible && (
-          <Image
-            src={helpText}
-            alt={"helpText"}
-            className="self-end mr-[-12px] mb-[-8px]"
-          />
-        )}
         <div className="flex gap-5">
           <div
             className="w-full bg-white70 shadow-default rounded-56
