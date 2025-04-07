@@ -329,7 +329,7 @@ export const CLUB_LEFT_MENU_MEMBER = [
     id: 2,
     label: "공지사항",
     icon: "announcement",
-    url: "/club/notice",
+    url: "/club/management/activity/notice",
     subUrl: [],
   },
   {
@@ -343,7 +343,7 @@ export const CLUB_LEFT_MENU_MEMBER = [
     id: 4,
     label: "회계내역",
     icon: "accounting",
-    url: "/club/review/activity",
+    url: "/club/management/activity/accounting",
     subUrl: [],
   },
   {
