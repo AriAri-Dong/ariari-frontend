@@ -1,6 +1,7 @@
 import { ClubMemberData, MemberData } from "./member";
 import { PageInfo } from "./pageInfo";
 
+export type ClubAffiliationType = "EXTERNAL" | "INTERNAL";
 export type ClubFieldType =
   | "CULTURE"
   | "VOLUNTEER"
@@ -30,7 +31,7 @@ export interface SchoolData {
 }
 
 export interface ClubData {
-  id: number;
+  id: string;
   name: string;
   profileUri: string;
   body: string;
@@ -52,7 +53,7 @@ export type TokenType =
   | "C_TOKEN_7";
 
 export interface ClubFaqData {
-  id: number; // $int64
+  id: string; // $int64
   title: string;
   body: string;
   clubFaqClassification: string;
@@ -72,7 +73,7 @@ export interface ClubAnswerData {
 }
 
 export interface ClubQuestionData {
-  id: number; // int64
+  id: string; // int64
   title: string;
   body: string;
   memberData: MemberData;
@@ -90,6 +91,35 @@ export interface MembershipBalance {
   amount: number; // 입금(양수) 또는 출금(음수)
   balance: number; // 현재 잔액
 }
+
+export interface ClubActivity {
+  clubActivityId: string;
+  clubId: string;
+  clubMember: ClubMemberData;
+  accessType: "ALL" | "CLUB_MEMBER";
+  body: string;
+  createdDateTime: string;
+  // deletedDateTime?: string | null;
+  images: string[];
+  likes: number;
+  myLike: boolean;
+  isMine: boolean;
+  commentCount: number;
+  comments: ClubActivityComment[];
+}
+
+export interface ClubActivityComment {
+  clubActivityCommentId: string;
+  clubMember: ClubMemberData;
+  clubActivityId: string;
+  body: string;
+  createdDateTime: string;
+  likes: number;
+  myLike: boolean;
+  isMine: boolean;
+  comments: ClubActivityComment[];
+}
+
 export interface ClubDetailRes {
   clubData: ClubData;
   clubMemberData: ClubMemberData;

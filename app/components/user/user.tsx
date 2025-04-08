@@ -7,11 +7,11 @@ import UserDropdown from "../dropdown/userDropdown";
 import { USER_MENU } from "@/data/header";
 import LoginBtn from "../button/basicBtn/loginBtn";
 import Notification from "../button/iconBtn/notification";
-import rabbit from "@/images/profile/rabbit.svg";
 import NotificationModal from "../modal/notification/notificationModal";
 import LoginModal from "../modal/login/loginModal";
-import { useUserStore } from "@/providers/user-store-provider";
+import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
+import { getProfileImage } from "@/utils/profileImage";
 
 const User = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -19,28 +19,28 @@ const User = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
-  // Zustand에서 사용자 로그인 상태 및 닉네임 가져오기
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
   const nickname = useUserStore(
     useShallow((state) => state.memberData.nickname)
   );
+  const profileType = useUserStore(
+    useShallow((state) => state.memberData.profileType)
+  );
 
-  // 드롭다운 토글 핸들러
+  const profileImageSrc = getProfileImage(profileType);
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
-  // 로그인 모달 닫기 핸들러
   const handleCloseModal = () => {
     setIsLoginModalOpen(false);
   };
 
-  // 로그인 버튼 클릭 시 모달 열기
   const handleLoginClick = () => {
     setIsLoginModalOpen(true);
   };
 
-  // 드롭다운 바깥 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -72,7 +72,7 @@ const User = () => {
             hover:bg-hover focus:bg-pressed"
             onClick={toggleDropdown}
           >
-            <Image src={rabbit} alt={"profile"} width={40} height={40} />
+            <Image src={profileImageSrc} alt="profile" width={40} height={40} />
             <span className="text-subtext2 text-base">{nickname}님</span>
             <Image src={arrow} alt="arrow" className="pr-2" />
           </button>

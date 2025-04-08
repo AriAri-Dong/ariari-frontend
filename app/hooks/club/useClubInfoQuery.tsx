@@ -7,9 +7,16 @@ export const useClubInfoQuery = (clubId: string) => {
     data: clubInfo,
     isLoading,
     isError,
+    error,
   } = useQuery({
     queryKey: ["club", clubId],
     queryFn: () => fetchClubInfo(clubId),
   });
-  return { clubInfo, isLoading, isError };
+
+  return {
+    clubInfo,
+    isLoading,
+    isError,
+    errorMessage: isError && error instanceof Error ? error.message : null,
+  };
 };
