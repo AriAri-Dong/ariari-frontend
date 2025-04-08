@@ -166,7 +166,7 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
                 className={`flex gap-4 mr-[18px] md:gap-5 md:flex-col cursor-pointer ${
                   isExpired ? "opacity-50 backdrop-filter backdrop-blur-md" : ""
                 }`}
-                onClick={() => handleRouter}
+                onClick={() => handleRouter(item.id)}
               >
                 <div className="relative min-w-[114px] md:w-full aspect-square">
                   <Image
