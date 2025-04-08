@@ -37,7 +37,7 @@ const PopularRecruitment = () => {
   useEffect(() => {
     if (
       isAuthenticated &&
-      !schoolCertification &&
+      schoolCertification &&
       affiliationType[0] === "교내"
     ) {
       // 학교 인증이 완료되었고 교내를 선택한 경우
