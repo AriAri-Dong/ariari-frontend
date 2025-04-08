@@ -221,6 +221,30 @@ export const removeClubBookmark = async (clubId: number) => {
   }
 };
 
+// 동아리 북마크 등록
+export const postClubBookmark = async (clubId: string) => {
+  try {
+    const response = await axiosInstance.post(`${CLUBS}/${clubId}/bookmark`);
+    console.log("북마크 등록 성공:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(" 북마크 등록 실패:", error);
+    throw error;
+  }
+};
+
+// 동아리 북마크 삭제
+export const deleteClubBookmark = async (clubId: string) => {
+  try {
+    const response = await axiosInstance.delete(`${CLUBS}/${clubId}/bookmark`);
+    console.log("북마크 삭제 성공:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(" 북마크 삭제 실패:", error);
+    throw error;
+  }
+};
+
 // 북마크 동아리 조회
 export const getBookmarkClubsInfo = async (
   hasActiveRecruitment: boolean,
