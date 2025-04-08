@@ -6,7 +6,11 @@ import HeaderSection from "./content/headerSection";
 import FilterSection from "./content/filterSection";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MainRecruitmentCard from "@/components/card/mainRecruitmentCard";
-import { RecruitmentData, RecruitmentResponse } from "@/types/recruitment";
+import {
+  ClubRecruitmentListResponse,
+  RecruitmentData,
+  RecruitmentResponse,
+} from "@/types/recruitment";
 import { getBookmarkRecruitment } from "@/api/recruitment/api";
 import { Pageable } from "@/types/api";
 
@@ -38,9 +42,8 @@ const InterestRecruitmentPage = () => {
         sort: sortType === "정렬 기준" ? [""] : [sortType],
       };
 
-      const response: RecruitmentResponse = await getBookmarkRecruitment(
-        pageable
-      );
+      const response: ClubRecruitmentListResponse =
+        await getBookmarkRecruitment(pageable);
 
       if (reset) {
         setRecruitmentData(response.recruitmentDataList);

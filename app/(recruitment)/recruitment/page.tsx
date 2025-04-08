@@ -6,7 +6,11 @@ import FilterSection from "./content/filterSection";
 import MainRecruitmentCard from "@/components/card/mainRecruitmentCard";
 import HeaderSection from "./content/headerSection";
 import { AFFILIATION_TYPE, POPULARITY_SORT_TYPE } from "@/data/pulldown";
-import { RecruitmentData, RecruitmentResponse } from "@/types/recruitment";
+import {
+  ClubRecruitmentListResponse,
+  RecruitmentData,
+  RecruitmentResponse,
+} from "@/types/recruitment";
 import { ClubSearchCondition, Pageable } from "@/types/api";
 import {
   getAllRecruitments,
@@ -43,7 +47,7 @@ const Recruitment = () => {
         sort: sortType === "정렬 기준" ? [] : [sortType],
       };
 
-      let response: RecruitmentResponse;
+      let response: ClubRecruitmentListResponse;
 
       if (affiliationFilter === "INTERNAL") {
         response = await getInternalRecruitments(condition, pageable);

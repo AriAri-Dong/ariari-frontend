@@ -9,7 +9,10 @@ import {
 } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
 import { ClubSearchCondition, Pageable } from "@/types/api";
-import { RecruitmentResponse } from "@/types/recruitment";
+import {
+  ClubRecruitmentListResponse,
+  RecruitmentResponse,
+} from "@/types/recruitment";
 import { AxiosError } from "axios";
 
 // 교내 모집 랭킹 리스트 조회
@@ -38,7 +41,7 @@ export const getExternalRecruitmentRanking = async () => {
 export const getAllRecruitments = async (
   condition: ClubSearchCondition,
   pageable: Pageable
-): Promise<RecruitmentResponse> => {
+): Promise<ClubRecruitmentListResponse> => {
   try {
     const filteredCondition = {
       clubCategoryTypes: condition.clubCategoryTypes
@@ -60,9 +63,12 @@ export const getAllRecruitments = async (
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
     };
 
-    const response = await axiosInstance.get<RecruitmentResponse>(RECRUITMENT, {
-      params,
-    });
+    const response = await axiosInstance.get<ClubRecruitmentListResponse>(
+      RECRUITMENT,
+      {
+        params,
+      }
+    );
 
     return response.data;
   } catch (error) {
@@ -75,7 +81,7 @@ export const getAllRecruitments = async (
 export const getInternalRecruitments = async (
   condition: ClubSearchCondition,
   pageable: Pageable
-): Promise<RecruitmentResponse> => {
+): Promise<ClubRecruitmentListResponse> => {
   try {
     const filteredCondition = {
       clubCategoryTypes: condition.clubCategoryTypes
@@ -97,7 +103,7 @@ export const getInternalRecruitments = async (
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
     };
 
-    const response = await axiosInstance.get<RecruitmentResponse>(
+    const response = await axiosInstance.get<ClubRecruitmentListResponse>(
       RECRUITMENT_INTERNAL,
       {
         params,
@@ -115,7 +121,7 @@ export const getInternalRecruitments = async (
 export const getExternalRecruitments = async (
   condition: ClubSearchCondition,
   pageable: Pageable
-): Promise<RecruitmentResponse> => {
+): Promise<ClubRecruitmentListResponse> => {
   try {
     const filteredCondition = {
       clubCategoryTypes: condition.clubCategoryTypes
@@ -137,7 +143,7 @@ export const getExternalRecruitments = async (
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
     };
 
-    const response = await axios.get<RecruitmentResponse>(
+    const response = await axios.get<ClubRecruitmentListResponse>(
       RECRUITMENT_EXTERNAL,
       {
         params,
@@ -152,7 +158,7 @@ export const getExternalRecruitments = async (
 };
 
 // 모집공고 북마크 등록
-export const addRecruitmentBookmark = async (recruitmentId: number) => {
+export const addRecruitmentBookmark = async (recruitmentId: string) => {
   try {
     const response = await axiosInstance.post(
       `${RECRUITMENT}/${recruitmentId}/bookmark`
@@ -166,7 +172,7 @@ export const addRecruitmentBookmark = async (recruitmentId: number) => {
 };
 
 // 모집공고 북마크 삭제
-export const removeRecruitmentBookmark = async (recruitmentId: number) => {
+export const removeRecruitmentBookmark = async (recruitmentId: string) => {
   try {
     const response = await axiosInstance.delete(
       `${RECRUITMENT}/${recruitmentId}/bookmark`
@@ -182,7 +188,7 @@ export const removeRecruitmentBookmark = async (recruitmentId: number) => {
 // 북마크 모집공고 조회
 export const getBookmarkRecruitment = async (
   pageable: Pageable
-): Promise<RecruitmentResponse> => {
+): Promise<ClubRecruitmentListResponse> => {
   try {
     const params = {
       page: pageable.page,
@@ -190,7 +196,7 @@ export const getBookmarkRecruitment = async (
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
     };
 
-    const response = await axiosInstance.get<RecruitmentResponse>(
+    const response = await axiosInstance.get<ClubRecruitmentListResponse>(
       RECRUITMENT_BOOKMARKS,
       {
         params,
