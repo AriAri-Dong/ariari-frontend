@@ -1,16 +1,18 @@
 import { UserDataResponseType } from "@/types/api";
+import { profileType } from "@/types/member";
 import { devtools, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 
 export type UserState = {
   accessToken: string;
+  refreshToken: string;
   id: string;
   isSignIn: boolean;
   isFirstLogin: boolean;
   memberData: {
     id: string;
     nickname: string;
-    profileType: string | null;
+    profileType: profileType;
   };
   schoolData: {
     name: string;
@@ -20,36 +22,34 @@ export type UserState = {
 export type UserActions = {
   signIn: ({
     accessToken,
+    refreshToken,
     isFirstLogin,
     isSignIn,
   }: {
     accessToken: string;
+    refreshToken: string;
     isFirstLogin: boolean;
     isSignIn: boolean;
   }) => void;
   signOut: () => void;
   setUserData: (userData: UserDataResponseType) => void;
+  setAccessToken: (accessToken: string) => void;
 };
 
 export type UserStore = UserState & UserActions;
 
 export const defaultInitState: UserState = {
-  accessToken: "initialAccessToken",
-  id: "defaultIdValue",
+  accessToken: "",
+  refreshToken: "",
+  id: "",
   isSignIn: false,
   isFirstLogin: false,
   memberData: {
     id: "",
     nickname: "",
-    profileType: "",
+    profileType: null,
   },
-  schoolData: {
-    name: "",
-  },
-};
-
-export const initUserStore = (): UserState => {
-  return defaultInitState;
+  schoolData: null,
 };
 
 export const createUserStore = (initState: UserState = defaultInitState) => {
@@ -58,25 +58,38 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
       persist(
         (set, get) => ({
           ...initState,
-          signIn: ({ accessToken, isFirstLogin, isSignIn }) =>
-            set((state) => {
-              return {
-                ...state,
-                accessToken: accessToken,
-                isFirstLogin: isFirstLogin,
-                isSignIn: isSignIn,
-              };
+          signIn: ({ accessToken, refreshToken, isFirstLogin, isSignIn }) =>
+            set((state) => ({
+              ...state,
+              accessToken,
+              refreshToken,
+              isFirstLogin,
+              isSignIn,
+            })),
+          signOut: () =>
+            set(() => {
+              localStorage.removeItem("ariari-storage");
+              sessionStorage.removeItem("accessToken");
+              sessionStorage.removeItem("refreshToken");
+
+              return defaultInitState;
             }),
-          signOut: () => set(() => initState),
           setUserData: (userData) =>
             set((state) => ({
               ...state,
               memberData: {
                 ...userData.memberData,
+                profileType: userData.memberData.profileType as profileType,
               },
-              schoolData: {
-                ...userData.schoolData,
-              },
+              schoolData: userData.schoolData
+                ? { ...userData.schoolData }
+                : null,
+            })),
+
+          setAccessToken: (accessToken) =>
+            set((state) => ({
+              ...state,
+              accessToken,
             })),
         }),
         {
@@ -86,3 +99,5 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
     )
   );
 };
+
+export const authStore = createUserStore();

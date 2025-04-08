@@ -4,62 +4,75 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { MdFavorite } from "react-icons/md";
 import { useRouter } from "next/navigation";
-
-interface ClubProfileCardProps {
-  clubName: string;
-  clubImage: string;
-  affiliation: string;
-  field: string;
-  region: string;
-  target: string;
-  heartNumber: number;
-  clubPageUrl: string;
-}
+import { ClubListData } from "@/types/api";
+import defaultImg from "@/images/icon/defaultAriari.svg";
+import {
+  CLUB_FIELD,
+  CLUB_PARTICIPANT,
+  CLUB_REGION,
+} from "@/constants/clubInfo";
+import { addClubBookmark, removeClubBookmark } from "@/api/club/api";
 
 /**
- *
- * @param clubName 동아리 이름
- * @param clubImage 동아리 프로필
- * @param affiliation 소속
- * @param field 분야
- * @param region 지역
- * @param target 대상
+ * @param name 동아리 이름
+ * @param profileUri 동아리 프로필
+ * @param afiliationType 소속
+ * @param clubCategoryType 분야
+ * @param clubRegionType 지역
+ * @param participantType 대상
  * @param heartNumber 좋아요 개수
  * @param clubPageUrl 동아리 링크
  * @returns
  */
 const ClubInfoCard = ({
-  clubName,
-  clubImage,
-  affiliation,
-  field,
-  region,
-  target,
-  heartNumber,
-  clubPageUrl,
-}: ClubProfileCardProps) => {
+  id,
+  name,
+  profileUri,
+  bannerUri,
+  clubCategoryType,
+  clubRegionType,
+  participantType,
+  isMyBookmark,
+  schoolData,
+}: ClubListData) => {
   const router = useRouter();
-  const [isHeart, setIsHeart] = useState<boolean>(false);
-  const [heartNumberVal, setHeartNumberVal] = useState<number>(heartNumber);
+  const [isHeart, setIsHeart] = useState<boolean>(isMyBookmark);
+  // 현재 북마크 개수에 대한 데이터 없음
+  const [heartNumberVal, setHeartNumberVal] = useState<number>(
+    isMyBookmark ? 1 : 0
+  );
 
   const onClubProfileClick = () => {
-    router.push(clubPageUrl);
+    router.push(`/club/activityHistory?clubId=${id}`);
   };
 
-  const onHeartClick = () => {
-    setIsHeart(!isHeart);
-    setHeartNumberVal((prev) => (isHeart ? prev - 1 : prev + 1));
+  const onHeartClick = async () => {
+    try {
+      setIsHeart((prev) => !prev);
+      setHeartNumberVal((prev) => (isHeart ? Math.max(prev - 1, 0) : prev + 1));
+
+      if (isHeart) {
+        await removeClubBookmark(id);
+      } else {
+        await addClubBookmark(id);
+      }
+    } catch (error) {
+      console.error("북마크 변경 실패:", error);
+      setIsHeart((prev) => !prev);
+      setHeartNumberVal((prev) => (isHeart ? prev + 1 : Math.max(prev - 1, 0)));
+    }
   };
 
   return (
     <div className="flex justify-between items-center">
       <div className="flex gap-4 items-center py-[6px] md:gap-5">
-        <div className="relative w-[60px] h-[60px] md:w-[73px] md:h-[73px]">
+        <div className="relative">
           <Image
-            src={clubImage}
+            src={profileUri || defaultImg}
             alt={"club_profile"}
-            fill
-            className="rounded-full object-cover cursor-pointer"
+            width={60}
+            height={60}
+            className="rounded-full object-cover cursor-pointer md:w-[73px] md:h-[73px]"
             onClick={onClubProfileClick}
           />
         </div>
@@ -68,10 +81,12 @@ const ClubInfoCard = ({
             className="text-mobile_h3 text-text1 md:text-h3 cursor-pointer"
             onClick={onClubProfileClick}
           >
-            {clubName}
+            {name}
           </h1>
           <p className="text-subtext2 text-mobile_body3_m md:text-body2_m">
-            {affiliation} | {field} | {region} | {target}
+            {schoolData == null ? "연합" : "교내"} |{" "}
+            {CLUB_FIELD[clubCategoryType]} | {CLUB_REGION[clubRegionType]} |{" "}
+            {CLUB_PARTICIPANT[participantType]}
           </p>
         </div>
       </div>

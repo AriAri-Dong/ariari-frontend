@@ -4,10 +4,29 @@ const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
+  trailingSlash: false,
   compiler: {
     styledComponents: true,
   },
   output: "standalone",
+  images: {
+    // domains: ["d19qg9zwo8is96.cloudfront.net"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "d19qg9zwo8is96.cloudfront.net",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "d19qg9zwo8is96.cloudfront.net",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
+
   webpack: (config) => {
     // current file loader rule
     const fileLoaderRule = config.module.rules.find((rule) =>

@@ -18,18 +18,31 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import vector from "@/images/icon/backVector.svg";
 import Alert from "@/components/alert/alert";
 import NotiPopUp from "@/components/modal/notiPopUp";
+import { createClubWithFile, getAllClubsInfo } from "@/api/club/api";
+import { convertToServerFormat } from "@/utils/convertToServerFormat";
+import {
+  ClubResponse,
+  ClubSearchCondition,
+  CreateClubData,
+  Pageable,
+} from "@/types/api";
 
 const OPTIONS = [
-  { label: "동아리 소속", key: "affiliationType", data: AFFILIATION_TYPE },
-  { label: "동아리 분야", key: "fieldType", data: FIELD_TYPE },
-  { label: "동아리 지역", key: "areaType", data: AREA_TYPE },
-  { label: "동아리 대상", key: "targetType", data: TARGET_TYPE },
+  {
+    label: "동아리 소속",
+    key: "affiliationType",
+    data: AFFILIATION_TYPE.slice(1),
+  },
+  { label: "동아리 분야", key: "fieldType", data: FIELD_TYPE.slice(1) },
+  { label: "동아리 지역", key: "areaType", data: AREA_TYPE.slice(1) },
+  { label: "동아리 대상", key: "targetType", data: TARGET_TYPE.slice(1) },
 ];
 
 const CreateClubPage = () => {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [submit, setSubmit] = useState<boolean>(false);
+  const [createdClubId, setCreatedClubId] = useState<number | null>(null);
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [clubName, setClubName] = useState<string>("");
@@ -66,10 +79,10 @@ const CreateClubPage = () => {
     const file = event.target.files?.[0];
     if (file) {
       // 파일 용량 및 확장자 확인
-      const maxFileSize = 100 * 1024 * 1024;
+      const maxFileSize = 100 * 1024 * 1024; // 100MB
       const allowedExtensions = ["image/png", "image/jpeg", "image/svg+xml"];
       if (file.size > maxFileSize) {
-        setAlertMessage("파일 용량은 100MB 를 초과할 수 없습니다.");
+        setAlertMessage("파일 용량은 100MB를 초과할 수 없습니다.");
         setAlertVisible(true);
         return;
       }
@@ -106,7 +119,7 @@ const CreateClubPage = () => {
     return true;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       setAlertVisible(false);
       setTimeout(() => {
@@ -115,20 +128,86 @@ const CreateClubPage = () => {
       }, 0);
       return;
     }
+
     setSubmit(true);
     setAlertVisible(false);
+
+    const convertedData = convertToServerFormat(
+      selections.affiliationType[0],
+      selections.fieldType[0],
+      selections.areaType[0],
+      selections.targetType[0]
+    );
+
+    const clubData: CreateClubData = {
+      name: clubName,
+      body: clubIntroduction,
+      ...convertedData,
+    };
+
+    try {
+      let fileToSend: File;
+      if (uploadedImage) {
+        const base64Image = uploadedImage.split(",")[1];
+        const byteArray = new Uint8Array(
+          atob(base64Image)
+            .split("")
+            .map((c) => c.charCodeAt(0))
+        );
+        fileToSend = new File([byteArray], "club_image", {
+          type: "image/jpeg",
+        });
+      } else {
+        fileToSend = new File([], "");
+      }
+
+      await createClubWithFile(clubData, fileToSend);
+
+      // 클럽 리스트에서 ID 찾기
+      const response: ClubResponse = await getAllClubsInfo(
+        {
+          clubCategoryTypes: undefined,
+          clubRegionTypes: undefined,
+          participantTypes: undefined,
+        },
+        {
+          page: 0,
+          size: 100,
+          sort: [""],
+        }
+      );
+
+      const createdClub = response.clubDataList.find(
+        (club) => club.name === clubName
+      );
+
+      if (createdClub) {
+        setCreatedClubId(createdClub.id);
+      } else {
+        throw new Error("생성된 동아리를 찾을 수 없습니다.");
+      }
+    } catch (error) {
+      console.error("동아리 생성 실패:", error);
+      setAlertMessage("동아리 생성에 실패했습니다.");
+      setAlertVisible(true);
+      setSubmit(false);
+    }
   };
 
   const handleWritePosting = () => {
     setSubmit(false);
-    // 임시 경로
-    router.push("/club");
+
+    if (createdClubId) {
+      router.push(`/club/activityHistory?clubId=${createdClubId}`);
+    } else {
+      router.push("/exploration");
+    }
   };
 
   const handleTakeALook = () => {
     setSubmit(false);
     // 임시 경로
-    router.push("/club");
+    router.push("/exploration");
   };
 
   return (

@@ -10,18 +10,19 @@ import rabbit from "@/images/profile/rabbit.svg";
 import sheep from "@/images/profile/sheep.svg";
 import tiger from "@/images/profile/tiger.svg";
 import turtle from "@/images/profile/turtle.svg";
+// import monkey from "@/images/profile/monkey.svg";
 
 export const PROFILE_SETTING = [
-  { id: 1, imageUrl: ariari, alias: "ariari" },
-  { id: 2, imageUrl: mouse, alias: "mouse" },
-  { id: 3, imageUrl: pig, alias: "pig" },
-  { id: 4, imageUrl: rabbit, alias: "rabbit" },
-  { id: 5, imageUrl: chicken, alias: "chicken" },
-  { id: 6, imageUrl: cow, alias: "cow" },
-  { id: 7, imageUrl: deer, alias: "deer" },
-  { id: 8, imageUrl: tiger, alias: "tiger" },
-  { id: 9, imageUrl: horse, alias: "horse" },
-  { id: 10, imageUrl: sheep, alias: "sheep" },
-  { id: 11, imageUrl: dog, alias: "dog" },
-  { id: 12, imageUrl: turtle, alias: "turtle" },
+  { id: 1, imageUrl: ariari, alias: null },
+  { id: 2, imageUrl: mouse, alias: "ARIARI_MOUSE" },
+  { id: 3, imageUrl: pig, alias: "ARIARI_PIG" },
+  { id: 4, imageUrl: rabbit, alias: "ARIARI_RABBIT" },
+  { id: 5, imageUrl: chicken, alias: "ARIARI_CHICKEN" },
+  { id: 6, imageUrl: cow, alias: "ARIARI_COW" },
+  { id: 7, imageUrl: deer, alias: "ARIARI_DRAGON" },
+  { id: 8, imageUrl: tiger, alias: "ARIARI_TIGER" },
+  { id: 9, imageUrl: horse, alias: "ARIARI_HORSE" },
+  { id: 10, imageUrl: sheep, alias: "ARIARI_SHEEP" },
+  { id: 11, imageUrl: dog, alias: "ARIARI_DOG" },
+  { id: 12, imageUrl: turtle, alias: "ARIARI_MONKEY" },
 ];

@@ -3,7 +3,6 @@ import Image from "next/image";
 import file from "@/images/icon/file.svg";
 import vector from "@/images/icon/pullDown.svg";
 import active from "@/images/icon/active_vector.svg";
-import test_image from "@/images/profile/ariari.svg";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import { useClubContext } from "@/context/ClubContext";
@@ -12,20 +11,31 @@ import { MENU_ICONS } from "@/constants/clubMenu";
 import { Icon } from "@/components/icon";
 import { CLUB_LEFT_MENU_TABS } from "@/data/club";
 import { useClubNotificationQuery } from "@/hooks/notification/useNotificationQuery";
+import ModifyClubInfoModal from "@/components/modal/club/modifyClubInfoModal";
+import Alert from "@/components/alert/alert";
+import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
+import { useUserStore } from "@/providers/userStoreProvider";
+import defaultImg from "@/images/icon/defaultAriari.svg";
+import { getProfileImage } from "@/utils/profileImage";
 import NotificationList from "@/components/list/notificationList";
 import WhiteButton from "@/components/button/basicBtn/whiteBtn";
 
+/**
+ * 메뉴 컴포넌트
+ * @returns
+ */
 const LeftMenu = () => {
   const [activeTab, setActiveTab] = useState<"menu" | "notification">("menu");
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState<number | null>(null);
-
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  
   const router = useRouter();
   const pathname = usePathname();
-  const params = useSearchParams();
-  const clubId = params.get("clubId") || "";
-
-  const { role, clubInfo } = useClubContext();
+  const searchParams = useSearchParams();
+  const clubId = searchParams.get("clubId") || "";
+  
   const {
     clubNotifications,
     hasNextPage,
@@ -33,9 +43,19 @@ const LeftMenu = () => {
     isFetchingNextPage,
     unreadCount,
   } = useClubNotificationQuery(clubId);
+  const { role } = useClubContext();
+  const { clubInfo } = useClubInfoQuery(clubId);
+  const clubData = clubInfo?.clubData;
+  console.log(role);
+  console.log(clubData);
+
+  const nickname = useUserStore((state) => state.memberData.nickname);
+  const profileType = useUserStore((state) => state.memberData.profileType);
 
   // 권한에 따른 메뉴 데이터
   const CLUB_LEFT_MENU = CLUB_MENU_MAP[role ?? "USER"];
+  const profileImageSrc = getProfileImage(profileType);
+
 
   const isActive = (url: string) => pathname === url;
 
@@ -78,6 +98,19 @@ const LeftMenu = () => {
       }
     });
   }, [pathname]);
+    
+  const handleModifyClubInfo = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSubmitSuccess = () => {
+    setAlertMessage("동아리 정보가 수정되었습니다.");
+
+    setTimeout(() => {
+      window.location.reload();
+      // 0.5초 후 새로고침
+    }, 500);
+  };
 
   if (!clubInfo) return null;
   return (
@@ -89,7 +122,7 @@ const LeftMenu = () => {
             <div className="flex flex-col">
               <div className="flex gap-3 items-center ">
                 <Image
-                  src={clubInfo.clubData.profileUri || test_image}
+                  src={clubData?.profileUri || defaultImg}
                   alt={"profile"}
                   width={52}
                   height={52}
@@ -98,7 +131,7 @@ const LeftMenu = () => {
                 />
                 <div className="flex flex-col gap-1">
                   <h3 className="text-body1_sb text-text1">
-                    {clubInfo.clubMemberData.name}
+                    {clubInfo?.clubMemberData.name}
                   </h3>
                   <div className="flex gap-[6px]">
                     <Image src={file} alt={"profile"} width={14} height={18} />
@@ -107,11 +140,12 @@ const LeftMenu = () => {
                     </p>
                   </div>
                 </div>
+
               </div>
               {role === "ADMIN" && (
                 <SmallBtn
                   title={"동아리 정보 수정"}
-                  onClick={() => {}}
+                  onClick={handleModifyClubInfo}
                   className="mt-5"
                 />
               )}
@@ -243,6 +277,17 @@ const LeftMenu = () => {
           </div>
         )}
       </div>
+      {isModalOpen && (
+        <ModifyClubInfoModal
+          onClose={() => {
+            setIsModalOpen(false);
+          }}
+          onSubmit={handleSubmitSuccess}
+        />
+      )}
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+      )}
     </div>
   );
 };

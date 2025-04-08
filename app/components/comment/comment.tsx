@@ -149,7 +149,8 @@ const Comment = (props: CommentBaseProps) => {
       <div className="w-full">
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-2.5 mb-3">
-            <Image
+            {/* 에러 발생 임시 주석 처리 */}
+            {/* <Image
               src={
                 profileImageMap[
                   isReplying
@@ -161,7 +162,7 @@ const Comment = (props: CommentBaseProps) => {
               width={28}
               height={28}
               className="md:w-8 md:h-8"
-            />
+            /> */}
             <div className="flex flex-col gap-[2px] md:gap-[18px] md:items-center md:flex-row">
               <span className="text-subtext2 text-mobile_body1_m md:text-body1_m">
                 {isReplying ? myMemberData.name : props.comment.clubMember.name}
