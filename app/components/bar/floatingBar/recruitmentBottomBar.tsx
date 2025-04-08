@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MediumBtn from "@/components/button/basicBtn/mediumBtn";
 import BookmarkBtn from "@/components/button/iconBtn/bookmarkBtn";
 import SahreBtn from "@/components/button/iconBtn/shareBtn";
@@ -13,8 +13,9 @@ import {
   postRecruitmentBookmark,
 } from "@/api/recruitment/api";
 import Alert from "@/components/alert/alert";
-import { useUserStore } from "@/providers/user-store-provider";
 import { useShallow } from "zustand/shallow";
+import { useUserStore } from "@/providers/userStoreProvider";
+
 interface RecruitmentBottomBar {
   isMyBookmark: boolean;
   bookmarks: number;

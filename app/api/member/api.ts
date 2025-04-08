@@ -6,9 +6,6 @@ import {
   MEMBERS_MY,
 } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
-import { MEMBERS, MEMBERS_MY } from "../apiUrl";
-
-import { UserDataResponseType } from "@/types/api";
 import {
   ClubMemberListRes,
   clubMemberRoleType,

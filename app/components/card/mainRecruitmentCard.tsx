@@ -64,7 +64,7 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
     }
   };
 
-  const handleRouter = (id: number) => {
+  const handleRouter = (id: string) => {
     router.push(`/recruitment/detail?id=${id}`);
   };
 

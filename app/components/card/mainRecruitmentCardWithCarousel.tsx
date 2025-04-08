@@ -119,7 +119,7 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
     return null;
   }
 
-  const handleRouter = (id: number) => {
+  const handleRouter = (id: string) => {
     router.push(`/recruitment/detail?id=${id}`);
   };
 

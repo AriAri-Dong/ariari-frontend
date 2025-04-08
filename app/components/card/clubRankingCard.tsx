@@ -1,4 +1,4 @@
-import { ClubData } from "@/types/club";
+import { ClubData } from "@/types/api";
 import { useRouter } from "next/navigation";
 
 interface ClubRankingCardProps {

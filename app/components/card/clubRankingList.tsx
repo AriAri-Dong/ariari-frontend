@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ClubData } from "@/types/club";
+import { ClubData } from "@/types/api";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import { useRouter } from "next/navigation";
 import useResponsive from "@/hooks/useResponsive";
