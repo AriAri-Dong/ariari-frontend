@@ -10,6 +10,7 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MembershipBalanceList from "@/components/list/membershipBalanceList";
 import AccountingModal from "@/components/modal/club/accountingModal";
+import { useClubContext } from "@/context/ClubContext";
 import { useAddFinancialRecordMutation } from "@/hooks/club/useClubFinanceMutation";
 import {
   useFinanceBalanceQuery,
@@ -23,6 +24,7 @@ const AccountingPage = () => {
   const params = useSearchParams();
   const clubId = params.get("clubId") || "";
   const isMdUp = useResponsive("md");
+  const { role } = useClubContext();
 
   const [openWrite, setOpenWrite] = useState<boolean>(false);
 
@@ -76,6 +78,12 @@ const AccountingPage = () => {
     );
   };
 
+  if (!role) {
+    return (
+      <p className="text-center h-24">동아리 소속 회원만 접근할 수 있습니다.</p>
+    );
+  }
+
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
       <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
@@ -114,15 +122,12 @@ const AccountingPage = () => {
           </div>
         </div>
         {/* 컴포넌트화 필요 */}
-        {isMdUp ? (
-          <div className="fixed w-full bottom-5 px-5 flex justify-end md:bottom-[44px] md:max-w-[1248px] md:px-5">
-            <WriteBtn onClick={() => setOpenWrite(true)} />
-          </div>
-        ) : (
-          <div className="fixed bottom-[77px] right-5 md:hidden">
+        {(role === "ADMIN" || role === "MANAGER") && (
+          <div className="fixed w-full bottom-5 max-md:right-5 flex justify-end md:bottom-9 md:max-w-[1248px] md:px-5">
             <WriteBtn onClick={() => setOpenWrite(true)} />
           </div>
         )}
+
         {openWrite &&
           (isMdUp ? (
             <AccountingModal onClose={handleClose} onSubmit={handleSubmit} />
