@@ -20,6 +20,13 @@ const ProgressBar = ({
 }: ProgressBarProp) => {
   const [currentStep, setCurrentStep] = useState<number | null>(initialStep);
   const steps = [0, 1, 2, 3, 4];
+  const colors = [
+    "selectedoption_default",
+    "selectedoption_hover",
+    "selectedoption_pressed",
+    "selectedoption_border",
+    "primary",
+  ];
 
   const handleStepClick = (step: number) => {
     if (!disabled) {
@@ -64,7 +71,7 @@ const ProgressBar = ({
               key={step}
               className={`h-5 w-full flex-grow mx-0.5 cursor-pointer ${
                 index <= (currentStep ?? -1)
-                  ? "bg-pulldownmenutext"
+                  ? `bg-${colors[index]}`
                   : "bg-menuborder"
               } ${disabled ? "cursor-default" : ""} ${
                 index === 0 ? "ml-[-2px] rounded-l-20" : ""

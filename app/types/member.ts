@@ -1,3 +1,5 @@
+import { PageInfo } from "./pageInfo";
+
 export type clubMemberRoleType = "GENERAL" | "MANAGER" | "ADMIN";
 export type clubMemberStatusType = "ACTIVE" | "INACTIVE" | "WITHDRAWN";
 export type profileType =
@@ -14,15 +16,25 @@ export type profileType =
   | "ARIARI_DOG"
   | "ARIARI_PIG";
 export interface MemberData {
-  id: number; // $int64
+  id: string; // $int64
   nickname: string;
+  profileType?: profileType;
 }
 
 export interface ClubMemberData {
-  id: number; // $int64
+  id: string; // $int64
   name: string;
   clubMemberRoleType: clubMemberRoleType;
   clubMemberStatusType: clubMemberStatusType;
   profileType: profileType;
   memberData: MemberData;
+}
+
+export interface ClubMemberListRes {
+  clubMemberDataList: ClubMemberData[];
+  pageInfo: PageInfo;
+}
+
+export interface MemberListRes {
+  memberDataList: MemberData[];
 }

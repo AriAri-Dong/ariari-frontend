@@ -26,7 +26,7 @@ const InviteDialog = ({ clubName, onClose }: InviteDialogProps) => {
       {step == 1 && (
         <NotiPopUp
           modalType="button"
-          icon={"school"}
+          icon={"invitation"}
           title="동아리 초대가 왔어요"
           description={`${clubName}동아리에서 초대장을 보냈어요.\n초대를 수락하고 동아리에 가입할까요?`}
           firstButton={() => {
