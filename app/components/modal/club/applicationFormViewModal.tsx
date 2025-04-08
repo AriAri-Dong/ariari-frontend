@@ -7,35 +7,34 @@ import close from "@/images/icon/close.svg";
 import FileBadge from "@/components/badge/fileBadge";
 import CustomInput from "@/components/input/customInput";
 import PDFDownloadBtn from "@/components/button/pdfDownloadBtn";
+import { useApplyDetailQuery } from "@/hooks/apply/useApplicationQuery";
+import defaultImg from "@/images/icon/defaultAriari.svg";
+import { STATUS_OPTIONS } from "@/(club)/club/management/recruitment/applicationStatus/page";
+import { APPLY_STATUS_MAP } from "@/constants/application";
+import ApplicationFields from "@/components/list/applicationFields";
 
 export interface ApplicationFromViewModalProps {
   applyId: string;
   onClose: () => void;
-  portfolio: boolean;
-  portfolioData?: {
-    portfolioPurpose: string;
-    portfolioText: string;
-    portfolioFile: string;
-  };
-  data: {
-    name: string;
-    image: string;
-    nickname: string;
-  };
 }
 
 const ApplicationFromViewModal = ({
   applyId,
   onClose,
-  data,
-  portfolio,
-  portfolioData,
-  fields,
 }: ApplicationFromViewModalProps) => {
   const optionsRef = useRef<HTMLDivElement | null>(null);
 
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
   const [selectedStatus, setSelectedStatus] = useState<string>("");
+
+  const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
+  const {
+    applyData,
+    applyAnswerDataList,
+    specialAnswerList,
+    fileUri,
+    portfolioUrl,
+  } = applyDetail ?? {};
 
   const handleMenuClick = (label: string) => {
     setSelectedStatus(label);
@@ -53,6 +52,10 @@ const ApplicationFromViewModal = ({
       document.body.style.overflow = "auto";
     };
   }, []);
+
+  if (!applyData) {
+    return null;
+  }
 
   return (
     <div
@@ -75,9 +78,16 @@ const ApplicationFromViewModal = ({
       items-center justify-between py-[14px] px-6"
       >
         <div className="flex gap-3 items-center">
-          <Image src={data.image} alt={"프로필"} />
-          <h1 className="text-text1 text-h4_sb">{`(${data.name})의 지원서`}</h1>
-          <span className="text-subtext2 text-body3_m">{data.nickname}</span>
+          <Image
+            src={applyData?.memberData?.profileType || defaultImg}
+            alt={"프로필"}
+            width={32}
+            height={32}
+          />
+          <h1 className="text-text1 text-h4_sb">{`(${applyData?.name})의 지원서`}</h1>
+          <span className="text-subtext2 text-body3_m">
+            {applyData?.memberData?.nickname}
+          </span>
         </div>
         <div className="flex gap-2">
           <div
@@ -100,23 +110,20 @@ const ApplicationFromViewModal = ({
               </div>
             )}
           </div>
-          <ResultBadge status={"합격"} />
+          <ResultBadge status={APPLY_STATUS_MAP[applyData.applyStatusType]} />
         </div>
       </div>
 
       {/* Content 영역 */}
       <div className="bg-white w-[900px] max-h-[75vh] rounded-2xl shadow-modal flex flex-col p-6">
         <div className="custom-scrollbar overflow-y-auto">
-          <div className="flex flex-col gap-10 ">
-            {/* 지원서 항목 리스트 */}
-            {fields.map((field, index) => (
-              <div key={index} className="flex flex-col gap-3">
-                <h3 className="text-text1 text-h3">{field.label}</h3>
-                <p className="text-subtext1 text-body1_m">{field.value}</p>
-              </div>
-            ))}
-          </div>
-          {portfolio && portfolioData && (
+          {/* 지원서 항목 리스트 */}
+          <ApplicationFields
+            name={applyData.name}
+            specialAnswerList={specialAnswerList!}
+            applyAnswerDataList={applyAnswerDataList || []}
+          />
+          {/* {portfolio && portfolioData && (
             <>
               <div className="flex flex-col gap-2.5 mt-10">
                 <h3 className="text-text1 text-h3">포트폴리오</h3>
@@ -140,7 +147,7 @@ const ApplicationFromViewModal = ({
                 onChange={() => {}}
               />
             </>
-          )}
+          )} */}
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ const ApplicationFields = ({
   specialAnswerList,
 }: ApplicationFieldsProps) => {
   return (
-    <>
+    <div className="flex flex-col gap-[30px] md:gap-10">
       {/* 뱃지 항목에 대한 답변 */}
       <ul className="flex flex-col md:gap-10 gap-[30px]">
         {Object.entries({ name: name, ...specialAnswerList })
@@ -46,7 +46,7 @@ const ApplicationFields = ({
       </ul>
 
       {/* 포폴 관련 데이터 추가 필요 */}
-    </>
+    </div>
   );
 };
 

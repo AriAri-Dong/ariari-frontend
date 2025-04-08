@@ -8,18 +8,28 @@ import Contour from "@/components/bar/contour";
 import FileBadge from "@/components/badge/fileBadge";
 import PDFDownloadBtn from "@/components/button/pdfDownloadBtn";
 import CustomInput from "@/components/input/customInput";
+import { useApplyDetailQuery } from "@/hooks/apply/useApplicationQuery";
+import defaultImg from "@/images/icon/defaultAriari.svg";
+import ApplicationFields from "@/components/list/applicationFields";
+import { STATUS_OPTIONS } from "@/(club)/club/management/recruitment/applicationStatus/page";
 
 const MobileApplicationFormViewModal = ({
+  applyId,
   onClose,
-  data,
-  portfolio,
-  portfolioData,
-  fields,
 }: ApplicationFromViewModalProps) => {
   const optionsRef = useRef<HTMLDivElement | null>(null);
 
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
   const [selectedStatus, setSelectedStatus] = useState<string>("");
+
+  const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
+  const {
+    applyData,
+    applyAnswerDataList,
+    specialAnswerList,
+    fileUri,
+    portfolioUrl,
+  } = applyDetail ?? {};
 
   const handleClose = () => {
     onClose();
@@ -28,6 +38,10 @@ const MobileApplicationFormViewModal = ({
   const handleMenuClick = (label: string) => {
     setSelectedStatus(label);
   };
+
+  if (!applyData) {
+    return null;
+  }
 
   return (
     <div
@@ -51,11 +65,16 @@ const MobileApplicationFormViewModal = ({
         </div>
         <div className="flex justify-between mt-6 mb-5">
           <div className="flex gap-2.5">
-            <Image src={data.image} alt={"프로필"} width={48} height={48} />
+            <Image
+              src={applyData?.memberData?.profileType || defaultImg}
+              alt={"프로필"}
+              width={48}
+              height={48}
+            />
             <div className="flex flex-col gap-0.5">
-              <h1 className="text-text1 text-h4_sb">{data.name}</h1>
+              <h1 className="text-text1 text-h4_sb">{applyData?.name}</h1>
               <p className="text-subtext2 text-mobile_body2_r">
-                {data.nickname}
+                {applyData?.memberData.nickname}
               </p>
             </div>
           </div>
@@ -72,12 +91,7 @@ const MobileApplicationFormViewModal = ({
               >
                 <SingleSelectOptions
                   selectedOption={selectedStatus}
-                  optionData={[
-                    { id: 1, label: "합격" },
-                    { id: 2, label: "불합격" },
-                    { id: 3, label: "대기중" },
-                    { id: 4, label: "면접중" },
-                  ]}
+                  optionData={[...STATUS_OPTIONS]}
                   size="small"
                   handleMenuClick={handleMenuClick}
                 />
@@ -90,15 +104,13 @@ const MobileApplicationFormViewModal = ({
 
       {/* 스크롤 가능한 콘텐츠 영역 */}
       <div className="flex-1 overflow-y-auto">
-        <div className="flex flex-col gap-[30px]">
-          {fields.map((field, index) => (
-            <div key={index} className="flex flex-col gap-2">
-              <h3 className="text-text1 text-mobile_h3">{field.label}</h3>
-              <p className="text-subtext1 text-mobile_body1_r">{field.value}</p>
-            </div>
-          ))}
-        </div>
-        {portfolio && portfolioData && (
+        {/* 지원서 항목 리스트 */}
+        <ApplicationFields
+          name={applyData.name}
+          specialAnswerList={specialAnswerList!}
+          applyAnswerDataList={applyAnswerDataList || []}
+        />
+        {/* {portfolio && portfolioData && (
           <>
             <div className="flex flex-col gap-2.5 mt-[30px]">
               <h3 className="text-text1 text-mobile_h3">포트폴리오</h3>
@@ -123,7 +135,7 @@ const MobileApplicationFormViewModal = ({
               />
             </div>
           </>
-        )}
+        )} */}
       </div>
     </div>
   );

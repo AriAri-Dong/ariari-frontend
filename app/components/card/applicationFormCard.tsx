@@ -118,34 +118,12 @@ const ApplicationFormCard = ({
             <ApplicationFromViewModal
               applyId={id}
               onClose={() => setOpenFormModal(false)}
-              data={{
-                name: "김아리",
-                image: testImage,
-                nickname: "백설공주",
-              }}
-              portfolio={true}
-              portfolioData={{
-                portfolioPurpose: "프로젝트 목적s",
-                portfolioText: "포트폴리오 내용",
-                portfolioFile: "file.pdf",
-              }}
             />
           )
         : openFormModal && (
             <MobileApplicationFormViewModal
               applyId={id}
               onClose={() => setOpenFormModal(false)}
-              data={{
-                name: "김아리",
-                image: testImage,
-                nickname: "백설공주",
-              }}
-              portfolio={true}
-              portfolioData={{
-                portfolioPurpose: "프로젝트 목적s",
-                portfolioText: "포트폴리오 내용",
-                portfolioFile: "file.pdf",
-              }}
             />
           )}
 
