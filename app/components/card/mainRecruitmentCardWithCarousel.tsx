@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
-import { MainRecruitmentCardProps } from "@/types/components/card";
+import defaultImg from "@/images/icon/defaultAriari.svg";
 import DdayBadge from "../badge/dDayBadge";
 import { MdBookmark } from "react-icons/md";
 import { calculateRemainingDays } from "@/utils/dateFormatter";
@@ -12,18 +12,36 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import RoundVectorBtn from "../button/iconBtn/roundVectorBtn";
 import useResponsive from "@/hooks/useResponsive";
+import { RecruitmentData } from "@/types/recruitment";
+import NotiPopUp from "../modal/notiPopUp";
+import {
+  addRecruitmentBookmark,
+  removeRecruitmentBookmark,
+} from "@/api/recruitment/api";
+import { authStore } from "@/stores/userStore";
+import LoginModal from "../modal/login/loginModal";
+import MobileLoginModal from "../modal/login/mobileLoginModal";
 
 interface CardProps {
-  data: MainRecruitmentCardProps[];
+  data: RecruitmentData[];
 }
 
 const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
   const router = useRouter();
   const isXlUp = useResponsive("lx");
-  const [cardData, setCardData] = useState<MainRecruitmentCardProps[]>(data);
+  const [cardData, setCardData] = useState<RecruitmentData[]>(data);
+  const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState<boolean>(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+
   const [isFirstSlide, setIsFirstSlide] = useState<boolean>(true);
   const [isLastSlide, setIsLastSlide] = useState<boolean>(false);
   const slickRef = useRef<Slider>(null);
+
+  const isAuthenticated = authStore.getState().isSignIn;
+
+  useEffect(() => {
+    setCardData(data);
+  }, [data]);
 
   const handleSliderPrevClick = useCallback(
     () => slickRef?.current?.slickPrev(),
@@ -64,16 +82,32 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
     },
   };
 
-  const toggleScrap = (
+  const toggleScrap = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     index: number
   ) => {
-    setCardData((prevData) =>
-      prevData.map((item, idx) =>
-        idx === index ? { ...item, isScrap: !item.isScrap } : item
-      )
-    );
-    e.preventDefault();
+    e.stopPropagation();
+    const updatedCardData = [...cardData];
+    const targetItem = updatedCardData[index];
+
+    if (!isAuthenticated) {
+      setIsNotiPopUpOpen(true);
+      return;
+    }
+
+    try {
+      if (targetItem.isMyBookmark) {
+        await removeRecruitmentBookmark(targetItem.id);
+        targetItem.isMyBookmark = false;
+      } else {
+        await addRecruitmentBookmark(targetItem.id);
+        targetItem.isMyBookmark = true;
+      }
+
+      setCardData(updatedCardData);
+    } catch (error) {
+      console.error("북마크 처리 중 오류가 발생했습니다.", error);
+    }
   };
 
   useEffect(() => {
@@ -85,9 +119,13 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
     return null;
   }
 
-  const handleRouter = () => {
-    // 경로 임시 설정
-    router.push("/");
+  const handleRouter = (id: number) => {
+    router.push(`/recruitment/detail?id=${id}`);
+  };
+
+  const handleLoginRedirect = () => {
+    setIsNotiPopUpOpen(false);
+    setIsLoginModalOpen(true);
   };
 
   return (
@@ -119,58 +157,76 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
         </div>
         <Slider ref={slickRef} {...carouselSettings}>
           {cardData.map((item, index) => {
-            const isExpired = calculateRemainingDays(item.date) === "마감";
+            const isExpired =
+              calculateRemainingDays(item.endDateTime) === "마감";
+
             return (
               <div
                 key={index}
                 className={`flex gap-4 mr-[18px] md:gap-5 md:flex-col cursor-pointer ${
                   isExpired ? "opacity-50 backdrop-filter backdrop-blur-md" : ""
                 }`}
-                onClick={() => handleRouter}
+                onClick={() => handleRouter(item.id)}
               >
-                <div className="relative min-w-[114px] md:w-full mb-[20px]">
+                <div className="relative min-w-[114px] md:w-full aspect-square">
                   <Image
-                    src={item.imageUrl}
+                    src={item.posterUri || defaultImg}
                     alt={item.title}
-                    width={114}
-                    height={114}
-                    className="rounded-3xl md:w-full shadow-default"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-3xl shadow-default"
                   />
                   <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 md:bottom-5">
-                    <DdayBadge date={item.date} />
+                    <DdayBadge date={item.endDateTime} />
                   </div>
                 </div>
                 <div className="flex flex-col w-full md:px-2 md:mt-2.5 md:mb-6">
                   <div className="flex justify-between">
                     <p className="text-subtext1 text-mobile_body3_m mb-[6px] md:text-h4">
-                      {item.clubName}
+                      {item.title}
                     </p>
                     <button
                       onClick={(e) => toggleScrap(e, index)}
                       className="focus:outline-none"
                     >
-                      {item.isScrap ? (
+                      {item.isMyBookmark ? (
                         <MdBookmark className="text-[#D1F75D] w-5 h-5 md:w-6 md:h-6" />
                       ) : (
                         <MdBookmark className="text-[#E3E3E3] w-5 h-5 md:w-6 md:h-6" />
                       )}
                     </button>
                   </div>
-                  <h3
-                    className="flex flex-wrap max-w-[166px] text-text1 text-mobile_body1_sb mb-5
-              md:text-h3 md:h-[54px]"
-                  >
-                    {item.title}
+                  <h3 className="line-clamp-2 overflow-hidden text-ellipsis max-w-[166px] text-text1 text-mobile_body1_sb mb-5 md:text-h3 md:h-[54px]">
+                    {item.body}
                   </h3>
                   <p className="text-subtext2 text-mobile_body3_m md:text-body2_m">
-                    {item.tag.affiliation} | {item.tag.field} |{" "}
-                    {item.tag.region} |{item.tag.target}
+                    서버에 | 데이터를 | 요청 | 해야합니다.
                   </p>
                 </div>
               </div>
             );
           })}
         </Slider>
+        {isNotiPopUpOpen && (
+          <NotiPopUp
+            onClose={() => setIsNotiPopUpOpen(false)}
+            icon={"login"}
+            title="로그인이 필요한 서비스입니다."
+            description={`북마크를 등록하려면\n아리아리 서비스 로그인이 필요합니다.`}
+            modalType={"button"}
+            firstButton={handleLoginRedirect}
+            firstButtonText="로그인 후 이용하기"
+            secondButton={() => setIsNotiPopUpOpen(false)}
+            secondButtonText="다음에 할게요"
+          />
+        )}
+
+        {isLoginModalOpen && (
+          <>
+            <LoginModal onClose={() => setIsLoginModalOpen(false)} />
+            <MobileLoginModal onClose={() => setIsLoginModalOpen(false)} />
+          </>
+        )}
       </div>
     </>
   );

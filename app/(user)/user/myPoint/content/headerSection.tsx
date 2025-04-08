@@ -8,7 +8,7 @@ const HeaderSection = () => {
   const router = useRouter();
 
   const handleGoBack = () => {
-    router.push("/myPage");
+    router.push("/user");
   };
 
   return (

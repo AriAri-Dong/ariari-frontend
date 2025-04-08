@@ -1,7 +1,7 @@
 // == LOGIN ==
 export const LOGIN = "/login/kakao";
 export const REISSUE = "/reissue/token";
-export const LOGOUT = "/logout";
+export const LOGOUT = "/auth/logout";
 export const UNREGISTER = "/unregister";
 
 // == MEMBER ==
@@ -11,7 +11,12 @@ export const MEMBERS_MY_NICKNAME = "/members/my/nickname";
 export const MEMBERS_MY_PROFILE = "/members/my/profile";
 
 // == RECRUITMENT ==
-export const RECRUITMENT_RANKING = "/recruitments/external/ranking";
+export const RECRUITMENT = "/recruitments";
+export const RECRUITMENT_EXTERNAL = "/recruitments/external";
+export const RECRUITMENT_INTERNAL = "/recruitments/internal";
+export const RECRUITMENT_BOOKMARKS = "/recruitments/my-bookmarks";
+export const RECRUITMENT_RANKING_EXTERNAL = "/recruitments/external/ranking";
+export const RECRUITMENT_RANKING_INTERNAL = "/recruitments/internal/ranking";
 
 // == CLUB ==
 export const CLUBS = "/clubs";
@@ -31,6 +36,9 @@ export const TEST_ADMIN = "/test/auth/ADMIN";
 
 // == SCHOOL ==
 export const SCHOOLS = "/schools";
+export const SCHOOLS_VALIDATE = "/schools/auth/validate";
+export const SCHOOLS_SEND = "/schools/auth/send";
+export const SCHOOLS_CANCEL = "/schools/auth/cancel";
 
 // == APPLY_TEMPS ==
 export const APPLY_TEMPS = "/apply-temp";

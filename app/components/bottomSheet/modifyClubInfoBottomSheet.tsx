@@ -3,32 +3,44 @@ import React, { useEffect, useRef, useState } from "react";
 import close from "@/images/icon/close.svg";
 import Alert from "@/components/alert/alert";
 import defaultImg from "@/images/icon/defaultAriari.svg";
+import defaultBgImg from "@/images/defaultAriariBg.svg";
 import { ModalProps } from "@/types/components/modal";
 import TextInputWithCounter from "@/components/input/textInputWithCounter";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import Noti from "@/images/icon/noti.svg";
-import test_image from "@/images/test/test_image.jpg";
 import CustomInput from "@/components/input/customInput";
 import LargeBtn from "../button/basicBtn/largeBtn";
 import IconBtn from "../button/withIconBtn/IconBtn";
 import NotiPopUp from "../modal/notiPopUp";
-
-const OPTIONS = [
-  { label: "동아리 소속", value: "아리아리" },
-  { label: "활동 분야", value: "프로그래밍" },
-  { label: "활동 지역", value: "서울" },
-  { label: "활동 대상", value: "대학생 및 직장인" },
-];
+import { useSearchParams } from "next/navigation";
+import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
+import { updateClubWithFiles } from "@/api/club/api";
+import { useClubContext } from "@/context/ClubContext";
+import { getClubOptions } from "@/utils/convertToServerFormat";
 
 const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
+  const searchParams = useSearchParams();
+  const clubId = searchParams.get("clubId") || "";
+
+  const { role } = useClubContext();
+  const { clubInfo } = useClubInfoQuery(clubId);
+  const clubData = clubInfo?.clubData;
+
+  const options = clubData ? getClubOptions(clubData) : [];
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const bannerFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [isVisible, setIsVisible] = useState<boolean>(true);
-  const [clubName, setClubName] = useState<string>("");
-  const [clubIntroduction, setClubIntroduction] = useState<string>("");
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [bannerImage, setBannerImage] = useState<string | null>(null);
+  const [clubIntroduction, setClubIntroduction] = useState<string>(
+    clubData?.body || ""
+  );
+  const [uploadedImage, setUploadedImage] = useState<string | null>(
+    clubData?.profileUri || null
+  );
+  const [bannerImage, setBannerImage] = useState<string | null>(
+    clubData?.bannerUri || null
+  );
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
   const [alertMsg, setAlertMsg] = useState<string>("");
@@ -115,8 +127,86 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
   };
 
   // 수정하기
-  const handleSubmit = () => {
-    onSubmit();
+  const handleSubmit = async () => {
+    setSubmit(true);
+
+    // 기존 clubData에서 기본 값 가져오기
+    const bodyData = { body: clubIntroduction || "" };
+
+    // 프로필 이미지 처리
+    let profileFile = null;
+    if (uploadedImage) {
+      // Base64로 인코딩된 이미지인지 확인하고, 해당 부분만 추출
+      const base64Image = uploadedImage.includes("base64,")
+        ? uploadedImage.split("base64,")[1]
+        : null; // base64, 부분을 제외한 실제 Base64 데이터만 추출
+
+      if (base64Image) {
+        try {
+          const byteArray = new Uint8Array(
+            atob(base64Image)
+              .split("")
+              .map((c) => c.charCodeAt(0))
+          );
+          profileFile = new File([byteArray], "profile_image", {
+            type: "image/jpeg",
+          });
+        } catch (error) {
+          console.error("Invalid Base64 string", error);
+          setAlertMsg("이미지가 유효하지 않습니다.");
+          setAlertVisible(true);
+          setSubmit(false);
+          return;
+        }
+      } else {
+        // Base64 형식이 아니면 그대로 파일을 보내지 않음
+        profileFile = null;
+      }
+    }
+
+    // 배너 이미지 처리
+    let bannerFile = null;
+    if (bannerImage) {
+      // Base64로 인코딩된 배너 이미지 처리
+      const base64Banner = bannerImage.includes("base64,")
+        ? bannerImage.split("base64,")[1]
+        : null; // base64, 부분을 제외한 실제 Base64 데이터만 추출
+
+      if (base64Banner) {
+        try {
+          const byteArray = new Uint8Array(
+            atob(base64Banner)
+              .split("")
+              .map((c) => c.charCodeAt(0))
+          );
+          bannerFile = new File([byteArray], "banner_image", {
+            type: "image/jpeg",
+          });
+        } catch (error) {
+          console.error("Invalid Base64 string", error);
+          setAlertMsg("배너 이미지가 유효하지 않습니다.");
+          setAlertVisible(true);
+          setSubmit(false);
+          return;
+        }
+      } else {
+        // Base64 형식이 아니면 그대로 파일을 보내지 않음
+        bannerFile = null;
+      }
+    }
+
+    try {
+      // 동아리 정보 수정 API 호출
+      await updateClubWithFiles(clubId, bodyData, profileFile, bannerFile);
+      setSubmit(false); // 수정 완료 후 상태 초기화
+      onSubmit();
+      onClose(); // 모달 닫기
+    } catch (error) {
+      console.error("Error updating club info:", error);
+      setAlertMsg("동아리 정보 수정에 실패했습니다.");
+      setAlertVisible(true);
+      setSubmit(false); // 실패 후 상태 초기화
+    }
   };
 
   // 닫기
@@ -197,7 +287,7 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
               onChange={(e) => handleBannerFileChange(e, setBannerImage)}
             />
             <Image
-              src={bannerImage || test_image}
+              src={bannerImage || defaultBgImg}
               alt={"Test Image"}
               className="rounded-20 w-full h-[82px]"
               width={100}
@@ -243,7 +333,7 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
             동아리 이름
           </h3>
           <CustomInput
-            value={clubName}
+            value={clubData?.name || ""}
             onChange={() => {}}
             placeholder={""}
             disable={true}
@@ -261,7 +351,7 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
             동아리 세부 카테고리
           </h3>
           <div className="flex justify-between mb-10 text-center">
-            {OPTIONS.map((item) => {
+            {options.map((item) => {
               return (
                 <div className="flex flex-col gap-2" key={item.label}>
                   <p className="text-subtext2 text-mobile_body3_r">
@@ -276,9 +366,12 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
           </div>
         </div>
         {/* 고정 버튼 영역 */}
-        <div className="pb-6 pt-[6px]">
-          <LargeBtn title={"등록하기"} onClick={handleSubmit} />
-        </div>
+        {role === "ADMIN" ||
+          (role === "MANAGER" && (
+            <div className="pb-6 pt-[6px]">
+              <LargeBtn title={"등록하기"} onClick={handleSubmit} />
+            </div>
+          ))}
       </div>
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
