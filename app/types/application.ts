@@ -47,10 +47,31 @@ export interface ApplyAnswerData {
   };
 }
 
+export type ApplySpecialFieldKeys =
+  | "gender"
+  | "birthday"
+  | "phone"
+  | "email"
+  | "education"
+  | "major"
+  | "occupation"
+  | "mbti"
+  | "availablePeriod"
+  | "preferredActivityField"
+  | "hobby"
+  | "sns"
+  | "motivation"
+  | "activityExperience"
+  | "skill"
+  | "aspiration"
+  | "availableTime"
+  | "referralSource";
+
 // 추가 예정
 export interface ApplyDetailRes {
   applyData: ApplyData;
   applyAnswerDataList: ApplyAnswerData[];
+  specialAnswerList: Record<ApplySpecialFieldKeys, string | null>;
   fileUri?: string;
   portfolioUrl?: string;
 }
