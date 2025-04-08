@@ -51,7 +51,7 @@ const RecruitmentCard2 = ({
         className="mr-4 rounded-16 object-cover md:w-full md:mt-4 md:mr-0 aspect-[1/1]"
       />
       <div className="flex flex-col  gap-2.5 md:flex-col-reverse pt-1 md:px-2 md:pt-5 md:pb-4">
-        <div className="text-subtext2 text-mobile_body4_r md:text-body4_r">
+        <div className="text-subtext2 text-mobile_body4_r md:text-body4_r whitespace-nowrap">
           {formatDateToDot(startDate)} ~ {formatDateToDot(endDate)}
         </div>
         <p className="text-text1 text-mobile_body1_sb md:text-body2_m">
