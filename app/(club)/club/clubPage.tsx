@@ -1,15 +1,13 @@
 "use client";
 
-import React, { Suspense, useEffect } from "react";
+import React, { useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useResponsive from "@/hooks/useResponsive";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import ClubInfoWrapper from "./content/clubInfoWrapper";
 import { useClubContext } from "@/context/ClubContext";
-import { useShallow } from "zustand/shallow";
 import Loading from "@/components/feedback/loading";
 import ErrorNotice from "@/components/feedback/error";
-import { useUserStore } from "@/providers/userStoreProvider";
 
 const ClubPage = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -17,7 +15,6 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
   const params = useSearchParams();
   const clubId = params.get("clubId") ?? "";
 
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
   const { clubInfo, isLoading, errorMessage } = useClubInfoQuery(clubId);
   const { setRole, setClubInfo } = useClubContext();
 
@@ -39,7 +36,7 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!clubInfo) return;
-    if (isSignIn && clubInfo.clubMemberData != null) {
+    if (clubInfo.clubMemberData != null) {
       setRole(clubInfo.clubMemberData.clubMemberRoleType);
     }
     setClubInfo(clubInfo);
