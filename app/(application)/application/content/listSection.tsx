@@ -14,8 +14,8 @@ const ListSection = ({ dataList = [], handleDelete }: ListSectionProps) => {
   };
   return (
     <div>
-      {dataList.map((data, index) => (
-        <div key={index}>
+      {dataList.map((data) => (
+        <div key={data.id}>
           <ApplicationCard
             data={data}
             applicationStatus={
