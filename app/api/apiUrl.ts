@@ -32,10 +32,11 @@ export const TEST_ADMIN = "/test/auth/ADMIN";
 // == SCHOOL ==
 export const SCHOOLS = "/schools";
 
+// == APPLY ==
+export const APPLY_MY = "/applies/my";
+
 // == APPLY_TEMPS ==
 export const APPLY_TEMPS = "/apply-temp";
-/ == APPLY ==
-export const APPLY_MY = "/applies/my";
 export const APPLY_TEMPS_MY = "/apply-temp/my";
 
 // == REPORT ==
