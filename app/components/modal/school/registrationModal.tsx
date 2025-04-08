@@ -80,6 +80,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
     } else if (step === 2) {
       onComplete("학교 인증이 완료되었습니다.");
       onClose();
+      window.location.reload();
     }
   };
 
