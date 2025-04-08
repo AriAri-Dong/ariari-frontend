@@ -10,7 +10,7 @@ import ApplicationFormPreviewModal from "../modal/club/applicationFormViewModal"
 import testImage from "@/images/icon/calender.svg";
 import MobileApplicationFormViewModal from "../modal/club/mobileApplicationFormViewModal";
 import { ApplyData } from "@/types/application";
-import { APPLY_STATUS } from "@/constants/application";
+import { APPLY_STATUS_MAP } from "@/constants/application";
 
 interface ApplicationFormCardProps {
   applyInfo: ApplyData;
@@ -36,7 +36,7 @@ const ApplicationFormCard = ({
   onCheck,
 }: ApplicationFormCardProps) => {
   const { id, memberData, name, applyStatusType, recruitmentTitle } = applyInfo;
-  const applyStatus = APPLY_STATUS[applyStatusType];
+  const applyStatus = APPLY_STATUS_MAP[applyStatusType];
 
   const isMdUp = useResponsive("md");
 
