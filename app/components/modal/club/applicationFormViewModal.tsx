@@ -12,6 +12,7 @@ import { useApplyDetailQuery } from "@/hooks/apply/useApplicationQuery";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import { APPLY_STATUS_MAP } from "@/constants/application";
 import ApplicationFields from "@/components/list/applicationFields";
+import { getProfileImage } from "@/utils/profileImage";
 
 export interface ApplicationFormViewModalProps {
   applyId: string;
@@ -83,7 +84,9 @@ const ApplicationFormViewModal = ({
       >
         <div className="flex gap-3 items-center">
           <Image
-            src={applyData?.memberData?.profileType || defaultImg}
+            src={
+              getProfileImage(applyData?.memberData?.profileType) || defaultImg
+            }
             alt={"프로필"}
             width={32}
             height={32}
