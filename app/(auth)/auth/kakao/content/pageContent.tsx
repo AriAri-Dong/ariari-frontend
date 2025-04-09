@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import HeaderToken from "@/api/headerToken";
 import LoginLoading from "./loginLoading";
@@ -12,6 +12,7 @@ import { authStore } from "@/stores/userStore";
 
 export default function SignInPageContent() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [kakaoCode, setKakaoCode] = useState<string>("");
   const { signIn, setUserData } = useUserStore((state) => state);
@@ -59,7 +60,10 @@ export default function SignInPageContent() {
         localStorage.removeItem("ariari-storage");
         sessionStorage.removeItem("accessToken");
         sessionStorage.removeItem("refreshToken");
-        router.replace("/");
+        router.push("/");
+        if (pathname === "/") {
+          window.location.reload();
+        }
       });
   }, [kakaoCode, router, setUserData, signIn]);
 
