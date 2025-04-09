@@ -50,3 +50,18 @@ export type ApplyField =
       placeholder?: string;
     }
   | { key: ApplicationKeys; name: string; type: "date" };
+
+export type ApplyFormRes = {
+  applyFormData: ApplyFormData;
+};
+
+export type ApplyAnswerReq = {
+  applyQuestionId: string;
+  body: string;
+};
+
+export type ApplySaveReq = {
+  name: string;
+  portfolioUrl: string;
+  applyAnswers: ApplyAnswerReq[];
+};
