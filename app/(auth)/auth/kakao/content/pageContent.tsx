@@ -56,6 +56,9 @@ export default function SignInPageContent() {
       .catch(() => {
         signOut();
         alert("로그인에 실패했습니다.\n다시 시도해주세요.");
+        localStorage.removeItem("ariari-storage");
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("refreshToken");
         router.replace("/");
       });
   }, [kakaoCode, router, setUserData, signIn]);
