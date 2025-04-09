@@ -21,6 +21,9 @@ import { useApplicationQuery } from "@/hooks/apply/useApplicationQuery";
 import { useSearchParams } from "next/navigation";
 import { formatLocalDateTime } from "@/utils/dateFormatter";
 import { ApplyData } from "@/types/application";
+import { useUpdateStatusMutation } from "@/hooks/apply/useApplicationMutation";
+import { APPLY_STATUS_VALUE_MAP } from "@/constants/application";
+import Alert from "@/components/alert/alert";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
@@ -29,7 +32,7 @@ const FILTER_TABS = [
 ];
 const MOBILE_FILTER_TABS = [{ id: 0, label: "지원 상태" }, ...FILTER_TABS];
 
-// 지원현황 - 지원서별 지원 상태 변경
+// 지원현황 - 지원서별 지원 상태 변경 옵션
 export const STATUS_OPTIONS = [
   { id: 1, label: "면접중" },
   { id: 2, label: "합격" },
@@ -50,6 +53,7 @@ const ApplicationStatusPage = () => {
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false); // 지원상태 변경 옵션 목록 open 여부
   const [selectedStatus, setSelectedStatus] = useState<string>(""); // 변경하고자 하는 지원 상태
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 지원상태 변경 확인 모달 open 여부
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
@@ -60,6 +64,7 @@ const ApplicationStatusPage = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false); // 지원서 상세 열람 모달 open 여부
   const [checkedApplications, setCheckedApplications] = useState<string[]>([]);
 
+  // 지원 목록 조건에 따른 필터링
   const {
     allTabSize,
     pendingTabSize,
@@ -76,7 +81,25 @@ const ApplicationStatusPage = () => {
     endDateTime: dateRange[1] ? formatLocalDateTime(dateRange[1]) : undefined,
   });
 
+  // 지원 상태 변경 mutation 훅
+  const { updateApplicationStatus } = useUpdateStatusMutation({
+    options: {
+      onSuccess: () => {
+        setAlertMessage("지원 상태를 성공적으로 변경했습니다.");
+        setCheckedApplications([]);
+      },
+      onError: () => {
+        setAlertMessage("지원 상태를 변경할 수 없습니다.");
+      },
+    },
+  });
+
+  // 지원 상태 변경 옵션 목록 중 메뉴 클릭
   const handleMenuClick = (label: string) => {
+    if (!checkedApplications.length) {
+      setAlertMessage("선택된 지원서가 없습니다.");
+      return;
+    }
     setSelectedStatus(label);
     setIsOptionsOpen(false);
     setIsModalOpen(true);
@@ -108,7 +131,12 @@ const ApplicationStatusPage = () => {
     }
   };
 
+  // 지원 상태 변경 확인 모달 내 '변경하기' 버튼 클릭
   const handleStatusChange = () => {
+    updateApplicationStatus.mutate({
+      applications: checkedApplications,
+      type: APPLY_STATUS_VALUE_MAP[selectedStatus],
+    });
     setIsModalOpen(false);
   };
 
@@ -317,6 +345,10 @@ const ApplicationStatusPage = () => {
           />
         )}
       </div>
+      {/* ====== 알림 ======*/}
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+      )}
     </>
   );
 };
