@@ -1,8 +1,13 @@
 import { AxiosError } from "axios";
 import { APPLY_MY, APPLY_TEMPS_MY } from "../apiUrl";
-import { APPLY_TEMPS_MY } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
-import { ApplyFormData, ApplyFormRes, ApplySaveReq } from "@/types/application";
+import {
+  ApplyFormData,
+  ApplyFormRes,
+  ApplyListRes,
+  ApplySaveReq,
+  ApplyTempListRes,
+} from "@/types/application";
 
 export const getAppliedList = async (
   page: number = 0,
@@ -36,7 +41,7 @@ export const getAppliedList = async (
 export const getMyApplyList = async () => {
   try {
     const response = await axiosInstance.get<ApplyListRes>(APPLY_MY);
-        return response.data;
+    return response.data;
   } catch (err) {
     if (err instanceof AxiosError) {
       if (err.response && err.response.data.message) {
@@ -97,6 +102,16 @@ export const deleteMyApply = async (applyId: string) => {
 export const deleteMyApplyTmp = async (applyTempId: string) => {
   try {
     const response = await axiosInstance.delete(`/apply-temps/${applyTempId}`);
+    return response.status;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
 // 지원 등록
 export const postApplicationForm = async (
   recruitmentId: string,
