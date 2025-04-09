@@ -17,7 +17,6 @@ import {
   CreateClubData,
 } from "@/types/api";
 import axios from "axios";
-import { AxiosError } from "axios";
 
 // 동아리 수정
 export const updateClubInfo = async (clubId: number) => {
@@ -146,7 +145,7 @@ export const createClub = async (clubData: any) => {
 export const getClubsInfo = async (
   query: string,
   pageable: Pageable
-): Promise<ClubInfoResponse> => {
+): Promise<ClubResponse> => {
   try {
     const params = {
       query,
@@ -155,7 +154,7 @@ export const getClubsInfo = async (
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
     };
 
-    const response = await axiosInstance.get<ClubInfoResponse>(CLUBS_SEARCH, {
+    const response = await axiosInstance.get<ClubResponse>(CLUBS_SEARCH, {
       params,
     });
     return response.data;
