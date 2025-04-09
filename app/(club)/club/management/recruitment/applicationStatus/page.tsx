@@ -105,16 +105,13 @@ const ApplicationStatusPage = () => {
     setIsModalOpen(true);
   };
 
-  const handleReset = () => {
-    setDateRange([null, null]);
-    setSearchQuery("");
-    setCheckedApplications([]);
-  };
-
+  // 검색 input query 변경
+  // 기준: 1. 서비스 이름, 2. 지원서 이름, 3. 모집 공고 제목
   const handleSearchQuery = (query: string) => {
     setSearchQuery(query);
   };
 
+  // 지원서 선택(checkbox)
   const handleAllCheck = (isChecked: boolean) => {
     if (isChecked) {
       setCheckedApplications(applicationsList.map((item) => item.id));
@@ -122,13 +119,19 @@ const ApplicationStatusPage = () => {
       setCheckedApplications([]);
     }
   };
-
   const handleSingleCheck = (id: string, isChecked: boolean) => {
     if (isChecked) {
       setCheckedApplications((prev) => [...prev, id]);
     } else {
       setCheckedApplications((prev) => prev.filter((item) => item !== id));
     }
+  };
+
+  // 필터링 조건 초기화
+  const handleReset = () => {
+    setDateRange([null, null]);
+    setSearchQuery("");
+    setCheckedApplications([]);
   };
 
   // 지원 상태 변경 확인 모달 내 '변경하기' 버튼 클릭
@@ -138,10 +141,6 @@ const ApplicationStatusPage = () => {
       type: APPLY_STATUS_VALUE_MAP[selectedStatus],
     });
     setIsModalOpen(false);
-  };
-
-  const handleOpenForm = () => {
-    setIsFormOpen(true);
   };
 
   useEffect(() => {

@@ -12,6 +12,7 @@ import defaultImg from "@/images/icon/defaultAriari.svg";
 import { STATUS_OPTIONS } from "@/(club)/club/management/recruitment/applicationStatus/page";
 import { APPLY_STATUS_MAP } from "@/constants/application";
 import ApplicationFields from "@/components/list/applicationFields";
+import { getProfileImage } from "@/utils/profileImage";
 
 export interface ApplicationFromViewModalProps {
   applyId: string;
@@ -79,7 +80,9 @@ const ApplicationFromViewModal = ({
       >
         <div className="flex gap-3 items-center">
           <Image
-            src={applyData?.memberData?.profileType || defaultImg}
+            src={
+              getProfileImage(applyData?.memberData?.profileType) || defaultImg
+            }
             alt={"프로필"}
             width={32}
             height={32}
