@@ -21,8 +21,8 @@ import {
 } from "@/utils/clubCategoryMapping";
 import { deleteClubBookmark, postClubBookmark } from "@/api/club/api";
 import { useShallow } from "zustand/shallow";
-import { useUserStore } from "@/providers/user-store-provider";
 import useResponsive from "@/hooks/useResponsive";
+import { useUserStore } from "@/providers/userStoreProvider";
 
 interface ClubInfoProps {
   recruitmentId?: string;

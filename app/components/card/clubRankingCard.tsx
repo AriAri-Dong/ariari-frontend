@@ -1,15 +1,8 @@
-"use client";
-
-interface Club {
-  id: number;
-  title: string;
-  description: string;
-  rank: number;
-  imageSrc?: string;
-}
+import { ClubData } from "@/types/api";
+import { useRouter } from "next/navigation";
 
 interface ClubRankingCardProps {
-  clubs: Club[];
+  clubs: ClubData[];
 }
 
 const gradientClasses = [
@@ -19,6 +12,8 @@ const gradientClasses = [
 ];
 
 const ClubRankingCard = ({ clubs }: ClubRankingCardProps) => {
+  const router = useRouter();
+
   return (
     <div className="grid grid-cols-1 mt-5 mb-[18px] md:grid-cols-2 md:gap-[18px] lg:grid-cols-3 lg:gap-4 lg:mb-[32px]">
       {clubs.map((club, index) => {
@@ -28,20 +23,23 @@ const ClubRankingCard = ({ clubs }: ClubRankingCardProps) => {
           <div
             key={club.id}
             className={`w-full rounded-lg cursor-pointer ${gradientClass}`}
+            onClick={() => {
+              router.push(`/club/activityHistory?clubId=${club.id}`);
+            }}
           >
             <div
               className={`flex items-center gap-[16px] px-[24px] py-[16px] md:py-[32px] md:gap-[28px]`}
             >
               <div className="w-[38px] text-[32px] text-center leading-none md:w-[38px] md:text-[58px]">
-                {club.rank}
+                {index + 1}
               </div>
 
               <div className="flex-1 overflow-hidden">
                 <div className="text-mobile_h3 truncate mb-2 md:text-h2">
-                  {club.title}
+                  {club.name}
                 </div>
                 <p className="text-mobile_body3_m truncate text-background md:text-body1_r">
-                  {club.description}
+                  {club.body}
                 </p>
               </div>
             </div>

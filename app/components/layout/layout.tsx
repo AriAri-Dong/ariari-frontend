@@ -23,7 +23,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const bgPaths = ["/application", "/help"];
   // md 이상만 bg 적용하는 path
   const mobileBgPaths = [
-    "/club/create",
+    "/user/club/create",
+    "/user/userInfo",
     "/withdrawal",
     "/club/close",
     "/club/management/recruitment/create",
