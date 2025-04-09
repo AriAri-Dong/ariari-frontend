@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import useResponsive from "@/hooks/useResponsive";
 import { useClubContext } from "@/context/ClubContext";
-import { useUserStore } from "@/providers/user-store-provider";
+import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
 
 import { QUESTION_TYPE } from "@/data/pulldown";
