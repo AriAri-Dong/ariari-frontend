@@ -53,7 +53,7 @@ export type TokenType =
   | "C_TOKEN_7";
 
 export interface ClubFaqData {
-  id: string; // $int64
+  id: string;
   title: string;
   body: string;
   clubFaqClassification: string;
@@ -63,7 +63,7 @@ export interface ClubFaqData {
 }
 
 export interface ClubFaqListRes {
-  contents: ClubFaqData[];
+  clubFaqDataList: ClubFaqData[];
   pageInfo: PageInfo;
 }
 
@@ -73,9 +73,10 @@ export interface ClubAnswerData {
 }
 
 export interface ClubQuestionData {
-  id: string; // int64
+  id: string;
   title: string;
   body: string;
+  createdDateTime?: Date;
   memberData: MemberData;
   clubAnswerData: ClubAnswerData | null;
 }

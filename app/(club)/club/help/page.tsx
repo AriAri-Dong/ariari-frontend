@@ -3,73 +3,49 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import useResponsive from "@/hooks/useResponsive";
+import { useClubContext } from "@/context/ClubContext";
+import { useUserStore } from "@/providers/userStoreProvider";
+import { useShallow } from "zustand/shallow";
 
-import { FAQ_DATA } from "@/data/faq";
 import { QUESTION_TYPE } from "@/data/pulldown";
-import { pageInfo, QNA_DATA } from "@/data/qna";
-import { ClubFaqData, ClubQuestionData } from "@/types/club";
-import { PageInfo } from "@/types/pageInfo";
 
 import SubTap from "@/components/tab/subTap";
-import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
 import HelpText from "@/components/button/helpText/helpText";
 
-import helpTextFaqMobile from "@/images/icon/helptextFaqMobile.svg";
 import helpTextQnaMobile from "@/images/icon/helptextQnaMobile.svg";
 import helpTextQnaPc from "@/images/icon/helptextQnaPc.svg";
 import helpTextFaqPc from "@/images/icon/helptextFaqPc.svg";
+import helpTextFaqMobile from "@/images/icon/helptextFaqMobile.svg";
+
 import Alert from "@/components/alert/alert";
 import NotiPopUp from "@/components/modal/notiPopUp";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
-import { ClubMemberData } from "@/types/member";
-import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
+
 import LeftMenu from "../components/menu/leftMenu";
 import MobileMenu from "../components/menu/mobileMenu";
 import FaqForm from "./components/faqForm";
 import QnaForm from "./components/qnaForm";
-import QuestionDropdown from "./components/questionDropdown";
+
+import FaqSection from "./content/faqSection";
+import QnaSection from "./content/qnaSection";
 
 const ClubHelpPage = () => {
   const [type, setType] = useState<string>(QUESTION_TYPE[0].label);
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [isQnaFormOpen, setIsQnaFormOpen] = useState<boolean>(false);
   const [isFaqFormOpen, setIsFaqFormOpen] = useState<boolean>(false);
-
-  const [faqData, setFaqData] = useState<ClubFaqData[]>(FAQ_DATA);
-  const [faqPageInfo, setFaqPageInfo] = useState<PageInfo>(pageInfo);
-  const [faqCurrentPage, setFaqCurrentPage] = useState<number>(1);
-
-  const [qnaData, setQnaData] = useState<ClubQuestionData[]>(QNA_DATA);
-  const [qnaPageInfo, setQnaPageInfo] = useState<PageInfo>(pageInfo);
-  const [qnaCurrentPage, setQnaCurrentPage] = useState<number>(1);
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
 
-  const [selectedFaq, setSelectedFaq] = useState<string | null>(null);
-  const [selectedQna, setSelectedQna] = useState<string | null>(null);
-
-  const [clubMember, setClubMember] = useState<ClubMemberData | null>(
-    CLUB_MEMBER_DATA[0]
-  ); // 멤버타입 (null - 미소속회원)
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true); // 로그인여부 임시값
+  const { role } = useClubContext();
+  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
   const isTapOver = useResponsive("md");
-
-  const handleLoadMoreFaq = () => {
-    setFaqCurrentPage((prev) => prev + 1);
-    // 데이터 받아오기
-    setFaqData((prev) => [...prev, ...faqData]);
-  };
-
-  const handleLoadMoreQna = () => {
-    setQnaCurrentPage((prev) => prev + 1);
-    // 데이터 받기
-    setQnaData((prev) => [...prev, ...qnaData]);
-  };
 
   const router = useRouter();
 
@@ -78,12 +54,16 @@ const ClubHelpPage = () => {
     router.push("/");
   };
   const handleOpenForm = () => {
-    if (!isLoggedIn) {
+    if (!isSignIn) {
       setIsNotiPopUpOpen(true);
       return;
     } else {
       type == "FAQ" ? setIsFaqFormOpen(true) : setIsQnaFormOpen(true);
     }
+  };
+
+  const handleTotalCount = (cnt: number) => {
+    setTotalCount(cnt);
   };
 
   return (
@@ -95,9 +75,8 @@ const ClubHelpPage = () => {
           <div className="w-full">
             <div className="flex items-center justify-between mb-[22px]">
               <p className="text-subtext2">
-                총
-                {type == "FAQ" ? faqPageInfo.totalSize : qnaPageInfo.totalSize}
-                개의 FAQ가 있어요
+                총 {totalCount}
+                개의 {type}가 있어요
               </p>
               <SubTap
                 optionData={QUESTION_TYPE}
@@ -112,47 +91,18 @@ const ClubHelpPage = () => {
               </div>
               <div className={type == "FAQ" ? "hidden" : ""}>작성일</div>
             </div>
-
-            {type == "FAQ"
-              ? faqData.map((item, index) => (
-                  <div key={index} className="mb-2.5">
-                    <QuestionDropdown
-                      data={item}
-                      myRoleType={clubMember?.clubMemberRoleType}
-                      myProfileType={clubMember?.profileType}
-                      isOpen={item.id == selectedFaq}
-                      setSelected={setSelectedFaq}
-                    />
-                  </div>
-                ))
-              : qnaData.map((item, index) => (
-                  <div key={index} className="mb-2.5">
-                    <QuestionDropdown
-                      data={item}
-                      myRoleType={clubMember?.clubMemberRoleType}
-                      myProfileType={clubMember?.profileType}
-                      isOpen={item.id == selectedQna}
-                      setSelected={setSelectedQna}
-                    />
-                  </div>
-                ))}
-
-            {type == "FAQ" && faqPageInfo.totalPages > faqCurrentPage && (
-              <div className="flex justify-center mt-9 md:mt-10">
-                <PlusBtn title={"더보기"} onClick={handleLoadMoreFaq} />
-              </div>
-            )}
-            {type == "Q&A" && qnaPageInfo.totalPages > qnaCurrentPage && (
-              <div className="flex justify-center  mt-9 md:mt-10">
-                <PlusBtn title={"더보기"} onClick={handleLoadMoreQna} />
-              </div>
+            {type === "FAQ" ? (
+              <FaqSection onListCount={handleTotalCount} />
+            ) : (
+              <QnaSection onListCount={handleTotalCount} />
             )}
           </div>
         </div>
       </div>
+
       {/* ====== PC 해상도에서만 보이는 하단 버튼 ======  */}
       {/* 모집안내 바 : 로그인 x or 동아리 가입 x */}
-      {(clubMember == null || !isLoggedIn) && (
+      {(role == null || !isSignIn) && (
         <RecruitmentGuideFloatingBar
           deadline={new Date("2024-12-31T23:59:59")}
           isWriteButtonVisible={type == "Q&A"}
@@ -161,7 +111,7 @@ const ClubHelpPage = () => {
       )}
 
       {/* ====== 모바일 해상도에서만 보이는 하단 버튼 ======  */}
-      {(clubMember == null || !isLoggedIn) && (
+      {(role == null || !isSignIn) && (
         <div
           className={`fixed bottom-5 md:hidden  ${
             type == "FAQ" ? "left-50% translate-1/2" : "left-4 "
@@ -172,13 +122,8 @@ const ClubHelpPage = () => {
       )}
 
       {/* ====== 공통 작성버튼 : FAQ - 관리자, 매니저, QNA - 일반회원 ======*/}
-      {((type == "Q&A" &&
-        (clubMember?.clubMemberRoleType == "GENERAL" ||
-          clubMember == null ||
-          !isLoggedIn)) ||
-        (type == "FAQ" &&
-          (clubMember?.clubMemberRoleType == "ADMIN" ||
-            clubMember?.clubMemberRoleType == "MANAGER"))) && (
+      {((type == "Q&A" && (role == "GENERAL" || role == null || !isSignIn)) ||
+        (type == "FAQ" && (role == "ADMIN" || role == "MANAGER"))) && (
         <div className="fixed w-full bottom-5 px-5 flex justify-end md:bottom-[44px] md:max-w-[1248px] md:px-5">
           <WriteBtn onClick={handleOpenForm} />
         </div>
@@ -222,13 +167,8 @@ const ClubHelpPage = () => {
       )}
       <HelpText
         imageVisible={
-          (type == "FAQ" &&
-            (clubMember?.clubMemberRoleType == "ADMIN" ||
-              clubMember?.clubMemberRoleType == "MANAGER")) ||
-          (type == "Q&A" &&
-            (clubMember?.clubMemberRoleType == "GENERAL" ||
-              clubMember == null ||
-              !isLoggedIn))
+          (type == "FAQ" && (role == "ADMIN" || role == "MANAGER")) ||
+          (type == "Q&A" && (role == "GENERAL" || role == null || !isSignIn))
         }
         image={
           type == "FAQ"
