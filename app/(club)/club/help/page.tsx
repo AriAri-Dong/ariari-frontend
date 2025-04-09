@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import useResponsive from "@/hooks/useResponsive";
 import { useClubContext } from "@/context/ClubContext";
+import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
 
 import { QUESTION_TYPE } from "@/data/pulldown";
@@ -31,7 +32,6 @@ import QnaForm from "./components/qnaForm";
 
 import FaqSection from "./content/faqSection";
 import QnaSection from "./content/qnaSection";
-import { useUserStore } from "@/providers/userStoreProvider";
 
 const ClubHelpPage = () => {
   const [type, setType] = useState<string>(QUESTION_TYPE[0].label);
