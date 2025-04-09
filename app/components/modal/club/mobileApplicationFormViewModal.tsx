@@ -1,9 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import vector from "@/images/icon/backVector.svg";
 import pull_down from "@/images/icon/sub_pull_down.svg";
 import { ApplicationFromViewModalProps } from "./applicationFormViewModal";
-import SingleSelectOptions from "@/components/pulldown/singleSelectOptions";
 import Contour from "@/components/bar/contour";
 import FileBadge from "@/components/badge/fileBadge";
 import PDFDownloadBtn from "@/components/button/pdfDownloadBtn";
@@ -11,15 +10,17 @@ import CustomInput from "@/components/input/customInput";
 import { useApplyDetailQuery } from "@/hooks/apply/useApplicationQuery";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import ApplicationFields from "@/components/list/applicationFields";
-import { STATUS_OPTIONS } from "@/(club)/club/management/recruitment/applicationStatus/page";
+import { getProfileImage } from "@/utils/profileImage";
+
+interface MobileApplicationFormViewModal extends ApplicationFromViewModalProps {
+  onOpenStatusOptions: () => void;
+}
 
 const MobileApplicationFormViewModal = ({
   applyId,
+  onOpenStatusOptions,
   onClose,
-}: ApplicationFromViewModalProps) => {
-  const optionsRef = useRef<HTMLDivElement | null>(null);
-
-  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
+}: MobileApplicationFormViewModal) => {
   const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
@@ -66,7 +67,10 @@ const MobileApplicationFormViewModal = ({
         <div className="flex justify-between mt-6 mb-5">
           <div className="flex gap-2.5">
             <Image
-              src={applyData?.memberData?.profileType || defaultImg}
+              src={
+                getProfileImage(applyData?.memberData?.profileType) ||
+                defaultImg
+              }
               alt={"프로필"}
               width={48}
               height={48}
@@ -80,23 +84,10 @@ const MobileApplicationFormViewModal = ({
           </div>
           <div
             className="relative flex items-center gap-1 cursor-pointer"
-            onClick={() => setIsOptionsOpen(!isOptionsOpen)}
+            onClick={onOpenStatusOptions}
           >
             <p className="text-subtext2 text-mobile_body2_m">지원상태 변경</p>
             <Image alt={"버튼"} src={pull_down} width={20} height={20} />
-            {isOptionsOpen && (
-              <div
-                ref={optionsRef}
-                className="absolute top-full mt-2 z-50 left-12"
-              >
-                <SingleSelectOptions
-                  selectedOption={selectedStatus}
-                  optionData={[...STATUS_OPTIONS]}
-                  size="small"
-                  handleMenuClick={handleMenuClick}
-                />
-              </div>
-            )}
           </div>
         </div>
         <Contour className="mb-6" />

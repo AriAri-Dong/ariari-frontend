@@ -7,7 +7,6 @@ import useResponsive from "@/hooks/useResponsive";
 import InterviewNoticeBottomSheet from "../bottomSheet/interviewNoticeBottomSheet";
 import Alert from "../alert/alert";
 import ApplicationFromViewModal from "../modal/club/applicationFormViewModal";
-import testImage from "@/images/icon/calender.svg";
 import MobileApplicationFormViewModal from "../modal/club/mobileApplicationFormViewModal";
 import { ApplyData } from "@/types/application";
 import { APPLY_STATUS_MAP } from "@/constants/application";
@@ -15,24 +14,14 @@ import { APPLY_STATUS_MAP } from "@/constants/application";
 interface ApplicationFormCardProps {
   applyInfo: ApplyData;
   isChecked: boolean;
-  onClick: () => void;
+  setOpenOptions: () => void;
   onCheck: (isChecked: boolean) => void;
 }
-
-const SAMOLE_DATA = [
-  { label: "이름", key: "name" },
-  { label: "성별", key: "name" },
-  { label: "생년월일", key: "name" },
-  { label: "연락처", value: "010-0000-0000" },
-  { label: "이메일", value: "example@gmail.com" },
-  { label: "자유 항목 제목 1", value: "Default Text" },
-  { label: "자유 항목 제목 2", value: "Default Text" },
-];
 
 const ApplicationFormCard = ({
   applyInfo,
   isChecked,
-  onClick,
+  setOpenOptions,
   onCheck,
 }: ApplicationFormCardProps) => {
   const { id, memberData, name, applyStatusType, recruitmentTitle } = applyInfo;
@@ -45,7 +34,7 @@ const ApplicationFormCard = ({
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const handleBadgeClick = () => {
-    if (status === "대기중") {
+    if (applyStatus === "대기중") {
       setOpenNoticeModal(true);
     }
   };
@@ -123,6 +112,7 @@ const ApplicationFormCard = ({
         : openFormModal && (
             <MobileApplicationFormViewModal
               applyId={id}
+              onOpenStatusOptions={setOpenOptions}
               onClose={() => setOpenFormModal(false)}
             />
           )}

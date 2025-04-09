@@ -305,7 +305,7 @@ const ApplicationStatusPage = () => {
                       key={item.id}
                       applyInfo={item}
                       isChecked={checkedApplications.includes(item.id)}
-                      onClick={handleOpenForm}
+                      setOpenOptions={() => setIsOptionsOpen(!isOptionsOpen)}
                       onCheck={(isChecked) =>
                         handleSingleCheck(item.id, isChecked)
                       }
