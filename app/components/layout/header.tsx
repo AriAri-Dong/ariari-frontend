@@ -56,6 +56,9 @@ const Header = () => {
 
       if (!accessToken || accessToken.trim() === "" || accessToken === "null") {
         console.log("비로그인 상태 → 사용자 정보 요청 생략");
+        localStorage.removeItem("ariari-storage");
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("refreshToken");
         return;
       }
 
