@@ -62,7 +62,7 @@ export const getMemberData = async () => {
   } catch (err) {
     console.error("유저 정보 조회 실패:", err);
     return {
-      memberData: { id: "", nickname: "", profileType: "" },
+      memberData: { memberId: "", nickname: "", profileType: "" },
       schoolData: { name: "" },
     };
   }
