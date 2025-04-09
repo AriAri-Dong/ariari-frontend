@@ -8,6 +8,14 @@ export const APPLY_STATUS_MAP: Record<ApplyStatusType, AppyStatusText> = {
   REFUSAL: "불합격",
 };
 
+export type StatusValue = "refuse" | "interview" | "approve";
+
+export const APPLY_STATUS_VALUE_MAP: Record<string, StatusValue> = {
+  면접중: "interview",
+  합격: "approve",
+  불합격: "refuse",
+} as const;
+
 export const BADGE_TITLE_MAP = BADGE_ITEMS.reduce((acc, item) => {
   acc[item.key] = item.name;
   return acc;
