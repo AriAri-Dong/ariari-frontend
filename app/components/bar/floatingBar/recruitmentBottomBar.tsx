@@ -15,14 +15,18 @@ import {
 import Alert from "@/components/alert/alert";
 import { useShallow } from "zustand/shallow";
 import { useUserStore } from "@/providers/userStoreProvider";
+import ApplicationFormModal from "@/components/modal/club/applicationFormModal";
+import { ClubInfoCard } from "@/types/components/card";
 
 interface RecruitmentBottomBar {
+  recruitmentData: ClubInfoCard;
   isMyBookmark: boolean;
   bookmarks: number;
   endDate: string;
   isMyApply: boolean;
 }
 const RecruitmentBottomBar = ({
+  recruitmentData,
   isMyBookmark,
   bookmarks,
   endDate,
@@ -33,6 +37,8 @@ const RecruitmentBottomBar = ({
   const isMdUp = useResponsive("md");
   const router = useRouter();
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const [isApplicationFormOpen, setIsApplicationFormOpen] =
+    useState<boolean>(false);
 
   const [count, setCount] = useState<number>(bookmarks);
   const [isScrap, setIsScrap] = useState<boolean>(isMyBookmark);
@@ -78,7 +84,7 @@ const RecruitmentBottomBar = ({
 
   const onApply = () => {
     if (isApplyAvailable) {
-      // router.push("/");
+      setIsApplicationFormOpen(true);
     }
   };
 
@@ -102,6 +108,25 @@ const RecruitmentBottomBar = ({
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
+      {isApplicationFormOpen &&
+        recruitmentData.applyFormData &&
+        (isMdUp ? (
+          <ApplicationFormModal
+            recruitmentData={recruitmentData}
+            applyFormData={recruitmentData.applyFormData}
+            onClose={() => {
+              setIsApplicationFormOpen(false);
+            }}
+          />
+        ) : (
+          <ApplicationFormModal
+            recruitmentData={recruitmentData}
+            applyFormData={recruitmentData.applyFormData}
+            onClose={() => {
+              setIsApplicationFormOpen(false);
+            }}
+          />
+        ))}
     </div>
   );
 };
