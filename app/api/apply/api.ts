@@ -16,6 +16,7 @@ import {
   ApplyDetailRes,
   ApplyListRes,
 } from "@/types/application";
+import { StatusValue } from "@/constants/application";
 
 import { IdResponse } from "@/types/api";
 import {
@@ -301,6 +302,25 @@ export const getApplicationDetail = async (applyId: string) => {
     return res.data;
   } catch (error) {
     console.log("Error fetching application detail");
+    throw error;
+  }
+};
+
+// 지원현황 - 지원 상태 변경(관리자)
+export type UpdateApplicationStatusParams = {
+  applications: string[];
+  type: StatusValue;
+};
+
+export const updateApplicationStatus = async ({
+  applications,
+  type,
+}: UpdateApplicationStatusParams) => {
+  try {
+    const res = await axiosInstance.post(`/applies/${type}`, applications);
+    return res.data;
+  } catch (error) {
+    console.log("Failed to update application status", error);
     throw error;
   }
 };
