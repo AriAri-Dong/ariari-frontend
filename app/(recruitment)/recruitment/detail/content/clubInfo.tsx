@@ -6,10 +6,6 @@ import Image from "next/image";
 import test_image from "@/images/test/test_image.jpg";
 import Keyword from "@/components/button/keyword";
 import { MdFavorite } from "react-icons/md";
-import DayFloatingBar from "@/components/bar/floatingBar/dayFloatinBar";
-import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
-import PointStatusFloatingBar from "@/components/bar/floatingBar/pointStatusFloatingBar";
-import MobilePointStatusFloatingBar from "@/components/bar/floatingBar/mobilePointStatusFloatingBar";
 import RecruitmentBottomBar from "@/components/bar/floatingBar/recruitmentBottomBar";
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import RecruitmentSummary from "../components/recruitmentSummary";
@@ -25,7 +21,7 @@ import {
 } from "@/utils/clubCategoryMapping";
 import { deleteClubBookmark, postClubBookmark } from "@/api/club/api";
 import { useShallow } from "zustand/shallow";
-import { useUserStore } from "@/providers/user-store-provider";
+import { useUserStore } from "@/providers/userStoreProvider";
 
 interface ClubInfoProps {
   recruitmentId?: string;

@@ -6,10 +6,10 @@ import useResponsive from "@/hooks/useResponsive";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import ClubInfoWrapper from "./content/clubInfoWrapper";
 import { useClubContext } from "@/context/ClubContext";
-import { useUserStore } from "@/providers/user-store-provider";
 import { useShallow } from "zustand/shallow";
 import Loading from "@/components/feedback/loading";
 import ErrorNotice from "@/components/feedback/error";
+import { useUserStore } from "@/providers/userStoreProvider";
 
 const ClubPage = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();

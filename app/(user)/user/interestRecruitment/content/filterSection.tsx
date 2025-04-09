@@ -4,17 +4,23 @@ import { POPULARITY_SORT_TYPE } from "@/data/pulldown";
 import useResponsive from "@/hooks/useResponsive";
 
 interface FilterSectionProps {
-  isChecked: boolean;
-  toggleCheck: () => void;
+  isDeadlineChecked: boolean;
+  isRecruitmentChecked: boolean;
+  toggleDeadlineCheck: () => void;
+  toggleRecruitmentCheck: () => void;
   sortType: string;
   setSortType: (value: string) => void;
+  dataCount: number;
 }
 
 const FilterSection = ({
-  isChecked,
-  toggleCheck,
+  isDeadlineChecked,
+  isRecruitmentChecked,
+  toggleDeadlineCheck,
+  toggleRecruitmentCheck,
   sortType,
   setSortType,
+  dataCount,
 }: FilterSectionProps) => {
   const isMdUp = useResponsive("md");
 
@@ -27,13 +33,18 @@ const FilterSection = ({
       {isMdUp ? (
         <div className="flex flex-row justify-between items-center w-full">
           <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-            총 nnn개의 관심 동아리가 있어요.
+            총 {dataCount}개의 관심 모집공고가 있어요.
           </p>
           <div className="flex gap-4 items-center">
             <RadioBtn
-              isChecked={isChecked}
-              label={"모집중인 동아리"}
-              onClick={toggleCheck}
+              isChecked={isDeadlineChecked}
+              label={"마감공고 제외"}
+              onClick={toggleDeadlineCheck}
+            />
+            <RadioBtn
+              isChecked={isRecruitmentChecked}
+              label={"지원공고 제외"}
+              onClick={toggleRecruitmentCheck}
             />
             <SubPullDown
               optionData={POPULARITY_SORT_TYPE.slice(1)}
@@ -46,7 +57,7 @@ const FilterSection = ({
         <div className="flex flex-col gap-2">
           <div className="flex flex-row justify-between items-center">
             <p className="text-subtext2 text-mobile_body2_m md:text-h4">
-              총 nnn개의 관심 동아리가 있어요.
+              총 {dataCount}개의 관심 모집공고가 있어요.
             </p>
             <SubPullDown
               optionData={POPULARITY_SORT_TYPE.slice(1)}
@@ -54,11 +65,18 @@ const FilterSection = ({
               handleOption={setSortType}
             />
           </div>
-          <RadioBtn
-            isChecked={isChecked}
-            label={"모집중인 동아리"}
-            onClick={toggleCheck}
-          />
+          <div className="flex gap-3">
+            <RadioBtn
+              isChecked={isDeadlineChecked}
+              label={"마감공고 제외"}
+              onClick={toggleDeadlineCheck}
+            />
+            <RadioBtn
+              isChecked={isRecruitmentChecked}
+              label={"지원공고 제외"}
+              onClick={toggleRecruitmentCheck}
+            />
+          </div>
         </div>
       )}
     </div>

@@ -19,7 +19,7 @@ const HeaderSection = () => {
   };
 
   const handleGoBack = () => {
-    router.push("/myPage");
+    router.push("/");
   };
 
   return (
@@ -34,7 +34,7 @@ const HeaderSection = () => {
           className="md:hidden cursor-pointer"
         />
         <h1 className="text-text1 text-mobile_h1_contents_title md:text-h1_contents_title">
-          관심 모집공고
+          관심 동아리
         </h1>
       </div>
       <Image
@@ -45,20 +45,20 @@ const HeaderSection = () => {
         onClick={handleAllDelete}
         className="md:hidden cursor-pointer"
       />
-      <div className="hidden md:flex">
+      {/* <div className="hidden md:flex">
         <IconBtn
           type={"trash"}
           size={"large"}
           title={"전체삭제"}
           onClick={handleAllDelete}
         />
-      </div>
+      </div> */}
       {isModalOpen && (
         <NotiPopUp
           onClose={() => setIsModalOpen(false)}
           icon="delete"
-          title="관심 모집공고 전체 삭제"
-          description={`관심 모집공고를 전부 삭제하시겠습니까?`}
+          title="관심 동아리 전체 삭제"
+          description={`관심 동아리를 전부 삭제하시겠습니까?`}
           firstButton={() => {}}
           firstButtonText="삭제하기"
           secondButton={() => setIsModalOpen(false)}

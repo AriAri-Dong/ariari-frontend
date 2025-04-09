@@ -1,6 +1,7 @@
 import { ClubMemberData, MemberData } from "./member";
 import { PageInfo } from "./pageInfo";
 
+export type ClubAffiliationType = "EXTERNAL" | "INTERNAL";
 export type ClubFieldType =
   | "CULTURE"
   | "VOLUNTEER"
