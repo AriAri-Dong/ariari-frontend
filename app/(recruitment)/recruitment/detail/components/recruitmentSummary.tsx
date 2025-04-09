@@ -34,7 +34,7 @@ const RecruitmentSummary = ({
           모집 절차
         </p>
         <p className="text-mobile_body2_r md:text-body1_m">
-          {startDate} ~ {endDate}
+          {procedureType == "DOCUMENT" ? "서류" : "서류/면접"}
         </p>
       </div>
       <div className="flex flex-row gap-[65px]">
@@ -42,7 +42,7 @@ const RecruitmentSummary = ({
           모집 기간
         </p>
         <p className="text-mobile_body2_r md:text-body1_m">
-          {procedureType == "DOCUMENT" ? "면접" : "서류/면접"}
+          {startDate} ~ {endDate}
         </p>
       </div>
     </div>

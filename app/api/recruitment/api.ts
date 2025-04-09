@@ -304,3 +304,25 @@ export const deleteRecruitmentBookmark = async (recruitmentId: string) => {
     throw new Error("문제가 발생했습니다.");
   }
 };
+// 모집공고 등록
+export const postRecruitment = async (clubId: string, formData: FormData) => {
+  try {
+    const response = await axiosInstance.post(
+      `/clubs/${clubId}/recruitments`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.status;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};

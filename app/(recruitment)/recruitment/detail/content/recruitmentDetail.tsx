@@ -31,6 +31,8 @@ const RecruitmentDetail = () => {
   const [recruitmentData, setRecruitmentData] = useState<ClubInfoCard | null>(
     null
   );
+  // 활동 내용
+  const [body, setBody] = useState<string>("");
   // 추가 질문 정보
   const [recruitmentNoteDataList, setRecruitmentNoteDataList] = useState<
     RecruitmentNoteData[] | null
@@ -46,6 +48,7 @@ const RecruitmentDetail = () => {
           setLoading(true);
           setRecruitmentData(null);
           setClubId(res.clubData.id);
+          setBody(res.recruitmentData.body);
           const parsedData = transformRecruitmentToMainCard(res!);
           setRecruitmentData(parsedData);
           setRecruitmentNoteDataList(res!.recruitmentNoteDataList);
@@ -86,6 +89,7 @@ const RecruitmentDetail = () => {
       <ClubInfo recruitmentData={recruitmentData} />
       <ClubActivities
         recruitmentId={recruitmentId}
+        body={body}
         recruitmentNoteDataList={recruitmentNoteDataList}
         prevRecruitmentList={prevRecruitmentList || []}
       />
