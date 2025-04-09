@@ -204,6 +204,7 @@ const ClubInfo = ({
               <div className="fixed bottom-0 left-0 right-0 md:static mt-10">
                 <div className="bg-background px-4 pt-2 pb-6 md:px-0 md:pt-0 md:pb-0">
                   <RecruitmentBottomBar
+                    recruitmentData={recruitmentData}
                     isMyBookmark={recruitmentData.isMyRecruitmentScrap}
                     bookmarks={recruitmentData.recruitmentBookmarks}
                     endDate={recruitmentData.endDate}
@@ -218,7 +219,7 @@ const ClubInfo = ({
                 type={"declaration"}
                 size={"large"}
                 title={"신고하기"}
-                onClick={toggleBottomModal}
+                onClick={isPreview ? () => {} : toggleBottomModal}
               />
             </div>
           </div>

@@ -1,6 +1,7 @@
 import { StaticImageData } from "next/image";
 import { ClubFieldType, ClubRegionType, ParticipantType } from "@/types/club";
 import { ProcedureType } from "@/types/recruitment";
+import { ApplyFormData } from "../application";
 
 export interface MainRecruitmentCardProps {
   id: number;
@@ -40,6 +41,7 @@ export interface ClubInfoCard {
   isMyClub: boolean;
   isMyApply: boolean;
   isMyClubBookmark: boolean;
+  applyFormData?: ApplyFormData;
 }
 
 export interface GuideData {
