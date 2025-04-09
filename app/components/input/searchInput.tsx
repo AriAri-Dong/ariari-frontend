@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import searchIcon from "@/images/icon/search.svg";
 import RecentSearchTermDropdown from "../dropdown/recentSearchTermDropdown";
 import SearchModal from "../modal/searchModal";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface SearchInputProps {
   onSearch: (searchTerm: string) => void;
@@ -24,15 +25,46 @@ const SearchInput = ({
   className,
   showRecentSearches,
 }: SearchInputProps) => {
+  const LOCAL_STORAGE_KEY = "ariari-recent-searches";
+
+  const router = useRouter();
+
   const [inputValue, setInputValue] = useState<string>("");
-  const [recentSearches, setRecentSearches] = useState<string[]>([
-    "최근 검색어 1",
-    "최근 검색어 2",
-    "최근 검색어 3",
-  ]);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [showDropdown, setShowDropdown] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  // query 파라미터 수동으로 가져오기
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const queryParam = params.get("query");
+      if (queryParam) setInputValue(queryParam);
+    }
+  }, []);
+
+  // 일단 클라이언트에서 저장 (api 없음)
+  const saveRecentSearch = (term: string) => {
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const parsed = stored ? JSON.parse(stored) : [];
+
+    // 중복 제거 + 앞에 추가 + 최대 5개
+    const newList = [
+      term,
+      ...parsed.filter((item: string) => item !== term),
+    ].slice(0, 5);
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newList));
+    setRecentSearches(newList);
+  };
+
+  useEffect(() => {
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (stored) {
+      setRecentSearches(JSON.parse(stored));
+    }
+  }, []);
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -49,8 +81,9 @@ const SearchInput = ({
   const handleSearch = () => {
     if (inputValue.trim()) {
       onSearch(inputValue);
+      saveRecentSearch(inputValue);
       setRecentSearches([inputValue, ...recentSearches.slice(0, 4)]);
-      setInputValue("");
+      router.push(`/search?query=${encodeURIComponent(inputValue)}`);
       setIsFocused(false);
     }
   };
@@ -58,11 +91,14 @@ const SearchInput = ({
   const handleRecentSearchClick = (searchTerm: string) => {
     setInputValue(searchTerm);
     onSearch(searchTerm);
+    router.push(`/search?query=${encodeURIComponent(searchTerm)}`);
     setIsFocused(false);
   };
 
   const handleRemoveSearchItem = (index: number) => {
-    setRecentSearches(recentSearches.filter((_, i) => i !== index));
+    const updated = recentSearches.filter((_, i) => i !== index);
+    setRecentSearches(updated);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
   };
 
   useEffect(() => {
