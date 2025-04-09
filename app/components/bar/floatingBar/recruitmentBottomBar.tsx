@@ -89,7 +89,7 @@ const RecruitmentBottomBar = ({
   };
 
   return (
-    <div className="flex bg-white w-full space-x-3">
+    <div className="flex bg-white w-full gap-3">
       <div className="flex-shrink-0">
         <SahreBtn onClick={handleCopy} />
       </div>
