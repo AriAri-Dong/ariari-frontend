@@ -9,6 +9,7 @@ interface RadioButtonProps {
   label?: string;
   onClick: () => void;
   className?: string;
+  imgClassName?: string;
 }
 
 /**
@@ -23,10 +24,11 @@ const RadioBtn = ({
   label,
   onClick,
   className,
+  imgClassName,
 }: RadioButtonProps) => {
   return (
     <div
-      className={`${className} flex items-center gap-1 md:gap-[6px] cursor-pointer py-1 pr-[6px]`}
+      className={`flex items-center gap-1 md:gap-[6px] cursor-pointer py-1 pr-[6px]  text-body3_m md:text-body1_m ${className}`}
       onClick={onClick}
     >
       <Image
@@ -34,11 +36,9 @@ const RadioBtn = ({
         alt={isChecked ? "Checked" : "Unchecked"}
         width={16}
         height={16}
-        className="md:w-5 md:h-5"
+        className={`md:w-5 md:h-5 ${imgClassName}`}
       />
-      {label && (
-        <p className="text-icon text-body3_m md:text-body1_m">{label}</p>
-      )}
+      {label && <p className="text-icon">{label}</p>}
     </div>
   );
 };

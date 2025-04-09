@@ -1,81 +1,91 @@
-"use client";
-
 import PullDown from "@/components/pulldown/pullDown";
 import SubTap from "@/components/tab/subTap";
 import ClubRankingCard from "@/components/card/clubRankingCard";
 import ClubRankingList from "@/components/card/clubRankingList";
 
-import { AFFILIATION_TYPE, AREA_TYPE, FIELD_TYPE } from "@/data/pulldown";
-import { useState } from "react";
+import { AFFILIATION_TYPE, FIELD_TYPE } from "@/data/pulldown";
+import { useEffect, useState } from "react";
 import useResponsive from "@/hooks/useResponsive";
 import FilterBtn from "@/components/button/iconBtn/filterBtn";
 import NotiPopUp from "@/components/modal/notiPopUp";
-
-const dummyCardData = [
-  { id: 1, rank: 1, title: "Card 1", description: "짧은 동아리 소개." },
-  {
-    id: 2,
-    rank: 2,
-    title: "Card 2",
-    description: "긴 동아리 소개 긴 동아리 소개 긴 동아리 소개 긴 동아리 소개",
-  },
-  { id: 3, rank: 3, title: "Card 3", description: "짧은 동아리 소개" },
-  {
-    id: 4,
-    rank: 4,
-    title: "Card 4",
-    description: "긴 동아리 소개 긴 동아리 소개 긴 동아리 소개 긴 동아리 소개",
-  },
-  {
-    id: 5,
-    rank: 5,
-    title: "Card 5",
-    description: "짧은 동아리 소개",
-  },
-  {
-    id: 6,
-    rank: 6,
-    title: "Card 6",
-    description: "짧은 동아리 소개",
-  },
-  {
-    id: 7,
-    rank: 7,
-    title: "Card 6",
-    description: "짧은 동아리 소개",
-  },
-  {
-    id: 8,
-    rank: 8,
-    title: "Card 6",
-    description: "짧은 동아리 소개",
-  },
-  {
-    id: 9,
-    rank: 9,
-    title: "Card 6",
-    description: "짧은 동아리 소개",
-  },
-];
+import LoginModal from "@/components/modal/login/loginModal";
+import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
+import { getExternalClubRanking, getInternalClubRanking } from "@/api/club/api";
+import { ClubData } from "@/types/api";
+import { useUserStore } from "@/providers/userStoreProvider";
+import { useShallow } from "zustand/shallow";
+import { useRouter } from "next/navigation";
 
 const ClubRanking = () => {
+  const router = useRouter();
+
   const isTab = useResponsive("md");
   const isDesktop = useResponsive("lg");
-  const [fieldType, setFieldType] = useState<string[]>([FIELD_TYPE[0].label]);
+
+  const [data, setData] = useState<ClubData[]>([]);
+  const [fieldType, setFieldType] = useState<string>(FIELD_TYPE[0].value);
   const [affiliationType, setAffiliationType] = useState<string[]>([
     AFFILIATION_TYPE[1].label,
   ]);
   const [showFilter, setShowFilter] = useState<boolean>(false);
 
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const schoolCertification = false; // 학교 인증 여부 임시값
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const [isLoginNotiPopUpOpen, setIsLoginNotiPopUpOpen] =
+    useState<boolean>(false);
+  const [isSchoolNotiPopUpOpen, setIsSchoolNotiPopUpOpen] =
+    useState<boolean>(false);
 
-  const handleOption = (value: string) => {
-    if (!schoolCertification && value == "교내" && !isModalOpen) {
-      setModalOpen(true);
+  const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn));
+  const schoolCertification = useUserStore(
+    useShallow((state) => state.schoolData)
+  );
+
+  const handleFieldOption = (value: string[]) => {
+    setFieldType(value[0]);
+  };
+
+  const handleAffiliationOption = (value: string) => {
+    if (!isAuthenticated) {
+      setIsLoginNotiPopUpOpen(true);
+    } else if (!schoolCertification && value === "교내") {
+      setIsSchoolNotiPopUpOpen(true);
     } else {
       setAffiliationType([value]);
     }
+  };
+
+  useEffect(() => {
+    const selectedFieldValue =
+      FIELD_TYPE.find((item) => item.label === fieldType)?.value || "";
+
+    if (affiliationType[0] === "교내") {
+      getInternalClubRanking(selectedFieldValue)
+        .then((data) => {
+          setData(data.clubDataList);
+          console.log("교내입니다");
+        })
+        .catch((error) => {
+          console.error("Error fetching internal recruitments:", error);
+        });
+    } else {
+      getExternalClubRanking(selectedFieldValue)
+        .then((data) => {
+          setData(data.clubDataList);
+          console.log("교외입니다.");
+        })
+        .catch((error) => {
+          console.error("Error fetching external recruitments:", error);
+        });
+    }
+  }, [fieldType, affiliationType]);
+
+  const handleLoginRedirect = () => {
+    setIsLoginModalOpen(true);
+    setIsLoginNotiPopUpOpen(false);
+  };
+
+  const handleLoginModalClose = () => {
+    setIsLoginModalOpen(false);
   };
 
   return (
@@ -90,13 +100,13 @@ const ClubRanking = () => {
               <PullDown
                 optionData={FIELD_TYPE.slice(1)}
                 optionSize="small"
-                handleOption={setFieldType}
-                selectedOption={fieldType}
+                handleOption={handleFieldOption}
+                selectedOption={[fieldType]}
               />
               <SubTap
                 optionData={AFFILIATION_TYPE.slice(1, 3)}
                 selectedOption={affiliationType[0]}
-                handleOption={handleOption}
+                handleOption={handleAffiliationOption}
               />
             </>
           ) : (
@@ -104,8 +114,9 @@ const ClubRanking = () => {
           )}
         </div>
       </div>
+
       {showFilter && (
-        <div className="flex mt-[16px] gap-[10px] md:hidden ">
+        <div className="flex mt-[16px] gap-[10px] md:hidden">
           <>
             <PullDown
               optionData={AFFILIATION_TYPE.slice(1)}
@@ -116,34 +127,56 @@ const ClubRanking = () => {
             <PullDown
               optionData={FIELD_TYPE.slice(1)}
               optionSize="small"
-              handleOption={setFieldType}
-              selectedOption={fieldType}
+              handleOption={(value: string[]) => setFieldType(value[0])}
+              selectedOption={[fieldType]}
             />
           </>
         </div>
       )}
 
       <div>
-        <ClubRankingCard
-          clubs={dummyCardData.slice(0, isDesktop ? 3 : isTab ? 2 : 1)}
-        />
+        <ClubRankingCard clubs={data.slice(0, isDesktop ? 3 : isTab ? 2 : 1)} />
         <ClubRankingList
-          clubs={dummyCardData.slice(
+          clubs={data.slice(
             isDesktop ? 3 : isTab ? 2 : 1,
             isDesktop ? 10 : isTab ? 8 : 7
           )}
         />
       </div>
 
-      {isModalOpen && (
+      {/* 로그인 팝업 */}
+      {isLoginModalOpen && (
+        <>
+          <LoginModal onClose={handleLoginModalClose} />
+          <MobileLoginModal onClose={handleLoginModalClose} />
+        </>
+      )}
+
+      {isLoginNotiPopUpOpen && (
         <NotiPopUp
-          onClose={() => setModalOpen(false)}
+          onClose={() => setIsLoginNotiPopUpOpen(false)}
+          icon="login"
+          title="로그인이 필요한 서비스입니다."
+          description={`교내 인기 동아리를 확인하기 위해서는\n로그인이 필요합니다.`}
+          firstButton={handleLoginRedirect}
+          firstButtonText="로그인 후 이용하기"
+          secondButton={() => setIsLoginNotiPopUpOpen(false)}
+          secondButtonText="다음에 할게요"
+          modalType="button"
+        />
+      )}
+
+      {isSchoolNotiPopUpOpen && (
+        <NotiPopUp
+          onClose={() => setIsSchoolNotiPopUpOpen(false)}
           icon="school"
-          title="학교 등록이 필요합니다"
+          title="학교 등록이 필요한 서비스입니다."
           description={`교내 인기 동아리를 확인하기 위해서는\n학교 등록이 필요합니다.`}
-          firstButton={() => {}}
+          firstButton={() => {
+            router.push("/user/userInfo");
+          }}
           firstButtonText="학교 등록하기"
-          secondButton={() => setModalOpen(false)}
+          secondButton={() => setIsSchoolNotiPopUpOpen(false)}
           secondButtonText="다음에 할게요"
           modalType="button"
         />

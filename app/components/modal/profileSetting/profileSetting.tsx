@@ -9,6 +9,9 @@ import Alert from "@/components/alert/alert";
 import { useProfileContext } from "@/context/profileConetxt";
 import { validateEmail } from "@/schema/email";
 import { formatTime } from "@/utils/timeFormatter";
+import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
+import { updateNickname, updateProfileType } from "@/api/member/api"; // 닉네임과 프로필 변경 API
+import { ProfileData } from "@/context/profileConetxt"; // ProfileData 타입 import
 
 interface ProfileSettingProps {
   step: number;
@@ -29,39 +32,92 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
   const [verificationFailed, setVerificationFailed] = useState(false); // Step3 인증 실패 상태
 
   // 인증 번호 재전송
-  const resetTimer = () => {
-    setTimeLeft(300);
-    setAlertMessage("인증번호를 전송했습니다.");
+  const resetTimer = async () => {
+    try {
+      await sendSchoolAuthEmail(profileData.email);
+      setTimeLeft(300);
+      setAlertMessage("인증번호를 전송했습니다.");
+    } catch (error) {
+      setAlertMessage(
+        "학교 인증 이메일 발송에 실패했습니다. 다시 시도해주세요."
+      );
+    }
   };
 
-  const validateCurrentStep = (): boolean => {
+  const validateCurrentStep = async () => {
     if (step === 2) {
-      // 이메일 검증
       const emailValidationError = validateEmail(profileData.email);
       if (emailValidationError) {
         setAlertMessage(emailValidationError);
         return false;
       }
     } else if (step === 3) {
-      // 인증 번호 검증 (현재 임시 인증 번호: 123456)
-      if (profileData.verificationCode !== "123456") {
+      try {
+        await validateSchoolAuthCode(profileData.verificationCode);
+        setVerificationFailed(false);
+      } catch (error) {
         setVerificationFailed(true);
+        setAlertMessage("인증번호가 올바르지 않습니다. 다시 확인해주세요.");
         return false;
       }
-      setVerificationFailed(false);
     }
     return true;
   };
 
-  const handleNextStep = () => {
-    if (!validateCurrentStep()) {
-      return;
-    }
-
+  const handleNextStep = async () => {
     setAlertMessage(null);
-    if (step === 3) {
-      // 인증 완료 시 Step4로 이동
-      onNextStep(4);
+
+    if (step === 1) {
+      // 1단계: 사용자 이름 유효성 검사
+      if (!profileData.username || profileData.username.trim() === "") {
+        setAlertMessage("사용자 이름을 입력해주세요.");
+        return;
+      }
+
+      onNextStep(2); // 2단계로 넘어감
+    } else if (step === 2) {
+      // 2단계: 이메일 유효성 검사
+      if (!profileData.email || profileData.email.trim() === "") {
+        setAlertMessage("이메일을 입력해주세요.");
+        return;
+      }
+
+      const emailValidationError = validateEmail(profileData.email);
+      if (emailValidationError) {
+        setAlertMessage(emailValidationError);
+        return;
+      }
+
+      // 이메일 검증 통과 후 3단계로 넘어감
+      resetTimer();
+      onNextStep(3);
+    } else if (step === 3) {
+      const isValid = await validateCurrentStep();
+      if (!isValid) {
+        return;
+      }
+
+      // 닉네임과 프로필 변경 API 호출
+      try {
+        // 프로필 타입이 null이면 처리하지 않고 오류 메시지를 띄움
+        if (!profileData.selectedProfileType) {
+          setAlertMessage("프로필을 선택해주세요.");
+          return; // 프로필 타입이 null인 경우에는 다음 단계로 넘어가지 않도록 함
+        }
+
+        // 1. 닉네임 변경 API
+        await updateNickname(profileData.username);
+
+        // 2. 프로필 변경 API
+        await updateProfileType(profileData.selectedProfileType);
+
+        // 3. 모든 API 호출 성공 후 4단계로 진행
+        onNextStep(4);
+      } catch (error) {
+        setAlertMessage(
+          "닉네임 또는 프로필 변경에 실패했습니다. 다시 시도해주세요."
+        );
+      }
     } else {
       onNextStep(step + 1);
     }

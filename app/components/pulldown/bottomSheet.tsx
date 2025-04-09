@@ -13,6 +13,16 @@ interface BottomSheetProps {
   multiple?: boolean;
 }
 
+/**
+ *
+ * @param optionData 옵션 리스트
+ * @param selectedOptions 선택된 옵션, 선택되지 않은 경우 ""로 넘기기 가능
+ * @param handleMenuClick 옵션 선택시 문자열로만 처리 가능한 경우 사용
+ * @param handleMenuClickWithId 옵션 선택시 id + 문자열로 처리가 필요한 경우 사용
+ * @param multiple 옵션 다중선택 가능 여부 (radio button 존재 여부)
+ * @returns
+ */
+
 const BottomSheet = ({
   optionData,
   selectedOptions,
@@ -50,11 +60,11 @@ const BottomSheet = ({
           {optionData.map((item) => (
             <li
               key={item.label}
-              className={`flex items-center p-[12.5px] text-[15px] cursor-pointer ${
+              className={`flex items-center p-[12.5px] text-mobile_h4 cursor-pointer ${
                 !isSelected
                   ? "text-subtext1"
                   : selectedOptions.includes(item.label)
-                  ? "text-primary font-semibold"
+                  ? "text-primary text-mobile_h4_sb"
                   : "text-unselected"
               } ${
                 !multiple && `justify-center`
@@ -67,7 +77,7 @@ const BottomSheet = ({
                   handleMenuClick(item.label);
                 }
                 if (!multiple) {
-                  onClose();
+                  handleClose();
                 }
               }}
             >

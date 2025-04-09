@@ -1,8 +1,10 @@
+"use client";
+
 interface RecruitmentSummaryProps {
   members: number;
   startDate: string;
   endDate: string;
-  email: string;
+  procedureType: string;
 }
 
 /**
@@ -10,14 +12,14 @@ interface RecruitmentSummaryProps {
  * @param members 모집 인원
  * @param startDate 모집 시작 날짜
  * @param endDate 모집 종료 날짜
- * @param email 모집자 이메일
+ * @param procedureType 모집 유형 (서류 or 서류.면접)
  * @returns
  */
 const RecruitmentSummary = ({
   members,
   startDate,
   endDate,
-  email,
+  procedureType,
 }: RecruitmentSummaryProps) => {
   return (
     <div className="felx text-subtext1 space-y-[14px]">
@@ -29,16 +31,20 @@ const RecruitmentSummary = ({
       </div>
       <div className="flex flex-row gap-[65px]">
         <p className="w-[56px] text-mobile_body2_sb md:text-body1_m">
+          모집 절차
+        </p>
+        <p className="text-mobile_body2_r md:text-body1_m">
+          {procedureType == "DOCUMENT" ? "서류" : "서류/면접"}
+        </p>
+      </div>
+      <div className="flex flex-row gap-[65px]">
+        <p className="w-[56px] text-mobile_body2_sb md:text-body1_m">
           모집 기간
         </p>
         <p className="text-mobile_body2_r md:text-body1_m">
           {startDate} ~ {endDate}
         </p>
       </div>
-      {/* <div className="flex flex-row gap-[65px]">
-        <p className="w-[56px] text-mobile_body2_sb md:text-body1_m">이메일</p>
-        <p className="text-mobile_body2_r md:text-body1_m">{email}</p>
-      </div> */}
     </div>
   );
 };

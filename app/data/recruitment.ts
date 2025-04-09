@@ -1,9 +1,77 @@
 import { RecruitmentData } from "@/types/recruitment";
 import noimage from "@/images/test/test.svg";
+import { ClubInfoCard } from "@/types/components/card";
+
+export const RECRUITMENT_GUIDE_DATA = [
+  {
+    title: "모집공고 작성 조건",
+    content: [
+      {
+        title:
+          "모집공고는 명확한 운영 주체, 활동 내용, 모집 절차 등을 포함해야 합니다.",
+      },
+      {
+        title:
+          "모집 주체는 실존하는 단체여야 하며, 활동 목적과 성격이 분명해야 합니다.",
+      },
+      {
+        title: "모집공고에는 다음과 같은 내용이 포함되어서는 안 됩니다",
+        description: [
+          "사이비 종교, 불법 단체, 불건전 단체와 관련된 내용",
+          "허위 정보나 운영 주체를 속이는 내용",
+        ],
+      },
+    ],
+  },
+  {
+    title: "부적절한 콘텐츠 기재",
+    content: [
+      {
+        title:
+          "모집공고에 다음과 같은 불건전한 콘텐츠가 포함된 경우, 공고는 삭제될 수 있습니다",
+        description: [
+          "선정적이거나 폭력적인 내용",
+          "심한 욕설, 혐오 표현, 비방 등의 부적절한 언어",
+          "기타 공공질서와 미풍양속에 반하는 내용",
+        ],
+      },
+
+      {
+        title:
+          "불건전 콘텐츠가 발견될 경우, 관리자 권한으로 모집공고를 즉시 삭제할 수 있습니다.",
+      },
+    ],
+  },
+  {
+    title: "모집공고 확인 및 삭제 규정",
+    content: [
+      {
+        title:
+          "작성된 모집공고는 제출 후 최대 2일 이내 확인 기간을 거친 후 자동으로 게시됩니다.",
+      },
+      {
+        title:
+          "확인 과정에서 모집공고 작성 조건에 부합하지 않거나 부적절한 콘텐츠가 발견되면, 해당 모집공고는 거절될 수 있습니다.",
+      },
+      { title: "거절된 모집공고는 복구가 불가능하므로 작성 시 주의해 주세요." },
+    ],
+  },
+  {
+    title: "모집공고 수정 및 재작성",
+    content: [
+      { title: "승인된 모집공고는 수정할 수 없습니다." },
+      {
+        title:
+          "공고 내용 수정을 원하는 경우, 기존 모집공고를 모집 종료시키거나 삭제 후 재작성해야 합니다.",
+      },
+    ],
+  },
+];
 
 export const RECRUITMENT_DATA: RecruitmentData[] = [
   {
-    id: 1,
+    id: "1",
+    clubId: 1,
     title: "프로그래밍 동아리 신입 모집",
     body: "코딩에 관심 있는 열정적인 신입 회원을 모집합니다!",
     posterUri: noimage,
@@ -12,11 +80,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-01T10:00:00Z",
     startDateTime: "2025-02-01T09:00:00Z",
     endDateTime: "2025-02-10T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 2,
+    id: "2",
+    clubId: 2,
     title: "사진 동아리 신입 모집 사진 동아리 신입 모집 사진 동아리 신입 모집",
     body: "사진 촬영 및 편집에 관심 있는 분들을 환영합니다!",
     posterUri: noimage,
@@ -25,11 +96,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-02T11:00:00Z",
     startDateTime: "2025-02-05T09:00:00Z",
     endDateTime: "2025-02-15T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: true,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 3,
+    id: "3",
+    clubId: 3,
     title: "연극 동아리 신입 모집",
     body: "연기에 열정 있는 분들을 위한 동아리입니다. 함께 무대를 만들어보아요!",
     posterUri: noimage,
@@ -38,11 +112,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-03T12:00:00Z",
     startDateTime: "2025-02-10T09:00:00Z",
     endDateTime: "2025-02-20T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 4,
+    id: "4",
+    clubId: 4,
     title: "봉사 동아리 신입 모집",
     body: "봉사를 통해 따뜻한 마음을 나누고 싶으신 분들을 모집합니다.",
     posterUri: noimage,
@@ -51,11 +128,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-05T13:00:00Z",
     startDateTime: "2025-02-15T09:00:00Z",
     endDateTime: "2025-02-25T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "CLOSED",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 5,
+    id: "5",
+    clubId: 5,
     title: "댄스 동아리 신입 모집",
     body: "춤을 사랑하고 열정을 가진 분들을 모집합니다. 장르는 자유!",
     posterUri: noimage,
@@ -64,11 +144,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-06T14:00:00Z",
     startDateTime: "2025-02-20T09:00:00Z",
     endDateTime: "2025-03-01T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "CLOSED",
     isMyBookmark: true,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 6,
+    id: "6",
+    clubId: 6,
     title: "음악 동아리 신입 모집",
     body: "보컬, 악기 연주 등 음악을 사랑하는 분들을 모집합니다.",
     posterUri: noimage,
@@ -77,11 +160,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-07T15:00:00Z",
     startDateTime: "2025-02-25T09:00:00Z",
     endDateTime: "2025-03-05T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 7,
+    id: "7",
+    clubId: 7,
     title: "영화 동아리 신입 모집",
     body: "영화를 보고 토론하며 작품을 만드는 재미를 느껴보세요!",
     posterUri: noimage,
@@ -90,11 +176,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-08T16:00:00Z",
     startDateTime: "2025-03-01T09:00:00Z",
     endDateTime: "2025-03-10T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 8,
+    id: "8",
+    clubId: 8,
     title: "프로그래밍 동아리 신입 모집",
     body: "코딩에 관심 있는 열정적인 신입 회원을 모집합니다!",
     posterUri: noimage,
@@ -103,11 +192,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-01T10:00:00Z",
     startDateTime: "2025-02-01T09:00:00Z",
     endDateTime: "2025-02-10T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 9,
+    id: "9",
+    clubId: 9,
     title: "사진 동아리 신입 모집",
     body: "사진 촬영 및 편집에 관심 있는 분들을 환영합니다!",
     posterUri: noimage,
@@ -116,11 +208,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-02T11:00:00Z",
     startDateTime: "2025-02-05T09:00:00Z",
     endDateTime: "2025-02-15T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: true,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 10,
+    id: "10",
+    clubId: 10,
     title: "연극 동아리 신입 모집",
     body: "연기에 열정 있는 분들을 위한 동아리입니다. 함께 무대를 만들어보아요!",
     posterUri: noimage,
@@ -129,11 +224,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-03T12:00:00Z",
     startDateTime: "2025-02-10T09:00:00Z",
     endDateTime: "2025-02-20T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 11,
+    id: "11",
+    clubId: 11,
     title: "봉사 동아리 신입 모집",
     body: "봉사를 통해 따뜻한 마음을 나누고 싶으신 분들을 모집합니다.",
     posterUri: noimage,
@@ -142,11 +240,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-05T13:00:00Z",
     startDateTime: "2025-02-15T09:00:00Z",
     endDateTime: "2025-02-25T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 12,
+    id: "12",
+    clubId: 12,
     title: "댄스 동아리 신입 모집",
     body: "춤을 사랑하고 열정을 가진 분들을 모집합니다. 장르는 자유!",
     posterUri: noimage,
@@ -155,11 +256,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-06T14:00:00Z",
     startDateTime: "2025-02-20T09:00:00Z",
     endDateTime: "2025-03-01T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: true,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 13,
+    id: "13",
+    clubId: 13,
     title: "음악 동아리 신입 모집",
     body: "보컬, 악기 연주 등 음악을 사랑하는 분들을 모집합니다.",
     posterUri: noimage,
@@ -168,11 +272,14 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-07T15:00:00Z",
     startDateTime: "2025-02-25T09:00:00Z",
     endDateTime: "2025-03-05T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
   {
-    id: 14,
+    id: "14",
+    clubId: 14,
     title: "영화 동아리 신입 모집",
     body: "영화를 보고 토론하며 작품을 만드는 재미를 느껴보세요!",
     posterUri: noimage,
@@ -181,7 +288,32 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
     createdDateTime: "2025-01-08T16:00:00Z",
     startDateTime: "2025-03-01T09:00:00Z",
     endDateTime: "2025-03-10T18:00:00Z",
-    isActivated: true,
+    // isActivated: true,
+    recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: [],
   },
 ];
+export const CLUB_INFO_DATA: ClubInfoCard = {
+  id: "1",
+  startDate: "2025-01-08T16:00:00Z",
+  endDate: "2025-03-01T09:00:00Z",
+  clubName: "인터페이스",
+  clubImageUrl: noimage,
+  title: "인터페이스 38기 모지",
+  imageUrl: noimage,
+  limits: 20,
+  tag: {
+    affiliation: "세종대학교",
+    field: "CULTURE",
+    region: "SEOUL_GYEONGGI",
+    target: "GRADUATE_STUDENT",
+  },
+  clubId: "1",
+  isMyRecruitmentScrap: false,
+  procedureType: "INTERVIEW",
+  recruitmentBookmarks: 15,
+  isMyClub: false,
+  isMyApply: true,
+  isMyClubBookmark: false,
+};

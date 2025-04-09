@@ -1,14 +1,18 @@
-import ClubRanking from "./content/clubRanking";
-import LatestRecruitment from "./content/latestRecruitment";
-import PopularRecruitment from "./content/popularRecruitment";
+"use client";
 
+import Loading from "@/components/feedback/loading";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+
+const HomePageContent = dynamic(() => import("@/(home)/home/pageContent"), {
+  loading: () => <Loading />,
+  ssr: false,
+});
 const Home = () => {
   return (
-    <div className="w-full ">
-      <ClubRanking />
-      <PopularRecruitment />
-      <LatestRecruitment />
-    </div>
+    <Suspense fallback={<Loading />}>
+      <HomePageContent />
+    </Suspense>
   );
 };
 

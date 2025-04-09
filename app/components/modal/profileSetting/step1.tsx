@@ -5,13 +5,19 @@ import Image from "next/image";
 import { PROFILE_SETTING } from "@/data/profileSetting";
 import check from "@/images/icon/check.svg";
 import { useProfileContext } from "@/context/profileConetxt";
+import { profileType } from "@/types/member";
 
 const Step1 = () => {
   const { profileData, updateProfileData } = useProfileContext();
-  const [inputValue, setInputValue] = useState<string>(profileData.username);
 
-  const handleProfileClick = (id: number) => {
-    updateProfileData({ selectedProfileId: id });
+  const [inputValue, setInputValue] = useState<string>(profileData.username);
+  const [selectedProfileAlias, setSelectedProfileAlias] = useState<
+    string | null
+  >(null);
+
+  const handleProfileClick = (alias: string | null) => {
+    setSelectedProfileAlias(alias);
+    updateProfileData({ selectedProfileType: alias as profileType });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,16 +26,17 @@ const Step1 = () => {
     updateProfileData({ username: value });
   };
 
-  const selectedProfileData = PROFILE_SETTING.find(
-    (item) => item.id === profileData.selectedProfileId
-  );
+  // 선택된 프로필 데이터 가져오기
+  const selectedProfileData =
+    PROFILE_SETTING.find((item) => item.alias === selectedProfileAlias) ||
+    PROFILE_SETTING[0];
 
   return (
     <>
       <div className="flex justify-center mb-4 mt-8">
         <Image
-          src={selectedProfileData?.imageUrl || ""}
-          alt={selectedProfileData?.alias || "프로필 기본 이미지"}
+          src={selectedProfileData.imageUrl || ""}
+          alt={selectedProfileData.alias || "프로필 기본 이미지"}
           width={112}
           height={112}
           className="rounded-full border border-menuborder p-1"
@@ -53,16 +60,16 @@ const Step1 = () => {
           <div
             key={item.id}
             className="relative flex justify-center items-center w-[76px] h-[76px] cursor-pointer rounded-full"
-            onClick={() => handleProfileClick(item.id)}
+            onClick={() => handleProfileClick(item.alias)}
           >
             <Image
               src={item.imageUrl}
-              alt={item.alias}
+              alt={item.alias || ""}
               width={76}
               height={76}
               className="rounded-full"
             />
-            {profileData.selectedProfileId === item.id && (
+            {item.alias === selectedProfileAlias && (
               <>
                 <div className="absolute inset-0 bg-black_50 rounded-full z-10 opacity-70"></div>
                 <div className="absolute z-20">
