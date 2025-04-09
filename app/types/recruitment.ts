@@ -1,6 +1,6 @@
-
 import { ClubData } from "@/types/club";
 import { PageInfo } from "@/types/pageInfo";
+import { ApplyFormData } from "./application";
 
 export type ProcedureType = "DOCUMENT" | "INTERVIEW";
 export type RecruitmentStatusType = "SCHEDULED" | "OPEN" | "CLOSED";
@@ -47,10 +47,6 @@ export interface RecruitmentNoteData {
 export interface ApplyQuestionData {
   id: number;
   body: string;
-}
-
-export interface ApplyFormData {
-  applyQuestionDataList: ApplyQuestionData[];
 }
 
 export interface RecruitmentResponse {
