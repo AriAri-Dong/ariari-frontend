@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import vector from "@/images/icon/backVector.svg";
-import ApplicationFormMobile from "@/components/form/application/applicationFieldFormMobile";
 import { ApplicationKeys, ApplyQuestionData } from "@/types/application";
-import ApplicationInputFormMobile from "@/components/form/application/applicationFieldFormMobile";
-import ApplicationFieldForm from "@/components/form/application/applicationFieldForm";
 
 // 사용 x
 interface ModalProps {

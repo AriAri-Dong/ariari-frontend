@@ -1,18 +1,12 @@
-import { BADGE_ITEMS } from "@/data/club";
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
 import CustomInput from "../../input/customInput";
-import {
-  ApplicationKeys,
-  ApplyQuestionData,
-  SpecialQuestionList,
-} from "@/types/application";
+import { ApplicationKeys, ApplyQuestionData } from "@/types/application";
 import RenderField from "@/(club)/club/components/renderField";
 import { useEffect, useState } from "react";
 import FileBadge from "@/components/badge/fileBadge";
 import TextareaWithCounter from "@/components/textArea/textareaWithCounter";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
-import { getApplyForm } from "@/api/apply/api";
 
 interface ApplicationFieldFormProps {
   selectedFields: ApplicationKeys[];
@@ -22,8 +16,8 @@ interface ApplicationFieldFormProps {
   fileName: string | null;
   handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleRemoveFile: () => void;
-  answers: Record<number, string>;
-  handleAnswerChange: (index: number, value: string) => void;
+  answers: Record<string, string>;
+  handleAnswerChange: (index: string, value: string) => void;
   url: string;
   setUrl: (value: string) => void;
   documentQuestions: ApplyQuestionData[];
@@ -70,11 +64,31 @@ const ApplicationFieldForm = ({
             handleInputChange={handleInputChange}
           />
         ))}
+
+        {documentQuestions &&
+          documentQuestions
+            .filter((item) => item.body.trim() !== "")
+            .map((item, index) => {
+              const answer = answers[item.id] || "";
+              const isOverMaxLength = answer.length > 50;
+
+              return (
+                <div className="flex flex-col gap-[18px]" key={item.id}>
+                  <h3 className="flex text-text1 text-h3">{item.body}</h3>
+                  <TextareaWithCounter
+                    value={answer}
+                    placeholder={"답변을 작성해 주세요."}
+                    onChange={(e) => handleAnswerChange(item.id, e)}
+                    maxLength={50}
+                  />
+                </div>
+              );
+            })}
         {portfolioCollected && (
           <div className="flex flex-col">
             <h3 className="flex text-text1 text-h3 mb-2.5">포트폴리오</h3>
             <p className="text-[#7D8595] text-body1_r">
-              포트폴리오 수집 목적 문구
+              포트폴리오 수집 목적 :
             </p>
             <div className="flex flex-wrap gap-4 mt-5">
               {/* 파일 첨부 버튼 */}
@@ -115,24 +129,6 @@ const ApplicationFieldForm = ({
             </div>
           </div>
         )}
-        {documentQuestions
-          .filter((item) => item.body.trim() !== "")
-          .map((item, index) => {
-            const answer = answers[index] || "";
-            const isOverMaxLength = answer.length > 50;
-
-            return (
-              <div className="flex flex-col gap-[18px]" key={index}>
-                <h3 className="flex text-text1 text-h3">{item.body}</h3>
-                <TextareaWithCounter
-                  value={answer}
-                  placeholder={"답변을 작성해 주세요."}
-                  onChange={(e) => handleAnswerChange(index, e)}
-                  maxLength={50}
-                />
-              </div>
-            );
-          })}
       </div>
     </div>
   );

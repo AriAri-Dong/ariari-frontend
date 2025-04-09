@@ -21,8 +21,8 @@ interface ApplicationFieldFormProps {
   fileName: string | null;
   handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleRemoveFile: () => void;
-  answers: Record<number, string>;
-  handleAnswerChange: (index: number, value: string) => void;
+  answers: Record<string, string>;
+  handleAnswerChange: (index: string, value: string) => void;
   url: string;
   setUrl: (value: string) => void;
   documentQuestions: ApplyQuestionData[];
@@ -119,16 +119,16 @@ const ApplicationFieldFormMobile = ({
         {documentQuestions
           .filter((item) => item.body.trim() !== "")
           .map((item, index) => {
-            const answer = answers[index] || "";
+            const answer = answers[item.id] || "";
             const isOverMaxLength = answer.length > 50;
 
             return (
-              <div className="flex flex-col gap-[18px]" key={index}>
+              <div className="flex flex-col gap-[18px]" key={item.id}>
                 <h3 className="flex text-text1 text-mobile_h3">{item.body}</h3>
                 <CustomInput
                   value={answer}
                   placeholder={"답변을 작성해 주세요."}
-                  onChange={(e) => handleAnswerChange(index, e.target.value)}
+                  onChange={(e) => handleAnswerChange(item.id, e.target.value)}
                   maxLength={50}
                 />
                 {isOverMaxLength && (
@@ -143,7 +143,5 @@ const ApplicationFieldFormMobile = ({
     </div>
   );
 };
-function formatPhoneNumber(onlyNumbers: string) {
-  throw new Error("Function not implemented.");
-}
+
 export default ApplicationFieldFormMobile;

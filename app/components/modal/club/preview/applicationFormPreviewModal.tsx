@@ -23,7 +23,7 @@ const ApplicationFormPreviewModal = ({
   >({});
   const [name, setName] = useState<string>("");
   const [fileName, setFileName] = useState<string | null>(null);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [url, setUrl] = useState<string>("");
 
   const formatPhoneNumber = (value: string) => {
@@ -61,7 +61,7 @@ const ApplicationFormPreviewModal = ({
   };
 
   // 답변 입력 핸들러
-  const handleAnswerChange = (index: number, value: string) => {
+  const handleAnswerChange = (index: string, value: string) => {
     setAnswers((prev) => ({ ...prev, [index]: value }));
     console.log(answers);
   };
