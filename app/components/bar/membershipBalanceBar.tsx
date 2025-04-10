@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import wallet from "@/images/icon/wallet.svg";
+import { formatNumber } from "@/utils/formatNumber";
 
 export interface MembershipBalanceBarProps {
   currentPoint: number;
@@ -30,7 +31,9 @@ const MembershipBalanceBar = ({
             <h3 className="text-h3 text-primary">동아리 회비 잔액</h3>
           </div>
           <div className="flex items-center gap-1 text-primary">
-            <div className="text-h1_contents_title">{currentPoint}</div>
+            <div className="text-h1_contents_title">
+              {formatNumber(currentPoint)}
+            </div>
             <p className="text-h4">원</p>
           </div>
         </div>
