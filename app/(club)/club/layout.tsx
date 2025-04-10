@@ -1,5 +1,6 @@
 "use client";
 
+
 import React, { Suspense, useEffect } from "react";
 import { ClubProvider } from "@/context/ClubContext";
 import dynamic from "next/dynamic";
