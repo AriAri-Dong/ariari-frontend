@@ -30,22 +30,23 @@ const LeftMenu = () => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const clubId = searchParams.get("clubId") || "";
-  
+  const { role } = useClubContext();
+  const { clubInfo } = useClubInfoQuery(clubId);
+  const clubData = clubInfo?.clubData;
+
   const {
     clubNotifications,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
     unreadCount,
-  } = useClubNotificationQuery(clubId);
-  const { role } = useClubContext();
-  const { clubInfo } = useClubInfoQuery(clubId);
-  const clubData = clubInfo?.clubData;
+  } = useClubNotificationQuery(clubId, { enabled: !!role });
+
   console.log(role);
   console.log(clubData);
 
@@ -55,7 +56,6 @@ const LeftMenu = () => {
   // 권한에 따른 메뉴 데이터
   const CLUB_LEFT_MENU = CLUB_MENU_MAP[role ?? "USER"];
   const profileImageSrc = getProfileImage(profileType);
-
 
   const isActive = (url: string) => pathname === url;
 
@@ -98,7 +98,7 @@ const LeftMenu = () => {
       }
     });
   }, [pathname]);
-    
+
   const handleModifyClubInfo = () => {
     setIsModalOpen(true);
   };
@@ -140,9 +140,8 @@ const LeftMenu = () => {
                     </p>
                   </div>
                 </div>
-
               </div>
-              {role === "ADMIN" && (
+              {(role === "ADMIN" || role === "MANAGER") && (
                 <SmallBtn
                   title={"동아리 정보 수정"}
                   onClick={handleModifyClubInfo}
@@ -151,40 +150,42 @@ const LeftMenu = () => {
               )}
             </div>
             {/* 동아리 메뉴/알림 탭 */}
-            <div className="flex mt-7">
-              {CLUB_LEFT_MENU_TABS.map((tab, idx) => (
-                <div
-                  key={tab.id}
-                  className="flex-1 text-center"
-                  onClick={() =>
-                    setActiveTab(tab.type as "menu" | "notification")
-                  }
-                >
-                  <button>
-                    <div className="flex gap-1 justify-center items-center mb-[10px] min-h-6">
-                      <p
-                        className={`text-body1_sb ${
-                          tab.type === activeTab
-                            ? "text-primary"
-                            : "text-unselected"
-                        }`}
-                      >
-                        {tab.label}
-                      </p>
-                      {/* 동아리 알림 개수 */}
-                      {tab.type === "notification" && (
-                        <span className="w-6 h-6 bg-token_bg text-subtext2 text-10 font-medium rounded-full flex justify-center items-center">
-                          {unreadCount}
-                        </span>
-                      )}
-                    </div>
-                  </button>
-                  {tab.type === activeTab && (
-                    <div className="h-[3px] bg-primary pr-1" />
-                  )}
-                </div>
-              ))}
-            </div>
+            {(role === "ADMIN" || role === "MANAGER") && (
+              <div className="flex mt-7">
+                {CLUB_LEFT_MENU_TABS.map((tab, idx) => (
+                  <div
+                    key={tab.id}
+                    className="flex-1 text-center"
+                    onClick={() =>
+                      setActiveTab(tab.type as "menu" | "notification")
+                    }
+                  >
+                    <button>
+                      <div className="flex gap-1 justify-center items-center mb-[10px] min-h-6">
+                        <p
+                          className={`text-body1_sb ${
+                            tab.type === activeTab
+                              ? "text-primary"
+                              : "text-unselected"
+                          }`}
+                        >
+                          {tab.label}
+                        </p>
+                        {/* 동아리 알림 개수 */}
+                        {tab.type === "notification" && (
+                          <span className="w-6 h-6 bg-token_bg text-subtext2 text-10 font-medium rounded-full flex justify-center items-center">
+                            {unreadCount}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                    {tab.type === activeTab && (
+                      <div className="h-[3px] bg-primary pr-1" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </>
         )}
 
@@ -206,7 +207,7 @@ const LeftMenu = () => {
 
               <div className="flex w-full flex-col items-center">
                 <div
-                  className={`flex w-full items-center justify-between cursor-pointer ml-[16px] 
+                  className={`flex w-full items-center justify-between cursor-pointer ml-[20px] 
                   ${isParentActive(menu) ? "text-primary" : "text-unselected"}
                 `}
                   onClick={() =>
