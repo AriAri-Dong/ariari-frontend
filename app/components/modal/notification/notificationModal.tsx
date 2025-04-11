@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import tooltip from "@/images/icon/triangle.svg";
-import vector from "@/images/icon/vector.svg";
-import { TEMP_DATA } from "@/data/notification";
+import { useMyNotificationQuery } from "@/hooks/notification/useNotificationQuery";
+import NotificationList from "@/components/list/notificationList";
 
 interface TooltipProps {
   children: React.ReactNode;
 }
 
 /**
- *
+ * PC 화면- 헤더 유저 알림
  * @param children 클릭 했을 때 툴팁이 보여져야하는 컴포넌트
  * @returns
  */
 const NotificationModal = ({ children }: TooltipProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { myNotifications, isLoading } = useMyNotificationQuery({
+    enabled: !!isOpen,
+  });
 
   const toggleModal = () => {
     setIsOpen((prev) => !prev);
@@ -48,19 +51,9 @@ const NotificationModal = ({ children }: TooltipProps) => {
               rounded-xl w-[400px] max-h-[548px] shadow-default
               overflow-y-scroll custom-scrollbar"
             >
-              {TEMP_DATA.map((item, index) => (
-                <div
-                  key={index}
-                  className={`flex items-center justify-between py-[14px] px-2.5 cursor-pointer
-                  ${index === TEMP_DATA.length - 1 ? "" : "border-b"}`}
-                >
-                  <div className="flex flex-col">
-                    <h3 className="text-text1 text-body2_m">{item.title}</h3>
-                    <p className="text-unselected text-body4_r">{item.date}</p>
-                  </div>
-                  <Image src={vector} alt={"바로가기"} width={24} height={24} />
-                </div>
-              ))}
+              {!isLoading && (
+                <NotificationList notificationList={myNotifications} />
+              )}
             </div>
           </div>
         </>
