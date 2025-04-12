@@ -21,6 +21,8 @@ import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import ApplicationFormPeviewBottomSheet from "@/components/bottomSheet/preview/applicationPreviewBottomSheet";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import ClubInfoWrapper from "@/(club)/club/content/clubInfoWrapper";
+import { ApplicationKeys, ApplyQuestionData } from "@/types/application";
+import { APPLICATION_DISPLAY_INFO } from "@/data/application";
 
 const ApplicationFormPage = () => {
   const isMdUp = useResponsive("md");
@@ -28,10 +30,10 @@ const ApplicationFormPage = () => {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [name, setName] = useState<string>("");
   const [nameError, setNameError] = useState<string | null>(null);
-  const [selectedBadges, setSelectedBadges] = useState<string[]>([]);
+  const [selectedBadges, setSelectedBadges] = useState<ApplicationKeys[]>([]);
   const [documentQuestions, setDocumentQuestions] = useState<
-    { question: string }[]
-  >([{ question: "" }]);
+    ApplyQuestionData[]
+  >([]);
   const [portfolioCollection, setPortfolioCollection] = useState<string>("");
   const [isPortfolioCollected, setIsPortfolioCollected] =
     useState<boolean>(true);
@@ -47,7 +49,7 @@ const ApplicationFormPage = () => {
     }
   };
 
-  const handleBadgeClick = (text: string) => {
+  const handleBadgeClick = (text: ApplicationKeys) => {
     setSelectedBadges((prev) =>
       prev.includes(text)
         ? prev.filter((item) => item !== text)
@@ -56,24 +58,25 @@ const ApplicationFormPage = () => {
   };
 
   const addDocumentQuestion = () => {
-    setDocumentQuestions((prev) => [...prev, { question: "", answer: "" }]);
+    setDocumentQuestions((prev) => [...prev, { id: "", body: "" }]);
   };
 
-  const removeDocumentQuestion = (index: number) => {
+  const removeDocumentQuestion = (index: string) => {
     if (documentQuestions.length > 1) {
-      setDocumentQuestions((prev) => prev.filter((_, i) => i !== index));
+      setDocumentQuestions((prev) => prev.filter((item) => item.id !== index));
     }
   };
 
-  // 문항 입력값 변경 처리
   const handleDocumentQuestionChange = (
-    index: number,
-    field: "question",
+    index: string,
+    field: "body",
     value: string
   ) => {
-    const updatedQuestions = [...documentQuestions];
-    updatedQuestions[index][field] = value;
-    setDocumentQuestions(updatedQuestions);
+    setDocumentQuestions((prevQuestions) =>
+      prevQuestions.map((item, i) =>
+        item.id === index ? { ...item, [field]: value } : item
+      )
+    );
   };
 
   const togglePortfolioCollection = (isCollected: boolean) => {
@@ -125,18 +128,18 @@ const ApplicationFormPage = () => {
                     setName("");
                     setNameError(null);
                     setSelectedBadges([]);
-                    setDocumentQuestions([{ question: "" }]);
+                    setDocumentQuestions([{ id: "", body: "" }]);
                   }}
                 />
               </div>
               <Contour className={"mt-2.5 mb-[14px]"} />
               <div className="flex flex-wrap gap-2.5">
-                {BADGE_TITLES.map((item) => (
+                {Object.values(APPLICATION_DISPLAY_INFO).map((item) => (
                   <ToggleBadge
-                    key={item}
-                    text={item}
-                    isSelected={selectedBadges.includes(item)}
-                    onClick={() => handleBadgeClick(item)}
+                    key={item.key}
+                    text={item.name}
+                    isSelected={selectedBadges.includes(item.key)}
+                    onClick={() => handleBadgeClick(item.key)}
                   />
                 ))}
               </div>
@@ -160,18 +163,18 @@ const ApplicationFormPage = () => {
                     }`}</h3>
                     {index !== 0 && (
                       <DeleteBtn
-                        onClick={() => removeDocumentQuestion(index)}
+                        onClick={() => removeDocumentQuestion(index.toString())}
                       />
                     )}
                   </div>
                   <div className="flex flex-col gap-3">
                     <CustomInput
-                      value={docQuestion.question}
+                      value={docQuestion.body}
                       placeholder={"문항을 작성해주세요"}
                       onChange={(e) =>
                         handleDocumentQuestionChange(
-                          index,
-                          "question",
+                          index.toString(),
+                          "body",
                           e.target.value
                         )
                       }
@@ -228,18 +231,7 @@ const ApplicationFormPage = () => {
               <ApplicationFromPreviewModal
                 onClose={() => setOpenPreview(false)}
                 portfolioCollected={isPortfolioCollected}
-                selectedFields={selectedBadges.map((badgeName) => {
-                  const field = BADGE_ITEMS.find(
-                    (item) => item.name === badgeName
-                  );
-                  return (
-                    field || {
-                      name: badgeName,
-                      type: "text",
-                      placeholder: `${badgeName}을(를) 입력해주세요.`,
-                    }
-                  );
-                })}
+                selectedFields={selectedBadges}
                 documentQuestions={documentQuestions}
               />
             )
@@ -247,18 +239,7 @@ const ApplicationFormPage = () => {
               <ApplicationFormPeviewBottomSheet
                 onClose={() => setOpenPreview(false)}
                 portfolioCollected={isPortfolioCollected}
-                selectedFields={selectedBadges.map((badgeName) => {
-                  const field = BADGE_ITEMS.find(
-                    (item) => item.name === badgeName
-                  );
-                  return (
-                    field || {
-                      name: badgeName,
-                      type: "text",
-                      placeholder: `${badgeName}을(를) 입력해주세요.`,
-                    }
-                  );
-                })}
+                selectedFields={selectedBadges}
                 documentQuestions={documentQuestions}
               />
             )}

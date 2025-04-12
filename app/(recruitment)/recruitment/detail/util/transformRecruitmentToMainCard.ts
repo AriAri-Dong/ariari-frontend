@@ -5,8 +5,14 @@ import formatDateToDot from "@/utils/formatDateToDot";
 export function transformRecruitmentToMainCard(
   recruitmentResponse: RecruitmentResponse
 ): ClubInfoCard {
-  const { recruitmentData, clubData, bookmarks, isMyClub, isMyApply } =
-    recruitmentResponse;
+  const {
+    recruitmentData,
+    clubData,
+    bookmarks,
+    isMyClub,
+    isMyApply,
+    applyFormData,
+  } = recruitmentResponse;
 
   return {
     id: recruitmentData.id,
@@ -30,5 +36,6 @@ export function transformRecruitmentToMainCard(
     recruitmentBookmarks: bookmarks,
     isMyRecruitmentScrap: recruitmentData.isMyBookmark,
     isMyClubBookmark: clubData.isMyBookmark,
+    applyFormData: applyFormData,
   };
 }

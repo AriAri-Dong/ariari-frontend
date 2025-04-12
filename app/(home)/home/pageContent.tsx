@@ -4,67 +4,80 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ProfileSettingModal from "@/components/modal/profileSetting/profileSettingModal";
 import useResponsive from "@/hooks/useResponsive";
 import MobileProfileSettingModal from "@/components/modal/profileSetting/mobile/mobileProfileSettingModal";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import HeaderToken from "@/api/headerToken";
 import ClubRanking from "@/(home)/home/content/clubRanking";
 import PopularRecruitment from "@/(home)/home/content/popularRecruitment";
 import LatestRecruitment from "@/(home)/home/content/latestRecruitment";
+import { useUserStore } from "@/providers/userStoreProvider";
+import MobileSnackBar from "@/components/bar/mobileSnackBar";
 import { getMemberData } from "@/api/member/api";
-import { useUserStore } from "@/providers/user-store-provider";
 
 const HomePageContent = () => {
   const router = useRouter();
-  const isMdUp = useResponsive("md");
   const searchParams = useSearchParams();
-  const [isFirstLogin, setIsFirstLogin] = useState<string | null>(null);
+  const isMdUp = useResponsive("md");
   const { setUserData } = useUserStore((state) => state);
 
-  // Check for the window object to ensure code runs only on the client-side
-  const accessToken =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem("accessToken") || ""
-      : "";
+  const [authState, setAuthState] = useState({
+    isFirstLogin: false,
+    isLoggedIn: false,
+    isFirstLoginModalOpen: false,
+  });
 
-  const [isFirstLoginModalOpen, setIsFirstLoginModalOpen] =
-    useState<boolean>(false);
-
-  const handleFirstLoginModalClose = () => {
-    setIsFirstLoginModalOpen(false);
+  const handleFirstLoginModalClose = useCallback(() => {
+    setAuthState((prev) => ({ ...prev, isFirstLoginModalOpen: false }));
     router.replace("/", undefined);
-  };
+  }, [router]);
 
   useEffect(() => {
-    const searchParamFirstLogin = searchParams.get("firstLogin");
-    setIsFirstLogin(searchParamFirstLogin);
-    setIsFirstLoginModalOpen(searchParamFirstLogin === "1");
-  }, [searchParams]);
+    const initializeAuth = async () => {
+      const isFirstLogin = searchParams.get("firstLogin") === "1";
 
-  useEffect(() => {
-    if (accessToken) {
-      HeaderToken.set(accessToken);
-    }
-  }, [accessToken]);
+      const accessToken =
+        typeof window !== "undefined"
+          ? sessionStorage.getItem("accessToken") || ""
+          : "";
 
-  useEffect(() => {
-    // Fetch user data and update state
-    (async () => {
-      try {
-        const res = await getMemberData();
-        if (res) {
-          setUserData(res);
-          console.log("유저 정보 불러오기 성공:", res);
-        }
-      } catch (error) {
-        console.error("유저 정보 불러오기 실패:", error);
+      if (accessToken) {
+        HeaderToken.set(accessToken);
       }
-    })();
-  }, [setUserData]);
+
+      setAuthState((prev) => ({
+        ...prev,
+        isFirstLogin,
+        isFirstLoginModalOpen: isFirstLogin,
+      }));
+
+      if (accessToken) {
+        try {
+          const userData = await getMemberData();
+          if (userData) {
+            setUserData(userData);
+            setAuthState((prev) => ({ ...prev, isLoggedIn: true }));
+            console.log("User data loaded successfully:", userData);
+          }
+        } catch (error) {
+          console.error("Failed to load user data:", error);
+        }
+      }
+    };
+
+    initializeAuth();
+  }, [searchParams, setUserData]);
+
+  const { isFirstLogin, isLoggedIn, isFirstLoginModalOpen } = authState;
 
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <ClubRanking />
       <PopularRecruitment />
       <LatestRecruitment />
+
+      {isFirstLogin && isLoggedIn && (
+        <MobileSnackBar text={"로그인이 완료되었습니다."} />
+      )}
+
       {isFirstLogin &&
         isFirstLoginModalOpen &&
         (isMdUp ? (

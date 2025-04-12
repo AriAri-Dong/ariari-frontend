@@ -79,7 +79,7 @@ const RecruitmentSlideContainer = ({
     <>
       {isMdUp && (
         <div className="relative">
-          <Slider {...settings} className="px-7">
+          <Slider {...settings} className="px-7 [&_.slick-track]:mx-0">
             {previousRecruitmentList.map((recruitment, index) => (
               <div key={index}>
                 <RecruitmentCard2

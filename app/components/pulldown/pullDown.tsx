@@ -9,7 +9,6 @@ import SingleSelectOptions from "./singleSelectOptions";
 import MultiSelectOptions from "./multiSelectOptions";
 
 import BottomSheet from "./bottomSheet";
-import NotiPopUp from "../modal/notiPopUp";
 import { OptionType } from "@/types/components/pulldown";
 
 interface PulldownProps {
@@ -19,15 +18,17 @@ interface PulldownProps {
   handleOption: (label: string[]) => void;
   optionSize: "small" | "medium" | "large" | "mobile";
   forceDropdown?: boolean;
+  placeholder?: string;
 }
 /**
  *
- * @property optionData - 선택 가능한 옵션 데이터 배열
- * @property multiple - 여러 개 옵션 선택 여부. 기본값은 false
- * @property selectedOption - 선택된 옵션 배열, 선택되지 않은 경우 기본값(ex-["분야"])
- * @property handleOption - 선택된 옵션을 처리 *(문자열로 처리)
- * @property optionSize - 옵션 드롭다운의 크기. {"small" | "medium" | "large" | "mobile"}
- * @property forceDropdown- 드롭다운이 강제로 열려 있도록 할지 여부. 기본값은 false
+ * @param optionData - 선택 가능한 옵션 데이터 배열
+ * @param multiple - 여러 개 옵션 선택 여부. 기본값은 false
+ * @param selectedOption - 선택된 옵션 배열, 선택되지 않은 경우 기본값(ex-["분야"])
+ * @param handleOption - 선택된 옵션을 처리 *(문자열로 처리)
+ * @param optionSize - 옵션 드롭다운의 크기. {"small" | "medium" | "large" | "mobile"}
+ * @param forceDropdown - 드롭다운이 강제로 열려 있도록 할지 여부. 기본값은 false
+ * @param placeholder - 선택되지 않았을 때 보여줄 placeholder
  */
 
 const PullDown = ({
@@ -37,6 +38,7 @@ const PullDown = ({
   selectedOption,
   handleOption,
   forceDropdown = false,
+  placeholder,
 }: PulldownProps) => {
   const pulldownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -47,9 +49,6 @@ const PullDown = ({
     optionData.some((option) => option.label === selectedOption[0]);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
-
-  const schoolCertification = false; // 학교 인증 여부 임시값
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => {
@@ -60,10 +59,6 @@ const PullDown = ({
   };
 
   const handleMenuClick = (label: string) => {
-    if (!schoolCertification && label == "교내") {
-      setModalOpen(true);
-      return;
-    }
     if (!multiple) {
       handleOption([label]);
       toggleDropdown();
@@ -99,7 +94,7 @@ const PullDown = ({
     ? !multiple || (multiple && selectedOption.length === 1)
       ? selectedOption[0]
       : `${selectedOption[0]} 외 ${selectedOption.length - 1}`
-    : optionData[0].label;
+    : placeholder || optionData[0].label;
 
   const getDynamicStyle = () => {
     const length = selectedOptionText.replace(/\s/g, "").length;
@@ -179,20 +174,6 @@ const PullDown = ({
             multiple={true}
           />
         ))}
-
-      {isModalOpen && (
-        <NotiPopUp
-          onClose={() => setModalOpen(false)}
-          icon="school"
-          title="학교 등록이 필요합니다"
-          description={`교내 인기 동아리를 확인하기 위해서는\n학교 등록이 필요합니다.`}
-          firstButton={() => {}}
-          firstButtonText="학교 등록하기"
-          secondButton={() => setModalOpen(false)}
-          secondButtonText="다음에 할게요"
-          modalType="button"
-        />
-      )}
     </div>
   );
 };

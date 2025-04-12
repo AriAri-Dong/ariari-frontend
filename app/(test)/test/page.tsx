@@ -17,12 +17,13 @@ import Alert from "@/components/alert/alert";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import helpText from "@/images/icon/mobile_point_Helptext.svg";
 import ReviewFloatingBtn from "@/components/button/floatingBtn/reviewFloatingBtn";
-import { getRecruitmentRanking } from "@/api/recruitment/api";
 import { getSchoolData } from "@/api/school/api";
-import { getAllClubsInfo, getMyClubs } from "@/api/club/api";
+import { getMyClubs } from "@/api/club/api";
+import { useRouter } from "next/navigation";
 
 const TestPage = () => {
   const isMdUp = useResponsive("md");
+  const router = useRouter();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
@@ -30,6 +31,7 @@ const TestPage = () => {
   const [isBadgeVisible, setIsBadgeVisible] = useState<boolean>(true);
   const [openReview, setOpenReview] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [isFirstLogin, setIsFirstLogin] = useState<boolean>(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -47,15 +49,6 @@ const TestPage = () => {
     setAlertMessage("활동후기가 등록되었습니다.");
     setOpenReview(false);
   };
-
-  useEffect(() => {
-    const fetchAppliedList = async () => {
-      const result = await getRecruitmentRanking();
-      console.log(result.data);
-    };
-
-    fetchAppliedList();
-  }, []);
 
   useEffect(() => {
     const fetchSchoolList = async () => {
@@ -78,20 +71,6 @@ const TestPage = () => {
   }, []);
 
   // 동아리 전체 조회
-  useEffect(() => {
-    const fetchClubsInfo = async () => {
-      try {
-        const data = await getAllClubsInfo();
-        console.log(data);
-      } catch (err) {
-        console.log;
-      } finally {
-      }
-    };
-
-    fetchClubsInfo();
-  }, []);
-
   // 동아리 상세 정보 조회
   // useEffect(() => {
   //   const fetchClubsInfo = async () => {
@@ -122,6 +101,17 @@ const TestPage = () => {
     fetchClubsInfo();
   }, []);
 
+  useEffect(() => {
+    if (!isFirstLogin) {
+      setIsProfileOpen(false); // Ensure profile settings modal is closed when first login state changes
+    }
+  }, [isFirstLogin]);
+
+  const handleProfileSetting = () => {
+    setIsFirstLogin(false);
+    router.push("/");
+  };
+
   return (
     <div>
       <button
@@ -140,7 +130,14 @@ const TestPage = () => {
       >
         {isBadgeVisible ? "Hidden Badge Components" : "Show Badge Components"}
       </button>
-
+      <button
+        className="py-2 px-4 mb-3 bg-indigo-400 text-white rounded-lg hover:bg-indigo-500"
+        onClick={() => {
+          setIsFirstLogin(true);
+        }}
+      >
+        회원가입 모달
+      </button>
       <button
         className="py-2 px-4 mb-3 bg-green-400 text-white rounded-lg hover:bg-green-500"
         onClick={handleOpenModal}
@@ -179,12 +176,6 @@ const TestPage = () => {
           <MobileProfileSettingModal onClose={() => setIsProfileOpen(false)} />
         </>
       )}
-      {/* {isInvitationModalOpen && (
-        <InviteDialog
-          clubName={"아리아리"}
-          onClose={() => setIsInvitationModalOpen(false)}
-        />
-      )} */}
 
       {/* Button Components */}
       {isButtonVisible && (
@@ -203,7 +194,6 @@ const TestPage = () => {
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
-      {!isProfileOpen && <MobileSnackBar text={"로그인이 완료되었습니다."} />}
       {isMdUp
         ? openReview && (
             <ModifyClubInfoModal
@@ -218,6 +208,12 @@ const TestPage = () => {
             />
           )}
       {!openReview && <ReviewFloatingBtn onClick={handleWrite} />}
+
+      {isFirstLogin && isMdUp ? (
+        <ProfileSettingModal onClose={handleProfileSetting} />
+      ) : (
+        <MobileProfileSettingModal onClose={handleProfileSetting} />
+      )}
     </div>
   );
 };

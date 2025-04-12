@@ -4,30 +4,44 @@ import close from "@/images/icon/close.svg";
 import Alert from "@/components/alert/alert";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import defaultImg from "@/images/icon/defaultAriari.svg";
+import defaultBgImg from "@/images/defaultAriariBg.svg";
 import { ModalProps } from "@/types/components/modal";
 import TextInputWithCounter from "@/components/input/textInputWithCounter";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
-import test_image from "@/images/test/test_image.jpg";
 import CustomInput from "@/components/input/customInput";
 import NotiPopUp from "../notiPopUp";
 import trash from "@/images/icon/delete.svg";
 import NoticeBanner from "@/components/banner/noticeBanner";
+import { updateClubWithFiles } from "@/api/club/api";
+import { useSearchParams } from "next/navigation";
+import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
+import { getClubOptions } from "@/utils/convertToServerFormat";
 
-const OPTIONS = [
-  { label: "동아리 소속", value: "아리아리" },
-  { label: "활동 분야", value: "프로그래밍" },
-  { label: "활동 지역", value: "서울" },
-  { label: "활동 대상", value: "대학생 및 직장인" },
-];
-
+/**
+ * 동아리 정보 수정 모달
+ * @param onClose: 모달 닫기 함수
+ * @param onSubmit: 제출 함수
+ */
 const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
+  const searchParams = useSearchParams();
+  const clubId = searchParams.get("clubId") || "";
+  const { clubInfo } = useClubInfoQuery(clubId);
+  const clubData = clubInfo?.clubData;
+
+  const options = clubData ? getClubOptions(clubData) : [];
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const bannerFileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [clubName, setClubName] = useState<string>("");
-  const [clubIntroduction, setClubIntroduction] = useState<string>("");
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [bannerImage, setBannerImage] = useState<string | null>(null);
+  const [clubIntroduction, setClubIntroduction] = useState<string>(
+    clubData?.body || ""
+  );
+  const [uploadedImage, setUploadedImage] = useState<string | null>(
+    clubData?.profileUri || null
+  );
+  const [bannerImage, setBannerImage] = useState<string | null>(
+    clubData?.bannerUri || null
+  );
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
   const [alertMsg, setAlertMsg] = useState<string>("");
@@ -114,9 +128,117 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
   };
 
   // 수정하기
-  const handleSubmit = () => {
-    onSubmit();
-    // onClose();
+  const handleSubmit = async () => {
+    // 동아리 한 줄 소개 값
+    const bodyData = { body: clubIntroduction || "" };
+
+    // 프로필 이미지 처리
+    let profileFile: File | null = null;
+
+    if (uploadedImage) {
+      // 새 프로필 이미지가 업로드된 경우
+      const base64Image = uploadedImage.includes("base64,")
+        ? uploadedImage.split("base64,")[1]
+        : null;
+
+      if (base64Image) {
+        try {
+          const byteArray = new Uint8Array(
+            atob(base64Image)
+              .split("")
+              .map((c) => c.charCodeAt(0))
+          );
+          profileFile = new File([byteArray], "profile_image", {
+            type: "image/jpeg",
+          });
+        } catch (error) {
+          console.error("Invalid Base64 string", error);
+          setAlertMsg("프로필 이미지가 유효하지 않습니다.");
+          setAlertVisible(true);
+          return;
+        }
+      }
+    } else if (uploadedImage === null) {
+      // 프로필 이미지 삭제 요청 시, 기본 이미지를 설정
+      const defaultImgFile = new File(
+        [new Blob([defaultImg], { type: "image/svg+xml" })],
+        "default_profile_image.svg",
+        { type: "image/svg+xml" }
+      );
+      // profileFile = defaultImgFile; // 기본 이미지 파일을 보내도록 설정
+      // 서버 에러 발생하는 부분!!!
+      profileFile = null;
+    } else {
+      // 프로필 이미지가 수정되지 않은 경우, 기본 이미지를 그대로 사용
+      if (clubData?.profileUri) {
+        // 기존 이미지를 그대로 보내기 위해 기본 이미지를 사용할 수 있음
+        const defaultImgFile = new File(
+          [new Blob([defaultImg], { type: "image/svg+xml" })],
+          "default_profile_image.svg",
+          { type: "image/svg+xml" }
+        );
+        profileFile = defaultImgFile;
+      }
+    }
+
+    // 배너 이미지 처리
+    // 서버 에러 발생하는 부분!!! (배너 이미지 전송 시 서버 에러 발생)
+    let bannerFile: File | null = null;
+
+    if (bannerImage) {
+      const base64Banner = bannerImage.includes("base64,")
+        ? bannerImage.split("base64,")[1]
+        : null;
+
+      if (base64Banner) {
+        try {
+          const byteArray = new Uint8Array(
+            atob(base64Banner)
+              .split("")
+              .map((c) => c.charCodeAt(0))
+          );
+          bannerFile = new File([byteArray], "banner_image", {
+            type: "image/jpeg",
+          });
+        } catch (error) {
+          console.error("Invalid Base64 string", error);
+          setAlertMsg("배너 이미지가 유효하지 않습니다.");
+          setAlertVisible(true);
+          return;
+        }
+      }
+    } else if (bannerImage === null) {
+      // 배너 이미지 삭제 요청 시, 기본 배너 이미지를 설정
+      const defaultBgFile = new File(
+        [new Blob([defaultBgImg], { type: "image/svg+xml" })],
+        "default_banner_image.svg",
+        { type: "image/svg+xml" }
+      );
+      // bannerFile = defaultBgFile; // 기본 배너 이미지를 보내도록 설정
+      bannerFile = null;
+    } else {
+      // 배너 이미지가 수정되지 않은 경우, 기본 배너 이미지를 그대로 사용
+      if (clubData?.bannerUri) {
+        // 기존 배너 이미지를 그대로 보내기 위해 기본 배너 이미지를 사용할 수 있음
+        const defaultBgFile = new File(
+          [new Blob([defaultBgImg], { type: "image/svg+xml" })],
+          "default_banner_image.svg",
+          { type: "image/svg+xml" }
+        );
+        bannerFile = defaultBgFile;
+      }
+    }
+
+    try {
+      // 동아리 정보 수정 API 호출
+      await updateClubWithFiles(clubId, bodyData, profileFile, bannerFile);
+      onSubmit();
+      onClose(); // 모달 닫기
+    } catch (error) {
+      console.error("Error updating club info:", error);
+      setAlertMsg("동아리 정보 수정에 실패했습니다.");
+      setAlertVisible(true);
+    }
   };
 
   // 닫기
@@ -192,7 +314,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
               onChange={(e) => handleBannerFileChange(e, setBannerImage)}
             />
             <Image
-              src={bannerImage || test_image}
+              src={bannerImage || defaultBgImg}
               alt={"Banner Image"}
               className="rounded-20 w-full h-[196px] transition-all duration-300"
               height={196}
@@ -264,7 +386,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
             동아리 이름
           </h3>
           <CustomInput
-            value={clubName}
+            value={clubData?.name || ""}
             onChange={() => {}}
             placeholder={""}
             disable={true}
@@ -283,14 +405,12 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
             동아리 세부 카테고리
           </h3>
           <div className="flex justify-between mb-10 text-center">
-            {OPTIONS.map((item) => {
-              return (
-                <div className="flex flex-col gap-[14px]" key={item.label}>
-                  <p className="text-subtext2 text-body2_m">{item.label}</p>
-                  <h3 className="text-h4_sb text-text1">{item.value}</h3>
-                </div>
-              );
-            })}
+            {options.map((item) => (
+              <div className="flex flex-col gap-[14px]" key={item.label}>
+                <p className="text-subtext2 text-body2_m">{item.label}</p>
+                <h3 className="text-h4_sb text-text1">{item.value}</h3>
+              </div>
+            ))}
           </div>
         </div>
 
