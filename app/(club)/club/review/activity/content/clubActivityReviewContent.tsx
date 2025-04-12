@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useClubReviews } from "@/hooks/club/useClubReviews";
 import { useClubContext } from "@/context/ClubContext";
-import { useUserStore } from "@/providers/user-store-provider";
+import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
 
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
