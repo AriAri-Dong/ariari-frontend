@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useUserStore } from "@/providers/user-store-provider";
+import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
 import useResponsive from "@/hooks/useResponsive";
 
