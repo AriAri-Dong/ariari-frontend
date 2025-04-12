@@ -28,7 +28,7 @@ const NotificationList = ({
             className={`py-[14px] px-2.5 border-b last:border-b-0 ${className}`}
           >
             <NotificationItemWrapper item={item}>
-              <div className="w-full h-[45px] flex flex-col gap-2 text-left md:gap-[6px]">
+              <div className="w-full flex flex-col gap-2 text-left md:gap-[6px]">
                 <h3
                   className={`text-mobile_body1_m md:text-body2_m ${
                     isChecked ? "text-subtext2" : "text-text1"
