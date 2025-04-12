@@ -142,8 +142,8 @@ const AcceptanceReviewDropdown = ({
                   {index === 0
                     ? getProcedureTypeLabel(reviewDetail?.procedureType)
                     : index === 1
-                    ? getInterviewRatioLabel(reviewDetail?.interviewRatioType)
-                    : getInterviewTypeLabel(reviewDetail?.interviewType)}
+                    ? getInterviewTypeLabel(reviewDetail?.interviewType)
+                    : getInterviewRatioLabel(reviewDetail?.interviewRatioType)}
                 </p>
               </div>
             ))}
