@@ -139,6 +139,10 @@ const AcceptanceReviewBottomSheet = ({
         setAlertMessage("면접 전형과 면접 인원 정보를 선택해주세요.");
         return false;
       }
+      if (!interviewMood) {
+        setAlertMessage("면접 분위기를 선택해주세요.");
+        return false;
+      }
       // 면접 질문 검사
       for (let i = 0; i < interviewQuestions.length; i++) {
         const intQuestion = interviewQuestions[i];
