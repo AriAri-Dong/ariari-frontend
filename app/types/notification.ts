@@ -1,15 +1,5 @@
 import { PageInfo } from "./pageInfo";
 
-export type ClubNotificationType =
-  | "APPLY"
-  | "MEMBER"
-  | "RECRUITMENT"
-  | "SYSTEM"
-  | "ACTIVITY"
-  | "QUESTION";
-
-export type MemberNotificationType = "CLUB" | "APPLY" | "SYSTEM";
-
 export interface NotificationData {
   id: string;
   title: string;
@@ -23,21 +13,13 @@ export interface NotificationPageInfo extends PageInfo {
 }
 
 // 동아리 알림
-export interface ClubNotificationData extends NotificationData {
-  clubAlarmType: ClubNotificationType;
-}
-
 export interface ClubNotificationListRes {
-  clubAlarmDataList: ClubNotificationData[];
+  clubAlarmDataList: NotificationData[];
   alarmPageInfo: NotificationPageInfo;
 }
 
 // 멤버 알림
-export interface MemberNotificationData extends NotificationData {
-  clubAlarmType: MemberNotificationType;
-}
-
 export interface MemberNotificationListRes {
-  memberAlarmDataList: MemberNotificationData[];
+  memberAlarmDataList: NotificationData[];
   alarmPageInfo: NotificationPageInfo;
 }
