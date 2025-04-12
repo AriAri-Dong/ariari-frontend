@@ -3,14 +3,7 @@ import ReviewBadge from "../badge/review/reviewBadge";
 
 interface ClubIntroductionProps {
   introductionText: string;
-  badgeType?:
-    | "employment"
-    | "experience"
-    | "health"
-    | "interest"
-    | "relationship"
-    | "selfDevelopment"
-    | "skill";
+  badgeType?: TagData;
 }
 
 const ClubIntroduction = ({
@@ -25,7 +18,7 @@ const ClubIntroduction = ({
       <p className="text-body1_r text-subtext1">{introductionText}</p>
       {badgeType && (
         <div className="flex">
-          <ReviewBadge type={badgeType} />
+          <ReviewBadge tag={badgeType} />
         </div>
       )}
     </div>
