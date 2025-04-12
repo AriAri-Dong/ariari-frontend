@@ -24,6 +24,7 @@ interface RecruitmentBottomBar {
   bookmarks: number;
   endDate: string;
   isMyApply: boolean;
+  type?: "PREVIEW" | "APPLYING" | "GENERAL";
 }
 const RecruitmentBottomBar = ({
   recruitmentData,
@@ -31,6 +32,7 @@ const RecruitmentBottomBar = ({
   bookmarks,
   endDate,
   isMyApply,
+  type = "GENERAL",
 }: RecruitmentBottomBar) => {
   const params = useSearchParams();
   const id = params.get("id");
@@ -110,6 +112,7 @@ const RecruitmentBottomBar = ({
       )}
       {isApplicationFormOpen &&
         recruitmentData.applyFormData &&
+        type === "GENERAL" &&
         (isMdUp ? (
           <ApplicationFormModal
             recruitmentData={recruitmentData}

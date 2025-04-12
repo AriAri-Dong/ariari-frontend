@@ -27,17 +27,17 @@ import { useUserStore } from "@/providers/userStoreProvider";
 interface ClubInfoProps {
   recruitmentId?: string;
   recruitmentData: ClubInfoCard;
-  isPreview?: boolean;
+  type?: "PREVIEW" | "APPLYING" | "GENERAL";
 }
 
 /**
- * @param isPreview 미리보기 페이지인지 여부
+ * @param type 미리보기 | 지원중 | 모집공고(일반)
  */
 
 const ClubInfo = ({
   recruitmentId,
   recruitmentData,
-  isPreview = false,
+  type = "GENERAL",
 }: ClubInfoProps) => {
   const isMdUp = useResponsive("md");
   const params = useSearchParams();
@@ -107,12 +107,14 @@ const ClubInfo = ({
             <p className="text-mobile_h1_contents_title text-text1">
               {recruitmentData.title}
             </p>
-            <IconBtn
-              type={"declaration"}
-              size={"large"}
-              title={""}
-              onClick={toggleBottomSheet}
-            />
+            {type !== "APPLYING" && (
+              <IconBtn
+                type={"declaration"}
+                size={"large"}
+                title={""}
+                onClick={type === "PREVIEW" ? () => {} : toggleBottomSheet}
+              />
+            )}
           </div>
           <div className="border-t border-menuborder sm_md:w-[350px] mt-6 mb-6 md:hidden" />
           <div className="flex flex-col md:pt-[6px]">
@@ -199,8 +201,10 @@ const ClubInfo = ({
                 procedureType={recruitmentData.procedureType}
               />
             </div>
-            {/* 미리보기 && 모바일 제외 */}
-            {!(isPreview && !isMdUp) && (
+
+            {(type === "GENERAL" ||
+              (type === "PREVIEW" && isMdUp) ||
+              type !== "APPLYING") && (
               <div className="fixed bottom-0 left-0 right-0 md:static mt-10">
                 <div className="bg-background px-4 pt-2 pb-6 md:px-0 md:pt-0 md:pb-0">
                   <RecruitmentBottomBar
@@ -209,19 +213,22 @@ const ClubInfo = ({
                     bookmarks={recruitmentData.recruitmentBookmarks}
                     endDate={recruitmentData.endDate}
                     isMyApply={recruitmentData.isMyApply}
+                    type={type}
                   />
                 </div>
               </div>
             )}
             <div className="h-5" />
-            <div className="hidden md:flex">
-              <IconBtn
-                type={"declaration"}
-                size={"large"}
-                title={"신고하기"}
-                onClick={isPreview ? () => {} : toggleBottomModal}
-              />
-            </div>
+            {type !== "APPLYING" && (
+              <div className="hidden md:flex">
+                <IconBtn
+                  type={"declaration"}
+                  size={"large"}
+                  title={"신고하기"}
+                  onClick={type === "GENERAL" ? toggleBottomModal : () => {}}
+                />
+              </div>
+            )}
           </div>
         </div>
 
