@@ -10,13 +10,16 @@ import {
   ApplyAnswerReq,
   ApplyFormData,
   ApplyQuestionData,
-  ApplySaveReq,
   SpecialQuestionList,
 } from "@/types/application";
 import { ClubInfoCard } from "@/types/components/card";
 import TransparentSmallBtn from "@/components/button/basicBtn/transparentSmallBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
-import { postApplicationForm } from "@/api/apply/api";
+import {
+  getApplicationTemp,
+  postApplication,
+  postApplicationTemp,
+} from "@/api/apply/api";
 import Alert from "@/components/alert/alert";
 import { useRouter } from "next/navigation";
 import { APPLICATION_DISPLAY_INFO } from "@/data/application";
@@ -47,11 +50,12 @@ const ApplicationFormModal = ({
 
   // 사용자 응답 관련 상태
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [inputValues, setInputValues] = useState<
-    Partial<Record<ApplicationKeys, string>>
-  >({});
+  const [inputValues, setInputValues] = useState<Partial<SpecialQuestionList>>(
+    {}
+  );
   const [name, setName] = useState<string>("");
   const [fileName, setFileName] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState<string>("");
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -99,8 +103,8 @@ const ApplicationFormModal = ({
     onClose();
   };
   // 유효성 검사 및 요청 데이터 생성
-  const createApplySaveReq = (): ApplySaveReq => {
-    if (!name) {
+  const createApplySaveReq = (type: "APPLY" | "APPLY_TEMP"): FormData => {
+    if (type == "APPLY" && !name) {
       setAlertMessage("이름을 입력해주세요.");
       throw new Error("이름을 입력해주세요.");
     }
@@ -111,64 +115,90 @@ const ApplicationFormModal = ({
       Object.entries(specialQuestionList).forEach(([key, applyQuestionId]) => {
         if (!applyQuestionId) return;
 
-        if (
-          !inputValues ||
-          !(key in inputValues) ||
-          !inputValues[key as ApplicationKeys]
-        ) {
-          setAlertMessage(
-            `${
-              APPLICATION_DISPLAY_INFO[key as ApplicationKeys]
-            } 항목을 입력해주세요`
-          );
-          throw new Error(
-            `${
-              APPLICATION_DISPLAY_INFO[key as ApplicationKeys]
-            } 항목을 입력해주세요.`
-          );
+        // 지원하기인 경우만 유효성 검사
+        if (type == "APPLY") {
+          if (
+            !inputValues ||
+            !(key in inputValues) ||
+            !inputValues[key as ApplicationKeys]
+          ) {
+            setAlertMessage(
+              `${
+                APPLICATION_DISPLAY_INFO[key as ApplicationKeys]
+              } 항목을 입력해주세요`
+            );
+            throw new Error(
+              `${
+                APPLICATION_DISPLAY_INFO[key as ApplicationKeys]
+              } 항목을 입력해주세요.`
+            );
+          }
         }
 
-        applyAnswers.push({
-          applyQuestionId,
-          body: inputValues[key as ApplicationKeys]!,
-        });
+        if (inputValues[key as ApplicationKeys])
+          applyAnswers.push({
+            applyQuestionId,
+            body: inputValues[key as ApplicationKeys]!,
+          });
       });
     }
     // 추가 항목 유효성 검사
     if (documentQuestions) {
       Object.entries(documentQuestions).forEach(([id, item]) => {
-        if (!answers[item.id]) {
+        if (type == "APPLY" && !answers[item.id]) {
           setAlertMessage(`모든 항목에 대한 답변을 입력해주세요.`);
           throw new Error(`모든 항목에 대한 답변을 입력해주세요.`);
         }
-
-        applyAnswers.push({
-          applyQuestionId: item.id,
-          body: answers[item.id],
-        });
+        if (answers[item.id])
+          applyAnswers.push({
+            applyQuestionId: item.id,
+            body: answers[item.id],
+          });
       });
     }
 
-    return {
+    const saveReq = {
       name,
       portfolioUrl: url,
-      applyAnswers,
+      [type === "APPLY" ? "applyAnswers" : "applyAnswerTemp"]: applyAnswers,
     };
+
+    const formData = new FormData();
+
+    formData.append(
+      "saveReq",
+      new Blob([JSON.stringify(saveReq)], { type: "application/json" })
+    );
+
+    // 파일이 있으면 추가
+    if (file) {
+      formData.append("file", file);
+    }
+    return formData;
   };
 
-  const handelSubmit = () => {
+  const handelSubmit = (type: "APPLY" | "APPLY_TEMP") => {
     try {
-      const applySaveReqData = createApplySaveReq();
+      const formData = createApplySaveReq(type);
 
-      postApplicationForm(recruitmentData.id, applySaveReqData).then((res) => {
-        if (res === 200) {
-          setAlertMessage("지원서 제출이 완료되었습니다.");
-          router.push("/application");
-        } else {
-          setAlertMessage("지원서 제출에 실패했습니다. 다시 시도해주세요.");
-        }
-      });
-      console.log(applySaveReqData);
+      if (type === "APPLY") {
+        postApplication(recruitmentData.id, formData).then((res) => {
+          if (res === 200) {
+            setAlertMessage("지원서 제출이 완료되었습니다.");
+            router.push("/application");
+          } else {
+            setAlertMessage("지원서 제출에 실패했습니다. 다시 시도해주세요.");
+          }
+        });
+      } else {
+        postApplicationTemp(recruitmentData.id, formData).then((res) => {
+          if (res === 200) {
+            setAlertMessage("임시 저장되었습니다.");
+          } else {
+            setAlertMessage("문제가 발생했습니다.");
+          }
+        });
+      }
     } catch (error) {
       console.error("Error creating applySaveReqData:", error);
     }
@@ -195,6 +225,24 @@ const ApplicationFormModal = ({
       setSelectedFields(data);
     }
   }, [applyFormData]);
+
+  useEffect(() => {
+    const tempId = "699069517447029346";
+    getApplicationTemp(tempId).then((res) => {
+      setName(res.applyData.name);
+      setUrl(res.portfolioUrl);
+      setInputValues(res.specialAnswerList);
+
+      const answerMap: Record<string, string> = {};
+      res.applyAnswerDataList.forEach((answer) => {
+        const questionId = answer.applyQuestionData.id;
+        const body = answer.body;
+        answerMap[questionId] = body;
+      });
+
+      setAnswers(answerMap);
+    });
+  }, []);
 
   return (
     <div
@@ -225,7 +273,7 @@ const ApplicationFormModal = ({
       </div>
       <div className="bg-white w-[900px] max-h-[75vh] rounded-2xl shadow-modal flex flex-col p-6">
         <div className="custom-scrollbar overflow-y-auto">
-          <ClubInfo recruitmentData={recruitmentData} isPreview={true} />
+          <ClubInfo recruitmentData={recruitmentData} type="APPLYING" />
           <ApplicationFieldForm
             selectedFields={selectedFields}
             portfolioCollected={portfolioCollected}
@@ -246,11 +294,11 @@ const ApplicationFormModal = ({
             <TransparentSmallBtn
               title={"임시저장"}
               round={true}
-              onClick={() => {}}
+              onClick={() => handelSubmit("APPLY_TEMP")}
             />
             <SmallBtn
               title={"제출하기"}
-              onClick={handelSubmit}
+              onClick={() => handelSubmit("APPLY")}
               round={true}
               className="h-[44px] flex flex-col items-center justify-center"
             />
