@@ -10,6 +10,7 @@ import {
   PassReviewSaveReq,
   TagData,
 } from "@/types/review";
+import { CLUB_REVIEW_TAG } from "../apiUrl";
 
 // 동아리 활동후기 리스트
 export const getClubReview = async (
@@ -76,7 +77,7 @@ export const getClubTagStatistics = async (clubId: string) => {
 // 사용 가능한 태그 리스트
 export const getClubTag = async () => {
   try {
-    const { data } = await axiosInstance.get<TagData[]>(`club-review/tag-data`);
+    const { data } = await axiosInstance.get<TagData[]>(CLUB_REVIEW_TAG);
     return data;
   } catch (err) {
     if (err instanceof AxiosError) {
