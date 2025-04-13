@@ -1,7 +1,11 @@
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
 import CustomInput from "../../input/customInput";
-import { ApplicationKeys, ApplyQuestionData } from "@/types/application";
+import {
+  ApplicationKeys,
+  ApplyQuestionData,
+  SpecialQuestionList,
+} from "@/types/application";
 import RenderField from "@/(club)/club/components/renderField";
 import { useEffect, useState } from "react";
 import FileBadge from "@/components/badge/fileBadge";
@@ -21,7 +25,7 @@ interface ApplicationFieldFormProps {
   url: string;
   setUrl: (value: string) => void;
   documentQuestions: ApplyQuestionData[];
-  inputValues: Partial<Record<ApplicationKeys, string>>;
+  inputValues: Partial<SpecialQuestionList>;
   handleInputChange: (fieldKey: ApplicationKeys, value: string) => void;
 }
 const ApplicationFieldForm = ({
