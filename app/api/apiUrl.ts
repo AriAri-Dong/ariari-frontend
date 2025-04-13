@@ -42,7 +42,7 @@ export const SCHOOLS_CANCEL = "/schools/auth/cancel";
 
 // == APPLY_TEMPS ==
 export const APPLY_TEMPS = "/apply-temp";
-export const APPLY_TEMPS_MY = "/apply-temp/my";
+export const APPLY_TEMPS_MY = "/apply-temps/my";
 
 // == REPORT ==
 
