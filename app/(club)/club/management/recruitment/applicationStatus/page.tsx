@@ -1,20 +1,16 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import React, { useEffect, useState } from "react";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import SubTap from "@/components/tab/subTap";
 import useResponsive from "@/hooks/useResponsive";
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import AllCheckBox from "@/components/checkBox/allCheckBox";
 import ApplicationFormCard from "@/components/card/applicationFormCard";
-import vector from "@/images/icon/sub_pull_down.svg";
-import SingleSelectOptions from "@/components/pulldown/singleSelectOptions";
 import NotiPopUp from "@/components/modal/notiPopUp";
 import PullDown from "@/components/pulldown/pullDown";
 import SubSearchInput from "@/components/input/subSearchInput";
 import RangeCalendar from "@/components/calendar/rangeCalendar";
-import CommonBottomSheet from "@/components/bottomSheet/commonBottomSheet";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import { useApplicationQuery } from "@/hooks/apply/useApplicationQuery";
@@ -24,6 +20,7 @@ import { ApplyData } from "@/types/application";
 import { useUpdateStatusMutation } from "@/hooks/apply/useApplicationMutation";
 import { APPLY_STATUS_VALUE_MAP } from "@/constants/application";
 import Alert from "@/components/alert/alert";
+import UpdateApplyStatusOptions from "@/components/dropdown/UpdateApplyStatusOptions";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
@@ -44,7 +41,6 @@ const ApplicationStatusPage = () => {
   const clubId = params.get("clubId") ?? "";
 
   const isMdUp = useResponsive("md");
-  const optionsRef = useRef<HTMLDivElement | null>(null);
 
   const [filters, setFilters] = useState(FILTER_TABS);
   const [selectedFilter, setSelectedFilter] = useState<string>(
@@ -94,17 +90,6 @@ const ApplicationStatusPage = () => {
     },
   });
 
-  // 지원 상태 변경 옵션 목록 중 메뉴 클릭
-  const handleMenuClick = (label: string) => {
-    if (!checkedApplications.length) {
-      setAlertMessage("선택된 지원서가 없습니다.");
-      return;
-    }
-    setSelectedStatus(label);
-    setIsOptionsOpen(false);
-    setIsModalOpen(true);
-  };
-
   // 검색 input query 변경
   // 기준: 1. 서비스 이름, 2. 지원서 이름, 3. 모집 공고 제목
   const handleSearchQuery = (query: string) => {
@@ -142,21 +127,6 @@ const ApplicationStatusPage = () => {
     });
     setIsModalOpen(false);
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        optionsRef.current &&
-        !optionsRef.current.contains(event.target as Node)
-      ) {
-        setIsOptionsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   useEffect(() => {
     setFilters((prev) => [
@@ -251,26 +221,14 @@ const ApplicationStatusPage = () => {
                       )
                     }
                   />
-                  <div
-                    className="relative flex items-center gap-2 cursor-pointer"
-                    onClick={() => setIsOptionsOpen(!isOptionsOpen)}
-                  >
-                    <p>지원상태 변경</p>
-                    <Image alt={"버튼"} src={vector} width={28} height={28} />
-                    {isOptionsOpen && (
-                      <div
-                        ref={optionsRef}
-                        className="absolute top-full mt-2 z-50 left-12"
-                      >
-                        <SingleSelectOptions
-                          selectedOption={""}
-                          optionData={STATUS_OPTIONS}
-                          size="medium"
-                          handleMenuClick={handleMenuClick}
-                        />
-                      </div>
-                    )}
-                  </div>
+                  <UpdateApplyStatusOptions
+                    checkedApplications={checkedApplications}
+                    isOptionsOpen={isOptionsOpen}
+                    setIsOptionsOpen={setIsOptionsOpen}
+                    setSelectedStatus={setSelectedStatus}
+                    setAlertMessage={setAlertMessage}
+                    setIsModalOpen={setIsModalOpen}
+                  />
                 </div>
               ) : (
                 <div className="flex justify-between mb-4">
@@ -285,15 +243,14 @@ const ApplicationStatusPage = () => {
                       )
                     }
                   />
-                  <div
-                    className="flex gap-1 items-center"
-                    onClick={() => setIsOptionsOpen(true)}
-                  >
-                    <p className="text-subtext2 text-mobile_body2_m">
-                      지원상태 변경
-                    </p>
-                    <Image alt={"버튼"} src={vector} width={20} height={20} />
-                  </div>
+                  <UpdateApplyStatusOptions
+                    checkedApplications={checkedApplications}
+                    isOptionsOpen={isOptionsOpen}
+                    setIsOptionsOpen={setIsOptionsOpen}
+                    setSelectedStatus={setSelectedStatus}
+                    setAlertMessage={setAlertMessage}
+                    setIsModalOpen={setIsModalOpen}
+                  />
                 </div>
               )}
               {/* 지원서 목록 */}
@@ -321,14 +278,6 @@ const ApplicationStatusPage = () => {
           </div>
         </div>
         {isMdUp ? isFormOpen && null : isFormOpen && null}
-        {isOptionsOpen && !isMdUp && (
-          <CommonBottomSheet
-            optionData={STATUS_OPTIONS}
-            selectedOption={""}
-            handleMenuClick={handleMenuClick}
-            onClose={() => setIsOptionsOpen(false)}
-          />
-        )}
 
         {isModalOpen && (
           <NotiPopUp
