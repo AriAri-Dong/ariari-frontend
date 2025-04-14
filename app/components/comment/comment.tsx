@@ -3,25 +3,21 @@ import useResponsive from "@/hooks/useResponsive";
 
 import Image from "next/image";
 import IconBtn from "../button/withIconBtn/IconBtn";
-import DotMenuDropDown from "../dropdown/option/dotMenuDropdown";
 
 import dotMenu from "@/images/icon/dotMenu.svg";
 import replyArrow from "@/images/icon/reply_arrow.svg";
 
 import formatDateToDot, { formatTime } from "@/utils/formatDateToDot";
-import { profileImageMap } from "@/utils/mappingProfile";
-import { ClubActivityComment } from "@/types/club";
 import CommentInput from "./commentInput";
 import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
 import { ClubMemberData } from "@/types/member";
-import CommonBottomSheet from "../bottomSheet/commonBottomSheet";
 import { EDIT_ACTION_TYPE, REPORT_ACTION_TYPE } from "@/data/pulldown";
 import SingleSelectOptions from "../pulldown/singleSelectOptions";
 import BottomSheet from "../pulldown/bottomSheet";
 import ReportModal from "../modal/reportModal";
 import ReportBottomSheet from "../bottomSheet/report/reportBottomSheet";
 import Alert from "../alert/alert";
-import NotiPopUp from "../modal/notiPopUp";
+import { ClubActivityComment } from "@/types/clubActivity";
 
 type CommentWithBodyProps = {
   comment: ClubActivityComment;
