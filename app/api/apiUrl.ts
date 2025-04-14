@@ -69,7 +69,13 @@ export const REPORT_CLUB_REVIEW = "/report/clubReviews";
 export const SERVICE_NOTICES = "/service-notices";
 export const SERVICE_FAQS = "/service-faqs";
 
-// == CLUB_FINANCE ==
+// == CLUB ACTIVITY ==
+export const CLUB_ACTIVITY = "/club-activity";
+export const CLUB_ACTIVITY_DETAIL = "/club-activity/detail";
+export const CLUB_ACTIVITY_LIKE = "/club-activity/like";
+export const CLUB_ACTIVITY_COMMENT = "/club-activity/comment";
+export const CLUB_ACTIVITY_COMMENT_LICK = "/club-activity/comment/like";
+export const CLUB_ACTIVITY_COMMENT_BLOCK = "/club-activity/comment/block";// == CLUB_FINANCE ==
 export const FINANCIAL_RECORDS = "/financial-records";
 
 // == CLUB_REVIEW ==
