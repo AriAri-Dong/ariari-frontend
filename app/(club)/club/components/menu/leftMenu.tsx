@@ -54,7 +54,7 @@ const LeftMenu = () => {
   const profileType = useUserStore((state) => state.memberData.profileType);
 
   // 권한에 따른 메뉴 데이터
-  const CLUB_LEFT_MENU = CLUB_MENU_MAP[role ?? "USER"];
+  const CLUB_LEFT_MENU = CLUB_MENU_MAP[role || "USER"];
   const profileImageSrc = getProfileImage(profileType);
 
   const isActive = (url: string) => pathname === url;
