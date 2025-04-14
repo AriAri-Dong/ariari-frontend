@@ -2,8 +2,16 @@ import Image from "next/image";
 import { MdBookmark } from "react-icons/md";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import useResponsive from "@/hooks/useResponsive";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import {
+  addRecruitmentBookmark,
+  removeRecruitmentBookmark,
+} from "@/api/recruitment/api";
+import Alert from "../alert/alert";
 
 interface RecruitmentCardProps {
+  id: string;
   title: string;
   clubName: string;
   description?: string;
@@ -12,16 +20,50 @@ interface RecruitmentCardProps {
 }
 
 const SearchRecruitmentCard = ({
+  id,
   title,
   clubName,
   description,
   deadline,
   isBookmarked,
 }: RecruitmentCardProps) => {
+  const router = useRouter();
   const isMdUp = useResponsive("md");
 
+  const [bookmarked, setBookmarked] = useState<boolean>(isBookmarked);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const handleRouter = () => {
+    router.push(`/recruitment/detail?id=${id}`);
+  };
+
+  const handleBookmarkClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (loading) return;
+
+    setLoading(true);
+    try {
+      if (bookmarked) {
+        await removeRecruitmentBookmark(id);
+      } else {
+        await addRecruitmentBookmark(id);
+      }
+      setBookmarked((prev) => !prev);
+    } catch (err) {
+      setAlertMessage(
+        "북마크 처리 중 오류가 발생했습니다.<br />잠시 후 다시 시도해주세요."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="flex w-full flex-row gap-3 md:gap-4">
+    <div
+      className="flex w-full flex-row gap-3 md:gap-4 cursor-pointer"
+      onClick={handleRouter}
+    >
       <div className="relative flex-shrink-0">
         <div className="relative w-[80px] h-[80px] md:w-[117px] md:h-[117px]">
           <Image
@@ -52,7 +94,9 @@ const SearchRecruitmentCard = ({
             <div className="flex-shrink-0 ml-2">
               <MdBookmark
                 size={24}
-                color={isBookmarked ? "#D1F75D" : "#E3E3E3"}
+                color={bookmarked ? "#D1F75D" : "#E3E3E3"}
+                onClick={handleBookmarkClick}
+                className="cursor-pointer"
               />
             </div>
           )}
@@ -67,6 +111,9 @@ const SearchRecruitmentCard = ({
           </p>
         </div>
       </div>
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+      )}
     </div>
   );
 };
