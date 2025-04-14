@@ -3,14 +3,9 @@ import useResponsive from "@/hooks/useResponsive";
 
 import Image from "next/image";
 import IconBtn from "../button/withIconBtn/IconBtn";
-
 import dotMenu from "@/images/icon/dotMenu.svg";
 import replyArrow from "@/images/icon/reply_arrow.svg";
-
-import formatDateToDot, { formatTime } from "@/utils/formatDateToDot";
 import CommentInput from "./commentInput";
-import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
-import { ClubMemberData } from "@/types/member";
 import { EDIT_ACTION_TYPE, REPORT_ACTION_TYPE } from "@/data/pulldown";
 import SingleSelectOptions from "../pulldown/singleSelectOptions";
 import BottomSheet from "../pulldown/bottomSheet";
@@ -18,91 +13,77 @@ import ReportModal from "../modal/reportModal";
 import ReportBottomSheet from "../bottomSheet/report/reportBottomSheet";
 import Alert from "../alert/alert";
 import { ClubActivityComment } from "@/types/clubActivity";
-
-type CommentWithBodyProps = {
-  comment: ClubActivityComment;
-  isReplying: false;
-};
-
-type CommentInputProps = {
-  isReplying: true;
-};
+import {
+  formatKoreanDateOnly,
+  formatKoreanTimeOnly,
+} from "@/utils/dateFormatter";
+import { createClubActivityComment } from "@/api/club/activity/api";
 
 type CommentBaseProps = {
   isReply: boolean;
-} & (CommentWithBodyProps | CommentInputProps);
-
-/**
- *
- * @param isReplying 답글 작성중 여부 (작성중 - comment X, 작성중 X - comment O)
- * @param comment 댓글 정보
- * @param isReply 답글 여부 (답글인 경우 들여쓰기 및 답글 불가)
- * @returns
- */
+  /**
+   *
+   * @param isReplying 답글 작성중 여부 (작성중 - comment X, 작성중 X - comment O)
+   * @param comment 댓글 정보
+   * @param isReply 답글 여부 (답글인 경우 들여쓰기 및 답글 불가)
+   * @returns
+   */
+  clubActivityId: string;
+  role?: null | "GENERAL" | "MANAGER" | "ADMIN";
+  nickname?: string;
+  isReplying: boolean;
+  comment?: ClubActivityComment;
+};
 
 const Comment = (props: CommentBaseProps) => {
   const { isReplying, isReply } = props;
+  const comment = props.comment;
 
   const menuRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
-  const [isOptionOpen, setIsOptionOpen] = useState<boolean>(false);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [isReplyFormOpen, setIsReplyFormOpen] = useState<boolean>(false);
-
+  const [isOptionOpen, setIsOptionOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
 
   const [likes, setLikes] = useState<number>(
-    isReplying ? 0 : props.comment.likes
+    !isReplying && comment ? comment.likes : 0
   );
   const [myLike, setMyLike] = useState<boolean>(
-    isReplying ? false : props.comment.myLike
+    !isReplying && comment ? comment.myLike : false
   );
 
-  //  임시 프로필
-  const [myMemberData, setMemberData] = useState<ClubMemberData>(
-    CLUB_MEMBER_DATA[0]
+  const date = formatKoreanDateOnly(
+    isReplying ? new Date().toISOString() : comment?.createdDateTime || ""
   );
-
-  //  답글 작성중인 경우 현재 시간
-  const date = formatDateToDot(
-    isReplying ? new Date().toISOString() : props.comment.createdDateTime
-  );
-  const time = formatTime(
-    isReplying ? new Date() : new Date(props.comment.createdDateTime)
+  const time = formatKoreanTimeOnly(
+    isReplying ? new Date().toISOString() : comment?.createdDateTime || ""
   );
 
   const handleLike = () => {
     if (!isReplying) {
       setMyLike(!myLike);
-      if (myLike) {
-        setLikes(likes - 1);
-      } else {
-        setLikes(likes + 1);
-      }
+      setLikes((prev) => (myLike ? prev - 1 : prev + 1));
     }
   };
 
   const handleMenuClick = () => {
     setIsOptionOpen(!isOptionOpen);
   };
+
   const handleOptionClick = (label: string) => {
     if (label === "수정하기") {
-      setIsEditing(!isEditing);
+      setIsEditing(true);
     } else if (label === "삭제하기") {
       // 삭제
       handleDelete();
     } else if (label === "신고하기") {
-      setIsOptionOpen(false);
-      handleReport();
+      setIsReportOpen(true);
     } else if (label === "차단하기") {
-      // 차단
       setAlertMessage("차단되었습니다");
     }
-  };
-
-  const handleReport = () => {
-    setIsReportOpen(true);
+    setIsOptionOpen(false);
   };
 
   const handleReportSubmit = () => {
@@ -113,8 +94,6 @@ const Comment = (props: CommentBaseProps) => {
   const handleDelete = () => {
     setAlertMessage("삭제되었습니다");
   };
-
-  // 메뉴 영역 밖 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -145,25 +124,10 @@ const Comment = (props: CommentBaseProps) => {
       <div className="w-full">
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-2.5 mb-3">
-            {/* 에러 발생 임시 주석 처리 */}
-            {/* <Image
-              src={
-                profileImageMap[
-                  isReplying
-                    ? myMemberData.profileType
-                    : props.comment.clubMember.profileType
-                ]
-              }
-              alt="profile"
-              width={28}
-              height={28}
-              className="md:w-8 md:h-8"
-            /> */}
             <div className="flex flex-col gap-[2px] md:gap-[18px] md:items-center md:flex-row">
               <span className="text-subtext2 text-mobile_body1_m md:text-body1_m">
-                {isReplying ? myMemberData.name : props.comment.clubMember.name}
+                {isReplying ? props.nickname : comment?.clubMember.name}
               </span>
-
               <span className="flex gap-1.5 text-mobile_body4_r md:text-body4_r text-subtext2">
                 <p>{date}</p>
                 {!isReplying && <p>|</p>}
@@ -171,21 +135,19 @@ const Comment = (props: CommentBaseProps) => {
               </span>
             </div>
           </div>
-          {!isReplying && (
-            <div className="flex gap-[2px] md:gap-2 items-center">
-              {!isReply && (
+          {!isReplying && comment?.comments?.length !== undefined && (
+            <div className="flex gap-0.5 md:gap-2 items-center">
+              {!isReply && !isReplying && (
                 <IconBtn
-                  type={"reply"}
-                  size={"large"}
+                  type="reply"
+                  size="large"
                   title={isMdUp ? "답글" : ""}
-                  onClick={() => {
-                    setIsReplyFormOpen(!isReplyFormOpen);
-                  }}
+                  onClick={() => setIsReplyFormOpen((prev) => !prev)}
                 />
               )}
               <IconBtn
                 type={myLike ? "like_active" : "like_inactive"}
-                size={"large"}
+                size="large"
                 title={likes.toString()}
                 onClick={handleLike}
               />
@@ -199,21 +161,15 @@ const Comment = (props: CommentBaseProps) => {
                     className="cursor-pointer"
                     onClick={handleMenuClick}
                   />
-                  {/* 메뉴 옵션 */}
-                  {isMdUp && isOptionOpen && (
+                  {isOptionOpen && (
                     <SingleSelectOptions
-                      selectedOption={""}
+                      selectedOption=""
                       optionData={
-                        props.comment.isMine
-                          ? EDIT_ACTION_TYPE
-                          : REPORT_ACTION_TYPE
+                        comment.isMine ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE
                       }
-                      size={"small"}
+                      size="small"
                       position="end"
-                      handleMenuClick={(label) => {
-                        handleOptionClick(label);
-                        setIsOptionOpen(false);
-                      }}
+                      handleMenuClick={handleOptionClick}
                     />
                   )}
                 </div>
@@ -221,8 +177,8 @@ const Comment = (props: CommentBaseProps) => {
                 <Image
                   src={dotMenu}
                   alt="menu"
-                  width={20}
-                  height={20}
+                  width={24}
+                  height={24}
                   className="cursor-pointer"
                   onClick={handleMenuClick}
                 />
@@ -230,56 +186,86 @@ const Comment = (props: CommentBaseProps) => {
             </div>
           )}
         </div>
+
         {isEditing || isReplying ? (
           <CommentInput
-            initialText={isReplying ? "" : props.comment.body}
-            onSend={() => {
-              setIsEditing(false);
+            initialText={!isReplying && comment ? comment.body : ""}
+            onSend={async (text) => {
+              if (isReplying && comment) {
+                try {
+                  await createClubActivityComment({
+                    clubActivityId: props.clubActivityId,
+                    body: text,
+                    parentCommentId: comment.clubActivityCommentId,
+                  });
+                  setAlertMessage("답글이 등록되었어요.");
+                  setIsReplyFormOpen(false);
+                } catch (error) {
+                  console.error(error);
+                  setAlertMessage("답글 등록에 실패했어요.");
+                }
+              } else {
+                setIsEditing(false);
+              }
             }}
           />
         ) : (
-          <p className="px-4 py-2 text-subtext1 text-mobile_body2_r bg-hover rounded-16 md:px-[18px] md:py-3.5 md:ml-[42px] md:text-body1_r">
-            {props.comment.body}
-          </p>
+          comment && (
+            <p className="px-4 py-2 text-subtext1 text-mobile_body2_r bg-hover rounded-16 md:px-[18px] md:py-3.5 md:ml-[42px] md:text-body1_r">
+              {comment.body}
+            </p>
+          )
         )}
+
         {!isReplying &&
-          (props.comment.comments.length > 0 || isReplyFormOpen) && (
-            <div className="flex flex-col mt-[18px] md:mt-[22px] gap-[18px] md:gap-[22px]">
-              {props.comment.comments.map((item) => (
-                <div key={item.clubActivityCommentId}>
-                  <Comment comment={item} isReply={true} isReplying={false} />
-                </div>
+          comment?.comments?.length !== undefined &&
+          (comment.comments.length > 0 || isReplyFormOpen) && (
+            <div className="flex flex-col mt-[18px] md:mt-[22px] gap-[18px] md:gap-[22px] ml-6 md:ml-[42px]">
+              {comment.comments.map((item) => (
+                <Comment
+                  key={item.clubActivityCommentId}
+                  comment={item}
+                  isReply={true}
+                  isReplying={false}
+                  clubActivityId={props.clubActivityId}
+                  role={props.role}
+                  nickname={props.nickname}
+                />
               ))}
-              {isReplyFormOpen && <Comment isReply={true} isReplying={true} />}
+              {isReplyFormOpen && (
+                <Comment
+                  isReply={true}
+                  isReplying={true}
+                  clubActivityId={props.clubActivityId}
+                  role={props.role}
+                  nickname={props.nickname}
+                  comment={comment}
+                />
+              )}
             </div>
           )}
       </div>
-      {/* 메뉴 옵션 바텀시트 */}
-      {!isMdUp && !isReplying && isOptionOpen && (
+
+      {!isMdUp && !isReplying && comment && isOptionOpen && (
         <BottomSheet
-          optionData={
-            props.comment.isMine ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE
-          }
-          selectedOptions={""}
-          onClose={() => {
-            setIsOptionOpen(false);
-          }}
+          optionData={comment.isMine ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE}
+          selectedOptions=""
+          onClose={() => setIsOptionOpen(false)}
           handleMenuClick={handleOptionClick}
         />
       )}
-      {isMdUp
-        ? isReportOpen && (
-            <ReportModal
-              onClose={() => setIsReportOpen(false)}
-              onSubmit={handleReportSubmit}
-            />
-          )
-        : isReportOpen && (
-            <ReportBottomSheet
-              onClose={() => setIsReportOpen(false)}
-              onSubmit={handleReportSubmit}
-            />
-          )}
+      {isReportOpen &&
+        (isMdUp ? (
+          <ReportModal
+            onClose={() => setIsReportOpen(false)}
+            onSubmit={() => setIsReportOpen(false)}
+          />
+        ) : (
+          <ReportBottomSheet
+            onClose={() => setIsReportOpen(false)}
+            onSubmit={() => setIsReportOpen(false)}
+          />
+        ))}
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
