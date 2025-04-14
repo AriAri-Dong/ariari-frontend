@@ -47,3 +47,6 @@ export const REPORT_CLUB_QUESTION = "/reports/clubQuestions";
 export const REPORT_APPLY = "/report/apply";
 export const REPORT_RECRUITMENT = "/report/recruitments";
 export const REPORT_CLUB_REVIEW = "/report/clubReviews";
+
+// == CLUB_FINANCE ==
+export const FINANCIAL_RECORDS = "/financial-records";

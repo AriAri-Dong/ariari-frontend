@@ -1,4 +1,4 @@
-import { CLUBS } from "@/api/apiUrl";
+import { CLUBS, FINANCIAL_RECORDS } from "@/api/apiUrl";
 import axiosInstance from "@/api/axiosInstance";
 import { Pageable } from "@/types/api";
 import { MembershipBalance, MembershipBalanceRes } from "@/types/club";
@@ -7,7 +7,7 @@ import { MembershipBalance, MembershipBalanceRes } from "@/types/club";
 export const getClubFinanceBalance = async (clubId: string) => {
   try {
     const res = await axiosInstance.get<number>(
-      `${CLUBS}/${clubId}/financial-records/balance`
+      `${CLUBS}/${clubId}${FINANCIAL_RECORDS}/balance`
     );
     return res.data;
   } catch (error) {
@@ -23,7 +23,7 @@ export const getClubFinancialRecords = async (
 ) => {
   try {
     const res = await axiosInstance.get<MembershipBalanceRes>(
-      `${CLUBS}/${clubId}/financial-records`,
+      `${CLUBS}/${clubId}${FINANCIAL_RECORDS}`,
       {
         params: {
           page,
@@ -51,7 +51,7 @@ export const addFinancialRecord = async ({
 }) => {
   try {
     const res = await axiosInstance.post(
-      `${CLUBS}/${clubId}/financial-records`,
+      `${CLUBS}/${clubId}${FINANCIAL_RECORDS}`,
       data
     );
     return res;
