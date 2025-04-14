@@ -14,6 +14,7 @@ export type AuthResponseType = {
 export type UserDataResponseType = {
   memberData: {
     id: string;
+    memberId: string;
     nickname: string;
     profileType: string;
   };
@@ -38,7 +39,7 @@ export type Pageable = {
 
 // 개별 동아리 데이터 타입
 export type ClubData = {
-  id: number;
+  id: string;
   name: string;
   profileUri: string;
   body: string;

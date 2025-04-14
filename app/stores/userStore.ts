@@ -11,6 +11,7 @@ export type UserState = {
   isFirstLogin: boolean;
   memberData: {
     id: string;
+    memberId: string;
     nickname: string;
     profileType: profileType;
   };
@@ -46,6 +47,7 @@ export const defaultInitState: UserState = {
   isFirstLogin: false,
   memberData: {
     id: "",
+    memberId: "",
     nickname: "",
     profileType: null,
   },

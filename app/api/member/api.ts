@@ -62,7 +62,7 @@ export const getMemberData = async () => {
   } catch (err) {
     console.error("유저 정보 조회 실패:", err);
     return {
-      memberData: { id: "", nickname: "", profileType: "" },
+      memberData: { memberId: "", id: "", nickname: "", profileType: "" },
       schoolData: { name: "" },
     };
   }
@@ -71,7 +71,7 @@ export const getMemberData = async () => {
 // 동아리 회원 리스트 조회
 export const getClubMembers = async (
   clubId: string,
-  statusType?: clubMemberStatusType,
+  statusType?: clubMemberStatusType | undefined,
   query?: string, //검색어
   page?: number,
   size?: number

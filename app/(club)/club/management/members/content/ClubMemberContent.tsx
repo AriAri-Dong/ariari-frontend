@@ -86,10 +86,10 @@ const ClubMemberContent = () => {
       // role이 MANAGER인 경우 ADMIN 선택 불가
       const allMemberIds =
         role === "ADMIN"
-          ? clubMember?.map((member) => member.memberData.id)
+          ? clubMember?.map((member) => member.memberData.memberId)
           : clubMember
               ?.filter((member) => member.clubMemberRoleType !== "ADMIN")
-              .map((member) => member.memberData.id);
+              .map((member) => member.memberData.memberId);
       setSelectedMember(allMemberIds!);
     }
   };
@@ -143,7 +143,7 @@ const ClubMemberContent = () => {
         .then(() => {
           setClubMember((prevMembers) =>
             prevMembers!.map((member) =>
-              memberIds.includes(member.memberData.id)
+              memberIds.includes(member.memberData.memberId)
                 ? { ...member, clubMemberStatusType: newStatus }
                 : member
             )
@@ -253,7 +253,7 @@ const ClubMemberContent = () => {
                         <ClubMemberList
                           data={member}
                           isSelected={selectedMember?.includes(
-                            member.memberData.id
+                            member.memberData.memberId
                           )}
                           toggleMember={toggleMember}
                           handleRoleChange={handleRoleChange}
