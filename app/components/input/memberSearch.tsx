@@ -4,7 +4,8 @@ import { ClubMemberData, MemberData } from "@/types/member";
 import { entrustAdmin, getClubMembers, getMemberList } from "@/api/member/api";
 import noimage from "@/images/test/test.svg";
 import { profileImageMap } from "@/utils/mappingProfile";
-import Alert from "../alert/alert";
+
+const CONTENT_SIZE = 10;
 
 // 공통 속성
 interface BaseMemberSearchProps {
@@ -32,6 +33,9 @@ const MemberSearch = (
   const [searchTerm, setSearchTerm] = useState("");
   const [members, setMembers] = useState<(MemberData | ClubMemberData)[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+
   const {
     nickname,
     setNickname,
@@ -48,33 +52,61 @@ const MemberSearch = (
   useEffect(() => {
     if (searchTerm.trim() === "") {
       setMembers([]);
+      setPage(0);
+      setHasMore(true);
       return;
     }
 
     setLoading(true);
+
     if (type === "CLUB_MEMBER") {
-      getClubMembers(props.clubId, undefined, searchTerm)
+      getClubMembers(props.clubId, undefined, searchTerm, page, CONTENT_SIZE)
         .then((res) => {
           if (res) {
-            setMembers(res.clubMemberDataList);
+            const newMembers = res.clubMemberDataList;
+            setMembers((prev) =>
+              page === 0 ? newMembers : [...prev, ...newMembers]
+            );
+            setHasMore(newMembers.length === CONTENT_SIZE);
+            console.log(newMembers.length === CONTENT_SIZE);
           }
         })
-        .finally(() => {
-          setLoading(false);
-        });
+        .finally(() => setLoading(false));
     } else if (type === "TOTAL_MEMBER") {
-      getMemberList(searchTerm)
+      getMemberList(searchTerm, page, CONTENT_SIZE)
         .then((response) => {
-          setMembers(response!.memberDataList);
+          const newMembers = response!.memberDataList;
+          setMembers((prev) =>
+            page === 0 ? newMembers : [...prev, ...newMembers]
+          );
+          setHasMore(newMembers.length === CONTENT_SIZE);
         })
         .catch(() => {
           setMembers([]);
+          setHasMore(false);
         })
-        .finally(() => {
-          setLoading(false);
-        });
+        .finally(() => setLoading(false));
     }
-  }, [props, searchTerm, type]);
+  }, [props, searchTerm, page, type]);
+
+  useEffect(() => {
+    const container = document.getElementById("member-scroll-container");
+    if (!container) return;
+
+    const handleScroll = () => {
+      if (
+        container.scrollTop + container.clientHeight >=
+          container.scrollHeight - 30 &&
+        hasMore &&
+        !loading
+      ) {
+        setPage((prev) => prev + 1);
+      }
+    };
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [hasMore, loading]);
 
   return (
     <div className="relative w-full">
@@ -85,6 +117,8 @@ const MemberSearch = (
           setSearchTerm(e.target.value);
           setNickname("");
           setErrorMessage(null);
+          setPage(0);
+          setHasMore(true);
         }}
         placeholder={
           placeholder
@@ -94,8 +128,11 @@ const MemberSearch = (
         className="w-full flex-grow px-4 py-3 rounded-[12px] bg-searchbar text-mobile_body1_r md:px-[22px] md:py-[13px] md:text-body1_r focus:outline-none  placeholder:text-subtext2"
       />
       {searchTerm && !nickname && (
-        <div className="absolute w-full bg-white border rounded-12 mt-2 max-h-[400px] md:max-h-[282px] overflow-y-auto shadow-default no-scrollbar z-10">
-          {loading ? (
+        <div
+          id="member-scroll-container"
+          className="absolute w-full bg-white border rounded-12 mt-2 max-h-[400px] md:max-h-[282px] overflow-y-auto shadow-default no-scrollbar z-10"
+        >
+          {loading && members.length === 0 ? (
             <p className="p-3 text-center">Loading...</p>
           ) : members.length > 0 ? (
             members.map((member, idx) => {

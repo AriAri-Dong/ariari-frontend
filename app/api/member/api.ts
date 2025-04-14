@@ -151,11 +151,16 @@ export const deleteClubMember = async (memberId: string) => {
   }
 };
 // 닉네임으로 회원 통합 검색
-export const getMemberList = async (nickname: string) => {
-  const params = {
-    nickname: nickname,
+export const getMemberList = async (
+  nickname: string,
+  page?: number,
+  size?: number
+) => {
+  const params: Record<string, any> = {
+    ...(nickname && { nickname }),
+    ...(page && { page }),
+    ...(size && { size }),
   };
-
   try {
     const { data } = await axiosInstance.get<MemberListRes>(MEMBERS, {
       params,
