@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ClubInfoSection from "../../../content/clubInfoSection";
 import Alert from "@/components/alert/alert";
 import useResponsive from "@/hooks/useResponsive";
@@ -23,8 +23,12 @@ import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import ClubInfoWrapper from "@/(club)/club/content/clubInfoWrapper";
 import { ApplicationKeys, ApplyQuestionData } from "@/types/application";
 import { APPLICATION_DISPLAY_INFO } from "@/data/application";
+import { useClubApplyFormQuery } from "@/hooks/club/useApplyFormQuery";
+import { useSearchParams } from "next/navigation";
 
 const ApplicationFormPage = () => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") || "";
   const isMdUp = useResponsive("md");
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -38,6 +42,8 @@ const ApplicationFormPage = () => {
   const [isPortfolioCollected, setIsPortfolioCollected] =
     useState<boolean>(true);
   const [openPreview, setOpenPreview] = useState<boolean>(false);
+  const { specialQuestions, applyQuestionDataList, isLoading, portfolio } =
+    useClubApplyFormQuery(clubId);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -89,6 +95,23 @@ const ApplicationFormPage = () => {
   const handlePreview = () => {
     setOpenPreview(true);
   };
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (applyQuestionDataList) {
+      setDocumentQuestions(applyQuestionDataList);
+    }
+    if (specialQuestions) {
+      const filteredBadges = Object.entries(specialQuestions)
+        .filter(([key, val]) => val !== null)
+        .map(([key]) => key) as ApplicationKeys[];
+      setSelectedBadges(filteredBadges);
+    }
+    if (portfolio) {
+      setIsPortfolioCollected(portfolio);
+    }
+  }, [applyQuestionDataList, specialQuestions, portfolio, isLoading]);
 
   return (
     <>
