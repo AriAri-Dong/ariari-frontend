@@ -30,6 +30,7 @@ const ActivityHistoryPage = () => {
 
   console.log("role >>>", role);
   console.log("활동 내역 >>>", activities);
+  console.log("닉네임 000 >>>", clubInfo?.clubMemberData.memberData.nickname);
 
   const handleRouter = () => {
     router.push(`/club/recruitment/clubId=${clubInfo?.clubData.id}`);
@@ -73,6 +74,11 @@ const ActivityHistoryPage = () => {
                   key={activity.clubActivityId}
                   data={activity}
                   role={role}
+                  nickname={
+                    role === "ADMIN" || role === "MANAGER"
+                      ? "동아리 대표"
+                      : clubInfo?.clubMemberData.memberData.nickname || ""
+                  }
                 />
               ))}
             </div>
