@@ -6,18 +6,18 @@ import close from "@/images/icon/close.svg";
 import Alert from "../../../../components/alert/alert";
 import LargeBtn from "../../../../components/button/basicBtn/largeBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
-import { colorMapping, tokenBg } from "../../../../utils/colorMapping";
 import img_delete from "@/images/icon/img_delete.svg";
 import RoundPlusBtn from "@/components/button/iconBtn/roundPlusBtn";
-import TextareaWithErrortext from "@/components/input/textareaWithErrortext";
 import useResponsive from "@/hooks/useResponsive";
 import RadioBtn from "@/components/button/radioBtn";
 
 const MAX_IMAGES = 10;
 
 interface FaqFormContentProps {
-  uploadedImages: string[];
-  handleImageDelete: (value: number) => void;
+  mode?: "create" | "edit";
+  uploadedImages: File[];
+  existingImages: { id: number; imageUri: string }[];
+  handleImageDelete: (index: number, isExisting?: boolean) => void;
   handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   detail: string;
   setDetail: (value: string) => void;
@@ -35,7 +35,9 @@ interface FaqFormContentProps {
  * @returns
  */
 const ActivityCreateContent = ({
+  mode,
   uploadedImages,
+  existingImages,
   handleImageDelete,
   handleFileChange,
   detail,
@@ -47,6 +49,8 @@ const ActivityCreateContent = ({
 }: FaqFormContentProps) => {
   const isMdUp = useResponsive("md");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  console.log("existingImages", existingImages);
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
@@ -89,17 +93,18 @@ const ActivityCreateContent = ({
           </p>
         </div>
         <div className="flex flex-wrap gap-2 items-center">
-          {uploadedImages.map((image, index) => (
-            <div key={index} className="relative">
+          {/* 기존 이미지 렌더링 */}
+          {existingImages?.map((img, index) => (
+            <div key={`existing-${img.id}`} className="relative">
               <Image
-                src={image}
-                alt={`Uploaded ${index}`}
+                src={img.imageUri}
+                alt={`기존 이미지 ${index}`}
                 width={96}
                 height={96}
                 className="rounded-lg object-cover w-[96px] h-[96px]"
               />
               <button
-                onClick={() => handleImageDelete(index)}
+                onClick={() => handleImageDelete(index, true)}
                 className="absolute top-0 right-0 translate-x-1/5 translate-y-1/5 mr-2 mt-2"
               >
                 <Image src={img_delete} alt="삭제" width={16} height={16} />
@@ -107,7 +112,31 @@ const ActivityCreateContent = ({
             </div>
           ))}
 
-          {uploadedImages.length < MAX_IMAGES && (
+          {/* 새로 업로드한 이미지 렌더링 */}
+          {uploadedImages.map((file, index) => {
+            const previewUrl = URL.createObjectURL(file);
+            return (
+              <div key={`new-${index}`} className="relative">
+                <Image
+                  src={previewUrl}
+                  alt={`Uploaded ${index}`}
+                  width={96}
+                  height={96}
+                  className="rounded-lg object-cover w-[96px] h-[96px]"
+                />
+                <button
+                  onClick={() => handleImageDelete(index)}
+                  className="absolute top-0 right-0 translate-x-1/5 translate-y-1/5 mr-2 mt-2"
+                >
+                  <Image src={img_delete} alt="삭제" width={16} height={16} />
+                </button>
+              </div>
+            );
+          })}
+
+          {/* MAX_IMAGES 체크 시 합산으로 비교 */}
+          {(existingImages?.length || 0) + uploadedImages.length <
+            MAX_IMAGES && (
             <label className="flex w-[96px] h-[96px] justify-center items-center">
               <input
                 ref={fileInputRef}
@@ -194,9 +223,15 @@ const ActivityCreateContent = ({
           </p>
           <div className="basis-4/5 flex justify-end md:basis-auto">
             {isMdUp ? (
-              <SmallBtn onClick={handleSubmit} title={"등록하기"} />
+              <SmallBtn
+                onClick={handleSubmit}
+                title={mode === "edit" ? "수정하기" : "등록하기"}
+              />
             ) : (
-              <LargeBtn onClick={handleSubmit} title={"등록하기"} />
+              <LargeBtn
+                onClick={handleSubmit}
+                title={mode === "edit" ? "수정하기" : "등록하기"}
+              />
             )}
           </div>
         </div>
