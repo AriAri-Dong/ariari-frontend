@@ -33,7 +33,7 @@ export const CLUB_MENU_MAP = {
 // 프로필 영역 권한 표기
 export const CLUB_MENU_ROLE_LABELS = {
   ADMIN: "관리자",
-  MANAGER: "관리자",
+  MANAGER: "매니저",
   GENERAL: "일반회원",
 };
 
