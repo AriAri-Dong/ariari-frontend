@@ -1,10 +1,11 @@
-import { CLUB_ACTIVITY } from "@/api/apiUrl";
+import { CLUB_ACTIVITY, CLUB_ACTIVITY_COMMENT } from "@/api/apiUrl";
 import axiosInstance from "@/api/axiosInstance";
 import { Pageable } from "@/types/api";
 import {
   ClubActivityResponse,
   ClubActivity,
   mapActivityFromApi,
+  mapActivityDetailFromApi,
 } from "@/types/clubActivity";
 
 interface CreateClubActivityParams {
@@ -121,4 +122,70 @@ export const getClubActivities = async (
     activities,
     pageInfo: response.data.pageInfo,
   };
+};
+
+// 활동 내역 상세 조회
+export const getClubActivityDetail = async (
+  clubActivityId: string
+): Promise<Partial<ClubActivity>> => {
+  const response = await axiosInstance.get(
+    `${CLUB_ACTIVITY}/detail/${clubActivityId}`
+  );
+
+  return mapActivityDetailFromApi(response.data);
+};
+
+// 활동 내역 댓글 작성 (일반 댓글 or 대댓글)
+export const createClubActivityComment = async ({
+  clubActivityId,
+  body,
+  parentCommentId,
+}: {
+  clubActivityId: string;
+  body: string;
+  parentCommentId?: string;
+}): Promise<void> => {
+  await axiosInstance.post(
+    `${CLUB_ACTIVITY_COMMENT}/${clubActivityId}`,
+    { body },
+    {
+      params: parentCommentId ? { parentCommentId } : {},
+    }
+  );
+};
+
+// 활동 내역 댓글 수정
+export const updateClubActivityComment = async ({
+  clubActivityId,
+  commentId,
+  body,
+}: {
+  clubActivityId: string;
+  commentId: string;
+  body: string;
+}): Promise<void> => {
+  await axiosInstance.put(
+    `${CLUB_ACTIVITY_COMMENT}/${clubActivityId}`,
+    { body },
+    {
+      params: {
+        commentId,
+      },
+    }
+  );
+};
+
+// 활동 내역 댓글 삭제
+export const deleteClubActivityComment = async ({
+  clubActivityId,
+  commentId,
+}: {
+  clubActivityId: string;
+  commentId: string;
+}): Promise<void> => {
+  await axiosInstance.delete(`${CLUB_ACTIVITY_COMMENT}/${clubActivityId}`, {
+    params: {
+      commentId,
+    },
+  });
 };
