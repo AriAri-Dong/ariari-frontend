@@ -17,12 +17,15 @@ import { RECRUITMENT_DATA } from "@/data/recruitment";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { AnimatePresence, motion } from "framer-motion";
+import Loading from "@/components/feedback/loading";
 
 const MainSection = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
 
   const isMdUp = useResponsive("md");
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [clubData, setClubData] = useState<ClubListData[]>([]);
   const [clubTotalSize, setClubTotalSize] = useState<number>(0);
@@ -45,11 +48,14 @@ const MainSection = () => {
 
   const fetchClubs = async (page: number) => {
     try {
+      setIsLoading(true);
       const res: ClubResponse = await getClubsInfo(query!, { page, size: 10 });
       setClubData(res.clubDataList);
       setClubTotalSize(res.pageInfo.totalSize);
     } catch (e) {
       console.error("클럽 정보 조회 실패", e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -83,6 +89,10 @@ const MainSection = () => {
         </p>
       </div>
     );
+  }
+
+  if (isLoading) {
+    return <Loading />;
   }
 
   return (
