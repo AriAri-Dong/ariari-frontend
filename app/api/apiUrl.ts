@@ -42,7 +42,7 @@ export const SCHOOLS_CANCEL = "/schools/auth/cancel";
 
 // == APPLY_TEMPS ==
 export const APPLY_TEMPS = "/apply-temp";
-export const APPLY_TEMPS_MY = "/apply-temp/my";
+export const APPLY_TEMPS_MY = "/apply-temps/my";
 
 // == REPORT ==
 
@@ -55,3 +55,7 @@ export const REPORT_CLUB_QUESTION = "/reports/clubQuestions";
 export const REPORT_APPLY = "/report/apply";
 export const REPORT_RECRUITMENT = "/report/recruitments";
 export const REPORT_CLUB_REVIEW = "/report/clubReviews";
+
+// == CLUB_REVIEW ==
+
+export const CLUB_REVIEW_TAG = "club-review/tag-data";
