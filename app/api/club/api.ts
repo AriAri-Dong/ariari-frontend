@@ -348,3 +348,18 @@ export const getExternalClubRanking = (fieldType: string) => {
       throw error;
     });
 };
+
+// 내가 ADMIN인 동아리 조회
+export const getMyAdminClubs = async () => {
+  try {
+    const response = await axiosInstance.get<ClubResponse>("/clubs/my/admin");
+    return response.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
