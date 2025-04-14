@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import searchIcon from "@/images/icon/search.svg";
 import RecentSearchTermDropdown from "../dropdown/recentSearchTermDropdown";
 import SearchModal from "../modal/searchModal";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import Loading from "../feedback/loading";
 
 interface SearchInputProps {
   onSearch: (searchTerm: string) => void;
@@ -34,6 +35,7 @@ const SearchInput = ({
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [showDropdown, setShowDropdown] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // query 파라미터 수동으로 가져오기
   useEffect(() => {
@@ -66,6 +68,10 @@ const SearchInput = ({
     }
   }, []);
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -80,18 +86,22 @@ const SearchInput = ({
 
   const handleSearch = () => {
     if (inputValue.trim()) {
+      setIsLoading(true);
       onSearch(inputValue);
       saveRecentSearch(inputValue);
       setRecentSearches([inputValue, ...recentSearches.slice(0, 4)]);
       router.push(`/search?query=${encodeURIComponent(inputValue)}`);
+      setIsLoading(false);
       setIsFocused(false);
     }
   };
 
   const handleRecentSearchClick = (searchTerm: string) => {
+    setIsLoading(true);
     setInputValue(searchTerm);
     onSearch(searchTerm);
     router.push(`/search?query=${encodeURIComponent(searchTerm)}`);
+    setIsLoading(false);
     setIsFocused(false);
   };
 
