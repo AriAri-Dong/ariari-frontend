@@ -101,7 +101,7 @@ const MainSection = () => {
 
       <div className="flex flex-col pt-5 md:pt-8 md:bg-white bg-sub_bg px-4 md:px-0">
         <div className="flex items-center gap-2 text-mobile_h1_contents_title md:text-h1_contents_title">
-          <h1 className="text-primary">검색키워드</h1>
+          <h1 className="text-primary">{query}</h1>
           <h1 className="text-text1">
             {recruitmentTotalSize > 0
               ? "모집공고"
@@ -201,7 +201,7 @@ const MainSection = () => {
         {/* 동아리 영역 */}
         <div className="flex flex-col mt-5 md:mt-8">
           <div className="flex items-center gap-2 text-mobile_h1_contents_title md:text-h1_contents_title">
-            <h1 className="text-primary">검색키워드</h1>
+            <h1 className="text-primary">{query}</h1>
             <h1 className="text-text1">
               {clubTotalSize > 0 ? "동아리" : "에 대한 동아리가 없습니다."}
             </h1>
