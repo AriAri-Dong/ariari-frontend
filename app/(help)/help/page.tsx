@@ -17,8 +17,11 @@ import {
   getServiceFaqDetail,
 } from "@/api/service/api";
 import NoticeDropdown from "./components/noticeDropdown";
+import useResponsive from "@/hooks/useResponsive";
 
 const HelpPage = () => {
+  const isMd = useResponsive("md");
+
   const [selectedFaq, setSelectedFaq] = useState<number | null>(null);
   const [faqList, setFaqList] = useState<SystemFaqData[]>([]);
   const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
@@ -106,7 +109,7 @@ const HelpPage = () => {
 
   return (
     <div className="mt-8 mb-20 md:mb-[124px]">
-      <MobileHeaderSection />
+      {!isMd && <MobileHeaderSection />}
       <div>
         <h1 className="text-text1 text-mobile_h1_contents_title md:text-h1_contents_title md:mb-[22px] mb-5">
           자주 묻는 질문
