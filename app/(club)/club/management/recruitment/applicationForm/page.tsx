@@ -198,12 +198,6 @@ const ApplicationFormPage = () => {
                   onClick={() => togglePortfolioCollection(false)}
                 />
               </div>
-              <CustomInput
-                value={portfolioCollection}
-                placeholder={"포트폴리오 수집 목적을 입력해 주세요."}
-                onChange={(e) => setPortfolioCollection(e.target.value)}
-                disable={!isPortfolioCollected}
-              />
               {/* 모바일 버튼 */}
               <div className="md:hidden felx flex-col mt-10">
                 <LargeBtn title={"저장하기"} onClick={() => {}} />

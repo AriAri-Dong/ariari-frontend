@@ -77,9 +77,6 @@ const ApplicationFieldFormMobile = ({
             <h3 className="flex text-text1 text-mobile_h3 mb-2.5">
               포트폴리오
             </h3>
-            <p className="text-[#7D8595] text-mobile_body3_r mb-[14px]">
-              포트폴리오 수집 목적 문구
-            </p>
             <CustomInput
               value={""}
               placeholder={"게시물 주소(URL)를 입력해 주세요."}
