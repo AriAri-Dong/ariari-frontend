@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { MdFavorite } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { ClubListData } from "@/types/api";
+import { ClubData } from "@/types/api";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import {
   CLUB_FIELD,
@@ -34,7 +34,7 @@ const ClubInfoCard = ({
   participantType,
   isMyBookmark,
   schoolData,
-}: ClubListData) => {
+}: ClubData) => {
   const router = useRouter();
   const [isHeart, setIsHeart] = useState<boolean>(isMyBookmark);
   // 현재 북마크 개수에 대한 데이터 없음

@@ -198,7 +198,7 @@ export const getClubDetails = async (clubId: string) => {
 };
 
 // 동아리 북마크 등록
-export const addClubBookmark = async (clubId: number) => {
+export const addClubBookmark = async (clubId: string) => {
   try {
     const response = await axiosInstance.post(`${CLUBS}/${clubId}/bookmark`);
     console.log("북마크 등록 성공:", response.data);
@@ -210,7 +210,7 @@ export const addClubBookmark = async (clubId: number) => {
 };
 
 // 동아리 북마크 삭제
-export const removeClubBookmark = async (clubId: number) => {
+export const removeClubBookmark = async (clubId: string) => {
   try {
     const response = await axiosInstance.delete(`${CLUBS}/${clubId}/bookmark`);
     console.log("북마크 삭제 성공:", response.data);

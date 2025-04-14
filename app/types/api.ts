@@ -4,6 +4,7 @@ import {
   ClubRegionType,
   ParticipantType,
 } from "./club";
+import { TagData } from "./review";
 
 export type AuthResponseType = {
   accessToken: string;
@@ -52,6 +53,7 @@ export type ClubData = {
     name: string;
   };
   bookmarkCount: number;
+  badgeType?: TagData;
 };
 
 // 동아리 목록 API 응답 타입
