@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { ClubMemberData, MemberData } from "@/types/member";
 import { entrustAdmin, getClubMembers, getMemberList } from "@/api/member/api";
@@ -30,6 +30,7 @@ interface ClubMemberSearchProps extends BaseMemberSearchProps {
 const MemberSearch = (
   props: TotalMemberSearchProps | ClubMemberSearchProps
 ) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [members, setMembers] = useState<(MemberData | ClubMemberData)[]>([]);
   const [loading, setLoading] = useState(false);
@@ -58,7 +59,7 @@ const MemberSearch = (
     }
 
     setLoading(true);
-
+    // 동아리 회원 검색
     if (type === "CLUB_MEMBER") {
       getClubMembers(props.clubId, undefined, searchTerm, page, CONTENT_SIZE)
         .then((res) => {
@@ -72,6 +73,7 @@ const MemberSearch = (
           }
         })
         .finally(() => setLoading(false));
+      // 통합 회원검색
     } else if (type === "TOTAL_MEMBER") {
       getMemberList(searchTerm, page, CONTENT_SIZE)
         .then((response) => {
@@ -89,6 +91,7 @@ const MemberSearch = (
     }
   }, [props, searchTerm, page, type]);
 
+  // 멤버 목록 무한 스크롤
   useEffect(() => {
     const container = document.getElementById("member-scroll-container");
     if (!container) return;
@@ -107,9 +110,26 @@ const MemberSearch = (
     container.addEventListener("scroll", handleScroll);
     return () => container.removeEventListener("scroll", handleScroll);
   }, [hasMore, loading]);
+  // 외부 클릭시 드롭다운 닫기
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setSearchTerm("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full" ref={containerRef}>
       <input
         type="text"
         value={searchTerm}
