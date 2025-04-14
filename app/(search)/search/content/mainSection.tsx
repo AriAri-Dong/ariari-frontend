@@ -130,6 +130,7 @@ const MainSection = () => {
                 {paginatedData.map((item) => (
                   <SearchRecruitmentCard
                     key={item.id}
+                    id={item.id}
                     title={item.body}
                     clubName={item.title}
                     description={item.body}
@@ -176,6 +177,7 @@ const MainSection = () => {
                       {pageItems.map((item) => (
                         <SearchRecruitmentCard
                           key={item.id}
+                          id={item.id}
                           title={item.body}
                           clubName={item.title}
                           description={item.body}
