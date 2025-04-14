@@ -20,6 +20,7 @@ export interface ClubActivityImage {
 
 // 프론트에서 사용하는 타입
 export interface ClubActivity {
+  id?: string;
   clubActivityId: string;
   clubId?: string;
   clubMember: ClubMemberData;
@@ -88,3 +89,75 @@ export const mapActivityFromApi = (api: ClubActivityApi): ClubActivity => ({
   commentCount: api.commentCount,
   comments: [],
 });
+
+export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
+  const activity = detail?.clubActivityData;
+  const commentResList = detail?.clubActivityCommentResList ?? [];
+
+  if (!activity || activity.id === undefined || activity.id === null) {
+    console.warn("활동 정보가 없습니다.");
+    return {} as ClubActivity;
+  }
+
+  return {
+    clubActivityId: String(activity.id),
+    clubMember: {
+      id: String(activity.creatorId),
+      name: activity.creatorName,
+      profileType: "DEFAULT",
+      clubMemberRoleType: "GENERAL",
+      clubMemberStatusType: "ACTIVE",
+      memberData: null,
+    },
+    createdDateTime: activity.createdDateTime,
+    accessType: activity.accessType,
+    body: activity.body,
+    images:
+      activity.clubActivityImageDataList?.map((img: any) => img.imageUri) ?? [],
+    likes: activity.likeCount,
+    myLike: activity.myLiked,
+    isMine: true,
+    commentCount: activity.commentCount,
+    comments: commentResList.map((res: any) => {
+      const parent = res.commentData;
+      const children = res.commentDataList;
+
+      return {
+        clubActivityCommentId: String(parent.id),
+        clubActivityId: String(activity.id),
+        body: parent.body,
+        createdDateTime: parent.createdDateTime,
+        likes: parent.likeCount,
+        myLike: parent.myLiked,
+        isMine: false,
+        clubMember: {
+          id: String(parent.creatorId),
+          name: parent.creatorName,
+          profileType: "DEFAULT",
+          clubMemberRoleType: "GENERAL",
+          clubMemberStatusType: "ACTIVE",
+          memberData: null,
+        },
+        comments:
+          children?.map((child: any) => ({
+            clubActivityCommentId: String(child.id),
+            clubActivityId: String(activity.id),
+            body: child.body,
+            createdDateTime: child.createdDateTime,
+            likes: child.likeCount,
+            myLike: child.myLiked,
+            isMine: false,
+            clubMember: {
+              id: String(child.creatorId),
+              name: child.creatorName,
+              profileType: "DEFAULT",
+              clubMemberRoleType: "GENERAL",
+              clubMemberStatusType: "ACTIVE",
+              memberData: null,
+            },
+            comments: child.comments,
+          })) ?? [],
+      };
+    }),
+  };
+};
