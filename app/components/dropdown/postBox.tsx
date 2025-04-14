@@ -24,17 +24,24 @@ import formatDateToDot from "@/utils/formatDateToDot";
 import { EDIT_ACTION_TYPE, REPORT_ACTION_TYPE } from "@/data/pulldown";
 import { ClubActivity, ClubActivityComment } from "@/types/clubActivity";
 import ActivityCreateForm from "@/(club)/club/activityHistory/components/activityCreateForm";
-import { deleteClubActivity } from "@/api/club/activity/api";
+import {
+  createClubActivityComment,
+  deleteClubActivity,
+  getClubActivityDetail,
+} from "@/api/club/activity/api";
 
 interface PostBoxProps {
   data: ClubActivity;
   role: null | "GENERAL" | "MANAGER" | "ADMIN";
+  nickname: string;
 }
 
-const PostBox = ({ data, role }: PostBoxProps) => {
+const PostBox = ({ data, role, nickname }: PostBoxProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
+
+  console.log("닉네임 111 >>", nickname);
 
   const [post, setPost] = useState<ClubActivity>(data);
   const [comments, setComments] = useState<ClubActivityComment[]>(
@@ -145,6 +152,26 @@ const PostBox = ({ data, role }: PostBoxProps) => {
     trackTouch: true,
     trackMouse: true,
   });
+
+  const handleToggleComments = async () => {
+    const willOpen = !isCommentOpen;
+    setIsCommentOpen(willOpen);
+
+    if (willOpen) {
+      try {
+        const detailRes = await getClubActivityDetail(post.clubActivityId);
+
+        console.log("detailRes", detailRes);
+
+        if (detailRes.comments) {
+          setComments(detailRes.comments);
+        }
+      } catch (e) {
+        console.error("댓글 불러오기 실패", e);
+        setAlertMessage("댓글을 불러오는 데 실패했어요.");
+      }
+    }
+  };
 
   return (
     <div className="bg-background p-[14px] pb-4 rounded-12 md:p-6 md:pb-[26px]">
@@ -264,13 +291,21 @@ const PostBox = ({ data, role }: PostBoxProps) => {
       </div>
 
       <div className="flex justify-end items-center gap-4 mt-4 md:mt-6">
-        <CommentInput onSend={() => {}} />
+        <CommentInput
+          onSend={async (text) => {
+            await createClubActivityComment({
+              clubActivityId: post.clubActivityId,
+              body: text,
+            });
+          }}
+        />
+
         <div className="flex items-center gap-1">
           <IconBtn
             type="comment"
             size="large"
             title={post.commentCount.toString()}
-            onClick={() => setIsCommentOpen((prev) => !prev)}
+            onClick={handleToggleComments}
           />
           <IconBtn
             type={post.myLike ? "like_active" : "like_inactive"}
@@ -283,7 +318,7 @@ const PostBox = ({ data, role }: PostBoxProps) => {
 
       {/* 댓글 영역 */}
       {isCommentOpen && (
-        <div className="mt-6">
+        <div className="flex flex-col gap-[18px] md:gap-[22px] mt-6">
           {comments.length > 0 ? (
             comments.map((comment) => (
               <Comment
@@ -291,6 +326,9 @@ const PostBox = ({ data, role }: PostBoxProps) => {
                 comment={comment}
                 isReply={false}
                 isReplying={false}
+                clubActivityId={post.clubActivityId}
+                role={role}
+                nickname={nickname}
               />
             ))
           ) : (
