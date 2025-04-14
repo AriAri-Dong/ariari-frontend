@@ -7,11 +7,11 @@ import ClubIntroduction from "@/components/card/clubIntroduction";
 import { POPULARITY_SORT_TYPE } from "@/data/pulldown";
 import FilterSection from "./content/filterSection";
 import HeaderSection from "./content/headerSection";
-import { ClubListData, ClubResponse, Pageable } from "@/types/api";
+import { ClubData, ClubResponse, Pageable } from "@/types/api";
 import { getBookmarkClubsInfo } from "@/api/club/api";
 
 const InterestClub = () => {
-  const [clubData, setClubData] = useState<ClubListData[]>([]);
+  const [clubData, setClubData] = useState<ClubData[]>([]);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [more, setMore] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
