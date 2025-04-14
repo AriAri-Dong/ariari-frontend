@@ -86,20 +86,26 @@ const MainSection = () => {
   }
 
   return (
-    <div className="mb-20 md:mb-[124px]">
+    <div className="mb-20 md:mb-[124px] m-auto md:max-w-screen-lg lg:max-w-screen-lx md:px-5">
       {/* 모집공고 영역 */}
-      <div className="flex flex-col mt-5 md:mt-8">
+
+      <div className="flex flex-col pt-5 md:pt-8 md:bg-white bg-sub_bg px-4 md:px-0">
         <div className="flex items-center gap-2 text-mobile_h1_contents_title md:text-h1_contents_title">
           <h1 className="text-primary">검색키워드</h1>
-          <h1 className="text-text1">모집공고</h1>
+          <h1 className="text-text1">
+            {recruitmentTotalSize > 0
+              ? "모집공고"
+              : "에 대한 모집공고가 없습니다."}
+          </h1>
         </div>
         <p className="text-subtext2 text-mobile_body2_m md:text-h4 md:my-[22px] mt-4 mb-5">
-          총 {recruitmentTotalSize}개의 모집공고가 있어요.
+          {recruitmentTotalSize > 0
+            ? `총 ${recruitmentTotalSize}개의 모집공고가 있어요.`
+            : "다른 검색어를 입력하시거나 철자를 확인해보세요."}
         </p>
       </div>
-
       {/* 모집공고 카드 리스트 */}
-      <div className="bg-sub_bg rounded-16 p-5 md:p-6">
+      <div className="bg-sub_bg md:rounded-16 p-5 md:p-6">
         {isMdUp ? (
           <>
             <AnimatePresence mode="wait">
@@ -181,32 +187,37 @@ const MainSection = () => {
           </>
         )}
       </div>
-
-      {/* 동아리 영역 */}
-      <div className="flex flex-col mt-5 md:mt-8">
-        <div className="flex items-center gap-2 text-mobile_h1_contents_title md:text-h1_contents_title">
-          <h1 className="text-primary">검색키워드</h1>
-          <h1 className="text-text1">동아리</h1>
+      <div className="max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5">
+        {/* 동아리 영역 */}
+        <div className="flex flex-col mt-5 md:mt-8">
+          <div className="flex items-center gap-2 text-mobile_h1_contents_title md:text-h1_contents_title">
+            <h1 className="text-primary">검색키워드</h1>
+            <h1 className="text-text1">
+              {clubTotalSize > 0 ? "동아리" : "에 대한 동아리가 없습니다."}
+            </h1>
+          </div>
+          <p className="text-subtext2 text-mobile_body2_m md:text-h4 md:my-[22px] mt-4 mb-5">
+            {clubTotalSize > 0
+              ? `총 ${clubTotalSize}개의 동아리가 있어요.`
+              : "다른 검색어를 입력하시거나 철자를 확인해보세요."}
+          </p>
         </div>
-        <p className="text-subtext2 text-mobile_body2_m md:text-h4 md:my-[22px] mt-4 mb-5">
-          총 {clubTotalSize}개의 동아리가 있어요.
-        </p>
-      </div>
 
-      <div className="min-h-[300px] md:min-h-[450px] flex flex-col">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-x-[18px] md:gap-y-9">
-          {clubData.map((club) => (
-            <div
-              key={club.id}
-              className="flex flex-col gap-[14px] md:gap-[22px] md:mt-[18px]"
-            >
-              <ClubInfoCard {...club} />
-              <ClubIntroduction
-                introductionText={club.body}
-                badgeType={club.badgeType}
-              />
-            </div>
-          ))}
+        <div className="min-h-[100px] md:min-h-[150px] flex flex-col">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-x-[18px] md:gap-y-9">
+            {clubData.map((club) => (
+              <div
+                key={club.id}
+                className="flex flex-col gap-[14px] md:gap-[22px] md:mt-[18px]"
+              >
+                <ClubInfoCard {...club} />
+                <ClubIntroduction
+                  introductionText={club.body}
+                  badgeType={club.badgeType}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
