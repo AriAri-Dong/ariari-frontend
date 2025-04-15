@@ -104,7 +104,7 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
     clubMember: {
       id: String(activity.creatorId),
       name: activity.creatorName,
-      profileType: "DEFAULT",
+      profileType: "",
       clubMemberRoleType: "GENERAL",
       clubMemberStatusType: "ACTIVE",
       memberData: null,
