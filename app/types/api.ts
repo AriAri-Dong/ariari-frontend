@@ -137,3 +137,7 @@ export interface CreateClubTypeData {
   regionType: ClubRegionType;
   participantType: ParticipantType;
 }
+
+export interface IdResponse {
+  id: string;
+}

@@ -6,6 +6,7 @@ import {
   ApplyTempDetailRes,
   ApplyTempListRes,
 } from "@/types/application";
+import { IdResponse } from "@/types/api";
 
 export const getAppliedList = async (
   page: number = 0,
@@ -116,7 +117,7 @@ export const postApplicationTemp = async (
   formData: FormData
 ) => {
   try {
-    const response = await axiosInstance.post(
+    const response = await axiosInstance.post<IdResponse>(
       `/recruitments/${recruitmentId}/apply-temps`,
       formData,
       {
@@ -124,7 +125,7 @@ export const postApplicationTemp = async (
       }
     );
 
-    return response.status;
+    return response.data.id;
   } catch (err) {
     if (err instanceof AxiosError) {
       if (err.response && err.response.data.message) {
@@ -136,12 +137,12 @@ export const postApplicationTemp = async (
 };
 // 임시 지원 수정
 export const putApplicationTemp = async (
-  recruitmentId: string,
+  applyTempId: string,
   formData: FormData
 ) => {
   try {
-    const response = await axiosInstance.put(
-      `/recruitments/${recruitmentId}/apply-temps`,
+    const response = await axiosInstance.put<string>(
+      `/apply-temps/${applyTempId}`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
