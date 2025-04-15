@@ -71,6 +71,31 @@ const ApplicationFieldFormMobile = ({
             handleInputChange={handleInputChange}
           />
         ))}
+        {/* 문항 */}
+        {documentQuestions
+          .filter((item) => item.body.trim() !== "")
+          .map((item, index) => {
+            const answer = answers[item.id] || "";
+            const isOverMaxLength = answer.length > 50;
+
+            return (
+              <div className="flex flex-col gap-[18px]" key={item.id}>
+                <h3 className="flex text-text1 text-mobile_h3">{item.body}</h3>
+                <CustomInput
+                  value={answer}
+                  placeholder={"답변을 작성해 주세요."}
+                  onChange={(e) => handleAnswerChange(item.id, e.target.value)}
+                  maxLength={50}
+                />
+                {isOverMaxLength && (
+                  <p className="text-noti text-mobile_body3_r mt-[-14px] ml-4">
+                    최대 50자까지 작성 가능합니다.
+                  </p>
+                )}
+              </div>
+            );
+          })}
+
         {/* 포트폴리오 */}
         {portfolioCollected && (
           <div className="flex flex-col">
@@ -112,30 +137,6 @@ const ApplicationFieldFormMobile = ({
             />
           </div>
         )}
-        {/* 문항 */}
-        {documentQuestions
-          .filter((item) => item.body.trim() !== "")
-          .map((item, index) => {
-            const answer = answers[item.id] || "";
-            const isOverMaxLength = answer.length > 50;
-
-            return (
-              <div className="flex flex-col gap-[18px]" key={item.id}>
-                <h3 className="flex text-text1 text-mobile_h3">{item.body}</h3>
-                <CustomInput
-                  value={answer}
-                  placeholder={"답변을 작성해 주세요."}
-                  onChange={(e) => handleAnswerChange(item.id, e.target.value)}
-                  maxLength={50}
-                />
-                {isOverMaxLength && (
-                  <p className="text-noti text-mobile_body3_r mt-[-14px] ml-4">
-                    최대 50자까지 작성 가능합니다.
-                  </p>
-                )}
-              </div>
-            );
-          })}
       </div>
     </div>
   );
