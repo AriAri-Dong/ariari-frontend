@@ -62,3 +62,18 @@ export const getMyNotifications = async (page: Pageable["page"]) => {
     };
   }
 };
+
+// 동아리 알림 읽음 처리
+export const readClubNotification = async (
+  clubId: string,
+  clubAlarmId: string
+) => {
+  try {
+    const res = await axiosInstance.patch(
+      `${CLUBS}/${clubId}/alarm/${clubAlarmId}/read`
+    );
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
