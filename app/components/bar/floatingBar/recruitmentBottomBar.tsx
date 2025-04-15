@@ -17,21 +17,29 @@ import { useShallow } from "zustand/shallow";
 import { useUserStore } from "@/providers/userStoreProvider";
 import ApplicationFormModal from "@/components/modal/club/applicationFormModal";
 import { ClubInfoCard } from "@/types/components/card";
+import { RecruitmentData } from "@/types/recruitment";
+import { ClubData } from "@/types/club";
+import { ApplyFormData } from "@/types/application";
+import ApplicationFormBottomSheet from "@/components/bottomSheet/applicationFormBottomSheet";
 
 interface RecruitmentBottomBar {
-  recruitmentData: ClubInfoCard;
-  isMyBookmark: boolean;
-  bookmarks: number;
-  endDate: string;
+  recruitmentData: RecruitmentData;
+  clubData: ClubData;
+  applyFormData: ApplyFormData;
+  myRecentApplyTempId?: string | null;
+  handleApplyTempId?: (tempId: string | null) => void;
   isMyApply: boolean;
+  bookmarks: number;
   type?: "PREVIEW" | "APPLYING" | "GENERAL";
 }
 const RecruitmentBottomBar = ({
   recruitmentData,
-  isMyBookmark,
-  bookmarks,
-  endDate,
+  clubData,
+  applyFormData,
+  myRecentApplyTempId,
+  handleApplyTempId,
   isMyApply,
+  bookmarks,
   type = "GENERAL",
 }: RecruitmentBottomBar) => {
   const params = useSearchParams();
@@ -43,10 +51,10 @@ const RecruitmentBottomBar = ({
     useState<boolean>(false);
 
   const [count, setCount] = useState<number>(bookmarks);
-  const [isScrap, setIsScrap] = useState<boolean>(isMyBookmark);
+  const [isScrap, setIsScrap] = useState<boolean>(recruitmentData.isMyBookmark);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const dDay = calculateRemainingDays(endDate);
+  const dDay = calculateRemainingDays(recruitmentData.endDateTime);
   const dDayContent =
     dDay === "마감" ? "마감" : isMyApply ? "지원 완료" : `지원하기 ${dDay}`;
 
@@ -111,20 +119,30 @@ const RecruitmentBottomBar = ({
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
       {isApplicationFormOpen &&
-        recruitmentData.applyFormData &&
+        applyFormData &&
         type === "GENERAL" &&
         (isMdUp ? (
           <ApplicationFormModal
             recruitmentData={recruitmentData}
-            applyFormData={recruitmentData.applyFormData}
+            clubData={clubData}
+            bookmarks={bookmarks}
+            isMyApply={isMyApply}
+            applyFormData={applyFormData}
+            myRecentApplyTempId={myRecentApplyTempId}
+            handleApplyTempId={handleApplyTempId}
             onClose={() => {
               setIsApplicationFormOpen(false);
             }}
           />
         ) : (
-          <ApplicationFormModal
+          <ApplicationFormBottomSheet
             recruitmentData={recruitmentData}
-            applyFormData={recruitmentData.applyFormData}
+            clubData={clubData}
+            bookmarks={bookmarks}
+            isMyApply={isMyApply}
+            applyFormData={applyFormData}
+            myRecentApplyTempId={myRecentApplyTempId}
+            handleApplyTempId={handleApplyTempId}
             onClose={() => {
               setIsApplicationFormOpen(false);
             }}
