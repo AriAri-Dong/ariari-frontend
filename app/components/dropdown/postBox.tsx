@@ -42,8 +42,6 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
 
-  console.log("닉네임 111 >>", nickname);
-
   const [post, setPost] = useState<ClubActivity>(data);
   const [comments, setComments] = useState<ClubActivityComment[]>(
     post.comments || []
@@ -72,7 +70,6 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
     const prevMyLike = post.myLike;
     const prevLikes = post.likes;
 
-    // UI 먼저 업데이트
     setPost((prev) => ({
       ...prev,
       myLike: !prevMyLike,
@@ -83,7 +80,6 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
       await toggleClubActivityLike(post.clubActivityId);
     } catch (error) {
       console.error("활동 내역 좋아요 실패:", error);
-      // 실패하면 롤백
       setPost((prev) => ({
         ...prev,
         myLike: prevMyLike,
