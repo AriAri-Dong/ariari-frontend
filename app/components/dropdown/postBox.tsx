@@ -47,8 +47,6 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
     post.comments || []
   );
 
-  console.log("post", post);
-
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [isCommentOpen, setIsCommentOpen] = useState<boolean>(false);
   const [isOptionOpen, setIsOptionOpen] = useState<boolean>(false);
@@ -179,8 +177,6 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
       try {
         const detailRes = await getClubActivityDetail(post.clubActivityId);
 
-        console.log("detailRes", detailRes);
-
         if (detailRes.comments) {
           setComments(detailRes.comments);
         }
@@ -237,7 +233,7 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
             </div>
           </div>
         </div>
-        {(role === "ADMIN" || role === "MANAGER") && (
+        {isManager && (
           <div ref={menuRef} className="relative">
             <Image
               src={dotMenu}
@@ -250,7 +246,7 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
             {isMdUp && isOptionOpen && (
               <SingleSelectOptions
                 selectedOption=""
-                optionData={optionData}
+                optionData={EDIT_ACTION_TYPE}
                 size="small"
                 position="end"
                 handleMenuClick={(label) => {
