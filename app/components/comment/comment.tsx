@@ -25,6 +25,7 @@ import {
   updateClubActivityComment,
 } from "@/api/club/activity/api";
 import { authStore } from "@/stores/userStore";
+import AlertWithMessage from "../alert/alertWithMessage";
 
 type CommentBaseProps = {
   isReply: boolean;
@@ -57,6 +58,9 @@ const Comment = (props: CommentBaseProps) => {
   const [isReplyFormOpen, setIsReplyFormOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
+  const [confirmAction, setConfirmAction] = useState<null | "delete" | "block">(
+    null
+  );
 
   const [likes, setLikes] = useState<number>(
     !isReplying && comment ? comment.likes : 0
@@ -100,31 +104,49 @@ const Comment = (props: CommentBaseProps) => {
   };
 
   const handleOptionClick = async (label: string) => {
+    if (label === "삭제하기") {
+      setConfirmAction("delete");
+    } else if (label === "차단하기") {
+      setConfirmAction("block");
+    } else if (label === "수정하기") {
+      setIsEditing(true);
+      setIsOptionOpen(false);
+    } else if (label === "신고하기") {
+      setIsReportOpen(true);
+      setIsOptionOpen(false);
+    }
+  };
+
+  const handleConfirmedAction = async () => {
+    if (!comment) return;
+
     try {
-      if (label === "수정하기") {
-        setIsEditing(true);
-      } else if (label === "삭제하기" && comment) {
+      if (confirmAction === "delete") {
         await deleteClubActivityComment({
           clubActivityId: props.clubActivityId,
           commentId: comment.clubActivityCommentId,
         });
+
         setAlertMessage("댓글이 삭제되었습니다.");
-        props.onDeleteSuccess?.();
-      } else if (label === "신고하기") {
-        setIsReportOpen(true);
-      } else if (label === "차단하기" && comment) {
+
+        setTimeout(() => {
+          props.onDeleteSuccess?.();
+        }, 1000);
+      }
+      if (confirmAction === "block") {
         await blockClubActivityCommentUser({
           commentId: comment.clubActivityCommentId,
         });
         setAlertMessage("해당 사용자가 차단되었습니다.");
       }
     } catch (error) {
-      console.error("옵션 처리 중 오류:", error);
+      console.error("요청 실패:", error);
       setAlertMessage(
         "요청 처리 중 오류가 발생했어요. <br/> 잠시후 다시 시도해주세요."
       );
     } finally {
       setIsOptionOpen(false);
+      setConfirmAction(null);
     }
   };
 
@@ -324,6 +346,24 @@ const Comment = (props: CommentBaseProps) => {
         ))}
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+      )}
+      {confirmAction && (
+        <AlertWithMessage
+          text={
+            confirmAction === "delete"
+              ? "댓글을 삭제할까요?"
+              : "이 사용자를 차단할까요?"
+          }
+          description={
+            confirmAction === "delete"
+              ? "삭제된 댓글은 복구할 수 없어요."
+              : "차단 시, 더 이상 해당 사용자의 활동을 볼 수 없어요."
+          }
+          leftBtnText="취소"
+          rightBtnText="확인"
+          onLeftBtnClick={() => setConfirmAction(null)}
+          onRightBtnClick={handleConfirmedAction}
+        />
       )}
     </div>
   );
