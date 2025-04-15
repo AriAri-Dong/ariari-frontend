@@ -23,8 +23,10 @@ const ActivityHistoryPage = () => {
   const isMdUp = useResponsive("md");
 
   const [activities, setActivities] = useState<ClubActivity[]>([]);
-  const [isWriteFormOpen, setIsWriteFormOpen] = useState(false);
+  const [isWriteFormOpen, setIsWriteFormOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(false);
 
   const { role, clubInfo } = useClubContext();
 
@@ -36,19 +38,32 @@ const ActivityHistoryPage = () => {
     router.push(`/club/recruitment/clubId=${clubInfo?.clubData.id}`);
   };
 
-  const fetchActivities = async () => {
+  const fetchActivities = async (pageToLoad = 0) => {
     if (!clubInfo?.clubData.id) return;
 
     try {
-      const { activities } = await getClubActivities(clubInfo.clubData.id, {
-        page: 0,
-        size: 10,
-        sort: ["createdDateTime,desc"],
-      });
+      const { activities: fetched, pageInfo } = await getClubActivities(
+        clubInfo.clubData.id,
+        {
+          page: pageToLoad,
+          size: 10,
+          sort: ["createdDateTime,desc"],
+        }
+      );
 
-      setActivities(activities);
+      if (pageToLoad === 0) {
+        setActivities(fetched);
+      } else {
+        setActivities((prev) => [...prev, ...fetched]);
+      }
+
+      setPage(pageToLoad);
+
+      setHasMore(pageToLoad + 1 < pageInfo.totalPages);
     } catch (err) {
-      setAlertMessage("활동 내역을 불러오는 데 실패했어요.");
+      setAlertMessage(
+        "활동 내역을 불러오는 데 실패했어요. <br/> 잠시후 다시 시도해주세요."
+      );
     }
   };
 
@@ -58,7 +73,7 @@ const ActivityHistoryPage = () => {
 
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
-      <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
+      <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:mt-8 md:px-5">
         <MobileMenu />
         <div className="flex lg:gap-9">
           <div className="flex flex-col">
@@ -82,9 +97,14 @@ const ActivityHistoryPage = () => {
                 />
               ))}
             </div>
-            <div className="flex justify-center mt-9 md:mt-10">
-              <PlusBtn title={"더보기"} onClick={() => {}} />
-            </div>
+            {hasMore && (
+              <div className="flex justify-center mt-9 md:mt-10">
+                <PlusBtn
+                  title={"더보기"}
+                  onClick={() => fetchActivities(page + 1)}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
