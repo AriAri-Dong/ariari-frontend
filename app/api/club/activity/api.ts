@@ -1,6 +1,7 @@
 import {
   CLUB_ACTIVITY,
   CLUB_ACTIVITY_COMMENT,
+  CLUB_ACTIVITY_COMMENT_BLOCK,
   CLUB_ACTIVITY_COMMENT_LICK,
   CLUB_ACTIVITY_LIKE,
 } from "@/api/apiUrl";
@@ -219,4 +220,17 @@ export const toggleClubActivityCommentLike = async ({
       },
     }
   );
+};
+
+// 활동 내역 댓글 유저 차단
+export const blockClubActivityCommentUser = async ({
+  commentId,
+}: {
+  commentId: string;
+}): Promise<void> => {
+  await axiosInstance.post(`${CLUB_ACTIVITY_COMMENT_BLOCK}`, null, {
+    params: {
+      commentId,
+    },
+  });
 };
