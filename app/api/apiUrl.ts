@@ -40,6 +40,9 @@ export const SCHOOLS_VALIDATE = "/schools/auth/validate";
 export const SCHOOLS_SEND = "/schools/auth/send";
 export const SCHOOLS_CANCEL = "/schools/auth/cancel";
 
+// == APPLY ==
+export const APPLY_MY = "/applies/my";
+
 // == APPLY_TEMPS ==
 export const APPLY_TEMPS = "/apply-temp";
 export const APPLY_TEMPS_MY = "/apply-temp/my";
