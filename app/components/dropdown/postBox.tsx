@@ -28,6 +28,7 @@ import {
   createClubActivityComment,
   deleteClubActivity,
   getClubActivityDetail,
+  toggleClubActivityLike,
 } from "@/api/club/activity/api";
 
 interface PostBoxProps {
@@ -67,12 +68,31 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
   const optionData = isManager ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE;
 
   // 좋아요
-  const handleLike = () => {
+  const handleLike = async () => {
+    const prevMyLike = post.myLike;
+    const prevLikes = post.likes;
+
+    // UI 먼저 업데이트
     setPost((prev) => ({
       ...prev,
-      myLike: !prev.myLike,
-      likes: prev.likes + (prev.myLike ? -1 : 1),
+      myLike: !prevMyLike,
+      likes: prevLikes + (prevMyLike ? -1 : 1),
     }));
+
+    try {
+      await toggleClubActivityLike(post.clubActivityId);
+    } catch (error) {
+      console.error("활동 내역 좋아요 실패:", error);
+      // 실패하면 롤백
+      setPost((prev) => ({
+        ...prev,
+        myLike: prevMyLike,
+        likes: prevLikes,
+      }));
+      setAlertMessage(
+        "좋아요 처리 중 오류가 발생했어요. </br> 잠시후 다시 시도해주세요."
+      );
+    }
   };
 
   // 옵션 메뉴
@@ -109,7 +129,9 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
       window.location.reload();
     } catch (error) {
       setIsNotiPopUpOpen(false);
-      setAlertMessage("삭제 중 오류가 발생했어요. 다시 시도해주세요.");
+      setAlertMessage(
+        "삭제 중 오류가 발생했어요. </br> 잠시후 다시 시도해주세요."
+      );
     }
   };
 
@@ -168,7 +190,9 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
         }
       } catch (e) {
         console.error("댓글 불러오기 실패", e);
-        setAlertMessage("댓글을 불러오는 데 실패했어요.");
+        setAlertMessage(
+          "댓글을 불러오는 데 실패했어요. </br> 잠시후 다시 시도해주세요."
+        );
       }
     }
   };
