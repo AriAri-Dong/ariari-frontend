@@ -20,11 +20,14 @@ import ReportModal from "@/components/modal/reportModal";
 import SendBtn from "@/components/button/iconBtn/sendBtn";
 import useResponsive from "@/hooks/useResponsive";
 import Alert from "@/components/alert/alert";
+import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
+import { useSearchParams } from "next/navigation";
+import formatDateToDot from "@/utils/formatDateToDot";
+import { useAddAnswerMutation } from "@/hooks/club/useClubHelpMutation";
 
 interface QuestionDropdownProps {
   data: ClubQuestionData | ClubFaqData;
   myRoleType: clubMemberRoleType | null | undefined;
-  myProfileType: profileType | null | undefined;
   isOpen: boolean;
   setSelected: (value: string | null) => void;
 }
@@ -32,7 +35,6 @@ interface QuestionDropdownProps {
  *
  * @param data QNA 데이터 or FAQ 데이터
  * @param myRoleType 로그인 유저 role - "GENERAL":일반, "MANAGER":매니저, "ADMIN":관리자
- * @param myProfileType 유저 이미지타입
  * @param isOpen 답변 open 여부
  * @param setSelected set 열린 답변
  * @returns
@@ -41,11 +43,15 @@ interface QuestionDropdownProps {
 const QuestionDropdown = ({
   data,
   myRoleType,
-  myProfileType,
   isOpen,
   setSelected,
 }: QuestionDropdownProps) => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") ?? "";
+
   const isMdUp = useResponsive("md");
+  const { clubInfo } = useClubInfoQuery(clubId);
+  const { addAnswer } = useAddAnswerMutation({ clubId });
 
   let bg, text, label;
   const isFaq = "clubFaqColorType" in data;
@@ -79,6 +85,14 @@ const QuestionDropdown = ({
     setAlertMessage("신고가 정상적으로 접수되었습니다.");
   };
 
+  const handleAnswerSubmit = () => {
+    addAnswer.mutate({
+      clubId,
+      clubQuestionId: data.id,
+      data: { body: answer },
+    });
+  };
+
   return (
     <div className="flex flex-col gap-4 justify-start items-start pt-4 pb-2.5 pl-4 pr-3 md:px-6 md:py-[26px] bg-background rounded-[8px] md:gap-8 ">
       <div className="w-full justify-between items-center md:flex">
@@ -100,7 +114,7 @@ const QuestionDropdown = ({
           <div className="flex items-center justify-between md:gap-5">
             {!isFaq && (
               <p className="text-subtext2 text-mobile_body4_r md:text-body2_m">
-                {"2024. 01. 08"}
+                {formatDateToDot(data.createdDateTime!.toString())}
               </p>
             )}
             <button
@@ -186,21 +200,19 @@ const QuestionDropdown = ({
               className={`w-full flex-col justify-start items-start gap-8 flex`}
             >
               <div className="w-full items-start gap-8 flex md:pl-1">
-                <Image
+                {/* 에러 발생 임시 주석 처리 */}
+                {/* <Image
                   src={
-                    profileImageMap[
-                      isFaq
-                        ? data.clubMemberData.profileType
-                        : data.clubAnswerData
-                        ? data.clubAnswerData!.clubMemberData.profileType
-                        : myProfileType!
-                    ]
+                    clubInfo?.clubData.profileUri ||
+                    profileImageMap["ARIARI_CHICKEN"]
                   }
                   alt={"club_img"}
                   width={56}
                   height={56}
                   className="hidden md:block rounded-full"
                 />
+                <div className="w-full flex justify-start items-start relative">
+                /> */}
                 <div className="w-full flex justify-start items-start  relative">
                   <Image
                     src={polygon}
@@ -219,7 +231,7 @@ const QuestionDropdown = ({
                         className="w-full py-[5px] rounded-[12px] bg-searchbar text-subtext1 text-mobile_body1_r md:py-1.5 md:text-body1_r focus:outline-none placeholder:text-subtext1"
                       />
                       <div>
-                        <SendBtn onClick={() => {}} />
+                        <SendBtn onClick={handleAnswerSubmit} />
                       </div>
                     </div>
                   ) : (
@@ -234,14 +246,19 @@ const QuestionDropdown = ({
         </div>
       )}
       {reportIsOpen && (
-        <div style={{ zIndex: 1000 }}>
+        <div style={{ zIndex: 9999 }}>
           {isMdUp ? (
+            // id, reportTargetType(CLUB_QUESTION)
             <ReportModal
+              id={data.id.toString()}
+              reportTargetType="CLUB_QUESTION"
               onClose={() => setReportIsOpen(false)}
               onSubmit={handleReportSubmit}
             />
           ) : (
             <ReportBottomSheet
+              id={data.id.toString()}
+              reportTargetType="CLUB_QUESTION"
               onClose={() => setReportIsOpen(false)}
               onSubmit={handleReportSubmit}
             />

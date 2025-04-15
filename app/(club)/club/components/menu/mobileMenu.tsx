@@ -30,7 +30,7 @@ const MobileMenu = () => {
 
   const [menuRefs, setMenuRefs] = useState<(HTMLDivElement | null)[]>([]);
 
-  // ✅ 현재 URL과 일치하는 메뉴 옵션 찾기
+  // 현재 URL과 일치하는 메뉴 옵션 찾기
   const currentOption = CLUB_LEFT_MENU.find(
     (menu) =>
       menu.url === pathname || menu.subUrl?.some((sub) => sub.url === pathname)
@@ -67,13 +67,13 @@ const MobileMenu = () => {
     if (Array.isArray(selectedMenu?.subUrl) && selectedMenu.subUrl.length > 0) {
       setOption(label);
 
-      // ✅ 현재 URL(`pathname`)이 `subUrl` 중 하나인지 확인
+      // 현재 URL(`pathname`)이 `subUrl` 중 하나인지 확인
       const isCurrentSubMenu = selectedMenu.subUrl.some(
         (sub) => sub.url === pathname
       );
 
       if (!isCurrentSubMenu) {
-        // ✅ 현재 URL이 `subUrl` 중 하나가 아닐 경우, 첫 번째 `subUrl`로 이동
+        // 현재 URL이 `subUrl` 중 하나가 아닐 경우, 첫 번째 `subUrl`로 이동
         setTimeout(() => {
           router.push(selectedMenu.subUrl[0].url);
         }, 0);
@@ -84,7 +84,7 @@ const MobileMenu = () => {
     }
   };
 
-  // ✅ 하위 메뉴 클릭 시 부모 메뉴 활성화
+  // 하위 메뉴 클릭 시 부모 메뉴 활성화
   const handleSubMenuClick = (parentLabel: string, url: string) => {
     setOption(parentLabel);
     router.push(url);

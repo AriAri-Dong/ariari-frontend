@@ -6,7 +6,7 @@ import InterviewNoticeModal from "../modal/club/interviewNoticeModal";
 import useResponsive from "@/hooks/useResponsive";
 import InterviewNoticeBottomSheet from "../bottomSheet/interviewNoticeBottomSheet";
 import Alert from "../alert/alert";
-import ApplicationFromViewModal from "../modal/club/applicationFormViewModal";
+import ApplicationFormPreviewModal from "../modal/club/applicationFormViewModal";
 import testImage from "@/images/icon/calender.svg";
 import MobileApplicationFormViewModal from "../modal/club/mobileApplicationFormViewModal";
 
@@ -116,7 +116,7 @@ const ApplicationFormCard = ({
           )}
       {isMdUp
         ? openFormModal && (
-            <ApplicationFromViewModal
+            <ApplicationFormPreviewModal
               onClose={() => setOpenFormModal(false)}
               data={{
                 name: "김아리",

@@ -1,17 +1,15 @@
 "use client";
 
-import React, { Suspense, useEffect } from "react";
+import React, { useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useResponsive from "@/hooks/useResponsive";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import ClubInfoWrapper from "./content/clubInfoWrapper";
 import { useClubContext } from "@/context/ClubContext";
-import { useUserStore } from "@/providers/user-store-provider";
 import { useShallow } from "zustand/shallow";
-import LoginModal from "@/components/modal/login/loginModal";
-import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import Loading from "@/components/feedback/loading";
 import ErrorNotice from "@/components/feedback/error";
+import { useUserStore } from "@/providers/userStoreProvider";
 
 const ClubPage = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -25,19 +23,17 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
 
   const isMdUp = useResponsive("md");
   const clubDetailPathsOnlyMdUp = ["/club/withdrawal", "/club/close"];
+  const withoutClubDetailPaths = ["/club/management/recruitment/create"];
 
   // md 이상인 경우에만 clubInfo 컴포넌트를 보여주는 path인지 확인
   const isClubDetailOnlyMdUpComponent = clubDetailPathsOnlyMdUp.some((path) =>
     pathname.includes(path)
   );
-  const handleRouter = () => {
-    // 모집 공고 임시 경로
-    router.push("/");
-  };
+  // clubInfo 컴포넌트가 없는 path 확인
+  const isWithoutClubDetailPaths = clubDetailPathsOnlyMdUp.some((path) =>
+    pathname.includes(path)
+  );
 
-  const handleWrite = () => {
-    console.log("작성 핸들러");
-  };
 
   useEffect(() => {
     if (!clubInfo) return;
@@ -57,7 +53,8 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       {/* === 상단 동아리 정보(공통 영역) === */}
-      {(!isClubDetailOnlyMdUpComponent || isMdUp) && <ClubInfoWrapper />}
+      {!isWithoutClubDetailPaths ||
+        ((!isClubDetailOnlyMdUpComponent || isMdUp) && <ClubInfoWrapper />)}
       {children}
     </div>
   );

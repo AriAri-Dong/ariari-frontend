@@ -26,6 +26,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/withdrawal",
     "/club/close",
     "/terms",
+   ]
+  // md 이상만 bg 적용하는 path
+  const mobileBgPaths = [
+    "/user/club/create",
+    "/user/userInfo",
+    "/withdrawal",
+    "/club/close",
+    "/club/management/recruitment/create",
   ];
 
   const isSpecialComponent = specialPaths.some((path) =>

@@ -6,10 +6,6 @@ import Image from "next/image";
 import test_image from "@/images/test/test_image.jpg";
 import Keyword from "@/components/button/keyword";
 import { MdFavorite } from "react-icons/md";
-import DayFloatingBar from "@/components/bar/floatingBar/dayFloatinBar";
-import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
-import PointStatusFloatingBar from "@/components/bar/floatingBar/pointStatusFloatingBar";
-import MobilePointStatusFloatingBar from "@/components/bar/floatingBar/mobilePointStatusFloatingBar";
 import RecruitmentBottomBar from "@/components/bar/floatingBar/recruitmentBottomBar";
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import RecruitmentSummary from "../components/recruitmentSummary";
@@ -25,12 +21,12 @@ import {
 } from "@/utils/clubCategoryMapping";
 import { deleteClubBookmark, postClubBookmark } from "@/api/club/api";
 import { useShallow } from "zustand/shallow";
-import { useUserStore } from "@/providers/user-store-provider";
+import useResponsive from "@/hooks/useResponsive";
+import { useUserStore } from "@/providers/userStoreProvider";
 
 interface ClubInfoProps {
   recruitmentId?: string;
   recruitmentData: ClubInfoCard;
-
   isPreview?: boolean;
 }
 
@@ -43,6 +39,7 @@ const ClubInfo = ({
   recruitmentData,
   isPreview = false,
 }: ClubInfoProps) => {
+  const isMdUp = useResponsive("md");
   const params = useSearchParams();
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
   const id = params.get("id") ?? "";
@@ -101,7 +98,7 @@ const ClubInfo = ({
             width={792}
             height={792}
             layout="responsive"
-            className="rounded-48 object-cover"
+            className="rounded-48 object-cover aspect-[1/1]"
           />
         </div>
         {/* 모바일 화면 */}
@@ -202,10 +199,12 @@ const ClubInfo = ({
                 procedureType={recruitmentData.procedureType}
               />
             </div>
-            {!isPreview && (
+            {/* 미리보기 && 모바일 제외 */}
+            {!(isPreview && !isMdUp) && (
               <div className="fixed bottom-0 left-0 right-0 md:static mt-10">
                 <div className="bg-background px-4 pt-2 pb-6 md:px-0 md:pt-0 md:pb-0">
                   <RecruitmentBottomBar
+                    recruitmentData={recruitmentData}
                     isMyBookmark={recruitmentData.isMyRecruitmentScrap}
                     bookmarks={recruitmentData.recruitmentBookmarks}
                     endDate={recruitmentData.endDate}
@@ -220,15 +219,12 @@ const ClubInfo = ({
                 type={"declaration"}
                 size={"large"}
                 title={"신고하기"}
-                onClick={toggleBottomModal}
+                onClick={isPreview ? () => {} : toggleBottomModal}
               />
             </div>
           </div>
         </div>
-        {/* <RecruitmentGuideFloatingBar deadline={new Date("2024-12-31T23:59:59")} /> */}
-        {/* <DayFloatingBar deadline={new Date("2024-12-31T23:59:59")} /> */}
-        {/* <PointStatusFloatingBar /> */}
-        {/* <MobilePointStatusFloatingBar /> */}
+
         {isBottomSheetOpen && (
           <ReportBottomSheet
             id={id}

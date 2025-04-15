@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useClubContext } from "@/context/ClubContext";
-import { useUserStore } from "@/providers/user-store-provider";
 import { useShallow } from "zustand/shallow";
 
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
@@ -25,6 +24,7 @@ import {
   endRecruitment,
   getClubRecruitment,
 } from "@/api/recruitment/api";
+import { useUserStore } from "@/providers/userStoreProvider";
 
 const ClubRecruitmentContent = () => {
   const params = useSearchParams();

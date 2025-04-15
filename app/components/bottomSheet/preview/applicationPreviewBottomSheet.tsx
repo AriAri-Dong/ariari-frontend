@@ -1,23 +1,14 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import close from "@/images/icon/close.svg";
-import { BADGE_ITEMS } from "@/data/club";
-import RenderField from "@/(club)/club/components/renderField";
-import FileBadge from "@/components/badge/fileBadge";
-import LargeBtn from "@/components/button/basicBtn/largeBtn";
-import CustomInput from "@/components/input/customInput";
+import { ApplicationKeys, ApplyQuestionData } from "@/types/application";
+import ApplicationInputFormMobile from "@/components/form/application/applicationFieldFormMobile";
 
 interface ModalProps {
   onClose: () => void;
-  selectedFields: {
-    name: string;
-    type: "radio" | "text" | "textarea" | "date";
-    options?: string[];
-    maxLength?: number;
-    placeholder?: string;
-  }[];
+  selectedFields: ApplicationKeys[];
   portfolioCollected: boolean;
-  documentQuestions: { question: string }[];
+  documentQuestions: ApplyQuestionData[];
 }
 
 const ApplicationFormPeviewBottomSheet = ({
@@ -27,16 +18,33 @@ const ApplicationFormPeviewBottomSheet = ({
   documentQuestions,
 }: ModalProps) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [inputValues, setInputValues] = useState<
+    Partial<Record<ApplicationKeys, string>>
+  >({});
+  const [name, setName] = useState<string>("");
   const [fileName, setFileName] = useState<string | null>(null);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [url, setUrl] = useState<string>("");
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
+  const formatPhoneNumber = (value: string) => {
+    if (value.length <= 3) return value;
+    if (value.length <= 7) return `${value.slice(0, 3)}-${value.slice(3)}`;
+    return `${value.slice(0, 3)}-${value.slice(3, 7)}-${value.slice(7, 11)}`;
+  };
 
-  const handleClose = () => {
-    setIsVisible(false);
-    onClose();
+  const handleInputChange = (fieldKey: ApplicationKeys, value: string) => {
+    if (fieldKey === "phone") {
+      const onlyNumbers = value.replace(/[^0-9]/g, "");
+      const formattedValue = formatPhoneNumber(onlyNumbers);
+
+      setInputValues((prev) => {
+        return { ...prev, [fieldKey]: formattedValue };
+      });
+    } else {
+      setInputValues((prev) => {
+        return { ...prev, [fieldKey]: value };
+      });
+    }
   };
 
   // PDF 파일 선택 시 상태 업데이트
@@ -53,14 +61,19 @@ const ApplicationFormPeviewBottomSheet = ({
   };
 
   // 답변 입력 핸들러
-  const handleAnswerChange = (index: number, value: string) => {
+  const handleAnswerChange = (index: string, value: string) => {
     setAnswers((prev) => ({ ...prev, [index]: value }));
+    console.log(answers);
   };
 
-  // 정렬된 필드 순서로 렌더링
-  const sortedFields = BADGE_ITEMS.filter((badge) =>
-    selectedFields.some((field) => field.name === badge.name)
-  );
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const handleClose = () => {
+    setIsVisible(false);
+    onClose();
+  };
 
   // 스크롤 방지
   useEffect(() => {
@@ -95,98 +108,22 @@ const ApplicationFormPeviewBottomSheet = ({
         <div className="h-[1px] bg-menuborder" />
 
         {/* 스크롤 가능한 내용 영역 */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar">
-          <div className="flex flex-col gap-[30px] mt-[22px] mb-[30px]">
-            {/* default 필드 */}
-            <div className="flex flex-col gap-[18px]">
-              <h3 className="flex text-text1 text-mobile_h3">
-                이름
-                <p className="text-noti text-mobile_body3_m ml-1">*</p>
-              </h3>
-              <CustomInput
-                value={""}
-                placeholder={"이름"}
-                onChange={() => {}}
-              />
-            </div>
-            {/* 선택 필드 */}
-            {sortedFields.map((field, index) => (
-              <RenderField key={index} field={field} index={index} />
-            ))}
-            {/* 포트폴리오 */}
-            {portfolioCollected && (
-              <div className="flex flex-col">
-                <h3 className="flex text-text1 text-mobile_h3 mb-2.5">
-                  포트폴리오
-                </h3>
-                <p className="text-[#7D8595] text-mobile_body3_r mb-[14px]">
-                  포트폴리오 수집 목적 문구
-                </p>
-                <CustomInput
-                  value={""}
-                  placeholder={"게시물 주소(URL)를 입력해 주세요."}
-                  onChange={() => {}}
-                  className="mt-[14px]"
-                />
-                {fileName ? (
-                  <div className="flex items-center gap-2 mt-[14px]">
-                    <Image
-                      src={close}
-                      alt={"삭제"}
-                      width={20}
-                      height={20}
-                      onClick={handleRemoveFile}
-                      className="cursor-pointer"
-                    />
-                    <FileBadge fileName={fileName} />
-                  </div>
-                ) : null}
-                <LargeBtn
-                  title={"pdf 파일 첨부"}
-                  onClick={() =>
-                    document.getElementById("fileInputMobile")?.click()
-                  }
-                  className="mt-[14px]"
-                />
-                <input
-                  id="fileInputMobile"
-                  type="file"
-                  accept=".pdf"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </div>
-            )}
-            {/* 문항 */}
-            {documentQuestions
-              .filter((item) => item.question.trim() !== "")
-              .map((item, index) => {
-                const answer = answers[index] || "";
-                const isOverMaxLength = answer.length > 50;
-
-                return (
-                  <div className="flex flex-col gap-[18px]" key={index}>
-                    <h3 className="flex text-text1 text-mobile_h3">
-                      {item.question}
-                    </h3>
-                    <CustomInput
-                      value={answer}
-                      placeholder={"답변을 작성해 주세요."}
-                      onChange={(e) =>
-                        handleAnswerChange(index, e.target.value)
-                      }
-                      maxLength={50}
-                    />
-                    {isOverMaxLength && (
-                      <p className="text-noti text-mobile_body3_r mt-[-14px] ml-4">
-                        최대 50자까지 작성 가능합니다.
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-          </div>
-        </div>
+        <ApplicationInputFormMobile
+          selectedFields={selectedFields}
+          portfolioCollected={portfolioCollected}
+          documentQuestions={documentQuestions}
+          name={name}
+          setName={setName}
+          fileName={fileName}
+          handleFileChange={handleFileChange}
+          handleRemoveFile={handleRemoveFile}
+          answers={answers}
+          handleAnswerChange={handleAnswerChange}
+          url={url}
+          setUrl={setUrl}
+          inputValues={inputValues}
+          handleInputChange={handleInputChange}
+        />
       </div>
     </div>
   );

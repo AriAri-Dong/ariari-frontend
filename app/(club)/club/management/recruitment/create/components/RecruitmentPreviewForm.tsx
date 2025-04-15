@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import useResponsive from "@/hooks/useResponsive";
 
 import Image from "next/image";
@@ -9,24 +9,61 @@ import close from "@/images/icon/close.svg";
 import ClubInfo from "@/(recruitment)/recruitment/detail/content/clubInfo";
 import ClubActivities from "@/(recruitment)/recruitment/detail/content/clubActivities";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
-import { CLUB_INFO_DATA, RECRUITMENT_DATA } from "@/data/recruitment";
+import { ClubInfoCard } from "@/types/components/card";
+import {
+  ProcedureType,
+  RecruitmentData,
+  RecruitmentNoteData,
+} from "@/types/recruitment";
+import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
+import { useSearchParams } from "next/navigation";
+import formatDateToDot from "@/utils/formatDateToDot";
+import no_image from "@/images/noImage/no-image.jpg";
 
 interface RecruitmentPreviewFormProps {
+  title: string;
+  imageUrl: string | null;
+  date: [Date | null, Date | null];
+  limits: number | null;
+  procedureType: ProcedureType;
+  body: string;
+  recruitmentNoteDataList: RecruitmentNoteData[];
+  prevRecruitmentList: RecruitmentData[];
+
   onClose: () => void;
   onSubmit: () => void;
 }
 
 /**
  *
+ * @param title 제목
+ * @param imageUrl 모집 이미지
+ * @param date [시작 날짜, 마감 날짜]
+ * @param procedureType 절차
+ * @param body 활동 내용
+ * @param recruitmentNoteDataList 추가 항목
+ * @param prevRecruitmentList 이전 모집 공고
  * @param onClose 닫기 함수
  * @param onSubmit 제출 함수
  */
 
 const RecruitmentPreviewForm = ({
+  title,
+  imageUrl,
+  date,
+  limits,
+  procedureType,
+  body,
+  recruitmentNoteDataList,
+  prevRecruitmentList,
   onClose,
   onSubmit,
 }: RecruitmentPreviewFormProps) => {
   const isTapOver = useResponsive("md");
+  const params = useSearchParams();
+  const clubId = params.get("clubId") ?? "";
+
+  const { clubInfo } = useClubInfoQuery(clubId);
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -35,8 +72,32 @@ const RecruitmentPreviewForm = ({
     };
   }, []);
 
+  const recruitmentData: ClubInfoCard = {
+    id: "",
+    startDate: date[0] ? formatDateToDot(date[0].toISOString()) : "",
+    endDate: date[1] ? formatDateToDot(date[1].toISOString()) : "",
+    clubName: clubInfo!.clubData.name,
+    clubImageUrl: clubInfo!.clubData.profileUri,
+    title: title,
+    imageUrl: imageUrl || no_image,
+    limits: limits || 0,
+    tag: {
+      affiliation: clubInfo!.clubData.schoolData ? "교내" : "연합",
+      field: clubInfo!.clubData.clubCategoryType,
+      region: clubInfo!.clubData.clubRegionType,
+      target: clubInfo!.clubData.participantType,
+    },
+    clubId: clubInfo!.clubData.id,
+    isMyRecruitmentScrap: false,
+    procedureType: procedureType,
+    recruitmentBookmarks: 0,
+    isMyClub: true,
+    isMyApply: false,
+    isMyClubBookmark: clubInfo!.clubData.isMyBookmark,
+  };
+
   return !isTapOver ? (
-    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 backdrop-blur-sm z-50 flex flex-col justify-between pt-[46px] pb-5  md:hidden">
+    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 backdrop-blur-sm z-50 flex flex-col justify-between pt-[46px] ">
       <div className="bg-background rounded-t-2xl">
         <div className="flex justify-between items-center px-4  pt-[22px] pb-4 border-b md:pb-5">
           <h2 className="text-mobile_h1_contents_title md:h1_contents_title">
@@ -59,10 +120,13 @@ const RecruitmentPreviewForm = ({
         <div className="overflow-y-scroll h-[calc(100vh-65px)]">
           <div className="h-5" />
           <div style={{ pointerEvents: "none" }}>
-            <ClubInfo isPreview={true} recruitmentData={CLUB_INFO_DATA} />
+            <ClubInfo isPreview={true} recruitmentData={recruitmentData} />
             <ClubActivities
-              recruitmentId={CLUB_INFO_DATA.id.toString()}
-              prevRecruitmentList={RECRUITMENT_DATA}
+              clubId={clubId}
+              recruitmentId={""}
+              body={body}
+              recruitmentNoteDataList={recruitmentNoteDataList}
+              prevRecruitmentList={prevRecruitmentList}
             />
           </div>
           <section className="flex flex-col items-center gap-5 bg-sub_bg px-4 mt-[-40px] pb-[80px]">
@@ -89,11 +153,21 @@ const RecruitmentPreviewForm = ({
       >
         <Image src={close} alt={"닫기"} width={24} height={24} />
       </div>
-      <div
-        className="relative w-3/4 p-5 pb-6 bg-white rounded-[16px]"
-        style={{ pointerEvents: "none" }} // 내부 클릭 차단
-      >
-        <ClubInfo isPreview={true} recruitmentData={CLUB_INFO_DATA} />
+      <div className="relative w-3/4 h-[calc(100vh-130px)] bg-white rounded-[16px] overflow-y-scroll no-scrollbar">
+        <div style={{ pointerEvents: "none" }}>
+          <div className="md:px-[60px] md:pt-[30px] lg:px-[100px] lg:pt-[50px] ">
+            <ClubInfo isPreview={true} recruitmentData={recruitmentData} />
+          </div>
+          <div className="bg-sub_bg md:px-[60px] md:pt-[30px] lg:px-[100px] lg:pt-[50px] ">
+            <ClubActivities
+              clubId={clubId}
+              recruitmentId={""}
+              body={body}
+              recruitmentNoteDataList={recruitmentNoteDataList}
+              prevRecruitmentList={prevRecruitmentList}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

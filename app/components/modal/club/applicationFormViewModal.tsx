@@ -8,7 +8,7 @@ import FileBadge from "@/components/badge/fileBadge";
 import CustomInput from "@/components/input/customInput";
 import PDFDownloadBtn from "@/components/button/pdfDownloadBtn";
 
-export interface ApplicationFromViewModalProps {
+export interface ApplicationFormViewModalProps {
   onClose: () => void;
   portfolio: boolean;
   portfolioData?: {
@@ -24,13 +24,13 @@ export interface ApplicationFromViewModalProps {
   fields: { label: string; value: string }[];
 }
 
-const ApplicationFromViewModal = ({
+const ApplicationFormViewModal = ({
   onClose,
   data,
   portfolio,
   portfolioData,
   fields,
-}: ApplicationFromViewModalProps) => {
+}: ApplicationFormViewModalProps) => {
   const optionsRef = useRef<HTMLDivElement | null>(null);
 
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
@@ -150,4 +150,4 @@ const ApplicationFromViewModal = ({
   );
 };
 
-export default ApplicationFromViewModal;
+export default ApplicationFormViewModal;

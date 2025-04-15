@@ -1,10 +1,11 @@
 "use client";
 
+import { profileType } from "@/types/member";
 import React, { createContext, useContext, useState } from "react";
 
-interface ProfileData {
+export interface ProfileData {
   username: string;
-  selectedProfileId: number;
+  selectedProfileType: profileType;
   email: string;
   verificationCode: string;
 }
@@ -23,7 +24,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [profileData, setProfileData] = useState<ProfileData>({
     username: "",
-    selectedProfileId: 1,
+    selectedProfileType: null,
     email: "",
     verificationCode: "",
   });

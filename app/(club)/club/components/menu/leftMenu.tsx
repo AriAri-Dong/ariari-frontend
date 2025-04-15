@@ -1,38 +1,55 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import rabbit from "@/images/profile/rabbit.svg";
 import file from "@/images/icon/file.svg";
 import vector from "@/images/icon/pullDown.svg";
 import active from "@/images/icon/active_vector.svg";
 import notice from "@/images/icon/notice.svg";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   CLUB_LEFT_MENU_ADMIN,
   CLUB_LEFT_MENU_MEMBER,
   CLUB_LEFT_MENU_USER,
 } from "@/data/club";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
+import ModifyClubInfoModal from "@/components/modal/club/modifyClubInfoModal";
+import Alert from "@/components/alert/alert";
+import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
+import { useClubContext } from "@/context/ClubContext";
+import { useUserStore } from "@/providers/userStoreProvider";
+import defaultImg from "@/images/icon/defaultAriari.svg";
+import { getProfileImage } from "@/utils/profileImage";
 
 /**
- * 임시 메뉴 컴포넌트
+ * 메뉴 컴포넌트
  * @returns
  */
 const LeftMenu = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const clubId = searchParams.get("clubId") || "";
+
+  const { clubInfo } = useClubInfoQuery(clubId);
+  const { role } = useClubContext();
+  const clubData = clubInfo?.clubData;
+  console.log(role);
+  console.log(clubData);
+
+  const nickname = useUserStore((state) => state.memberData.nickname);
+  const profileType = useUserStore((state) => state.memberData.profileType);
+
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  // 임시 권한 설정 (API 연동 전)
-  const [authority, setAuthority] = useState<"USER" | "MEMBER" | "ADMIN">(
-    "ADMIN"
-  );
+  const profileImageSrc = getProfileImage(profileType);
 
   // 권한에 따른 메뉴 데이터
   const CLUB_LEFT_MENU =
-    authority === "ADMIN"
+    role === "ADMIN"
       ? CLUB_LEFT_MENU_ADMIN
-      : authority === "MEMBER"
+      : role === "MANAGER"
       ? CLUB_LEFT_MENU_MEMBER
       : CLUB_LEFT_MENU_USER;
 
@@ -78,31 +95,49 @@ const LeftMenu = () => {
     });
   }, [pathname, CLUB_LEFT_MENU]);
 
+  const handleModifyClubInfo = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSubmitSuccess = () => {
+    setAlertMessage("동아리 정보가 수정되었습니다.");
+
+    setTimeout(() => {
+      window.location.reload();
+      // 0.5초 후 새로고침
+    }, 500);
+  };
+
   return (
     <div className="hidden lg:block">
       <div className="w-[256px] bg-white rounded-16 py-7 px-4">
         {/* 프로필 영역 */}
         <div className="flex flex-col">
           <div className="flex gap-3">
-            <Image src={rabbit} alt={"profile"} width={52} height={52} />
+            <Image
+              src={profileImageSrc || defaultImg}
+              alt={"profile"}
+              width={52}
+              height={52}
+            />
             <div className="flex flex-col gap-1">
-              <h3 className="text-body1_sb text-text1">백설공주</h3>
+              <h3 className="text-body1_sb text-text1">{nickname}</h3>
               <div className="flex gap-[6px]">
                 <Image src={file} alt={"profile"} width={14} height={18} />
                 <p className="text-primary text-body3_m">
-                  {authority === "ADMIN"
+                  {role === "ADMIN"
                     ? "관리자"
-                    : authority === "MEMBER"
-                    ? "일반회원"
-                    : ""}
+                    : role === "MANAGER"
+                    ? "매니저"
+                    : "일반회원"}
                 </p>
               </div>
             </div>
           </div>
-          {authority === "ADMIN" && (
+          {role === "ADMIN" && (
             <SmallBtn
               title={"동아리 정보 수정"}
-              onClick={() => {}}
+              onClick={handleModifyClubInfo}
               className="mt-5"
             />
           )}
@@ -172,6 +207,17 @@ const LeftMenu = () => {
           </div>
         ))}
       </div>
+      {isModalOpen && (
+        <ModifyClubInfoModal
+          onClose={() => {
+            setIsModalOpen(false);
+          }}
+          onSubmit={handleSubmitSuccess}
+        />
+      )}
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+      )}
     </div>
   );
 };

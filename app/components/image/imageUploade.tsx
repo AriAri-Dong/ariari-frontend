@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 import uploadIcon from "@/images/icon/upload.svg";
@@ -10,9 +10,15 @@ import Alert from "../alert/alert";
 interface ImageUploadProps {
   uploadedImage: string | null;
   setUploadedImage: (value: string | null) => void;
+  setUploadedFile: (value: File | null) => void;
 }
-const ImageUpload = ({ uploadedImage, setUploadedImage }: ImageUploadProps) => {
+const ImageUpload = ({
+  uploadedImage,
+  setUploadedImage,
+  setUploadedFile,
+}: ImageUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,12 +36,14 @@ const ImageUpload = ({ uploadedImage, setUploadedImage }: ImageUploadProps) => {
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        setUploadedImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      setUploadedFile(file);
+      setUploadedImage(URL.createObjectURL(file));
     }
+  };
+
+  const handleRemoveImage = () => {
+    setUploadedImage(null);
+    setUploadedFile(null);
   };
 
   return (
@@ -73,7 +81,7 @@ const ImageUpload = ({ uploadedImage, setUploadedImage }: ImageUploadProps) => {
             alt="x"
             width={16}
             height={16}
-            onClick={() => setUploadedImage(null)}
+            onClick={handleRemoveImage}
             className="absolute right-5 top-5 cursor-pointer md:w-5 md:h-5 "
           />
         </div>
