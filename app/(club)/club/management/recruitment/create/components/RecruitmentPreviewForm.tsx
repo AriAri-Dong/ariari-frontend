@@ -4,12 +4,13 @@ import React, { useEffect } from "react";
 import useResponsive from "@/hooks/useResponsive";
 
 import Image from "next/image";
+import noimage from "@/images/test/test.svg";
+
 import close from "@/images/icon/close.svg";
 
 import ClubInfo from "@/(recruitment)/recruitment/detail/content/clubInfo";
 import ClubActivities from "@/(recruitment)/recruitment/detail/content/clubActivities";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
-import { ClubInfoCard } from "@/types/components/card";
 import {
   ProcedureType,
   RecruitmentData,
@@ -17,8 +18,6 @@ import {
 } from "@/types/recruitment";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import { useSearchParams } from "next/navigation";
-import formatDateToDot from "@/utils/formatDateToDot";
-import no_image from "@/images/noImage/no-image.jpg";
 
 interface RecruitmentPreviewFormProps {
   title: string;
@@ -72,28 +71,20 @@ const RecruitmentPreviewForm = ({
     };
   }, []);
 
-  const recruitmentData: ClubInfoCard = {
+  const recruitmentData: RecruitmentData = {
     id: "",
-    startDate: date[0] ? formatDateToDot(date[0].toISOString()) : "",
-    endDate: date[1] ? formatDateToDot(date[1].toISOString()) : "",
-    clubName: clubInfo!.clubData.name,
-    clubImageUrl: clubInfo!.clubData.profileUri,
+    clubId: "",
     title: title,
-    imageUrl: imageUrl || no_image,
-    limits: limits || 0,
-    tag: {
-      affiliation: clubInfo!.clubData.schoolData ? "교내" : "연합",
-      field: clubInfo!.clubData.clubCategoryType,
-      region: clubInfo!.clubData.clubRegionType,
-      target: clubInfo!.clubData.participantType,
-    },
-    clubId: clubInfo!.clubData.id,
-    isMyRecruitmentScrap: false,
+    body: "",
+    posterUri: imageUrl || noimage,
     procedureType: procedureType,
-    recruitmentBookmarks: 0,
-    isMyClub: true,
-    isMyApply: false,
-    isMyClubBookmark: clubInfo!.clubData.isMyBookmark,
+    limits: limits || 0,
+    startDateTime: date[0] ? date[0].toISOString() : "",
+    endDateTime: date[1] ? date[1].toISOString() : "",
+    createdDateTime: new Date().toISOString(),
+    recruitmentStatusType: "OPEN",
+    isMyBookmark: false,
+    recruitmentNoteDataList: recruitmentNoteDataList,
   };
 
   return !isTapOver ? (
@@ -120,7 +111,14 @@ const RecruitmentPreviewForm = ({
         <div className="overflow-y-scroll h-[calc(100vh-65px)]">
           <div className="h-5" />
           <div style={{ pointerEvents: "none" }}>
-            <ClubInfo isPreview={true} recruitmentData={recruitmentData} />
+            <ClubInfo
+              recruitmentData={recruitmentData}
+              clubData={clubInfo!.clubData}
+              applyFormData={null}
+              isMyApply={false}
+              bookmarks={0}
+              type="PREVIEW"
+            />
             <ClubActivities
               clubId={clubId}
               recruitmentId={""}
@@ -156,7 +154,13 @@ const RecruitmentPreviewForm = ({
       <div className="relative w-3/4 h-[calc(100vh-130px)] bg-white rounded-[16px] overflow-y-scroll no-scrollbar">
         <div style={{ pointerEvents: "none" }}>
           <div className="md:px-[60px] md:pt-[30px] lg:px-[100px] lg:pt-[50px] ">
-            <ClubInfo isPreview={true} recruitmentData={recruitmentData} />
+            <ClubInfo
+              recruitmentData={recruitmentData}
+              clubData={clubInfo!.clubData}
+              applyFormData={null}
+              isMyApply={false}
+              bookmarks={0}
+            />
           </div>
           <div className="bg-sub_bg md:px-[60px] md:pt-[30px] lg:px-[100px] lg:pt-[50px] ">
             <ClubActivities

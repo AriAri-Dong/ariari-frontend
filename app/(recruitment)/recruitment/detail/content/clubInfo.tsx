@@ -23,10 +23,18 @@ import { deleteClubBookmark, postClubBookmark } from "@/api/club/api";
 import { useShallow } from "zustand/shallow";
 import useResponsive from "@/hooks/useResponsive";
 import { useUserStore } from "@/providers/userStoreProvider";
+import { ClubData } from "@/types/club";
+import { RecruitmentData } from "@/types/recruitment";
+import { ApplyFormData } from "@/types/application";
 
 interface ClubInfoProps {
-  recruitmentId?: string;
-  recruitmentData: ClubInfoCard;
+  recruitmentData: RecruitmentData;
+  clubData: ClubData;
+  applyFormData: ApplyFormData | null;
+  isMyApply: boolean;
+  bookmarks: number;
+  myRecentApplyTempId?: string | null;
+
   type?: "PREVIEW" | "APPLYING" | "GENERAL";
 }
 
@@ -35,8 +43,12 @@ interface ClubInfoProps {
  */
 
 const ClubInfo = ({
-  recruitmentId,
   recruitmentData,
+  clubData,
+  applyFormData,
+  isMyApply,
+  bookmarks,
+  myRecentApplyTempId = null,
   type = "GENERAL",
 }: ClubInfoProps) => {
   const isMdUp = useResponsive("md");
@@ -45,11 +57,18 @@ const ClubInfo = ({
   const id = params.get("id") ?? "";
 
   const [isClubHeart, setIsClubHeart] = useState<boolean>(
-    recruitmentData.isMyClubBookmark
+    clubData.isMyBookmark
   );
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState<boolean>(false);
   const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const [applyTempId, setApplyTempId] = useState<string | null>(
+    myRecentApplyTempId
+  );
+  const handleApplyTempId = (tempId: string | null) => {
+    setApplyTempId(tempId);
+  };
 
   const onClubHeartClick = () => {
     if (!isSignIn) {
@@ -57,7 +76,7 @@ const ClubInfo = ({
       return;
     }
     if (isClubHeart) {
-      deleteClubBookmark(recruitmentData.clubId)
+      deleteClubBookmark(clubData.id)
         .then(() => {
           setIsClubHeart(!isClubHeart);
         })
@@ -65,7 +84,7 @@ const ClubInfo = ({
           setAlertMessage(err.message);
         });
     } else {
-      postClubBookmark(recruitmentData.clubId)
+      postClubBookmark(clubData.id)
         .then(() => {
           setIsClubHeart(!isClubHeart);
         })
@@ -93,7 +112,7 @@ const ClubInfo = ({
       <div className="flex flex-col mt-2 sm_md:flex-row sm_md:gap-[27px] md:pb-10 md:pt-8 md:flex-row md:gap-14 w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5">
         <div className="w-full max-w-[792px]">
           <Image
-            src={recruitmentData.imageUrl || test_image}
+            src={recruitmentData.posterUri || test_image}
             alt={"main_image"}
             width={792}
             height={792}
@@ -123,18 +142,20 @@ const ClubInfo = ({
                 <div className="flex justify-between items-center">
                   <div className="flex gap-3 items-center">
                     <Image
-                      src={recruitmentData.clubImageUrl || test_image}
+                      src={clubData.profileUri || test_image}
                       alt={"club_image"}
                       width={68}
                       height={68}
                       className="relative w-[68px] h-[68px] rounded-full overflow-hidden"
                     />
                     <ClubProfileCard
-                      clubName={recruitmentData.clubName}
-                      affiliation={recruitmentData.tag.affiliation}
-                      field={fieldMap[recruitmentData.tag.field]}
-                      region={regionMap[recruitmentData.tag.region]}
-                      target={participantMap[recruitmentData.tag.target]}
+                      clubName={clubData.name}
+                      affiliation={
+                        clubData.schoolData ? clubData.schoolData.name : "교외"
+                      }
+                      field={fieldMap[clubData.clubCategoryType]}
+                      region={regionMap[clubData.clubRegionType]}
+                      target={participantMap[clubData.participantType]}
                     />
                   </div>
                   <div className="cursor-pointer" onClick={onClubHeartClick}>
@@ -148,8 +169,8 @@ const ClubInfo = ({
                 <div className="border-t border-menuborder mt-6 mb-6" />
                 <RecruitmentSummary
                   members={recruitmentData.limits}
-                  startDate={recruitmentData.startDate}
-                  endDate={recruitmentData.endDate}
+                  startDate={recruitmentData.startDateTime}
+                  endDate={recruitmentData.startDateTime}
                   procedureType={recruitmentData.procedureType}
                 />
               </div>
@@ -159,7 +180,7 @@ const ClubInfo = ({
               <div className="flex items-center md:gap-5">
                 <div className="relative w-[60px] h-[60px]">
                   <Image
-                    src={recruitmentData.clubImageUrl || test_image}
+                    src={clubData.profileUri || test_image}
                     alt={"club_image"}
                     width={60}
                     height={60}
@@ -176,9 +197,7 @@ const ClubInfo = ({
                     )}
                   </div>
                 </div>
-                <h3 className="text-subtext1 text-h3">
-                  {recruitmentData.clubName}
-                </h3>
+                <h3 className="text-subtext1 text-h3">{clubData.name}</h3>
               </div>
               <h1 className="text-h1_contents_title md:mt-8 md:mb-12">
                 {recruitmentData.title}
@@ -186,38 +205,41 @@ const ClubInfo = ({
               <div className="w-[340px] mt-10">
                 <Keyword
                   tags={[
-                    recruitmentData.tag.affiliation,
-                    fieldMap[recruitmentData.tag.field],
-                    regionMap[recruitmentData.tag.region],
-                    participantMap[recruitmentData.tag.target],
+                    clubData.schoolData ? clubData.schoolData.name : "교외",
+                    fieldMap[clubData.clubCategoryType],
+                    regionMap[clubData.clubRegionType],
+                    participantMap[clubData.participantType],
                   ]}
                 />
               </div>
               <div className="border-t border-menuborder mt-8 mb-7" />
               <RecruitmentSummary
                 members={recruitmentData.limits}
-                startDate={recruitmentData.startDate}
-                endDate={recruitmentData.endDate}
+                startDate={recruitmentData.startDateTime}
+                endDate={recruitmentData.startDateTime}
                 procedureType={recruitmentData.procedureType}
               />
             </div>
 
             {(type === "GENERAL" ||
               (type === "PREVIEW" && isMdUp) ||
-              type !== "APPLYING") && (
-              <div className="fixed bottom-0 left-0 right-0 md:static mt-10">
-                <div className="bg-background px-4 pt-2 pb-6 md:px-0 md:pt-0 md:pb-0">
-                  <RecruitmentBottomBar
-                    recruitmentData={recruitmentData}
-                    isMyBookmark={recruitmentData.isMyRecruitmentScrap}
-                    bookmarks={recruitmentData.recruitmentBookmarks}
-                    endDate={recruitmentData.endDate}
-                    isMyApply={recruitmentData.isMyApply}
-                    type={type}
-                  />
+              type !== "APPLYING") &&
+              applyFormData && (
+                <div className="fixed bottom-0 left-0 right-0 md:static mt-10">
+                  <div className="bg-background px-4 pt-2 pb-6 md:px-0 md:pt-0 md:pb-0">
+                    <RecruitmentBottomBar
+                      recruitmentData={recruitmentData}
+                      clubData={clubData}
+                      applyFormData={applyFormData}
+                      myRecentApplyTempId={applyTempId}
+                      handleApplyTempId={handleApplyTempId}
+                      bookmarks={bookmarks}
+                      isMyApply={isMyApply}
+                      type={type}
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
             <div className="h-5" />
             {type !== "APPLYING" && (
               <div className="hidden md:flex">

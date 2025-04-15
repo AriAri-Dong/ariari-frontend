@@ -1,5 +1,7 @@
 "use client";
 
+import formatDateToDot from "@/utils/formatDateToDot";
+
 interface RecruitmentSummaryProps {
   members: number;
   startDate: string;
@@ -42,7 +44,7 @@ const RecruitmentSummary = ({
           모집 기간
         </p>
         <p className="text-mobile_body2_r md:text-body1_m">
-          {startDate} ~ {endDate}
+          {formatDateToDot(startDate)} ~ {formatDateToDot(endDate)}
         </p>
       </div>
     </div>

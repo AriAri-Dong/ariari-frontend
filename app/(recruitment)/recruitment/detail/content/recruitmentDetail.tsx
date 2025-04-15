@@ -7,7 +7,11 @@ import ClubInfo from "./clubInfo";
 import ClubActivities from "./clubActivities";
 
 import { ClubInfoCard } from "@/types/components/card";
-import { RecruitmentData, RecruitmentNoteData } from "@/types/recruitment";
+import {
+  RecruitmentData,
+  RecruitmentNoteData,
+  RecruitmentResponse,
+} from "@/types/recruitment";
 import { transformRecruitmentToMainCard } from "../util/transformRecruitmentToMainCard";
 
 import {
@@ -27,16 +31,8 @@ const RecruitmentDetail = () => {
   const [prevRecruitmentList, setPrevRecruitmentList] = useState<
     RecruitmentData[]
   >([]);
-  // 변환된 모집 정보 정보
-  const [recruitmentData, setRecruitmentData] = useState<ClubInfoCard | null>(
-    null
-  );
-  // 활동 내용
-  const [body, setBody] = useState<string>("");
-  // 추가 질문 정보
-  const [recruitmentNoteDataList, setRecruitmentNoteDataList] = useState<
-    RecruitmentNoteData[] | null
-  >(null);
+  // 모집상세
+  const [recruitmentData, setRecruitmentData] = useState<RecruitmentResponse>();
 
   const [loading, setLoading] = useState(true);
   const [errorMsg, setError] = useState<string | null>(null);
@@ -46,12 +42,7 @@ const RecruitmentDetail = () => {
       getRecruitmentDetail(recruitmentId)
         .then((res) => {
           setLoading(true);
-          setRecruitmentData(null);
-          setClubId(res.clubData.id);
-          setBody(res.recruitmentData.body);
-          const parsedData = transformRecruitmentToMainCard(res!);
-          setRecruitmentData(parsedData);
-          setRecruitmentNoteDataList(res!.recruitmentNoteDataList);
+          setRecruitmentData(res);
           setError(null);
         })
         .catch((err) => {
@@ -86,11 +77,18 @@ const RecruitmentDetail = () => {
   }
   return (
     <>
-      <ClubInfo recruitmentData={recruitmentData} />
+      <ClubInfo
+        recruitmentData={recruitmentData.recruitmentData}
+        clubData={recruitmentData.clubData}
+        applyFormData={recruitmentData.applyFormData}
+        isMyApply={recruitmentData.isMyApply}
+        bookmarks={recruitmentData.bookmarks}
+        myRecentApplyTempId={recruitmentData.myRecentApplyTempId}
+      />
       <ClubActivities
         recruitmentId={recruitmentId}
-        body={body}
-        recruitmentNoteDataList={recruitmentNoteDataList}
+        body={recruitmentData.recruitmentData.body}
+        recruitmentNoteDataList={recruitmentData.recruitmentNoteDataList}
         prevRecruitmentList={prevRecruitmentList || []}
       />
     </>

@@ -42,6 +42,7 @@ export interface ClubInfoCard {
   isMyApply: boolean;
   isMyClubBookmark: boolean;
   applyFormData?: ApplyFormData;
+  myRecentApplyTempId?: string;
 }
 
 export interface GuideData {
