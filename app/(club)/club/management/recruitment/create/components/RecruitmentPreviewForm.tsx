@@ -160,6 +160,7 @@ const RecruitmentPreviewForm = ({
               applyFormData={null}
               isMyApply={false}
               bookmarks={0}
+              type="PREVIEW"
             />
           </div>
           <div className="bg-sub_bg md:px-[60px] md:pt-[30px] lg:px-[100px] lg:pt-[50px] ">

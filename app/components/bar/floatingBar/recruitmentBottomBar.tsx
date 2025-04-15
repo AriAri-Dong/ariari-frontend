@@ -25,7 +25,7 @@ import ApplicationFormBottomSheet from "@/components/bottomSheet/applicationForm
 interface RecruitmentBottomBar {
   recruitmentData: RecruitmentData;
   clubData: ClubData;
-  applyFormData: ApplyFormData;
+  applyFormData: ApplyFormData | null;
   myRecentApplyTempId?: string | null;
   handleApplyTempId?: (tempId: string | null) => void;
   isMyApply: boolean;

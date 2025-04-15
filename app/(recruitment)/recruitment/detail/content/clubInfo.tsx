@@ -223,23 +223,22 @@ const ClubInfo = ({
 
             {(type === "GENERAL" ||
               (type === "PREVIEW" && isMdUp) ||
-              type !== "APPLYING") &&
-              applyFormData && (
-                <div className="fixed bottom-0 left-0 right-0 md:static mt-10">
-                  <div className="bg-background px-4 pt-2 pb-6 md:px-0 md:pt-0 md:pb-0">
-                    <RecruitmentBottomBar
-                      recruitmentData={recruitmentData}
-                      clubData={clubData}
-                      applyFormData={applyFormData}
-                      myRecentApplyTempId={applyTempId}
-                      handleApplyTempId={handleApplyTempId}
-                      bookmarks={bookmarks}
-                      isMyApply={isMyApply}
-                      type={type}
-                    />
-                  </div>
+              type !== "APPLYING") && (
+              <div className="fixed bottom-0 left-0 right-0 md:static mt-10">
+                <div className="bg-background px-4 pt-2 pb-6 md:px-0 md:pt-0 md:pb-0">
+                  <RecruitmentBottomBar
+                    recruitmentData={recruitmentData}
+                    clubData={clubData}
+                    applyFormData={applyFormData}
+                    myRecentApplyTempId={applyTempId}
+                    handleApplyTempId={handleApplyTempId}
+                    bookmarks={bookmarks}
+                    isMyApply={isMyApply}
+                    type={type}
+                  />
                 </div>
-              )}
+              </div>
+            )}
             <div className="h-5" />
             {type !== "APPLYING" && (
               <div className="hidden md:flex">
