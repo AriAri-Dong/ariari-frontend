@@ -193,6 +193,19 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
     }
   };
 
+  const refreshPostDetail = async () => {
+    try {
+      const detailRes = await getClubActivityDetail(post.clubActivityId);
+      if (detailRes) {
+        setPost(detailRes as ClubActivity);
+        setComments(detailRes.comments || []);
+      }
+    } catch (e) {
+      console.error("게시글 정보 갱신 실패", e);
+      setAlertMessage("게시글 정보를 불러오는데 실패했어요.");
+    }
+  };
+
   return (
     <div className="bg-background p-[14px] pb-4 rounded-12 md:p-6 md:pb-[26px]">
       <div className="flex justify-between">
@@ -369,6 +382,8 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
                 clubActivityId={post.clubActivityId}
                 role={role}
                 nickname={nickname}
+                onEditSuccess={refreshPostDetail}
+                onDeleteSuccess={refreshPostDetail}
               />
             ))
           ) : (
