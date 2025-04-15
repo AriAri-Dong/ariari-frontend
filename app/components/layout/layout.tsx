@@ -21,14 +21,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/management/members",
   ];
   const bgPaths = ["/application", "/help"];
-  const mobileBgPaths = [
-    "/club/create",
-    "/withdrawal",
-    "/club/close",
-    "/terms",
-   ]
   // md 이상만 bg 적용하는 path
   const mobileBgPaths = [
+    "/terms",
     "/user/club/create",
     "/user/userInfo",
     "/withdrawal",
