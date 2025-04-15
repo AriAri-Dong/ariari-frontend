@@ -170,7 +170,7 @@ const ClubInfo = ({
                 <RecruitmentSummary
                   members={recruitmentData.limits}
                   startDate={recruitmentData.startDateTime}
-                  endDate={recruitmentData.startDateTime}
+                  endDate={recruitmentData.endDateTime}
                   procedureType={recruitmentData.procedureType}
                 />
               </div>
@@ -216,7 +216,7 @@ const ClubInfo = ({
               <RecruitmentSummary
                 members={recruitmentData.limits}
                 startDate={recruitmentData.startDateTime}
-                endDate={recruitmentData.startDateTime}
+                endDate={recruitmentData.endDateTime}
                 procedureType={recruitmentData.procedureType}
               />
             </div>
