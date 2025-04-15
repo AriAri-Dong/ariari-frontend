@@ -86,6 +86,7 @@ const RecruitmentDetail = () => {
         myRecentApplyTempId={recruitmentData.myRecentApplyTempId}
       />
       <ClubActivities
+        clubId={clubId}
         recruitmentId={recruitmentId}
         body={recruitmentData.recruitmentData.body}
         recruitmentNoteDataList={recruitmentData.recruitmentNoteDataList}

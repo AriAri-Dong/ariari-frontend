@@ -33,7 +33,7 @@ export const ACTIVITY_REVIEWS = [
     date: "2025.12.31",
     username: "아리아리",
     detail: "아리아리 활동 후기 상세 내용",
-    badgeType: ["selfDevelopment", "relationship", "skill"],
+    badgeType: ["CAREER_PREPARATION", "NETWORKING", "INTEREST_EXPLORATION"],
   },
   {
     id: 1,
@@ -41,7 +41,7 @@ export const ACTIVITY_REVIEWS = [
     date: "2025.01.15",
     username: "떵개에요",
     detail: "진차 완전 별로 진짜 최악 웩 웩에ㅔ에게ㅔㄱㄱ",
-    badgeType: ["employment", "experience", "health"],
+    badgeType: ["CAREER_PREPARATION", "NETWORKING", "INTEREST_EXPLORATION"],
   },
   {
     id: 2,
@@ -49,7 +49,11 @@ export const ACTIVITY_REVIEWS = [
     date: "2025.07.20",
     username: "수여니",
     detail: "룰루랄라룰라랄",
-    badgeType: ["employment", "interest", "health"],
+    badgeType: [
+      "ACADEMIC_IMPROVEMENT",
+      "INTEREST_EXPLORATION",
+      "CAREER_PREPARATION",
+    ],
   },
   {
     id: 3,
@@ -59,11 +63,11 @@ export const ACTIVITY_REVIEWS = [
     detail:
       "아리아리 활동 후기 상세 내용 아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용",
     badgeType: [
-      "employment",
-      "relationship",
-      "health",
-      "interest",
-      "experience",
+      "CAREER_PREPARATION",
+      "NETWORKING",
+      "ACADEMIC_IMPROVEMENT",
+      "HEALTH_ENHANCEMENT",
+      "DIVERSE_EXPERIENCE",
     ],
   },
   {
@@ -72,7 +76,11 @@ export const ACTIVITY_REVIEWS = [
     date: "2025.03.04",
     username: "생생정보통 ",
     detail: "아리아리 활동 후기 상세 내용",
-    badgeType: ["interest", "experience", "health"],
+    badgeType: [
+      "CAREER_PREPARATION",
+      "expNETWORKINGrience",
+      "ACADEMIC_IMPROVEMENT",
+    ],
   },
 ];
 

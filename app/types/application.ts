@@ -26,14 +26,12 @@ export interface ApplyTempData {
   createdDateTime: string;
   recruitmentTitle: string;
   clubName: string;
-  recruitmentId: string;
 }
 
 export interface ApplyTempListRes {
   applyDataList: ApplyTempData[];
   pageInfo: PageInfo;
 }
-
 export type ApplicationKeys =
   | "gender"
   | "birthday"

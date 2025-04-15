@@ -1,32 +1,34 @@
 import React, { useState } from "react";
 import ReviewBadgeList from "./reviewBadgeList";
+import { TagData, TagIconType } from "@/types/review";
+import { tagMap } from "@/utils/tagMapping";
 
 export interface ReviewBadgeListProps {
-  REVIEW_BADGE_LIST: { id: number; title: string; imageUrl: string }[];
-  selectedBadges: number[];
-  onBadgeSelect: (id: number) => void;
+  tags: TagData[];
+  selectedTags: TagIconType[];
+  onTagSelect: (tagIcon: TagIconType) => void;
   className?: string;
 }
 
 const ReviewBadgeContainer = ({
-  REVIEW_BADGE_LIST,
-  selectedBadges,
-  onBadgeSelect,
+  tags,
+  selectedTags,
+  onTagSelect,
   className,
 }: ReviewBadgeListProps) => {
-  const handleSelectedBadge = (id: number) => {
-    onBadgeSelect(id);
+  const handleSelectedTag = (tagIcon: TagIconType) => {
+    onTagSelect(tagIcon);
   };
 
   return (
     <div className={`flex flex-wrap gap-2.5 md:gap-4 ${className}`}>
-      {REVIEW_BADGE_LIST.map((item) => (
+      {tags.map((item) => (
         <ReviewBadgeList
           key={item.id}
-          title={item.title}
-          imageUrl={item.imageUrl}
-          isSelected={selectedBadges.includes(item.id)}
-          onClick={() => handleSelectedBadge(item.id)}
+          title={item.body}
+          imageUrl={tagMap[item.icon]}
+          isSelected={selectedTags.includes(item.icon)}
+          onClick={() => handleSelectedTag(item.icon)}
         />
       ))}
     </div>
