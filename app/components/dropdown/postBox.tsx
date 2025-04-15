@@ -313,10 +313,30 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
       <div className="flex justify-end items-center gap-4 mt-4 md:mt-6">
         <CommentInput
           onSend={async (text) => {
-            await createClubActivityComment({
-              clubActivityId: post.clubActivityId,
-              body: text,
-            });
+            try {
+              await createClubActivityComment({
+                clubActivityId: post.clubActivityId,
+                body: text,
+              });
+
+              const updatedDetail = await getClubActivityDetail(
+                post.clubActivityId
+              );
+
+              if (updatedDetail && Array.isArray(updatedDetail.comments)) {
+                const comments = updatedDetail.comments;
+                setComments(comments);
+                setPost((prev) => ({
+                  ...prev,
+                  commentCount: comments.length,
+                }));
+              }
+
+              setAlertMessage("댓글이 등록되었어요.");
+            } catch (e) {
+              console.error(e);
+              setAlertMessage("댓글 등록에 실패했어요.");
+            }
           }}
         />
 
