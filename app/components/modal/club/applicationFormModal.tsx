@@ -12,32 +12,48 @@ import {
   ApplyQuestionData,
   SpecialQuestionList,
 } from "@/types/application";
-import { ClubInfoCard } from "@/types/components/card";
 import TransparentSmallBtn from "@/components/button/basicBtn/transparentSmallBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import {
   getApplicationTemp,
   postApplication,
   postApplicationTemp,
+  putApplicationTemp,
 } from "@/api/apply/api";
 import Alert from "@/components/alert/alert";
 import { useRouter } from "next/navigation";
 import { APPLICATION_DISPLAY_INFO } from "@/data/application";
+import { RecruitmentData } from "@/types/recruitment";
+import { ClubData } from "@/types/club";
 
-interface ModalProps {
-  recruitmentData: ClubInfoCard;
+export interface ApplicationFormModalProps {
+  recruitmentData: RecruitmentData;
+  clubData: ClubData;
   applyFormData: ApplyFormData;
+  bookmarks: number;
+  isMyApply: boolean;
+  myRecentApplyTempId?: string | null;
+  handleApplyTempId?: (tempId: string) => void;
   onClose: () => void;
 }
 
 const ApplicationFormModal = ({
   recruitmentData,
+  clubData,
   applyFormData,
+  bookmarks,
+  isMyApply,
+  myRecentApplyTempId,
+  handleApplyTempId,
   onClose,
-}: ModalProps) => {
+}: ApplicationFormModalProps) => {
   const router = useRouter();
   const nickname = useUserStore((state) => state.memberData.nickname);
   const profileType = useUserStore((state) => state.memberData.profileType);
+
+  const [recentApplyTempId, setRecentApplyTempId] = useState<string | null>(
+    myRecentApplyTempId || null
+  );
 
   // 렌더링할 필드 관련 상태
   const [specialQuestionList, setSpecialQuestionList] =
@@ -56,7 +72,7 @@ const ApplicationFormModal = ({
   const [name, setName] = useState<string>("");
   const [fileName, setFileName] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [url, setUrl] = useState<string>("");
+  const [url, setUrl] = useState<string | null>(null);
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
@@ -85,6 +101,7 @@ const ApplicationFormModal = ({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setFile(file);
       setFileName(file.name);
     }
   };
@@ -115,26 +132,6 @@ const ApplicationFormModal = ({
       Object.entries(specialQuestionList).forEach(([key, applyQuestionId]) => {
         if (!applyQuestionId) return;
 
-        // 지원하기인 경우만 유효성 검사
-        if (type == "APPLY") {
-          if (
-            !inputValues ||
-            !(key in inputValues) ||
-            !inputValues[key as ApplicationKeys]
-          ) {
-            setAlertMessage(
-              `${
-                APPLICATION_DISPLAY_INFO[key as ApplicationKeys]
-              } 항목을 입력해주세요`
-            );
-            throw new Error(
-              `${
-                APPLICATION_DISPLAY_INFO[key as ApplicationKeys]
-              } 항목을 입력해주세요.`
-            );
-          }
-        }
-
         if (inputValues[key as ApplicationKeys])
           applyAnswers.push({
             applyQuestionId,
@@ -142,13 +139,9 @@ const ApplicationFormModal = ({
           });
       });
     }
-    // 추가 항목 유효성 검사
+    // 추가 항목
     if (documentQuestions) {
       Object.entries(documentQuestions).forEach(([id, item]) => {
-        if (type == "APPLY" && !answers[item.id]) {
-          setAlertMessage(`모든 항목에 대한 답변을 입력해주세요.`);
-          throw new Error(`모든 항목에 대한 답변을 입력해주세요.`);
-        }
         if (answers[item.id])
           applyAnswers.push({
             applyQuestionId: item.id,
@@ -166,7 +159,7 @@ const ApplicationFormModal = ({
     const formData = new FormData();
 
     formData.append(
-      "saveReq",
+      recentApplyTempId && type === "APPLY_TEMP" ? "modifyReq" : "saveReq",
       new Blob([JSON.stringify(saveReq)], { type: "application/json" })
     );
 
@@ -180,7 +173,7 @@ const ApplicationFormModal = ({
   const handelSubmit = (type: "APPLY" | "APPLY_TEMP") => {
     try {
       const formData = createApplySaveReq(type);
-
+      // 지원
       if (type === "APPLY") {
         postApplication(recruitmentData.id, formData).then((res) => {
           if (res === 200) {
@@ -191,16 +184,32 @@ const ApplicationFormModal = ({
           }
         });
       } else {
-        postApplicationTemp(recruitmentData.id, formData).then((res) => {
-          if (res === 200) {
-            setAlertMessage("임시 저장되었습니다.");
-          } else {
-            setAlertMessage("문제가 발생했습니다.");
-          }
-        });
+        // 임시지원 수정
+        if (recentApplyTempId) {
+          putApplicationTemp(recentApplyTempId, formData).then((res) => {
+            if (res === 200) {
+              setAlertMessage("임시 저장되었습니다.");
+            } else {
+              setAlertMessage("문제가 발생했습니다.");
+            }
+          });
+          // 임시지원 생성
+        } else {
+          postApplicationTemp(recruitmentData.id, formData).then((res) => {
+            if (res) {
+              setAlertMessage("임시 저장되었습니다.");
+              setRecentApplyTempId(res);
+              if (handleApplyTempId) {
+                handleApplyTempId(res);
+              }
+            } else {
+              setAlertMessage("문제가 발생했습니다.");
+            }
+          });
+        }
       }
     } catch (error) {
-      console.error("Error creating applySaveReqData:", error);
+      console.error("applySaveReqData 생성 오류", error);
     }
   };
   useEffect(() => {
@@ -227,22 +236,45 @@ const ApplicationFormModal = ({
   }, [applyFormData]);
 
   useEffect(() => {
-    const tempId = "699069517447029346";
-    getApplicationTemp(tempId).then((res) => {
-      setName(res.applyData.name);
-      setUrl(res.portfolioUrl);
-      setInputValues(res.specialAnswerList);
+    if (myRecentApplyTempId)
+      getApplicationTemp(myRecentApplyTempId).then(async (res) => {
+        setName(res.applyData.name);
+        if (res.portfolioUrl && res.portfolioUrl !== "") {
+          setUrl(res.portfolioUrl);
+        }
+        setInputValues(res.specialAnswerList);
 
-      const answerMap: Record<string, string> = {};
-      res.applyAnswerDataList.forEach((answer) => {
-        const questionId = answer.applyQuestionData.id;
-        const body = answer.body;
-        answerMap[questionId] = body;
+        const answerMap: Record<string, string> = {};
+        res.applyAnswerDataList.forEach((answer) => {
+          const questionId = answer.applyQuestionData.id;
+          const body = answer.body;
+          answerMap[questionId] = body;
+        });
+
+        setAnswers(answerMap);
+
+        if (res.fileUri) {
+          try {
+            const response = await fetch(res.fileUri);
+            const blob = await response.blob();
+
+            const rawFileName = res.fileUri.split("/").pop() || "portfolio.pdf";
+
+            const fileName =
+              rawFileName.split("_applyTemp_")[1] || "portfolio.pdf";
+
+            const fileFromUrl = new File([blob], fileName, {
+              type: blob.type || "application/pdf",
+            });
+
+            setFile(fileFromUrl);
+            setFileName(fileName);
+          } catch (err) {
+            console.error("파일 객체 변환 실패", err);
+          }
+        }
       });
-
-      setAnswers(answerMap);
-    });
-  }, []);
+  }, [myRecentApplyTempId]);
 
   return (
     <div
@@ -273,23 +305,34 @@ const ApplicationFormModal = ({
       </div>
       <div className="bg-white w-[900px] max-h-[75vh] rounded-2xl shadow-modal flex flex-col p-6">
         <div className="custom-scrollbar overflow-y-auto">
-          <ClubInfo recruitmentData={recruitmentData} type="APPLYING" />
-          <ApplicationFieldForm
-            selectedFields={selectedFields}
-            portfolioCollected={portfolioCollected}
-            documentQuestions={documentQuestions}
-            name={name}
-            setName={setName}
-            fileName={fileName}
-            handleFileChange={handleFileChange}
-            handleRemoveFile={handleRemoveFile}
-            answers={answers}
-            handleAnswerChange={handleAnswerChange}
-            url={url}
-            setUrl={setUrl}
-            inputValues={inputValues}
-            handleInputChange={handleInputChange}
-          />
+          <div className="pb-2 border-b border-menuborder">
+            <ClubInfo
+              recruitmentData={recruitmentData}
+              type="APPLYING"
+              clubData={clubData}
+              applyFormData={applyFormData}
+              isMyApply={isMyApply}
+              bookmarks={bookmarks}
+            />
+          </div>
+          <div className="pt-[48px]">
+            <ApplicationFieldForm
+              selectedFields={selectedFields}
+              portfolioCollected={portfolioCollected}
+              documentQuestions={documentQuestions}
+              name={name}
+              setName={setName}
+              fileName={fileName}
+              handleFileChange={handleFileChange}
+              handleRemoveFile={handleRemoveFile}
+              answers={answers}
+              handleAnswerChange={handleAnswerChange}
+              url={url}
+              setUrl={setUrl}
+              inputValues={inputValues}
+              handleInputChange={handleInputChange}
+            />
+          </div>
           <div className="flex gap-4 justify-center mt-[42px]">
             <TransparentSmallBtn
               title={"임시저장"}
