@@ -74,7 +74,7 @@ export const mapActivityFromApi = (api: ClubActivityApi): ClubActivity => ({
   clubMember: {
     id: String(api.creatorId),
     name: api.creatorName,
-    profileType: "DEFAULT",
+    profileType: "",
     clubMemberRoleType: "GENERAL",
     clubMemberStatusType: "ACTIVE",
     memberData: null,
@@ -133,7 +133,7 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
         clubMember: {
           id: String(parent.creatorId),
           name: parent.creatorName,
-          profileType: "DEFAULT",
+          profileType: "",
           clubMemberRoleType: "GENERAL",
           clubMemberStatusType: "ACTIVE",
           memberData: null,
@@ -150,7 +150,7 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
             clubMember: {
               id: String(child.creatorId),
               name: child.creatorName,
-              profileType: "DEFAULT",
+              profileType: "",
               clubMemberRoleType: "GENERAL",
               clubMemberStatusType: "ACTIVE",
               memberData: null,
