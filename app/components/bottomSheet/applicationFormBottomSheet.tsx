@@ -300,7 +300,7 @@ const ApplicationFormBottomSheet = ({
         <div className="h-[1px] bg-menuborder" />
 
         {/* 스크롤 가능한 내용 영역 */}
-        <div className="flex-1 overflow-y-auto pt-[22px]">
+        <div className="flex-1 overflow-y-auto pt-[22px] mb-[14px]">
           <ApplicationFieldFormMobile
             selectedFields={selectedFields}
             portfolioCollected={portfolioCollected}
@@ -319,7 +319,7 @@ const ApplicationFormBottomSheet = ({
           />
         </div>
         {/* 고정 버튼 영역 */}
-        <div className="pb-6 pt-[6px] flex gap-5">
+        <div className="pb-6 pt-[6px] flex gap-2">
           <TransparentLargeBtn
             title={"임시저장"}
             onClick={() => handelSubmit("APPLY_TEMP")}
