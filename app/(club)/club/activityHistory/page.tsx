@@ -30,10 +30,6 @@ const ActivityHistoryPage = () => {
 
   const { role, clubInfo } = useClubContext();
 
-  console.log("role >>>", role);
-  console.log("활동 내역 >>>", activities);
-  console.log("닉네임 000 >>>", clubInfo?.clubMemberData.memberData.nickname);
-
   const handleRouter = () => {
     router.push(`/club/recruitment/clubId=${clubInfo?.clubData.id}`);
   };
