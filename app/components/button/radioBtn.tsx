@@ -28,7 +28,8 @@ const RadioBtn = ({
 }: RadioButtonProps) => {
   return (
     <div
-      className={`flex items-center gap-1 md:gap-[6px] cursor-pointer py-1 pr-[6px]  text-body3_m md:text-body1_m ${className}`}
+      className={`flex items-center gap-1 cursor-pointer p-2 pr-3 text-body3_m 
+        md:gap-[10px] md:p-2.5 md:pr-4 md:text-body1_m ${className}`}
       onClick={onClick}
     >
       <Image
