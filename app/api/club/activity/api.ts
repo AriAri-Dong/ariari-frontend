@@ -1,4 +1,9 @@
-import { CLUB_ACTIVITY, CLUB_ACTIVITY_COMMENT } from "@/api/apiUrl";
+import {
+  CLUB_ACTIVITY,
+  CLUB_ACTIVITY_COMMENT,
+  CLUB_ACTIVITY_COMMENT_LICK,
+  CLUB_ACTIVITY_LIKE,
+} from "@/api/apiUrl";
 import axiosInstance from "@/api/axiosInstance";
 import { Pageable } from "@/types/api";
 import {
@@ -188,4 +193,30 @@ export const deleteClubActivityComment = async ({
       commentId,
     },
   });
+};
+
+// 활동 내역 좋아요 추가/취소
+export const toggleClubActivityLike = async (
+  clubActivityId: string
+): Promise<void> => {
+  await axiosInstance.post(`${CLUB_ACTIVITY_LIKE}/${clubActivityId}`);
+};
+
+// 활동 내역 댓글 좋아요 추가/취소
+export const toggleClubActivityCommentLike = async ({
+  clubActivityId,
+  commentId,
+}: {
+  clubActivityId: string;
+  commentId: string;
+}): Promise<void> => {
+  await axiosInstance.post(
+    `${CLUB_ACTIVITY_COMMENT_LICK}/${clubActivityId}`,
+    null,
+    {
+      params: {
+        commentId,
+      },
+    }
+  );
 };
