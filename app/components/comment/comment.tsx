@@ -17,7 +17,10 @@ import {
   formatKoreanDateOnly,
   formatKoreanTimeOnly,
 } from "@/utils/dateFormatter";
-import { createClubActivityComment } from "@/api/club/activity/api";
+import {
+  createClubActivityComment,
+  toggleClubActivityCommentLike,
+} from "@/api/club/activity/api";
 
 type CommentBaseProps = {
   isReply: boolean;
@@ -61,10 +64,23 @@ const Comment = (props: CommentBaseProps) => {
     isReplying ? new Date().toISOString() : comment?.createdDateTime || ""
   );
 
-  const handleLike = () => {
-    if (!isReplying) {
-      setMyLike(!myLike);
-      setLikes((prev) => (myLike ? prev - 1 : prev + 1));
+  const handleLike = async () => {
+    if (!isReplying && comment) {
+      const prevMyLike = myLike;
+      setMyLike(!prevMyLike);
+      setLikes((prev) => (prevMyLike ? prev - 1 : prev + 1));
+
+      try {
+        await toggleClubActivityCommentLike({
+          clubActivityId: props.clubActivityId,
+          commentId: comment.clubActivityCommentId,
+        });
+      } catch (error) {
+        console.error("댓글 좋아요 토글 실패:", error);
+        setMyLike(prevMyLike);
+        setLikes((prev) => (prevMyLike ? prev + 1 : prev - 1));
+        setAlertMessage("좋아요 처리 중 오류가 발생했어요.");
+      }
     }
   };
 
@@ -135,9 +151,10 @@ const Comment = (props: CommentBaseProps) => {
               </span>
             </div>
           </div>
-          {!isReplying && comment?.comments?.length !== undefined && (
+          {!isReplying && comment && (
             <div className="flex gap-0.5 md:gap-2 items-center">
-              {!isReply && !isReplying && (
+              {/* 댓글에만 답글 버튼 표시 (대댓글에는 X) */}
+              {!isReply && (
                 <IconBtn
                   type="reply"
                   size="large"
@@ -145,35 +162,17 @@ const Comment = (props: CommentBaseProps) => {
                   onClick={() => setIsReplyFormOpen((prev) => !prev)}
                 />
               )}
+
+              {/* 좋아요 버튼 (댓글/대댓글 모두 표시) */}
               <IconBtn
                 type={myLike ? "like_active" : "like_inactive"}
                 size="large"
                 title={likes.toString()}
                 onClick={handleLike}
               />
-              {isMdUp ? (
-                <div ref={menuRef} className="relative inline-block">
-                  <Image
-                    src={dotMenu}
-                    alt="menu"
-                    width={24}
-                    height={24}
-                    className="cursor-pointer"
-                    onClick={handleMenuClick}
-                  />
-                  {isOptionOpen && (
-                    <SingleSelectOptions
-                      selectedOption=""
-                      optionData={
-                        comment.isMine ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE
-                      }
-                      size="small"
-                      position="end"
-                      handleMenuClick={handleOptionClick}
-                    />
-                  )}
-                </div>
-              ) : (
+
+              {/* 도트 메뉴 (댓글/대댓글 모두 표시) */}
+              <div ref={menuRef} className="relative inline-block">
                 <Image
                   src={dotMenu}
                   alt="menu"
@@ -182,7 +181,18 @@ const Comment = (props: CommentBaseProps) => {
                   className="cursor-pointer"
                   onClick={handleMenuClick}
                 />
-              )}
+                {isOptionOpen && isMdUp && (
+                  <SingleSelectOptions
+                    selectedOption=""
+                    optionData={
+                      comment.isMine ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE
+                    }
+                    size="small"
+                    position="end"
+                    handleMenuClick={handleOptionClick}
+                  />
+                )}
+              </div>
             </div>
           )}
         </div>
