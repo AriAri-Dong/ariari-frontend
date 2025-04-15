@@ -1,9 +1,9 @@
 import { AxiosError } from "axios";
 import { APPLY_MY, APPLY_TEMPS_MY } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
-import {
-  
+
 import { IdResponse } from "@/types/api";
+import {
   ApplyFormData,
   ApplyFormRes,
   ApplyListRes,
