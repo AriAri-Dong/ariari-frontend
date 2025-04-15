@@ -18,9 +18,13 @@ import {
   formatKoreanTimeOnly,
 } from "@/utils/dateFormatter";
 import {
+  blockClubActivityCommentUser,
   createClubActivityComment,
+  deleteClubActivityComment,
   toggleClubActivityCommentLike,
+  updateClubActivityComment,
 } from "@/api/club/activity/api";
+import { authStore } from "@/stores/userStore";
 
 type CommentBaseProps = {
   isReply: boolean;
@@ -36,19 +40,23 @@ type CommentBaseProps = {
   nickname?: string;
   isReplying: boolean;
   comment?: ClubActivityComment;
+  onDeleteSuccess?: () => void;
+  onEditSuccess?: () => void;
 };
 
 const Comment = (props: CommentBaseProps) => {
   const { isReplying, isReply } = props;
   const comment = props.comment;
+  const { memberData } = authStore.getState();
+  const myId = memberData?.memberId;
 
   const menuRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
-  const [isOptionOpen, setIsOptionOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
+  const [isOptionOpen, setIsOptionOpen] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isReplyFormOpen, setIsReplyFormOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [isReportOpen, setIsReportOpen] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
 
   const [likes, setLikes] = useState<number>(
     !isReplying && comment ? comment.likes : 0
@@ -63,6 +71,9 @@ const Comment = (props: CommentBaseProps) => {
   const time = formatKoreanTimeOnly(
     isReplying ? new Date().toISOString() : comment?.createdDateTime || ""
   );
+
+  const menuOptions =
+    comment?.clubMember?.id === myId ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE;
 
   const handleLike = async () => {
     if (!isReplying && comment) {
@@ -88,28 +99,35 @@ const Comment = (props: CommentBaseProps) => {
     setIsOptionOpen(!isOptionOpen);
   };
 
-  const handleOptionClick = (label: string) => {
-    if (label === "수정하기") {
-      setIsEditing(true);
-    } else if (label === "삭제하기") {
-      // 삭제
-      handleDelete();
-    } else if (label === "신고하기") {
-      setIsReportOpen(true);
-    } else if (label === "차단하기") {
-      setAlertMessage("차단되었습니다");
+  const handleOptionClick = async (label: string) => {
+    try {
+      if (label === "수정하기") {
+        setIsEditing(true);
+      } else if (label === "삭제하기" && comment) {
+        await deleteClubActivityComment({
+          clubActivityId: props.clubActivityId,
+          commentId: comment.clubActivityCommentId,
+        });
+        setAlertMessage("댓글이 삭제되었습니다.");
+        props.onDeleteSuccess?.();
+      } else if (label === "신고하기") {
+        setIsReportOpen(true);
+      } else if (label === "차단하기" && comment) {
+        await blockClubActivityCommentUser({
+          commentId: comment.clubActivityCommentId,
+        });
+        setAlertMessage("해당 사용자가 차단되었습니다.");
+      }
+    } catch (error) {
+      console.error("옵션 처리 중 오류:", error);
+      setAlertMessage(
+        "요청 처리 중 오류가 발생했어요. <br/> 잠시후 다시 시도해주세요."
+      );
+    } finally {
+      setIsOptionOpen(false);
     }
-    setIsOptionOpen(false);
   };
 
-  const handleReportSubmit = () => {
-    setIsReportOpen(false);
-    setAlertMessage("신고가 정상적으로 접수되었습니다.");
-  };
-
-  const handleDelete = () => {
-    setAlertMessage("삭제되었습니다");
-  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -184,9 +202,7 @@ const Comment = (props: CommentBaseProps) => {
                 {isOptionOpen && isMdUp && (
                   <SingleSelectOptions
                     selectedOption=""
-                    optionData={
-                      comment.isMine ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE
-                    }
+                    optionData={menuOptions}
                     size="small"
                     position="end"
                     handleMenuClick={handleOptionClick}
@@ -208,14 +224,30 @@ const Comment = (props: CommentBaseProps) => {
                     body: text,
                     parentCommentId: comment.clubActivityCommentId,
                   });
-                  setAlertMessage("답글이 등록되었어요.");
+                  setAlertMessage("답글이 등록되었습니다..");
                   setIsReplyFormOpen(false);
                 } catch (error) {
                   console.error(error);
-                  setAlertMessage("답글 등록에 실패했어요.");
+                  setAlertMessage(
+                    "답글 등록에 실패했어요. </br> 잠시후 다시 시도해주세요."
+                  );
                 }
-              } else {
-                setIsEditing(false);
+              } else if (isEditing && comment) {
+                try {
+                  await updateClubActivityComment({
+                    clubActivityId: props.clubActivityId,
+                    commentId: comment.clubActivityCommentId,
+                    body: text,
+                  });
+                  setAlertMessage("댓글이 수정되었어요.");
+                  props.onEditSuccess?.();
+                  setIsEditing(false);
+                } catch (error) {
+                  console.error(error);
+                  setAlertMessage(
+                    "댓글 수정에 실패했어요.</br> 잠시후 다시 시도해주세요."
+                  );
+                }
               }
             }}
           />
@@ -240,6 +272,8 @@ const Comment = (props: CommentBaseProps) => {
                   clubActivityId={props.clubActivityId}
                   role={props.role}
                   nickname={props.nickname}
+                  onEditSuccess={props.onEditSuccess}
+                  onDeleteSuccess={props.onDeleteSuccess}
                 />
               ))}
               {isReplyFormOpen && (
@@ -250,6 +284,8 @@ const Comment = (props: CommentBaseProps) => {
                   role={props.role}
                   nickname={props.nickname}
                   comment={comment}
+                  onEditSuccess={props.onEditSuccess}
+                  onDeleteSuccess={props.onDeleteSuccess}
                 />
               )}
             </div>
@@ -258,7 +294,7 @@ const Comment = (props: CommentBaseProps) => {
 
       {!isMdUp && !isReplying && comment && isOptionOpen && (
         <BottomSheet
-          optionData={comment.isMine ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE}
+          optionData={menuOptions}
           selectedOptions=""
           onClose={() => setIsOptionOpen(false)}
           handleMenuClick={handleOptionClick}
@@ -267,13 +303,23 @@ const Comment = (props: CommentBaseProps) => {
       {isReportOpen &&
         (isMdUp ? (
           <ReportModal
+            id={comment?.clubActivityCommentId}
+            reportTargetType="CLUB_ACTIVITY_COMMENT"
             onClose={() => setIsReportOpen(false)}
-            onSubmit={() => setIsReportOpen(false)}
+            onSubmit={() => {
+              setIsReportOpen(false);
+              setAlertMessage("신고가 정상적으로 접수되었습니다.");
+            }}
           />
         ) : (
           <ReportBottomSheet
+            id={comment?.clubActivityCommentId}
+            reportTargetType="CLUB_ACTIVITY_COMMENT"
             onClose={() => setIsReportOpen(false)}
-            onSubmit={() => setIsReportOpen(false)}
+            onSubmit={() => {
+              setIsReportOpen(false);
+              setAlertMessage("신고가 정상적으로 접수되었습니다.");
+            }}
           />
         ))}
       {alertMessage && (
