@@ -11,33 +11,49 @@ import DeleteBtn from "@/components/button/iconBtn/deleteBtn";
 import RadioBtn from "@/components/button/radioBtn";
 import CustomInput from "@/components/input/customInput";
 import PullDown from "@/components/pulldown/pullDown";
+import { ProcedureType } from "@/types/recruitment";
+import {
+  InterviewRatioType,
+  InterviewType,
+  PassReviewNote,
+  PassReviewSaveReq,
+} from "@/types/review";
+import {
+  getInterviewRatioLabel,
+  getInterviewRatioType,
+  getInterviewType,
+  getInterviewTypeLabel,
+} from "@/utils/reviewMapping";
 
 const AcceptanceReviewBottomSheet = ({
   onClose,
   onSubmit,
   className,
 }: AcceptanceReviewProps) => {
-  const [title, setTitle] = useState<string>("");
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const [interviewer, setInterviewer] = useState<string[]>([]);
-  const [intervieweStyle, setIntervieweStyle] = useState<string[]>([]);
+
+  const [title, setTitle] = useState<string>("");
+  const [procedureType, setProcedureType] = useState<ProcedureType | null>(
+    null
+  );
+  const [interviewType, setInterviewType] = useState<InterviewType | null>(
+    null
+  );
+  const [interviewRatioType, setInterviewerRatioType] =
+    useState<InterviewRatioType | null>(null);
+  const [interviewMood, setInterviewerMood] = useState<number | null>(null);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   // 문항과 질문 상태
-  const [documentQuestions, setDocumentQuestions] = useState<
-    { question: string; answer: string }[]
-  >([{ question: "", answer: "" }]);
+  const [documentQuestions, setDocumentQuestions] = useState<PassReviewNote[]>([
+    { title: "", body: "", noteType: "DOCUMENT" },
+  ]);
 
   const [interviewQuestions, setInterviewQuestions] = useState<
-    { question: string; answer: string }[]
-  >([{ question: "", answer: "" }]);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
+    PassReviewNote[]
+  >([]);
 
   const handleClose = () => {
-    setIsVisible(false);
     setTimeout(() => {
       onClose();
     }, 300);
@@ -49,7 +65,10 @@ const AcceptanceReviewBottomSheet = ({
 
   // 문항 추가 함수
   const addDocumentQuestion = () => {
-    setDocumentQuestions((prev) => [...prev, { question: "", answer: "" }]);
+    setDocumentQuestions((prev) => [
+      ...prev,
+      { title: "", body: "", noteType: "DOCUMENT" },
+    ]);
   };
 
   // 문항 삭제 함수
@@ -61,7 +80,10 @@ const AcceptanceReviewBottomSheet = ({
 
   // 면접 질문 추가 함수
   const addInterviewQuestion = () => {
-    setInterviewQuestions((prev) => [...prev, { question: "", answer: "" }]);
+    setInterviewQuestions((prev) => [
+      ...prev,
+      { title: "", body: "", noteType: "INTERVIEW" },
+    ]);
   };
 
   // 면접 질문 삭제 함수
@@ -74,7 +96,7 @@ const AcceptanceReviewBottomSheet = ({
   // 문항 입력값 변경 처리
   const handleDocumentQuestionChange = (
     index: number,
-    field: "question" | "answer",
+    field: "title" | "body",
     value: string
   ) => {
     const updatedQuestions = [...documentQuestions];
@@ -85,7 +107,7 @@ const AcceptanceReviewBottomSheet = ({
   // 면접 질문 입력값 변경 처리
   const handleInterviewQuestionChange = (
     index: number,
-    field: "question" | "answer",
+    field: "title" | "body",
     value: string
   ) => {
     const updatedQuestions = [...interviewQuestions];
@@ -106,36 +128,58 @@ const AcceptanceReviewBottomSheet = ({
     }
 
     // 합격 전형 검사
-    if (!intervieweStyle.length || !interviewer.length) {
-      setAlertMessage("합격 전형과 면접 인원 정보를 선택해주세요.");
+    if (!procedureType) {
+      setAlertMessage("합격 전형을 선택해주세요.");
       return false;
     }
-
+    // 면접인 경우
+    if (procedureType === "INTERVIEW") {
+      // 면접 전형 검사
+      if (!interviewType || !interviewRatioType) {
+        setAlertMessage("면접 전형과 면접 인원 정보를 선택해주세요.");
+        return false;
+      }
+      if (!interviewMood) {
+        setAlertMessage("면접 분위기를 선택해주세요.");
+        return false;
+      }
+      // 면접 질문 검사
+      for (let i = 0; i < interviewQuestions.length; i++) {
+        const intQuestion = interviewQuestions[i];
+        if (!intQuestion.title || !intQuestion.body) {
+          setAlertMessage(`면접 질문 ${i + 1}에 모든 값을 입력해주세요.`);
+          return false;
+        }
+      }
+    }
     // 서류 문항 검사
     for (let i = 0; i < documentQuestions.length; i++) {
       const docQuestion = documentQuestions[i];
-      if (!docQuestion.question || !docQuestion.answer) {
+      if (!docQuestion.title || !docQuestion.body) {
         setAlertMessage(`서류 문항 ${i + 1}에 모든 값을 입력해주세요.`);
         return false;
       }
     }
 
-    // 면접 질문 검사
-    for (let i = 0; i < interviewQuestions.length; i++) {
-      const intQuestion = interviewQuestions[i];
-      if (!intQuestion.question || !intQuestion.answer) {
-        setAlertMessage(`면접 질문 ${i + 1}에 모든 값을 입력해주세요.`);
-        return false;
-      }
-    }
+    const req: PassReviewSaveReq = {
+      title,
+      procedureType,
+      ...(interviewType && { interviewType }),
+      ...(interviewRatioType && { interviewRatioType }),
+      ...(interviewMood && { interviewMood }),
+      passReviewNotes: [...documentQuestions, ...interviewQuestions],
+    };
 
-    return true;
+    return req;
+
+    // return true;
   };
 
   const handleSubmit = () => {
-    if (validateForm()) {
+    const req = validateForm();
+    if (req) {
+      onSubmit(req);
       onClose();
-      onSubmit();
     }
   };
 
@@ -144,6 +188,10 @@ const AcceptanceReviewBottomSheet = ({
     return () => {
       document.body.style.overflow = "auto";
     };
+  }, []);
+
+  useEffect(() => {
+    setIsVisible(true);
   }, []);
 
   return (
@@ -178,12 +226,23 @@ const AcceptanceReviewBottomSheet = ({
             합격 전형
             <span className="text-noti text-mobile_body3_m pl-1">*</span>
           </h3>
-          <div className="flex gap-[14px] p-2">
-            <RadioBtn isChecked={true} label={"서류"} onClick={() => {}} />
+          <div className="flex gap-[14px]">
             <RadioBtn
-              isChecked={false}
+              isChecked={procedureType === "DOCUMENT"}
+              label={"서류"}
+              onClick={() => {
+                setProcedureType("DOCUMENT");
+              }}
+            />
+            <RadioBtn
+              isChecked={procedureType === "INTERVIEW"}
               label={"서류 · 면접"}
-              onClick={() => {}}
+              onClick={() => {
+                setProcedureType("INTERVIEW");
+                setInterviewQuestions([
+                  { title: "", body: "", noteType: "INTERVIEW" },
+                ]);
+              }}
             />
           </div>
 
@@ -212,112 +271,131 @@ const AcceptanceReviewBottomSheet = ({
               </div>
               <div className="flex flex-col gap-2">
                 <CustomInput
-                  value={docQuestion.question}
+                  value={docQuestion.title}
                   placeholder={"문항을 작성해주세요"}
                   onChange={(e) =>
-                    handleDocumentQuestionChange(
-                      index,
-                      "question",
-                      e.target.value
-                    )
+                    handleDocumentQuestionChange(index, "title", e.target.value)
                   }
                 />
                 <CustomInput
-                  value={docQuestion.answer}
+                  value={docQuestion.body}
                   placeholder={"답변을 작성해주세요"}
                   onChange={(e) =>
-                    handleDocumentQuestionChange(
-                      index,
-                      "answer",
-                      e.target.value
-                    )
+                    handleDocumentQuestionChange(index, "body", e.target.value)
                   }
                 />
               </div>
             </div>
           ))}
-          <div className="flex justify-between mt-[30px] mb-2.5 items-center">
-            <h3 className="flex text-text1 text-mobile_h2">
-              면접
-              <span className="text-noti text-mobile_body3_m pl-1">*</span>
-            </h3>
-          </div>
-          <div className="flex w-full">
-            <div className="flex flex-col">
-              <div className="flex gap-[14px] mb-[14px]">
-                <PullDown
-                  optionData={INTERVIEWE_STYLE}
-                  selectedOption={intervieweStyle}
-                  handleOption={setIntervieweStyle}
-                  optionSize={"mobile"}
-                  forceDropdown={true}
-                />
-                <PullDown
-                  optionData={INTERVIEWER}
-                  selectedOption={interviewer}
-                  handleOption={setInterviewer}
-                  optionSize={"mobile"}
-                  forceDropdown={true}
-                />
-              </div>
-              <div className="flex gap-[6px] border px-3 py-[6px] rounded-20 items-center">
-                <p className="flex text-text1 text-mobile_body2_m whitespace-nowrap">
-                  분위기
+          {/* 면접 */}
+          {procedureType === "INTERVIEW" && (
+            <>
+              <div className="flex justify-between mt-[30px] mb-2.5 items-center">
+                <h3 className="flex text-text1 text-mobile_h2">
+                  면접
                   <span className="text-noti text-mobile_body3_m pl-1">*</span>
+                </h3>
+              </div>
+              <div className="flex w-full">
+                <div className="flex flex-col">
+                  <div className="flex gap-[14px] mb-[14px]">
+                    <PullDown
+                      optionData={INTERVIEWE_STYLE.slice(1)}
+                      selectedOption={
+                        interviewType
+                          ? [getInterviewTypeLabel(interviewType)]
+                          : [INTERVIEWE_STYLE[0].label]
+                      }
+                      handleOption={(value) => {
+                        setInterviewType(getInterviewType(value[0]));
+                      }}
+                      optionSize={"mobile"}
+                      forceDropdown={true}
+                    />
+                    <PullDown
+                      optionData={INTERVIEWER.slice(1)}
+                      selectedOption={
+                        interviewRatioType
+                          ? [getInterviewRatioLabel(interviewRatioType)]
+                          : [INTERVIEWER[0].label]
+                      }
+                      handleOption={(value) => {
+                        setInterviewerRatioType(
+                          getInterviewRatioType(value[0])
+                        );
+                      }}
+                      optionSize={"mobile"}
+                      forceDropdown={true}
+                    />
+                  </div>
+                  <div className="flex gap-[6px] border px-3 py-[6px] rounded-20 items-center">
+                    <p className="flex text-text1 text-mobile_body2_m whitespace-nowrap">
+                      분위기
+                      <span className="text-noti text-mobile_body3_m pl-1">
+                        *
+                      </span>
+                    </p>
+                    <ProgressBar
+                      align="horizontal"
+                      currentStep={interviewMood}
+                      setCurrentStep={setInterviewerMood}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between mt-[30px] mb-2.5 items-center">
+                <h3 className="flex text-text1 text-mobile_h2">
+                  면접 질문
+                  <span className="text-noti text-mobile_body3_m pl-1">*</span>
+                </h3>
+                <p
+                  className="text-primary text-mobile_body3_m cursor-pointer"
+                  onClick={addInterviewQuestion}
+                >
+                  + 추가
                 </p>
-                <ProgressBar align="horizontal" />
               </div>
-            </div>
-          </div>
-          <div className="flex justify-between mt-[30px] mb-2.5 items-center">
-            <h3 className="flex text-text1 text-mobile_h2">
-              면접 질문
-              <span className="text-noti text-mobile_body3_m pl-1">*</span>
-            </h3>
-            <p
-              className="text-primary text-mobile_body3_m cursor-pointer"
-              onClick={addInterviewQuestion}
-            >
-              + 추가
-            </p>
-          </div>
-          <div className="h-[1px] bg-menuborder" />
-          {interviewQuestions.map((intQuestion, index) => (
-            <div className="flex flex-col" key={`int-${index}`}>
-              <div className="flex justify-between mt-[14px] mb-2.5">
-                <h3 className="text-text1 text-mobile_h4_sb">{`질문 - ${
-                  index + 1
-                }`}</h3>
-                {index !== 0 && (
-                  <DeleteBtn onClick={() => removeInterviewQuestion(index)} />
-                )}
-              </div>
-              <div className="flex flex-col gap-2">
-                <CustomInput
-                  value={intQuestion.question}
-                  placeholder={"질문을 작성해주세요"}
-                  onChange={(e) =>
-                    handleInterviewQuestionChange(
-                      index,
-                      "question",
-                      e.target.value
-                    )
-                  }
-                />
-                <CustomInput
-                  value={intQuestion.answer}
-                  placeholder={"답변을 작성해주세요"}
-                  onChange={(e) =>
-                    handleInterviewQuestionChange(
-                      index,
-                      "answer",
-                      e.target.value
-                    )
-                  }
-                />
-              </div>
-            </div>
-          ))}
+              <div className="h-[1px] bg-menuborder" />
+              {interviewQuestions.map((intQuestion, index) => (
+                <div className="flex flex-col" key={`int-${index}`}>
+                  <div className="flex justify-between mt-[14px] mb-2.5">
+                    <h3 className="text-text1 text-mobile_h4_sb">{`질문 - ${
+                      index + 1
+                    }`}</h3>
+                    {index !== 0 && (
+                      <DeleteBtn
+                        onClick={() => removeInterviewQuestion(index)}
+                      />
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <CustomInput
+                      value={intQuestion.title}
+                      placeholder={"질문을 작성해주세요"}
+                      onChange={(e) =>
+                        handleInterviewQuestionChange(
+                          index,
+                          "title",
+                          e.target.value
+                        )
+                      }
+                    />
+                    <CustomInput
+                      value={intQuestion.body}
+                      placeholder={"답변을 작성해주세요"}
+                      onChange={(e) =>
+                        handleInterviewQuestionChange(
+                          index,
+                          "body",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
           <div className="h-[33px]" />
         </div>
         <div className="pb-6 pt-[6px]">

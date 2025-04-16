@@ -4,10 +4,10 @@ import close from "@/images/icon/close.svg";
 import help from "@/images/icon/help.svg";
 import Alert from "@/components/alert/alert";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
-import { AcceptanceReviewProps } from "@/types/components/review";
+import { InterviewNoticeProps } from "@/types/components/review";
 import Contour from "@/components/bar/contour";
 
-const InterviewNoticeModal = ({ onClose, onSubmit }: AcceptanceReviewProps) => {
+const InterviewNoticeModal = ({ onClose, onSubmit }: InterviewNoticeProps) => {
   const [details, setDetails] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 

@@ -4,21 +4,25 @@ import close from "@/images/icon/close.svg";
 import Alert from "@/components/alert/alert";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import CustomInput from "@/components/input/customInput";
-import { REVIEW_BADGE_LIST } from "@/data/reviewBadge";
 import ReviewBadgeContainer from "@/components/badge/review/reviewBadgeContainer";
 import { ActivityReviewProps } from "@/types/components/review";
+import { TagData, TagIconType } from "@/types/review";
+import { useSearchParams } from "next/navigation";
+import { getClubTag } from "@/api/review/api";
 
 const ActivityReviewModal = ({ onClose, onSubmit }: ActivityReviewProps) => {
   const [title, setTitle] = useState<string>("");
-  const [details, setDetails] = useState<string>("");
+  const [body, setBody] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [selectedBadges, setSelectedBadges] = useState<number[]>([]);
 
-  const handleBadgeSelection = (id: number) => {
-    if (selectedBadges.includes(id)) {
-      setSelectedBadges(selectedBadges.filter((badgeId) => badgeId !== id));
+  const [tagData, setTagData] = useState<TagData[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagIconType[]>([]);
+
+  const handleTagSelection = (tagIcon: TagIconType) => {
+    if (selectedTags.includes(tagIcon)) {
+      setSelectedTags(selectedTags.filter((item) => item !== tagIcon));
     } else {
-      setSelectedBadges([...selectedBadges, id]);
+      setSelectedTags([...selectedTags, tagIcon]);
     }
   };
 
@@ -27,11 +31,11 @@ const ActivityReviewModal = ({ onClose, onSubmit }: ActivityReviewProps) => {
       setAlertMessage("활동후기 제목을 입력해주세요.");
       return false;
     }
-    if (!details.trim()) {
+    if (!body.trim()) {
       setAlertMessage("활동후기 내용을 입력해주세요.");
       return false;
     }
-    if (selectedBadges.length === 0) {
+    if (selectedTags.length === 0) {
       setAlertMessage("좋았던 점을 최소 1개 이상 선택해주세요.");
       return false;
     }
@@ -40,7 +44,7 @@ const ActivityReviewModal = ({ onClose, onSubmit }: ActivityReviewProps) => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      onSubmit({ title, details, badges: selectedBadges });
+      onSubmit({ title, body, icons: selectedTags });
       onClose();
     }
   };
@@ -54,6 +58,12 @@ const ActivityReviewModal = ({ onClose, onSubmit }: ActivityReviewProps) => {
     return () => {
       document.body.style.overflow = "auto";
     };
+  }, []);
+
+  useEffect(() => {
+    getClubTag().then((res) => {
+      setTagData(res);
+    });
   }, []);
 
   return (
@@ -102,9 +112,9 @@ const ActivityReviewModal = ({ onClose, onSubmit }: ActivityReviewProps) => {
             </h3>
           </div>
           <ReviewBadgeContainer
-            REVIEW_BADGE_LIST={REVIEW_BADGE_LIST}
-            onBadgeSelect={handleBadgeSelection}
-            selectedBadges={selectedBadges}
+            tags={tagData}
+            onTagSelect={handleTagSelection}
+            selectedTags={selectedTags}
           />
           {/* 세 번째 문항 */}
           <div className="flex justify-between mt-7 mb-3 items-center">
@@ -116,8 +126,8 @@ const ActivityReviewModal = ({ onClose, onSubmit }: ActivityReviewProps) => {
           <div className="px-1">
             <textarea
               placeholder="동아리 분위기, 개인적 평가 등 자유롭게 할동 후기를 기재해 주세요."
-              value={details}
-              onChange={(e) => setDetails(e.target.value)}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
               maxLength={1000}
               className="w-full p-2 border-0 rounded-md resize-none text-body1_r 
                   text-subtext1 focus:outline-none focus:ring-[1px] 
