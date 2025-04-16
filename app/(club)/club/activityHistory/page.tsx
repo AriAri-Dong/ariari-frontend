@@ -29,6 +29,9 @@ const ActivityHistoryPage = () => {
   const [hasMore, setHasMore] = useState<boolean>(false);
 
   const { role, clubInfo } = useClubContext();
+  if (role === undefined) return null;
+
+  console.log("role", role);
 
   const handleRouter = () => {
     router.push(`/club/recruitment/clubId=${clubInfo?.clubData.id}`);
@@ -85,11 +88,12 @@ const ActivityHistoryPage = () => {
                   key={activity.clubActivityId}
                   data={activity}
                   role={role}
-                  nickname={
-                    role === "ADMIN" || role === "MANAGER"
-                      ? "동아리 대표"
-                      : clubInfo?.clubMemberData.memberData.nickname || ""
-                  }
+                  // nickname={
+                  //   role === "ADMIN" || role === "MANAGER"
+                  //     ? "동아리 대표"
+                  //     : clubInfo?.clubMemberData.memberData.nickname || ""
+                  // }
+                  nickname={"동아리 대표"}
                 />
               ))}
             </div>
@@ -105,21 +109,21 @@ const ActivityHistoryPage = () => {
         </div>
       </div>
 
-      {role == null && (
+      {role === null && (
         <RecruitmentGuideFloatingBar
           deadline={new Date("2024-12-31T23:59:59")}
-          isWriteButtonVisible={true}
+          isWriteButtonVisible={false}
           handleWrite={() => setIsWriteFormOpen(true)}
         />
       )}
 
-      {!isMdUp && role == null && (
+      {!isMdUp && role === null && (
         <div className="fixed bottom-5 left-50% translate-1/2">
           <DarkBtn title={"모집공고 보기"} onClick={handleRouter} />
         </div>
       )}
 
-      {(role === "ADMIN" || role === "MANAGER") && (
+      {role !== null && (role === "ADMIN" || role === "MANAGER") && (
         <div className="fixed w-full bottom-5 px-5 flex justify-end md:bottom-[44px] md:max-w-[1248px] md:px-5">
           <WriteBtn onClick={() => setIsWriteFormOpen(true)} />
         </div>
