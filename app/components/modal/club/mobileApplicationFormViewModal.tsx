@@ -61,7 +61,7 @@ const MobileApplicationFormViewModal = ({
             className="md:hidden cursor-pointer"
           />
           <h1 className="text-text1 text-mobile_h1_contents_title md:text-h1_contents_title">
-            관심 동아리
+            ({applyData.name})님의 지원서
           </h1>
         </div>
         <div className="flex justify-between mt-6 mb-5">
