@@ -148,7 +148,7 @@ const HelpPage = () => {
         </p>
         <ClubNoticeHeader role="SERVICE_ADMIN" />
         <div className="flex flex-col gap-2.5">
-          {noticeList.slice(0, visibleNoticeCount).map((notice) => {
+          {noticeList.slice(0, visibleNoticeCount).map((notice, index) => {
             const isOpen = openDropdownId === notice.id;
             const detailed = noticeDetails[notice.id];
 
@@ -159,6 +159,7 @@ const HelpPage = () => {
                 isOpen={isOpen}
                 setOpenDropdownId={() => handleDropdownToggle(notice.id)}
                 pin={false}
+                index={index}
               />
             );
           })}
