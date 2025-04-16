@@ -1,9 +1,10 @@
-import { useClubNotificationMutation } from "@/hooks/notification/useNotificationMutation";
+import { readClubNotification } from "@/api/notification/api";
 import rightArrow from "@/images/icon/vector.svg";
 import { NotificationData } from "@/types/notification";
 
 import formatDateToDot, { formatTime } from "@/utils/formatDateToDot";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface NotificationListProps {
   notificationList: NotificationData[];
@@ -15,9 +16,17 @@ const NotificationList = ({
   notificationList,
   className,
 }: NotificationListProps) => {
-  const { readClubNotification } = useClubNotificationMutation();
-  const handleClickNotification = (id: string) => {
-    readClubNotification.mutate({ clubAlarmId: id });
+  const router = useRouter();
+  const params = useSearchParams();
+  const clubId = params.get("clubId") || "";
+
+  const handleClickNotification = (id: string, uri: string | null) => {
+    readClubNotification(clubId, id).catch((error) =>
+      console.log("알림 읽음 처리 실패", error)
+    );
+    if (uri) {
+      router.push(uri);
+    }
   };
 
   if (!notificationList.length) {
@@ -36,7 +45,7 @@ const NotificationList = ({
               className={`w-full flex items-center justify-between gap-3 ${
                 isChecked && "opacity-70"
               }`}
-              onClick={() => handleClickNotification(id)}
+              onClick={() => handleClickNotification(id, uri)}
             >
               <div className="flex flex-col gap-2 text-left md:gap-[6px]">
                 <h3
@@ -51,11 +60,13 @@ const NotificationList = ({
                   <p>{formatTime(new Date(createdDateTime))}</p>
                 </div>
               </div>
-              <Image
-                src={rightArrow}
-                alt={"알림 바로가기"}
-                className="w-5 h-5 md:w-6 md:h-6"
-              />
+              {uri && (
+                <Image
+                  src={rightArrow}
+                  alt={"알림 바로가기"}
+                  className="w-5 h-5 md:w-6 md:h-6"
+                />
+              )}
             </button>
           </li>
         );
