@@ -9,13 +9,13 @@ export const FAQ_DATA: SystemFaqData[] = [
     id: 673012345142939000,
     title: "아리아리에서 개발한 서비스의 배포 시작 방법",
     body: "main 브렌치에 push!",
-    systemFaqStatusType: "APPROVE",
+    systemFaqStatusType: "SECURITY",
   },
   {
     id: 553012345142939011,
     title: "동아리 멤버 관리 방법",
     body: "관리자 페이지에서 멤버 초대 및 권한 설정이 가능합니다.",
-    systemFaqStatusType: "APPROVE",
+    systemFaqStatusType: "SECURITY",
   },
 ];
 
