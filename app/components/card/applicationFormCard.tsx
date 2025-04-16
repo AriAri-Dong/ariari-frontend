@@ -33,12 +33,6 @@ const ApplicationFormCard = ({
   const [openNoticeModal, setOpenNoticeModal] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const handleBadgeClick = () => {
-    if (applyStatus === "대기중") {
-      setOpenNoticeModal(true);
-    }
-  };
-
   const handleSubmitSuccess = () => {
     setAlertMessage("면접 안내를 전송했습니다.");
     setOpenNoticeModal(false);
@@ -63,12 +57,7 @@ const ApplicationFormCard = ({
                 {name}
               </p>
             </div>
-            <div
-              onClick={handleBadgeClick}
-              className={`${applyStatus === "대기중" && "cursor-pointer"}`}
-            >
-              <ResultBadge status={applyStatus} />
-            </div>
+            <ResultBadge status={applyStatus} />
           </div>
           <div className="flex justify-between gap-3">
             <p className="text-mobile_body3_r md:text-body2_m text-subtext2 w-full bg-sub_bg p-2.5 rounded-lg md:py-2 md:px-3">
