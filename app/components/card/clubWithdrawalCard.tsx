@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import Image from "next/image";
 import checkIcon from "@/images/icon/radio_button_checked.svg";
@@ -18,18 +18,19 @@ import {
   CLUB_WITHDRAWAL_INFO_GENERAL,
   CLUB_WITHDRAWAL_INFO_MANAGER,
 } from "@/data/withdrawal";
-import { clubMemberRoleType } from "@/types/member";
+import { getClubMembers, withdrawalClub } from "@/api/member/api";
+import { useClubContext } from "@/context/ClubContext";
+import { deleteClub } from "@/api/club/api";
 
 interface ClubWithdrawalCardProps {
   isWithdrawal: boolean;
-  role: clubMemberRoleType | null;
 }
-const ClubWithdrawalCard = ({
-  isWithdrawal,
-  role,
-}: ClubWithdrawalCardProps) => {
+const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
   const isMdUp = useResponsive("md");
   const router = useRouter();
+  const params = useSearchParams();
+  const clubId = params.get("clubId") ?? "";
+  const { role, clubInfo } = useClubContext();
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
@@ -44,26 +45,45 @@ const ClubWithdrawalCard = ({
 
   // 탈퇴하기 버튼 클릭 핸들러
   const handleWithdrawalBtn = () => {
-    if (isChecked) setShowConfirmModal(true);
-    else {
-      if (!isWithdrawal && (role === "GENERAL" || role === null)) {
-        setAlertMessage("관리자는 탈퇴할 수 없습니다.");
-      } else {
-        setAlertMessage("동의하지 않은 항목이 있습니다.");
-      }
+    if (isWithdrawal && role === "ADMIN") {
+      setAlertMessage("관리자는 탈퇴할 수 없습니다.");
+      return;
+    }
+    if (isChecked) {
+      setShowConfirmModal(true);
+    } else {
+      setAlertMessage("동의하지 않은 항목이 있습니다.");
     }
   };
 
   // 모달에서 탈퇴하기 버튼 클릭
   const handleWithdrawal = () => {
-    setShowConfirmModal(false);
-    // 탈퇴 로직 추가
-    setShowSuccessModal(true);
-    // 3초 뒤 메인 페이지로 이동
-    setTimeout(() => {
-      router.push("/");
-    }, 3000);
+    try {
+      setShowConfirmModal(false);
+      if (isWithdrawal) {
+        // 탈퇴하기
+        if (clubInfo?.clubMemberData.id) {
+          withdrawalClub(clubInfo?.clubMemberData.id);
+        }
+      } else {
+        // 폐쇄하기
+        deleteClub(clubId);
+      }
+    } catch (error) {
+      setAlertMessage("문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    } finally {
+      setShowSuccessModal(true);
+      // 3초 뒤 메인 페이지로 이동
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    }
   };
+  useEffect(() => {
+    getClubMembers(clubId).then((data) => {
+      setClubLimits(data?.pageInfo.totalSize || 0);
+    });
+  }, [isWithdrawal]);
 
   return (
     <div className="w-full flex flex-col gap-7 rounded-8 bg-background mt-5 mb-20 md:mb-[124px] md:mt-0 md:px-6 md:py-[26px] md:gap-10">
