@@ -3,6 +3,8 @@ import Image from "next/image";
 import tooltip from "@/images/icon/triangle.svg";
 import { useMyNotificationQuery } from "@/hooks/notification/useNotificationQuery";
 import NotificationList from "@/components/list/notificationList";
+import { markMemberNotificationAsRead } from "@/api/notification/api";
+import { useRouter } from "next/navigation";
 
 interface TooltipProps {
   children: React.ReactNode;
@@ -15,6 +17,7 @@ interface TooltipProps {
  */
 const NotificationModal = ({ children }: TooltipProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const { myNotifications, isLoading } = useMyNotificationQuery({
     enabled: !!isOpen,
   });
@@ -25,6 +28,18 @@ const NotificationModal = ({ children }: TooltipProps) => {
 
   const closeModal = () => {
     setIsOpen(false);
+  };
+
+  // 알림 클릭 시 읽음 처리
+  const handleNotificationClick = (
+    notificationId: string,
+    uri: string | null
+  ) => {
+    markMemberNotificationAsRead(notificationId);
+    setIsOpen(false);
+    if (uri) {
+      router.push(uri);
+    }
   };
 
   return (
@@ -52,7 +67,10 @@ const NotificationModal = ({ children }: TooltipProps) => {
               overflow-y-scroll custom-scrollbar"
             >
               {!isLoading && (
-                <NotificationList notificationList={myNotifications} />
+                <NotificationList
+                  notificationList={myNotifications}
+                  onClickNotification={handleNotificationClick}
+                />
               )}
             </div>
           </div>

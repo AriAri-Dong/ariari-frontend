@@ -1,13 +1,17 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import backVector from "@/images/icon/backVector.svg";
-import ClubNotificationList from "@/components/list/notificationList";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import NotificationList from "@/components/list/notificationList";
 import WhiteButton from "@/components/button/basicBtn/whiteBtn";
 import {
   useClubNotificationQuery,
   useMyNotificationQuery,
 } from "@/hooks/notification/useNotificationQuery";
+import {
+  markClubNotificationAsRead,
+  markMemberNotificationAsRead,
+} from "@/api/notification/api";
 
 interface ModalProps {
   onclose: () => void;
@@ -21,6 +25,7 @@ interface ModalProps {
  * @returns
  */
 const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
+  const router = useRouter();
   const params = useSearchParams();
   const clubId = params.get("clubId") || "";
 
@@ -45,6 +50,22 @@ const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
       target === "club"
         ? clubNotiQuery.clubNotifications
         : myNotiQuery.myNotifications,
+  };
+
+  // 알림 클릭 시 읽음 처리
+  const handleNotificationClick = (
+    notificationId: string,
+    uri: string | null
+  ) => {
+    if (target === "club") {
+      markClubNotificationAsRead(clubId, notificationId);
+    } else if (target === "member") {
+      markMemberNotificationAsRead(notificationId);
+    }
+    onclose();
+    if (uri) {
+      router.push(uri);
+    }
   };
 
   // 전체 화면 스크롤 방지 (이중 스크롤이 생겨서 넣었습니다.)
@@ -74,8 +95,9 @@ const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
         className="flex flex-col overflow-y-scroll custom-scrollbar"
         style={{ maxHeight: "calc(100vh - 113px)" }}
       >
-        <ClubNotificationList
+        <NotificationList
           notificationList={notificationList}
+          onClickNotification={handleNotificationClick}
           className="first:pt-[6px] last:pb-[6px]"
         />
         {hasNextPage && (

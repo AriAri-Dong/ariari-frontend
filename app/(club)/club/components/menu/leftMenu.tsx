@@ -19,6 +19,7 @@ import defaultImg from "@/images/icon/defaultAriari.svg";
 import { getProfileImage } from "@/utils/profileImage";
 import NotificationList from "@/components/list/notificationList";
 import WhiteButton from "@/components/button/basicBtn/whiteBtn";
+import { markClubNotificationAsRead } from "@/api/notification/api";
 
 /**
  * 메뉴 컴포넌트
@@ -80,6 +81,17 @@ const LeftMenu = () => {
     router.push(`${subUrl}?clubId=${clubId}`);
     setActiveMenu(parentMenuId);
     setIsSubMenuOpen(parentMenuId);
+  };
+
+  // 알림 클릭 시 읽음 처리
+  const handleNotificationClick = (
+    notificationId: string,
+    uri: string | null
+  ) => {
+    markClubNotificationAsRead(clubId, notificationId);
+    if (uri) {
+      router.push(uri);
+    }
   };
 
   useEffect(() => {
@@ -265,6 +277,7 @@ const LeftMenu = () => {
           <div className="max-h-[556px] mt-[14px] overflow-y-auto no-scrollbar">
             <NotificationList
               notificationList={clubNotifications}
+              onClickNotification={handleNotificationClick}
               className="last:pb-0"
             />
             {hasNextPage && (
