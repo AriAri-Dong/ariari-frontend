@@ -43,6 +43,7 @@ type CommentBaseProps = {
   comment?: ClubActivityComment;
   onDeleteSuccess?: () => void;
   onEditSuccess?: () => void;
+  onPostSuccess?: () => void;
 };
 
 const Comment = (props: CommentBaseProps) => {
@@ -247,6 +248,7 @@ const Comment = (props: CommentBaseProps) => {
                     parentCommentId: comment.clubActivityCommentId,
                   });
                   setAlertMessage("답글이 등록되었습니다..");
+                  props.onPostSuccess?.();
                   setIsReplyFormOpen(false);
                 } catch (error) {
                   console.error(error);
@@ -308,6 +310,7 @@ const Comment = (props: CommentBaseProps) => {
                   comment={comment}
                   onEditSuccess={props.onEditSuccess}
                   onDeleteSuccess={props.onDeleteSuccess}
+                  onPostSuccess={props.onPostSuccess}
                 />
               )}
             </div>
