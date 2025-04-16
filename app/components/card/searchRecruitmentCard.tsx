@@ -107,7 +107,7 @@ const SearchRecruitmentCard = ({
             {clubName}
           </p>
           <p className="text-mobile_body3_m md:text-body2_m text-subtext2">
-            소속 | 분야 | 지역 | 대상
+            서버에 | 데이터를 | 요청해야 | 합니다.
           </p>
         </div>
       </div>

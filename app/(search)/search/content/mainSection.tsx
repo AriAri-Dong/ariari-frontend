@@ -10,7 +10,10 @@ import { ClubListData, ClubResponse } from "@/types/api";
 import notIcon from "@/images/icon/popup/not.svg";
 import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import SearchRecruitmentCard from "@/components/card/searchRecruitmentCard";
-import { RecruitmentData } from "@/types/recruitment";
+import {
+  ClubRecruitmentListResponse,
+  RecruitmentData,
+} from "@/types/recruitment";
 import { calculateRemainingDays } from "@/utils/dateFormatter";
 import useResponsive from "@/hooks/useResponsive";
 import { RECRUITMENT_DATA } from "@/data/recruitment";
@@ -18,6 +21,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { AnimatePresence, motion } from "framer-motion";
 import Loading from "@/components/feedback/loading";
+import { getRecruitmentInfo } from "@/api/recruitment/api";
 
 const MainSection = () => {
   const searchParams = useSearchParams();
@@ -30,8 +34,8 @@ const MainSection = () => {
   const [clubData, setClubData] = useState<ClubListData[]>([]);
   const [clubTotalSize, setClubTotalSize] = useState<number>(0);
 
-  const [recruitmentData] = useState<RecruitmentData[]>(RECRUITMENT_DATA);
-  const [recruitmentTotalSize] = useState<number>(RECRUITMENT_DATA.length);
+  const [recruitmentData, setRecruitmentData] = useState<RecruitmentData[]>([]);
+  const [recruitmentTotalSize, setRecruitmentTotalSize] = useState<number>(0);
   const [desktopPage, setDesktopPage] = useState<number>(1);
   const [mobilePage, setMobilePage] = useState<number>(1);
 
@@ -49,9 +53,17 @@ const MainSection = () => {
   const fetchClubs = async (page: number) => {
     try {
       setIsLoading(true);
-      const res: ClubResponse = await getClubsInfo(query!, { page, size: 10 });
-      setClubData(res.clubDataList);
-      setClubTotalSize(res.pageInfo.totalSize);
+      const clubRes: ClubResponse = await getClubsInfo(query!, {
+        page,
+        size: 10,
+      });
+      setClubData(clubRes.clubDataList);
+      setClubTotalSize(clubRes.pageInfo.totalSize);
+
+      const recruitmentRes: ClubRecruitmentListResponse =
+        await getRecruitmentInfo(query!, { page, size: 10 });
+      setRecruitmentData(recruitmentRes.recruitmentDataList);
+      setRecruitmentTotalSize(recruitmentRes.pageInfo.totalSize);
     } catch (e) {
       console.error("클럽 정보 조회 실패", e);
     } finally {
@@ -108,98 +120,110 @@ const MainSection = () => {
               : "에 대한 모집공고가 없습니다."}
           </h1>
         </div>
-        <p className="text-subtext2 text-mobile_body2_m md:text-h4 md:my-[22px] mt-4 mb-5">
+        <p
+          className={`text-subtext2 text-mobile_body2_m md:text-h4 md:my-[22px] mt-4 mb-5 ${
+            recruitmentTotalSize > 0 ? "" : "min-h-[100px]"
+          }`}
+        >
           {recruitmentTotalSize > 0
             ? `총 ${recruitmentTotalSize}개의 모집공고가 있어요.`
             : "다른 검색어를 입력하시거나 철자를 확인해보세요."}
         </p>
       </div>
       {/* 모집공고 카드 리스트 */}
-      <div className="bg-sub_bg md:rounded-16 p-5 md:p-6">
-        {isMdUp ? (
-          <>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={desktopPage}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4 lg:gap-x-[18px]"
+      {recruitmentTotalSize > 0 && (
+        <div className="bg-sub_bg md:rounded-16 p-5 md:p-6">
+          {isMdUp ? (
+            <>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={desktopPage}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4 lg:gap-x-[18px]"
+                >
+                  {paginatedData.map((item) => (
+                    <SearchRecruitmentCard
+                      key={item.id}
+                      id={item.id}
+                      title={item.body}
+                      clubName={item.title}
+                      description={item.body}
+                      deadline={calculateRemainingDays(item.endDateTime)}
+                      isBookmarked={item.isMyBookmark}
+                    />
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+
+              <div className="flex justify-center items-center gap-6 mt-6 transition-all duration-300">
+                <RoundVectorBtn
+                  onClick={() =>
+                    setDesktopPage((prev) => Math.max(1, prev - 1))
+                  }
+                  className="rotate-180"
+                />
+                <span className="text-text1 text-h5">
+                  {desktopPage} / {totalPages}
+                </span>
+                <RoundVectorBtn
+                  onClick={() =>
+                    setDesktopPage((prev) => Math.min(totalPages, prev + 1))
+                  }
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <Swiper
+                spaceBetween={20}
+                slidesPerView={1}
+                className="md:hidden"
+                onSlideChange={(swiper) => {
+                  setMobilePage(swiper.activeIndex + 1);
+                }}
               >
-                {paginatedData.map((item) => (
-                  <SearchRecruitmentCard
-                    key={item.id}
-                    id={item.id}
-                    title={item.body}
-                    clubName={item.title}
-                    description={item.body}
-                    deadline={calculateRemainingDays(item.endDateTime)}
-                    isBookmarked={item.isMyBookmark}
-                  />
-                ))}
-              </motion.div>
-            </AnimatePresence>
+                {Array.from({ length: mobileTotalPages }).map(
+                  (_, pageIndex) => {
+                    const start = pageIndex * mobileItemsPerPage;
+                    const end = start + mobileItemsPerPage;
+                    const pageItems = recruitmentData.slice(start, end);
 
-            <div className="flex justify-center items-center gap-6 mt-6 transition-all duration-300">
-              <RoundVectorBtn
-                onClick={() => setDesktopPage((prev) => Math.max(1, prev - 1))}
-                className="rotate-180"
-              />
-              <span className="text-text1 text-h5">
-                {desktopPage} / {totalPages}
-              </span>
-              <RoundVectorBtn
-                onClick={() =>
-                  setDesktopPage((prev) => Math.min(totalPages, prev + 1))
-                }
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            <Swiper
-              spaceBetween={20}
-              slidesPerView={1}
-              className="md:hidden"
-              onSlideChange={(swiper) => {
-                setMobilePage(swiper.activeIndex + 1);
-              }}
-            >
-              {Array.from({ length: mobileTotalPages }).map((_, pageIndex) => {
-                const start = pageIndex * mobileItemsPerPage;
-                const end = start + mobileItemsPerPage;
-                const pageItems = recruitmentData.slice(start, end);
+                    return (
+                      <SwiperSlide key={pageIndex}>
+                        <div className="flex flex-col gap-4 h-full">
+                          {pageItems.map((item) => (
+                            <SearchRecruitmentCard
+                              key={item.id}
+                              id={item.id}
+                              title={item.body}
+                              clubName={item.title}
+                              description={item.body}
+                              deadline={calculateRemainingDays(
+                                item.endDateTime
+                              )}
+                              isBookmarked={item.isMyBookmark}
+                            />
+                          ))}
+                        </div>
+                      </SwiperSlide>
+                    );
+                  }
+                )}
+              </Swiper>
 
-                return (
-                  <SwiperSlide key={pageIndex}>
-                    <div className="flex flex-col gap-4 h-full">
-                      {pageItems.map((item) => (
-                        <SearchRecruitmentCard
-                          key={item.id}
-                          id={item.id}
-                          title={item.body}
-                          clubName={item.title}
-                          description={item.body}
-                          deadline={calculateRemainingDays(item.endDateTime)}
-                          isBookmarked={item.isMyBookmark}
-                        />
-                      ))}
-                    </div>
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-
-            <div className="flex justify-center items-center mt-5 md:hidden">
-              <p className="bg-white70 text-mobile_body3_r text-subtext2 rounded-12 py-0.5 px-2.5">
-                {mobilePage} / {mobileTotalPages}
-              </p>
-            </div>
-          </>
-        )}
-      </div>
-      <div className="max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5">
+              <div className="flex justify-center items-center mt-5 md:hidden">
+                <p className="bg-white70 text-mobile_body3_r text-subtext2 rounded-12 py-0.5 px-2.5">
+                  {mobilePage} / {mobileTotalPages}
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+      <div className="max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-0">
         {/* 동아리 영역 */}
         <div className="flex flex-col mt-5 md:mt-8">
           <div className="flex items-center gap-2 text-mobile_h1_contents_title md:text-h1_contents_title">
