@@ -165,3 +165,16 @@ export const getMemberList = async (nickname: string) => {
     console.log("회원 검색 실패", err);
   }
 };
+
+// 동아리 회원 탈퇴
+
+export const withdrawalClub = async (clubMemberId: string) => {
+  try {
+    const response = await axiosInstance.delete<ClubMemberListRes>(
+      `/club-members/withdrawal/${clubMemberId}`
+    );
+    return response.status;
+  } catch (err) {
+    console.log("동아리 회원 탈퇴 실패", err);
+  }
+};
