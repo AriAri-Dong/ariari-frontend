@@ -19,6 +19,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/recruitment",
     "/club/management/activity/accounting",
     "/club/management/members",
+    "/club/close",
+    "/club/withdrawal",
   ];
   const bgPaths = ["/application", "/help"];
   // md 이상만 bg 적용하는 path
@@ -28,6 +30,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/user/userInfo",
     "/withdrawal",
     "/club/close",
+    "/club/withdrawal",
     "/club/management/recruitment/create",
   ];
 
