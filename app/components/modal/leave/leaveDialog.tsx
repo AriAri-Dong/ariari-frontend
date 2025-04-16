@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import Step1 from "./step1";
-import Step4 from "./step4";
-import { Delegator, JoinedClub } from "@/types/components/delegate";
-import NotiPopUp from "../notiPopUp";
 import Step2 from "./step2";
+import Step4 from "./step4";
+import NotiPopUp from "../notiPopUp";
+import { Delegator } from "@/types/components/delegate";
+import { ClubData } from "@/types/club";
 
 interface LeaveDialogProps {
-  clubs: JoinedClub[];
+  clubs: ClubData[];
   step: number;
   handleNextStep: () => void;
   handleNext2Step: () => void;
-  selectedDelegates: Record<number, Delegator>;
-  handleDelegateSelection: (clubId: number, user: Delegator) => void;
+  selectedDelegates: Record<string, Delegator>;
+  handleDelegateSelection: (clubId: string, user: Delegator) => void;
   onClose: () => void;
   inputValue: string;
   setInputValue: (value: string) => void;
@@ -21,10 +22,10 @@ interface LeaveDialogProps {
  *
  * @param clubs 관리자인 동아리
  * @param step 모집 시작 날짜
- * @param handleNextStep step + 1
+ * @param handleNextStep step 관리 handler
  * @param handleNext2Step step + 2
  * @param selectedDelegates 선택된 위임자 [(clubid,{name, userid}),..]
- * @param handleDelegateSelection s위임자 선택 핸들러
+ * @param handleDelegateSelection 위임자 선택 핸들러
  * @param onClose 모달 닫기
  * @param inputValue 탈퇴 문구 입력상태
  * @param setInputValue inputValue set

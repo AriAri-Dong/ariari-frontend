@@ -18,13 +18,13 @@ export type profileType =
   | null;
 
 export interface MemberData {
-  id: string; // $int64
+  memberId: string;
   nickname: string;
   profileType?: profileType;
 }
 
 export interface ClubMemberData {
-  id: string; // $int64
+  id: string;
   name: string;
   clubMemberRoleType: clubMemberRoleType;
   clubMemberStatusType: clubMemberStatusType;

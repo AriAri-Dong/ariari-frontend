@@ -8,7 +8,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     clubMemberStatusType: "ACTIVE",
     profileType: "ARIARI_SNAKE",
     memberData: {
-      id: "101",
+      memberId: "101",
       nickname: "성은",
       profileType: "ARIARI_SNAKE",
     },
@@ -21,7 +21,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     profileType: "ARIARI_COW",
 
     memberData: {
-      id: "102",
+      memberId: "102",
       nickname: "찬진",
       profileType: "ARIARI_COW",
     },
@@ -33,7 +33,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     clubMemberStatusType: "INACTIVE",
     profileType: "ARIARI_DOG",
     memberData: {
-      id: "103",
+      memberId: "103",
       nickname: "수연",
       profileType: "ARIARI_DOG",
     },
@@ -45,7 +45,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     clubMemberStatusType: "WITHDRAWN",
     profileType: "ARIARI_TIGER",
     memberData: {
-      id: "104",
+      memberId: "104",
       nickname: "대선",
       profileType: "ARIARI_TIGER",
     },
@@ -57,7 +57,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     clubMemberStatusType: "WITHDRAWN",
     profileType: "ARIARI_RABBIT",
     memberData: {
-      id: "105",
+      memberId: "105",
       nickname: "순재",
       profileType: "ARIARI_RABBIT",
     },
@@ -69,7 +69,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     clubMemberStatusType: "ACTIVE",
     profileType: "ARIARI_DRAGON",
     memberData: {
-      id: "106",
+      memberId: "106",
       nickname: "민아",
       profileType: "ARIARI_DRAGON",
     },
@@ -81,7 +81,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     clubMemberStatusType: "INACTIVE",
     profileType: "ARIARI_HORSE",
     memberData: {
-      id: "107",
+      memberId: "107",
       nickname: "진원",
       profileType: "ARIARI_HORSE",
     },
@@ -93,7 +93,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     clubMemberStatusType: "ACTIVE",
     profileType: "ARIARI_SHEEP",
     memberData: {
-      id: "108",
+      memberId: "108",
       nickname: "가을",
       profileType: "ARIARI_SHEEP",
     },
@@ -105,7 +105,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     clubMemberStatusType: "ACTIVE",
     profileType: "ARIARI_MONKEY",
     memberData: {
-      id: "109",
+      memberId: "109",
       nickname: "세윤",
       profileType: "ARIARI_MONKEY",
     },
@@ -117,7 +117,7 @@ export const CLUB_MEMBER_DATA: ClubMemberData[] = [
     clubMemberStatusType: "ACTIVE",
     profileType: "ARIARI_CHICKEN",
     memberData: {
-      id: "110",
+      memberId: "110",
       nickname: "종혁",
       profileType: "ARIARI_CHICKEN",
     },

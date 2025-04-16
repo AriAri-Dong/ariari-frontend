@@ -6,6 +6,7 @@ import ClubIntroduction from "@/components/card/clubIntroduction";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import { getAllClubsInfo } from "@/api/club/api";
 import {
+  ClubData,
   ClubListData,
   ClubResponse,
   ClubSearchCondition,
@@ -13,7 +14,7 @@ import {
 } from "@/types/api";
 
 const Exploration = () => {
-  const [clubData, setClubData] = useState<ClubListData[]>([]);
+  const [clubData, setClubData] = useState<ClubData[]>([]);
   const [page, setPage] = useState<number>(0);
   const [more, setMore] = useState<boolean>(true);
   const [totalSize, setTotalSize] = useState<number>(0);

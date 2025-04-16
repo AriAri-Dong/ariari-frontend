@@ -12,7 +12,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     title: "클럽에 어떻게 가입하나요?",
     body: "이 클럽에 가입하고 싶은데 방법을 모르겠어요. 알려주실 수 있나요?",
     memberData: {
-      id: "101",
+      memberId: "101",
       nickname: "변성은",
       profileType: "ARIARI_SNAKE",
     },
@@ -25,7 +25,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         clubMemberStatusType: "ACTIVE",
         profileType: "ARIARI_DRAGON",
         memberData: {
-          id: "201",
+          memberId: "201",
           nickname: "관리자1",
           profileType: "ARIARI_DRAGON",
         },
@@ -37,7 +37,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     title: "회원비는 얼마인가요?",
     body: "클럽 가입 비용이 궁금합니다.",
     memberData: {
-      id: "102",
+      memberId: "102",
       nickname: "박찬진",
       profileType: "ARIARI_COW",
     },
@@ -50,7 +50,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         clubMemberStatusType: "ACTIVE",
         profileType: "ARIARI_PIG",
         memberData: {
-          id: "202",
+          memberId: "202",
           nickname: "회계담당자",
           profileType: "ARIARI_PIG",
         },
@@ -62,7 +62,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     title: "해외 거주자도 가입할 수 있나요?",
     body: "저는 해외에 거주 중입니다. 가입이 가능할까요?",
     memberData: {
-      id: "103",
+      memberId: "103",
       nickname: "권수연",
       profileType: "ARIARI_DOG",
     },
@@ -75,7 +75,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         clubMemberStatusType: "ACTIVE",
         profileType: "ARIARI_COW",
         memberData: {
-          id: "203",
+          memberId: "203",
           nickname: "관리자2",
           profileType: "ARIARI_COW",
         },
@@ -87,7 +87,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     title: "다음 클럽 모임 일정은 언제인가요?",
     body: "공지사항을 놓쳤어요. 다음 모임 날짜를 알려주세요.",
     memberData: {
-      id: "104",
+      memberId: "104",
       nickname: "정현우",
       profileType: "ARIARI_TIGER",
     },
@@ -100,7 +100,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         clubMemberStatusType: "ACTIVE",
         profileType: "ARIARI_RABBIT",
         memberData: {
-          id: "204",
+          memberId: "204",
           nickname: "총무담당",
           profileType: "ARIARI_RABBIT",
         },
@@ -112,7 +112,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     title: "연령 제한이 있나요?",
     body: "클럽에 가입하려면 최소 또는 최대 나이 제한이 있나요?",
     memberData: {
-      id: "105",
+      memberId: "105",
       nickname: "최은지",
       profileType: "ARIARI_DRAGON",
     },
@@ -125,7 +125,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         clubMemberStatusType: "ACTIVE",
         profileType: "ARIARI_TIGER",
         memberData: {
-          id: "205",
+          memberId: "205",
           nickname: "기획자1",
           profileType: "ARIARI_TIGER",
         },
@@ -137,7 +137,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     title: "클럽 행사에 게스트를 데려갈 수 있나요?",
     body: "다가오는 행사에 친구를 초대하고 싶은데, 가능할까요?",
     memberData: {
-      id: "106",
+      memberId: "106",
       nickname: "한상민",
       profileType: "ARIARI_SHEEP",
     },
@@ -150,7 +150,7 @@ export const QNA_DATA: ClubQuestionData[] = [
         clubMemberStatusType: "ACTIVE",
         profileType: "ARIARI_DRAGON",
         memberData: {
-          id: "206",
+          memberId: "206",
           nickname: "관리자3",
           profileType: "ARIARI_DRAGON",
         },
@@ -162,7 +162,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     title: "활동기간",
     body: "3개월만 활동하고 싶어요",
     memberData: {
-      id: "106",
+      memberId: "106",
       nickname: "아무개",
       profileType: "ARIARI_MONKEY",
     },
@@ -173,7 +173,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     title: "회비",
     body: "회비 너무 비싸요",
     memberData: {
-      id: "106",
+      memberId: "106",
       nickname: "아무개",
       profileType: "ARIARI_CHICKEN",
     },
@@ -184,7 +184,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     title: "동아리방",
     body: "동아리방 있나요?",
     memberData: {
-      id: "106",
+      memberId: "106",
       nickname: "아무개",
       profileType: "ARIARI_CHICKEN",
     },
@@ -195,7 +195,7 @@ export const QNA_DATA: ClubQuestionData[] = [
     title: "회장",
     body: "회장 이름 뭔가요",
     memberData: {
-      id: "106",
+      memberId: "106",
       nickname: "아무개",
       profileType: "ARIARI_MONKEY",
     },

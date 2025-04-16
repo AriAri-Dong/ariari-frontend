@@ -42,7 +42,7 @@ const CreateClubPage = () => {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [submit, setSubmit] = useState<boolean>(false);
-  const [createdClubId, setCreatedClubId] = useState<number | null>(null);
+  const [createdClubId, setCreatedClubId] = useState<string | null>(null);
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [clubName, setClubName] = useState<string>("");
