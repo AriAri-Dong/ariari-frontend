@@ -24,6 +24,7 @@ interface NoticeDropdownProps {
   isFirstPin?: boolean;
   isLastPin?: boolean;
   isSinglePin?: boolean;
+  index: number;
 }
 
 const NoticeDropdown = ({
@@ -34,6 +35,7 @@ const NoticeDropdown = ({
   isFirstPin,
   isLastPin,
   isSinglePin,
+  index,
 }: NoticeDropdownProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
@@ -109,7 +111,7 @@ const NoticeDropdown = ({
         <div className="flex w-full justify-between">
           <div className="flex items-center gap-6">
             <p className="w-[66px] text-center md:block hidden text-subtext2 text-mobile_body3_r">
-              {notice.id}
+              {index + 1}
             </p>
             <div className="flex items-center gap-1 md:gap-2">
               <h1 className="text-text1 text-mobile_body1_m md:text-h4">
