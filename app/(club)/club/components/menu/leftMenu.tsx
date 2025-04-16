@@ -46,7 +46,9 @@ const LeftMenu = () => {
     fetchNextPage,
     isFetchingNextPage,
     unreadCount,
-  } = useClubNotificationQuery(clubId, { enabled: !!role });
+  } = useClubNotificationQuery(clubId, {
+    enabled: role === "ADMIN" || role === "MANAGER",
+  });
 
   console.log(role);
   console.log(clubData);
