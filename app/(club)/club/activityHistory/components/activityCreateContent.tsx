@@ -65,7 +65,7 @@ const ActivityCreateContent = ({
   };
 
   return (
-    <div className="h-full flex flex-col justify-between smax-h-[90vh]">
+    <div className="h-full flex flex-col justify-between max-h-[90vh]">
       <div className="flex justify-between items-center pb-4 border-b md:pb-5">
         <h2 className="text-mobile_h1_contents_title md:text-h1_contents_title">
           활동내역 작성하기
