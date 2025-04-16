@@ -6,6 +6,7 @@ import {
   RECRUITMENT_INTERNAL,
   RECRUITMENT_RANKING_EXTERNAL,
   RECRUITMENT_RANKING_INTERNAL,
+  RECRUITMENT_SEARCH,
 } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
 import { ClubSearchCondition, Pageable } from "@/types/api";
@@ -153,6 +154,32 @@ export const getExternalRecruitments = async (
     return response.data;
   } catch (error) {
     console.error("Error fetching recruitment info:", error);
+    throw error;
+  }
+};
+
+// 모집공고 검색 조회
+export const getRecruitmentInfo = async (
+  query: string,
+  pageable: Pageable
+): Promise<ClubRecruitmentListResponse> => {
+  try {
+    const params = {
+      query,
+      page: pageable.page,
+      size: pageable.size,
+      ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
+    };
+
+    const response = await axiosInstance.get<ClubRecruitmentListResponse>(
+      RECRUITMENT_SEARCH,
+      {
+        params,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching club info:", error);
     throw error;
   }
 };
