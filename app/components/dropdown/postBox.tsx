@@ -30,6 +30,7 @@ import {
   getClubActivityDetail,
   toggleClubActivityLike,
 } from "@/api/club/activity/api";
+import { profileImageMap } from "@/utils/mappingProfile";
 
 interface PostBoxProps {
   data: ClubActivity;
@@ -62,6 +63,8 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
 
   const isManager = role === "ADMIN" || role === "MANAGER";
   const optionData = isManager ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE;
+
+  console.log("post >>", post);
 
   // 좋아요
   const handleLike = async () => {
@@ -207,7 +210,10 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
       <div className="flex justify-between">
         <div className="flex items-center gap-[14px]">
           {/* 프로필 이미지 (필요시 profileImageMap 사용) */}
-          {/* <Image src={profileImageMap[post.clubMember.profileType]} ... /> */}
+          <Image
+            src={profileImageMap[post.clubMember.profileType]}
+            alt={"프로필이미지"}
+          />
           <div>
             <p className="text-mobile_body1_m text-subtext2 md:text-h4">
               {post.clubMember.name}
@@ -328,22 +334,9 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
                 body: text,
               });
 
-              const updatedDetail = await getClubActivityDetail(
-                post.clubActivityId
-              );
-
-              if (updatedDetail && Array.isArray(updatedDetail.comments)) {
-                const comments = updatedDetail.comments;
-                setComments(comments);
-                setPost((prev) => ({
-                  ...prev,
-                  commentCount: comments.length,
-                }));
-              }
-
+              await refreshPostDetail();
               setAlertMessage("댓글이 등록되었어요.");
             } catch (e) {
-              console.error(e);
               setAlertMessage("댓글 등록에 실패했어요.");
             }
           }}
@@ -380,6 +373,7 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
                 nickname={nickname}
                 onEditSuccess={refreshPostDetail}
                 onDeleteSuccess={refreshPostDetail}
+                onPostSuccess={refreshPostDetail}
               />
             ))
           ) : (
