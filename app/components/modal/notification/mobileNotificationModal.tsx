@@ -8,10 +8,7 @@ import {
   useClubNotificationQuery,
   useMyNotificationQuery,
 } from "@/hooks/notification/useNotificationQuery";
-import {
-  markClubNotificationAsRead,
-  markMemberNotificationAsRead,
-} from "@/api/notification/api";
+import { useNotificationMutations } from "@/hooks/notification/useNotificationMutation";
 
 interface ModalProps {
   onclose: () => void;
@@ -53,14 +50,17 @@ const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
   };
 
   // 알림 클릭 시 읽음 처리
+  const { markClubNotificationAsRead, markMemberNotificationAsRead } =
+    useNotificationMutations();
+
   const handleNotificationClick = (
     notificationId: string,
     uri: string | null
   ) => {
     if (target === "club") {
-      markClubNotificationAsRead(clubId, notificationId);
+      markClubNotificationAsRead.mutate({ clubAlarmId: notificationId });
     } else if (target === "member") {
-      markMemberNotificationAsRead(notificationId);
+      markMemberNotificationAsRead.mutate({ memberAlarmId: notificationId });
     }
     onclose();
     if (uri) {

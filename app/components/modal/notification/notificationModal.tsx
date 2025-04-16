@@ -3,8 +3,8 @@ import Image from "next/image";
 import tooltip from "@/images/icon/triangle.svg";
 import { useMyNotificationQuery } from "@/hooks/notification/useNotificationQuery";
 import NotificationList from "@/components/list/notificationList";
-import { markMemberNotificationAsRead } from "@/api/notification/api";
 import { useRouter } from "next/navigation";
+import { useNotificationMutations } from "@/hooks/notification/useNotificationMutation";
 
 interface TooltipProps {
   children: React.ReactNode;
@@ -31,11 +31,13 @@ const NotificationModal = ({ children }: TooltipProps) => {
   };
 
   // 알림 클릭 시 읽음 처리
+  const { markMemberNotificationAsRead } = useNotificationMutations();
+
   const handleNotificationClick = (
     notificationId: string,
     uri: string | null
   ) => {
-    markMemberNotificationAsRead(notificationId);
+    markMemberNotificationAsRead.mutate({ memberAlarmId: notificationId });
     setIsOpen(false);
     if (uri) {
       router.push(uri);

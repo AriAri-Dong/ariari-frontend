@@ -19,7 +19,7 @@ import defaultImg from "@/images/icon/defaultAriari.svg";
 import { getProfileImage } from "@/utils/profileImage";
 import NotificationList from "@/components/list/notificationList";
 import WhiteButton from "@/components/button/basicBtn/whiteBtn";
-import { markClubNotificationAsRead } from "@/api/notification/api";
+import { useClubNotificationMutation } from "@/hooks/notification/useNotificationMutation";
 
 /**
  * 메뉴 컴포넌트
@@ -49,6 +49,8 @@ const LeftMenu = () => {
   } = useClubNotificationQuery(clubId, {
     enabled: role === "ADMIN" || role === "MANAGER",
   });
+
+  const { markClubNotificationAsRead } = useClubNotificationMutation();
 
   console.log(role);
   console.log(clubData);
@@ -86,11 +88,8 @@ const LeftMenu = () => {
   };
 
   // 알림 클릭 시 읽음 처리
-  const handleNotificationClick = (
-    notificationId: string,
-    uri: string | null
-  ) => {
-    markClubNotificationAsRead(clubId, notificationId);
+  const handleNotificationClick = (clubAlarmId: string, uri: string | null) => {
+    markClubNotificationAsRead.mutate({ clubAlarmId });
     if (uri) {
       router.push(uri);
     }
