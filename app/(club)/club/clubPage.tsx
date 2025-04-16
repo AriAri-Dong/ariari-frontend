@@ -30,10 +30,9 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
     pathname.includes(path)
   );
   // clubInfo 컴포넌트가 없는 path 확인
-  const isWithoutClubDetailPaths = clubDetailPathsOnlyMdUp.some((path) =>
+  const isWithoutClubDetailPaths = withoutClubDetailPaths.some((path) =>
     pathname.includes(path)
   );
-
 
   useEffect(() => {
     if (!clubInfo) return;

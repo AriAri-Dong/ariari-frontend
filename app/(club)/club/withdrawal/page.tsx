@@ -21,10 +21,7 @@ const ClubWithdrawalPage = () => {
       <div className="flex lg:gap-9 md:mt-8">
         {/* 임시 메뉴 */}
         <LeftMenu />
-        <ClubWithdrawalCard
-          isWithdrawal={true}
-          role={clubMember?.clubMemberRoleType || null}
-        />
+        <ClubWithdrawalCard isWithdrawal={true} />
       </div>
     </div>
   );
