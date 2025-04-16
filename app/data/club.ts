@@ -33,7 +33,7 @@ export const ACTIVITY_REVIEWS = [
     date: "2025.12.31",
     username: "아리아리",
     detail: "아리아리 활동 후기 상세 내용",
-    badgeType: ["selfDevelopment", "relationship", "skill"],
+    badgeType: ["CAREER_PREPARATION", "NETWORKING", "INTEREST_EXPLORATION"],
   },
   {
     id: 1,
@@ -41,7 +41,7 @@ export const ACTIVITY_REVIEWS = [
     date: "2025.01.15",
     username: "떵개에요",
     detail: "진차 완전 별로 진짜 최악 웩 웩에ㅔ에게ㅔㄱㄱ",
-    badgeType: ["employment", "experience", "health"],
+    badgeType: ["CAREER_PREPARATION", "NETWORKING", "INTEREST_EXPLORATION"],
   },
   {
     id: 2,
@@ -49,7 +49,11 @@ export const ACTIVITY_REVIEWS = [
     date: "2025.07.20",
     username: "수여니",
     detail: "룰루랄라룰라랄",
-    badgeType: ["employment", "interest", "health"],
+    badgeType: [
+      "ACADEMIC_IMPROVEMENT",
+      "INTEREST_EXPLORATION",
+      "CAREER_PREPARATION",
+    ],
   },
   {
     id: 3,
@@ -59,11 +63,11 @@ export const ACTIVITY_REVIEWS = [
     detail:
       "아리아리 활동 후기 상세 내용 아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용아리아리 활동 후기 상세 내용",
     badgeType: [
-      "employment",
-      "relationship",
-      "health",
-      "interest",
-      "experience",
+      "CAREER_PREPARATION",
+      "NETWORKING",
+      "ACADEMIC_IMPROVEMENT",
+      "HEALTH_ENHANCEMENT",
+      "DIVERSE_EXPERIENCE",
     ],
   },
   {
@@ -72,7 +76,11 @@ export const ACTIVITY_REVIEWS = [
     date: "2025.03.04",
     username: "생생정보통 ",
     detail: "아리아리 활동 후기 상세 내용",
-    badgeType: ["interest", "experience", "health"],
+    badgeType: [
+      "CAREER_PREPARATION",
+      "expNETWORKINGrience",
+      "ACADEMIC_IMPROVEMENT",
+    ],
   },
 ];
 
@@ -139,27 +147,41 @@ export const PERCENT_DATA = [
 ];
 
 export const BADGE_ITEMS: {
+  key: string;
   name: string;
   type: "radio" | "text" | "textarea" | "date";
   options?: string[];
   maxLength?: number;
   placeholder?: string;
 }[] = [
-  { name: "성별", type: "radio", options: ["남자", "여자"] },
-  { name: "생년월일", type: "date" },
+  { key: "gender", name: "성별", type: "radio", options: ["남자", "여자"] },
+  { key: "birthday", name: "생년월일", type: "date" },
   {
+    key: "phone",
     name: "연락처",
     type: "text",
     placeholder: "연락처를 입력해 주세요.",
   },
-  { name: "이메일", type: "text", placeholder: "이메일 주소를 입력해 주세요." },
   {
+    key: "email",
+    name: "이메일",
+    type: "text",
+    placeholder: "이메일 주소를 입력해 주세요.",
+  },
+  {
+    key: "education",
     name: "학력",
     type: "radio",
     options: ["중학교 졸업", "고등학교 졸업", "대학교 재학", "대학교 졸업"],
   },
-  { name: "MBTI", type: "text", placeholder: "MBTI를 입력해주세요." },
   {
+    key: "mbti",
+    name: "MBTI",
+    type: "text",
+    placeholder: "MBTI를 입력해주세요.",
+  },
+  {
+    key: "occupation",
     name: "직업",
     type: "radio",
     options: [
@@ -186,66 +208,77 @@ export const BADGE_ITEMS: {
     ],
   },
   {
+    key: "major",
     name: "전공",
     type: "text",
     maxLength: 20,
     placeholder: "주 전공학과를 입력해 주세요.",
   },
   {
+    key: "skill",
     name: "특기",
     type: "text",
     maxLength: 30,
     placeholder: "특기를 입력해주세요.",
   },
   {
+    key: "hobby",
     name: "취미",
     type: "text",
     maxLength: 30,
     placeholder: "취미를 입력해주세요.",
   },
   {
+    key: "preferredActivityField",
     name: "희망 활동 분야",
     type: "text",
     maxLength: 30,
     placeholder: "희망 활동 분야를 입력해주세요.",
   },
   {
+    key: "sns",
     name: "SNS",
     type: "text",
     maxLength: 50,
     placeholder: "SNS를 입력해주세요.",
   },
   {
+    key: "referralSource",
     name: "동아리를 알게된 경로",
     type: "text",
     maxLength: 50,
     placeholder: "동아리를 알게된 경로를 입력해주세요.",
   },
   {
+    key: "availablePeriod",
     name: "활동 가능 기간",
     type: "text",
     maxLength: 50,
     placeholder: "활동 가능 기간을 입력해주세요.",
   },
   {
+    key: "availableTime",
     name: "참여 가능 시간대",
     type: "textarea",
     maxLength: 100,
     placeholder: "참여 가능 시간대를 입력해주세요.",
   },
   {
+    key: "motivation",
     name: "지원 동기",
     type: "textarea",
     maxLength: 300,
     placeholder: "지원동기를 입력해주세요.",
   },
   {
+    key: "aspiration",
     name: "포부",
     type: "textarea",
     maxLength: 300,
     placeholder: "포부를 입력해주세요.",
   },
   {
+    key: "activityExperience",
     name: "활동 경력",
     type: "textarea",
     maxLength: 300,

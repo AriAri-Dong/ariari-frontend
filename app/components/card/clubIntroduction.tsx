@@ -1,15 +1,9 @@
+import { TagData } from "@/types/review";
 import ReviewBadge from "../badge/review/reviewBadge";
 
 interface ClubIntroductionProps {
   introductionText: string;
-  badgeType:
-    | "employment"
-    | "experience"
-    | "health"
-    | "interest"
-    | "relationship"
-    | "selfDevelopment"
-    | "skill";
+  badgeType?: TagData;
 }
 
 const ClubIntroduction = ({
@@ -22,9 +16,11 @@ const ClubIntroduction = ({
       rounded-xl md:px-7 md:py-[26px]"
     >
       <p className="text-body1_r text-subtext1">{introductionText}</p>
-      <div className="flex">
-        <ReviewBadge type={badgeType} />
-      </div>
+      {badgeType && (
+        <div className="flex">
+          <ReviewBadge tag={badgeType} />
+        </div>
+      )}
     </div>
   );
 };

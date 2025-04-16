@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MediumBtn from "@/components/button/basicBtn/mediumBtn";
 import BookmarkBtn from "@/components/button/iconBtn/bookmarkBtn";
 import SahreBtn from "@/components/button/iconBtn/shareBtn";
@@ -13,15 +13,20 @@ import {
   postRecruitmentBookmark,
 } from "@/api/recruitment/api";
 import Alert from "@/components/alert/alert";
-import { useUserStore } from "@/providers/user-store-provider";
 import { useShallow } from "zustand/shallow";
+import { useUserStore } from "@/providers/userStoreProvider";
+import ApplicationFormModal from "@/components/modal/club/applicationFormModal";
+import { ClubInfoCard } from "@/types/components/card";
+
 interface RecruitmentBottomBar {
+  recruitmentData: ClubInfoCard;
   isMyBookmark: boolean;
   bookmarks: number;
   endDate: string;
   isMyApply: boolean;
 }
 const RecruitmentBottomBar = ({
+  recruitmentData,
   isMyBookmark,
   bookmarks,
   endDate,
@@ -32,6 +37,8 @@ const RecruitmentBottomBar = ({
   const isMdUp = useResponsive("md");
   const router = useRouter();
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const [isApplicationFormOpen, setIsApplicationFormOpen] =
+    useState<boolean>(false);
 
   const [count, setCount] = useState<number>(bookmarks);
   const [isScrap, setIsScrap] = useState<boolean>(isMyBookmark);
@@ -77,12 +84,12 @@ const RecruitmentBottomBar = ({
 
   const onApply = () => {
     if (isApplyAvailable) {
-      // router.push("/");
+      setIsApplicationFormOpen(true);
     }
   };
 
   return (
-    <div className="flex bg-white w-full space-x-3">
+    <div className="flex bg-white w-full gap-3">
       <div className="flex-shrink-0">
         <SahreBtn onClick={handleCopy} />
       </div>
@@ -101,6 +108,25 @@ const RecruitmentBottomBar = ({
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
+      {isApplicationFormOpen &&
+        recruitmentData.applyFormData &&
+        (isMdUp ? (
+          <ApplicationFormModal
+            recruitmentData={recruitmentData}
+            applyFormData={recruitmentData.applyFormData}
+            onClose={() => {
+              setIsApplicationFormOpen(false);
+            }}
+          />
+        ) : (
+          <ApplicationFormModal
+            recruitmentData={recruitmentData}
+            applyFormData={recruitmentData.applyFormData}
+            onClose={() => {
+              setIsApplicationFormOpen(false);
+            }}
+          />
+        ))}
     </div>
   );
 };

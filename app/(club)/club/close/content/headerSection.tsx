@@ -7,6 +7,12 @@ import vector from "@/images/icon/backVector.svg";
 interface HeaderSectionProps {
   title: string;
 }
+
+/**
+ * 
+ * @param title 페이 타이틀 
+ * @returns 
+ */
 const HeaderSection = ({ title }: HeaderSectionProps) => {
   const router = useRouter();
 

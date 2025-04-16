@@ -6,17 +6,20 @@ import { PROFILE_SETTING } from "@/data/profileSetting";
 import check from "@/images/icon/check.svg";
 import { useProfileContext } from "@/context/profileConetxt";
 import useScreenHeight from "@/hooks/useScreenHeight";
+import { profileType } from "@/types/member";
 
 const Step1 = () => {
   const { updateProfileData } = useProfileContext();
   const isSmallScreen = useScreenHeight(740);
 
-  const [selectedProfileId, setSelectedProfileId] = useState<number>(1);
+  const [selectedProfileAlias, setSelectedProfileAlias] = useState<
+    string | null
+  >(null);
   const [userName, setUserName] = useState<string>("");
 
-  const handleProfileClick = (id: number) => {
-    setSelectedProfileId(id);
-    updateProfileData({ selectedProfileId: id });
+  const handleProfileClick = (alias: string | null) => {
+    setSelectedProfileAlias(alias);
+    updateProfileData({ selectedProfileType: alias as profileType });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,15 +28,16 @@ const Step1 = () => {
     updateProfileData({ username: value });
   };
 
-  const selectedProfileData = PROFILE_SETTING.find(
-    (item) => item.id === selectedProfileId
-  );
+  // 선택된 프로필 데이터 가져오기
+  const selectedProfileData =
+    PROFILE_SETTING.find((item) => item.alias === selectedProfileAlias) ||
+    PROFILE_SETTING[0];
 
   return (
     <>
       <Image
-        src={selectedProfileData?.imageUrl || ""}
-        alt={selectedProfileData?.alias || "프로필 기본 이미지"}
+        src={selectedProfileData.imageUrl || ""}
+        alt={selectedProfileData.alias || "프로필 기본 이미지"}
         width={90}
         height={90}
         className={`rounded-full border border-menuborder p-1
@@ -61,16 +65,16 @@ const Step1 = () => {
           <div
             key={profile.id}
             className="relative cursor-pointer rounded-full w-[64px] h-[64px] flex items-center justify-center mx-auto"
-            onClick={() => handleProfileClick(profile.id)}
+            onClick={() => handleProfileClick(profile.alias)}
           >
             <Image
               src={profile.imageUrl}
-              alt={profile.alias}
+              alt={profile.alias || ""}
               width={64}
               height={64}
               className="rounded-full block"
             />
-            {profile.id === selectedProfileId && (
+            {profile.alias === selectedProfileAlias && (
               <>
                 <div className="absolute inset-0 bg-black opacity-50 rounded-full z-10" />
                 <div className="absolute inset-0 flex items-center justify-center z-20">

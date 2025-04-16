@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-import { UserStoreProvider } from "@/providers/user-store-provider";
+import { UserStoreProvider } from "@/providers/userStoreProvider";
 import Layout from "@/components/layout/layout";
 import QueryClientProvider from "./providers/QueryClientProvider";
 
