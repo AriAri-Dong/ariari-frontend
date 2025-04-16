@@ -59,6 +59,8 @@ export const REPORT_APPLY = "/report/apply";
 export const REPORT_RECRUITMENT = "/report/recruitments";
 export const REPORT_CLUB_REVIEW = "/report/clubReviews";
 
-// == CLUB_REVIEW ==
+// == CLUB_FINANCE ==
+export const FINANCIAL_RECORDS = "/financial-records";
 
+// == CLUB_REVIEW ==
 export const CLUB_REVIEW_TAG = "club-review/tag-data";
