@@ -64,7 +64,7 @@ export const getMyNotifications = async (page: Pageable["page"]) => {
 };
 
 // 동아리 알림 읽음 처리
-export const readClubNotification = async (
+export const markClubNotificationAsRead = async (
   clubId: string,
   clubAlarmId: string
 ) => {
@@ -80,7 +80,7 @@ export const readClubNotification = async (
 };
 
 // 멤버 알림 읽음 처리
-export const readMemberNotification = async (memberAlarmId: string) => {
+export const markMemberNotificationAsRead = async (memberAlarmId: string) => {
   try {
     const res = await axiosInstance.patch(
       `${MEMBER_MY_NOTIFICATION}/${memberAlarmId}/read`
