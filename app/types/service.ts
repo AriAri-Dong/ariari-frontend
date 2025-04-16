@@ -2,7 +2,7 @@ export interface SystemFaqData {
   id: number;
   title: string;
   body: string;
-  systemFaqStatusType: "APPROVE" | "PENDING" | "REJECT";
+  systemFaqStatusType: "SECURITY" | "APPROVE";
 }
 
 export interface SystemNoticeType {
