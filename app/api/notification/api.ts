@@ -74,6 +74,20 @@ export const readClubNotification = async (
     );
     return res.data;
   } catch (error) {
+    console.log("failed to read club notification", error);
+    throw error;
+  }
+};
+
+// 멤버 알림 읽음 처리
+export const readMemberNotification = async (memberAlarmId: string) => {
+  try {
+    const res = await axiosInstance.patch(
+      `${MEMBER_MY_NOTIFICATION}/${memberAlarmId}/read`
+    );
+    return res.data;
+  } catch (error) {
+    console.log("failed to read member notification", error);
     throw error;
   }
 };
