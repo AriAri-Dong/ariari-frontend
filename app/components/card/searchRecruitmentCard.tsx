@@ -84,7 +84,7 @@ const SearchRecruitmentCard = ({
         </p>
       </div>
 
-      <div className="flex flex-col flex-grow min-w-0 md:gap-3 justify-between">
+      <div className="flex flex-col flex-grow min-w-0 md:gap-3 md:justify-normal justify-between">
         <div className="flex flex-row justify-between items-start">
           <h1 className="truncate text-text1 md:text-h4_sb text-body1_sb min-w-0">
             {title}
@@ -102,7 +102,7 @@ const SearchRecruitmentCard = ({
           )}
         </div>
 
-        <div className="overflow-hidden">
+        <div className="flex flex-col gap-1 md:gap-0.5 overflow-hidden">
           <p className="truncate text-mobile_body3_m md:text-body2_m text-subtext2 min-w-0">
             {clubName}
           </p>
