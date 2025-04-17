@@ -37,11 +37,17 @@ const NotificationModal = ({ children }: TooltipProps) => {
     notificationId: string,
     uri: string | null
   ) => {
-    markMemberNotificationAsRead.mutate({ memberAlarmId: notificationId });
-    setIsOpen(false);
-    if (uri) {
-      router.push(uri);
-    }
+    markMemberNotificationAsRead.mutate(
+      { alarmId: notificationId },
+      {
+        onSettled: () => {
+          setIsOpen(false);
+          if (uri) {
+            router.push(uri);
+          }
+        },
+      }
+    );
   };
 
   return (

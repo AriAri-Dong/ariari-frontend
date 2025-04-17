@@ -89,10 +89,16 @@ const LeftMenu = () => {
 
   // 알림 클릭 시 읽음 처리
   const handleNotificationClick = (clubAlarmId: string, uri: string | null) => {
-    markClubNotificationAsRead.mutate({ clubAlarmId });
-    if (uri) {
-      router.push(uri);
-    }
+    markClubNotificationAsRead.mutate(
+      { alarmId: clubAlarmId },
+      {
+        onSettled: () => {
+          if (uri) {
+            router.push(uri);
+          }
+        },
+      }
+    );
   };
 
   useEffect(() => {

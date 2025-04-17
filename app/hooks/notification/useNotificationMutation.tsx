@@ -12,8 +12,8 @@ export const useClubNotificationMutation = () => {
   const clubId = params.get("clubId") || "";
 
   const mutation = useMutation({
-    mutationFn: ({ clubAlarmId }: { clubAlarmId: string }) =>
-      markClubNotificationAsRead(clubId, clubAlarmId),
+    mutationFn: ({ alarmId }: { alarmId: string }) =>
+      markClubNotificationAsRead(clubId, alarmId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["club", clubId, "notifications"],
@@ -29,8 +29,8 @@ export const useMemberNotificationMutation = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: ({ memberAlarmId }: { memberAlarmId: string }) =>
-      markMemberNotificationAsRead(memberAlarmId),
+    mutationFn: ({ alarmId }: { alarmId: string }) =>
+      markMemberNotificationAsRead(alarmId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["my", "notifications"],

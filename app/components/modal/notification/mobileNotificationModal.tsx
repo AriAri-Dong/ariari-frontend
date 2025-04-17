@@ -57,15 +57,22 @@ const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
     notificationId: string,
     uri: string | null
   ) => {
-    if (target === "club") {
-      markClubNotificationAsRead.mutate({ clubAlarmId: notificationId });
-    } else if (target === "member") {
-      markMemberNotificationAsRead.mutate({ memberAlarmId: notificationId });
-    }
-    onclose();
-    if (uri) {
-      router.push(uri);
-    }
+    const mutation =
+      target === "club"
+        ? markClubNotificationAsRead
+        : markMemberNotificationAsRead;
+
+    mutation.mutate(
+      { alarmId: notificationId },
+      {
+        onSettled: () => {
+          onclose();
+          if (uri) {
+            router.push(uri);
+          }
+        },
+      }
+    );
   };
 
   // 전체 화면 스크롤 방지 (이중 스크롤이 생겨서 넣었습니다.)
