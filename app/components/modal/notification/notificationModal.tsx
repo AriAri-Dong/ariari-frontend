@@ -5,6 +5,7 @@ import { useMyNotificationQuery } from "@/hooks/notification/useNotificationQuer
 import NotificationList from "@/components/list/notificationList";
 import { useRouter } from "next/navigation";
 import { useNotificationMutations } from "@/hooks/notification/useNotificationMutation";
+import WhiteButton from "@/components/button/basicBtn/whiteBtn";
 
 interface TooltipProps {
   children: React.ReactNode;
@@ -18,7 +19,13 @@ interface TooltipProps {
 const NotificationModal = ({ children }: TooltipProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const { myNotifications, isLoading } = useMyNotificationQuery({
+  const {
+    myNotifications,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+  } = useMyNotificationQuery({
     enabled: !!isOpen,
   });
 
@@ -79,6 +86,14 @@ const NotificationModal = ({ children }: TooltipProps) => {
                   notificationList={myNotifications}
                   onClickNotification={handleNotificationClick}
                 />
+              )}
+              {hasNextPage && (
+                <div className="w-full my-3 flex justify-center">
+                  <WhiteButton
+                    title={isFetchingNextPage ? "불러오는 중" : "더보기"}
+                    onClick={fetchNextPage}
+                  />
+                </div>
               )}
             </div>
           </div>
