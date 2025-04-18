@@ -32,9 +32,9 @@ interface ClubInfoProps {
   clubData: ClubData;
   applyFormData: ApplyFormData | null;
   isMyApply: boolean;
+  isMyClub: boolean;
   bookmarks: number;
   myRecentApplyTempId?: string | null;
-
   type?: "PREVIEW" | "APPLYING" | "GENERAL";
 }
 
@@ -47,6 +47,7 @@ const ClubInfo = ({
   clubData,
   applyFormData,
   isMyApply,
+  isMyClub,
   bookmarks,
   myRecentApplyTempId = null,
   type = "GENERAL",
@@ -116,7 +117,6 @@ const ClubInfo = ({
             alt={"main_image"}
             width={792}
             height={792}
-            layout="responsive"
             className="rounded-48 object-cover aspect-[1/1]"
           />
         </div>
@@ -234,6 +234,7 @@ const ClubInfo = ({
                     handleApplyTempId={handleApplyTempId}
                     bookmarks={bookmarks}
                     isMyApply={isMyApply}
+                    isMyClub={isMyClub}
                     type={type}
                   />
                 </div>

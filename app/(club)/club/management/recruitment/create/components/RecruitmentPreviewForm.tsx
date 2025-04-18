@@ -116,6 +116,7 @@ const RecruitmentPreviewForm = ({
               clubData={clubInfo!.clubData}
               applyFormData={null}
               isMyApply={false}
+              isMyClub={false}
               bookmarks={0}
               type="PREVIEW"
             />
@@ -159,6 +160,7 @@ const RecruitmentPreviewForm = ({
               clubData={clubInfo!.clubData}
               applyFormData={null}
               isMyApply={false}
+              isMyClub={false}
               bookmarks={0}
               type="PREVIEW"
             />

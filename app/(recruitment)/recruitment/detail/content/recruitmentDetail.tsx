@@ -6,13 +6,7 @@ import { useSearchParams } from "next/navigation";
 import ClubInfo from "./clubInfo";
 import ClubActivities from "./clubActivities";
 
-import { ClubInfoCard } from "@/types/components/card";
-import {
-  RecruitmentData,
-  RecruitmentNoteData,
-  RecruitmentResponse,
-} from "@/types/recruitment";
-import { transformRecruitmentToMainCard } from "../util/transformRecruitmentToMainCard";
+import { RecruitmentData, RecruitmentResponse } from "@/types/recruitment";
 
 import {
   getClubRecruitmentList,
@@ -25,8 +19,6 @@ const RecruitmentDetail = () => {
   const params = useSearchParams();
   const recruitmentId = params.get("id");
 
-  const [clubId, setClubId] = useState<string>("");
-
   // 이전 모집공고
   const [prevRecruitmentList, setPrevRecruitmentList] = useState<
     RecruitmentData[]
@@ -37,33 +29,39 @@ const RecruitmentDetail = () => {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setError] = useState<string | null>(null);
 
+  // 모집공고 상세
   useEffect(() => {
-    if (recruitmentId) {
-      getRecruitmentDetail(recruitmentId)
-        .then((res) => {
-          setLoading(true);
-          setRecruitmentData(res);
-          setError(null);
-        })
-        .catch((err) => {
-          setError(err.message);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-    if (clubId) {
-      const fetchPrevRecruitment = async () => {
-        try {
-          const data = await getClubRecruitmentList(clubId);
-          setPrevRecruitmentList(data!.recruitmentDataList);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchPrevRecruitment();
-    }
-  }, [recruitmentId, clubId, errorMsg]);
+    if (!recruitmentId) return;
+
+    setLoading(true);
+    getRecruitmentDetail(recruitmentId)
+      .then((res) => {
+        setRecruitmentData(res);
+        setError(null);
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [recruitmentId]);
+
+  // 이전 모집공고
+  useEffect(() => {
+    if (!recruitmentData?.clubData.id) return;
+
+    const fetchPrevRecruitment = async () => {
+      try {
+        const data = await getClubRecruitmentList(recruitmentData.clubData.id);
+        setPrevRecruitmentList(data!.recruitmentDataList);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchPrevRecruitment();
+  }, [recruitmentData?.clubData.id]);
 
   if (loading) {
     return <Loading />;
@@ -82,11 +80,12 @@ const RecruitmentDetail = () => {
         clubData={recruitmentData.clubData}
         applyFormData={recruitmentData.applyFormData}
         isMyApply={recruitmentData.isMyApply}
+        isMyClub={recruitmentData.isMyClub}
         bookmarks={recruitmentData.bookmarks}
         myRecentApplyTempId={recruitmentData.myRecentApplyTempId}
       />
       <ClubActivities
-        clubId={clubId}
+        clubId={recruitmentData.clubData.id}
         recruitmentId={recruitmentId}
         body={recruitmentData.recruitmentData.body}
         recruitmentNoteDataList={recruitmentData.recruitmentNoteDataList}

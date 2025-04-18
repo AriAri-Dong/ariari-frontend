@@ -29,6 +29,7 @@ interface RecruitmentBottomBar {
   myRecentApplyTempId?: string | null;
   handleApplyTempId?: (tempId: string | null) => void;
   isMyApply: boolean;
+  isMyClub: boolean;
   bookmarks: number;
   type?: "PREVIEW" | "APPLYING" | "GENERAL";
 }
@@ -39,6 +40,7 @@ const RecruitmentBottomBar = ({
   myRecentApplyTempId,
   handleApplyTempId,
   isMyApply,
+  isMyClub,
   bookmarks,
   type = "GENERAL",
 }: RecruitmentBottomBar) => {
@@ -56,9 +58,15 @@ const RecruitmentBottomBar = ({
 
   const dDay = calculateRemainingDays(recruitmentData.endDateTime);
   const dDayContent =
-    dDay === "마감" ? "마감" : isMyApply ? "지원 완료" : `지원하기 ${dDay}`;
+    dDay === "마감"
+      ? "마감"
+      : isMyClub
+      ? "가입 완료"
+      : isMyApply
+      ? "지원 완료"
+      : `지원하기 ${dDay}`;
 
-  const isApplyAvailable = dDay !== "마감" && !isMyApply;
+  const isApplyAvailable = dDay !== "마감" && !isMyApply && !isMyClub;
 
   const onHeartClick = () => {
     if (!isSignIn) {
@@ -127,11 +135,7 @@ const RecruitmentBottomBar = ({
         type === "GENERAL" &&
         (isMdUp ? (
           <ApplicationFormModal
-            recruitmentData={recruitmentData}
-            clubData={clubData}
-            bookmarks={bookmarks}
-            isMyApply={isMyApply}
-            applyFormData={applyFormData}
+            recruitmentId={recruitmentData.id}
             myRecentApplyTempId={myRecentApplyTempId}
             handleApplyTempId={handleApplyTempId}
             onClose={() => {
@@ -140,11 +144,7 @@ const RecruitmentBottomBar = ({
           />
         ) : (
           <ApplicationFormBottomSheet
-            recruitmentData={recruitmentData}
-            clubData={clubData}
-            bookmarks={bookmarks}
-            isMyApply={isMyApply}
-            applyFormData={applyFormData}
+            recruitmentId={recruitmentData.id}
             myRecentApplyTempId={myRecentApplyTempId}
             handleApplyTempId={handleApplyTempId}
             onClose={() => {
