@@ -12,7 +12,6 @@ import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import ClubNoticeHeader from "./components/clubNoticeHeader";
 import ClubNoticeDropdown from "@/components/dropdown/clubNoticeDropdown";
-import { NOTICE_DATA } from "@/data/clubNotice";
 import pin from "@/images/icon/pin.svg";
 import CreateNoticeModal from "@/components/modal/club/notice/createNoticeModal";
 import CreateNoticeBottomSheet from "@/components/bottomSheet/notice/createNoticeBottomsheet";
