@@ -8,13 +8,13 @@ import { profileImageMap } from "@/utils/mappingProfile";
 import {
   ApplicationKeys,
   ApplyAnswerReq,
-  ApplyFormData,
   ApplyQuestionData,
   SpecialQuestionList,
 } from "@/types/application";
 import TransparentSmallBtn from "@/components/button/basicBtn/transparentSmallBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import {
+  deleteMyApplyTmp,
   getApplicationTemp,
   postApplication,
   postApplicationTemp,
@@ -22,27 +22,19 @@ import {
 } from "@/api/apply/api";
 import Alert from "@/components/alert/alert";
 import { useRouter } from "next/navigation";
-import { APPLICATION_DISPLAY_INFO } from "@/data/application";
-import { RecruitmentData } from "@/types/recruitment";
-import { ClubData } from "@/types/club";
+import { RecruitmentResponse } from "@/types/recruitment";
+import { getRecruitmentDetail } from "@/api/recruitment/api";
+import Loading from "@/components/feedback/loading";
 
 export interface ApplicationFormModalProps {
-  recruitmentData: RecruitmentData;
-  clubData: ClubData;
-  applyFormData: ApplyFormData;
-  bookmarks: number;
-  isMyApply: boolean;
+  recruitmentId: string;
   myRecentApplyTempId?: string | null;
   handleApplyTempId?: (tempId: string) => void;
   onClose: () => void;
 }
 
 const ApplicationFormModal = ({
-  recruitmentData,
-  clubData,
-  applyFormData,
-  bookmarks,
-  isMyApply,
+  recruitmentId,
   myRecentApplyTempId,
   handleApplyTempId,
   onClose,
@@ -50,6 +42,10 @@ const ApplicationFormModal = ({
   const router = useRouter();
   const nickname = useUserStore((state) => state.memberData.nickname);
   const profileType = useUserStore((state) => state.memberData.profileType);
+
+  // 모집상세 관련 상태
+  const [recruitmentData, setRecruitmentData] =
+    useState<RecruitmentResponse | null>(null);
 
   const [recentApplyTempId, setRecentApplyTempId] = useState<string | null>(
     myRecentApplyTempId || null
@@ -122,7 +118,6 @@ const ApplicationFormModal = ({
   // 유효성 검사 및 요청 데이터 생성
   const createApplySaveReq = (type: "APPLY" | "APPLY_TEMP"): FormData => {
     if (type == "APPLY" && !name) {
-      setAlertMessage("이름을 입력해주세요.");
       throw new Error("이름을 입력해주세요.");
     }
 
@@ -175,12 +170,17 @@ const ApplicationFormModal = ({
       const formData = createApplySaveReq(type);
       // 지원
       if (type === "APPLY") {
-        postApplication(recruitmentData.id, formData).then((res) => {
+        postApplication(recruitmentId, formData).then((res) => {
           if (res === 200) {
             setAlertMessage("지원서 제출이 완료되었습니다.");
+            if (recentApplyTempId) {
+              deleteMyApplyTmp(recentApplyTempId);
+            }
             router.push("/application");
           } else {
-            setAlertMessage("지원서 제출에 실패했습니다. 다시 시도해주세요.");
+            setAlertMessage(
+              "지원서 제출에 실패했습니다.<br />다시 시도해주세요."
+            );
           }
         });
       } else {
@@ -195,7 +195,7 @@ const ApplicationFormModal = ({
           });
           // 임시지원 생성
         } else {
-          postApplicationTemp(recruitmentData.id, formData).then((res) => {
+          postApplicationTemp(recruitmentId, formData).then((res) => {
             if (res) {
               setAlertMessage("임시 저장되었습니다.");
               setRecentApplyTempId(res);
@@ -209,32 +209,35 @@ const ApplicationFormModal = ({
         }
       }
     } catch (error) {
-      console.error("applySaveReqData 생성 오류", error);
+      if (error instanceof Error) {
+        setAlertMessage(error.message);
+      } else {
+        setAlertMessage("문제가 발생했습니다.");
+      }
     }
   };
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, []);
 
+  // 지원 양식 적용
   useEffect(() => {
-    setPortfolioCollected(applyFormData.portfolio);
-    setDocumentQuestions(applyFormData.applyQuestionDataList);
-    setSpecialQuestionList(applyFormData.specialQuestionList);
+    if (!recruitmentData?.applyFormData) return;
+    setPortfolioCollected(recruitmentData.applyFormData.portfolio);
+    setDocumentQuestions(recruitmentData.applyFormData.applyQuestionDataList);
+    setSpecialQuestionList(recruitmentData.applyFormData.specialQuestionList);
 
-    if (applyFormData.specialQuestionList) {
+    if (recruitmentData.applyFormData.specialQuestionList) {
       const data: ApplicationKeys[] = Object.keys(
-        applyFormData.specialQuestionList
+        recruitmentData.applyFormData.specialQuestionList
       ).filter(
         (key): key is ApplicationKeys =>
-          applyFormData.specialQuestionList[key as ApplicationKeys] !== null
+          recruitmentData.applyFormData.specialQuestionList[
+            key as ApplicationKeys
+          ] !== null
       );
       setSelectedFields(data);
     }
-  }, [applyFormData]);
+  }, [recruitmentData?.applyFormData]);
 
+  // 임시 지원 내용 적용
   useEffect(() => {
     if (myRecentApplyTempId)
       getApplicationTemp(myRecentApplyTempId).then(async (res) => {
@@ -276,6 +279,21 @@ const ApplicationFormModal = ({
       });
   }, [myRecentApplyTempId]);
 
+  // 모집 상세 정보
+  useEffect(() => {
+    if (!recruitmentId) return;
+    getRecruitmentDetail(recruitmentId).then((res) => {
+      setRecruitmentData(res);
+    });
+  }, [recruitmentId]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
     <div
       id="background"
@@ -304,52 +322,60 @@ const ApplicationFormModal = ({
         </div>
       </div>
       <div className="bg-white w-[900px] max-h-[75vh] rounded-2xl shadow-modal flex flex-col p-6">
-        <div className="custom-scrollbar overflow-y-auto">
-          <div className="pb-2 border-b border-menuborder">
-            <ClubInfo
-              recruitmentData={recruitmentData}
-              type="APPLYING"
-              clubData={clubData}
-              applyFormData={applyFormData}
-              isMyApply={isMyApply}
-              bookmarks={bookmarks}
-            />
+        {recruitmentData ? (
+          <div className="custom-scrollbar overflow-y-auto">
+            <div className="pb-2 border-b border-menuborder">
+              <ClubInfo
+                recruitmentData={recruitmentData.recruitmentData}
+                type="APPLYING"
+                clubData={recruitmentData.clubData}
+                applyFormData={recruitmentData.applyFormData}
+                isMyApply={recruitmentData.isMyApply}
+                bookmarks={recruitmentData.bookmarks}
+                isMyClub={false}
+              />
+            </div>
+            <div className="pt-[48px]">
+              <ApplicationFieldForm
+                selectedFields={selectedFields}
+                portfolioCollected={portfolioCollected}
+                documentQuestions={documentQuestions}
+                name={name}
+                setName={setName}
+                fileName={fileName}
+                handleFileChange={handleFileChange}
+                handleRemoveFile={handleRemoveFile}
+                answers={answers}
+                handleAnswerChange={handleAnswerChange}
+                url={url}
+                setUrl={setUrl}
+                inputValues={inputValues}
+                handleInputChange={handleInputChange}
+              />
+            </div>
+            <div className="flex gap-4 justify-center mt-[42px]">
+              <TransparentSmallBtn
+                title={"임시저장"}
+                round={true}
+                onClick={() => handelSubmit("APPLY_TEMP")}
+              />
+              <SmallBtn
+                title={"제출하기"}
+                onClick={() => handelSubmit("APPLY")}
+                round={true}
+                className="h-[44px] flex flex-col items-center justify-center"
+              />
+            </div>
+            {alertMessage && (
+              <Alert
+                text={alertMessage}
+                onClose={() => setAlertMessage(null)}
+              />
+            )}
           </div>
-          <div className="pt-[48px]">
-            <ApplicationFieldForm
-              selectedFields={selectedFields}
-              portfolioCollected={portfolioCollected}
-              documentQuestions={documentQuestions}
-              name={name}
-              setName={setName}
-              fileName={fileName}
-              handleFileChange={handleFileChange}
-              handleRemoveFile={handleRemoveFile}
-              answers={answers}
-              handleAnswerChange={handleAnswerChange}
-              url={url}
-              setUrl={setUrl}
-              inputValues={inputValues}
-              handleInputChange={handleInputChange}
-            />
-          </div>
-          <div className="flex gap-4 justify-center mt-[42px]">
-            <TransparentSmallBtn
-              title={"임시저장"}
-              round={true}
-              onClick={() => handelSubmit("APPLY_TEMP")}
-            />
-            <SmallBtn
-              title={"제출하기"}
-              onClick={() => handelSubmit("APPLY")}
-              round={true}
-              className="h-[44px] flex flex-col items-center justify-center"
-            />
-          </div>
-          {alertMessage && (
-            <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
-          )}
-        </div>
+        ) : (
+          <Loading className="md:min-h-[150px]" />
+        )}
       </div>
     </div>
   );

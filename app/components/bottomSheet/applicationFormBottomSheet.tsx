@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUserStore } from "@/providers/userStoreProvider";
 
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
 
 import Alert from "@/components/alert/alert";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
-import ApplicationFieldForm from "../form/application/applicationFieldForm";
 import TransparentLargeBtn from "../button/basicBtn/transparentLargeBtn";
 
 import {
+  deleteMyApplyTmp,
   getApplicationTemp,
   postApplication,
   postApplicationTemp,
@@ -25,31 +24,21 @@ import {
 import { APPLICATION_DISPLAY_INFO } from "@/data/application";
 import { ApplicationFormModalProps } from "../modal/club/applicationFormModal";
 import ApplicationFieldFormMobile from "../form/application/applicationFieldFormMobile";
+import { RecruitmentResponse } from "@/types/recruitment";
+import { getRecruitmentDetail } from "@/api/recruitment/api";
 
 const ApplicationFormBottomSheet = ({
-  recruitmentData,
-  clubData,
-  applyFormData,
-  bookmarks,
-  isMyApply,
+  recruitmentId,
   myRecentApplyTempId,
   handleApplyTempId,
   onClose,
 }: ApplicationFormModalProps) => {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, []);
-
-  const router = useRouter();
+  // 모집상세 관련 상태
+  const [recruitmentData, setRecruitmentData] =
+    useState<RecruitmentResponse | null>(null);
 
   const [recentApplyTempId, setRecentApplyTempId] = useState<string | null>(
     myRecentApplyTempId || null
@@ -173,12 +162,15 @@ const ApplicationFormBottomSheet = ({
       const formData = createApplySaveReq(type);
       // 지원
       if (type === "APPLY") {
-        postApplication(recruitmentData.id, formData).then((res) => {
+        postApplication(recruitmentId, formData).then((res) => {
           if (res === 200) {
             setAlertMessage("지원서 제출이 완료되었습니다.");
+            if (recentApplyTempId) {
+              deleteMyApplyTmp(recentApplyTempId);
+            }
             router.push("/application");
           } else {
-            setAlertMessage("지원서 제출에 실패했습니다. 다시 시도해주세요.");
+            setAlertMessage("지원서 제출에 실패했습니다.");
           }
         });
       } else {
@@ -193,7 +185,7 @@ const ApplicationFormBottomSheet = ({
           });
           // 임시지원 생성
         } else {
-          postApplicationTemp(recruitmentData.id, formData).then((res) => {
+          postApplicationTemp(recruitmentId, formData).then((res) => {
             if (res) {
               setAlertMessage("임시 저장되었습니다.");
               setRecentApplyTempId(res);
@@ -207,31 +199,34 @@ const ApplicationFormBottomSheet = ({
         }
       }
     } catch (error) {
-      console.error("applySaveReqData 생성 오류", error);
+      if (error instanceof Error) {
+        setAlertMessage(error.message);
+      } else {
+        setAlertMessage("문제가 발생했습니다.");
+      }
     }
   };
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, []);
 
+  // 지원 양식 적용
   useEffect(() => {
-    setPortfolioCollected(applyFormData.portfolio);
-    setDocumentQuestions(applyFormData.applyQuestionDataList);
-    setSpecialQuestionList(applyFormData.specialQuestionList);
+    if (!recruitmentData?.applyFormData) return;
 
-    if (applyFormData.specialQuestionList) {
+    setPortfolioCollected(recruitmentData.applyFormData.portfolio);
+    setDocumentQuestions(recruitmentData.applyFormData.applyQuestionDataList);
+    setSpecialQuestionList(recruitmentData.applyFormData.specialQuestionList);
+
+    if (recruitmentData.applyFormData.specialQuestionList) {
       const data: ApplicationKeys[] = Object.keys(
-        applyFormData.specialQuestionList
+        recruitmentData.applyFormData.specialQuestionList
       ).filter(
         (key): key is ApplicationKeys =>
-          applyFormData.specialQuestionList[key as ApplicationKeys] !== null
+          recruitmentData.applyFormData.specialQuestionList[
+            key as ApplicationKeys
+          ] !== null
       );
       setSelectedFields(data);
     }
-  }, [applyFormData]);
+  }, [recruitmentData?.applyFormData]);
 
   useEffect(() => {
     if (myRecentApplyTempId)
@@ -273,6 +268,25 @@ const ApplicationFormBottomSheet = ({
         }
       });
   }, [myRecentApplyTempId]);
+
+  // 모집 상세 정보
+  useEffect(() => {
+    if (!recruitmentId) return;
+    getRecruitmentDetail(recruitmentId).then((res) => {
+      setRecruitmentData(res);
+    });
+  }, [recruitmentId]);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 z-50 flex items-end bg-black/50">
