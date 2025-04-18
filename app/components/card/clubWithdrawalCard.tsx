@@ -35,6 +35,8 @@ const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+  const [showBlockedModal, setShowBlockedModal] = useState(false);
+
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const [clubLimits, setClubLimits] = useState<number>(1);
@@ -45,10 +47,22 @@ const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
 
   // 탈퇴하기 버튼 클릭 핸들러
   const handleWithdrawalBtn = () => {
-    if (isWithdrawal && role === "ADMIN") {
-      setAlertMessage("관리자는 탈퇴할 수 없습니다.");
+    // 매니저 또는 관리자 탈퇴 불가
+    if (isWithdrawal && (role === "ADMIN" || role === "MANAGER")) {
+      setShowBlockedModal(true);
       return;
     }
+    // 관리자만 폐쇄 가능
+    if (!isWithdrawal && role !== "ADMIN") {
+      setShowBlockedModal(true);
+      return;
+    }
+    // 동아리원 수가 2명 이상일 때 폐쇄 불가
+    if (!isWithdrawal && clubLimits > 1) {
+      setShowBlockedModal(true);
+      return;
+    }
+    // 체크박스 체크 여부 확인
     if (isChecked) {
       setShowConfirmModal(true);
     } else {
@@ -70,7 +84,7 @@ const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
         deleteClub(clubId);
       }
     } catch (error) {
-      setAlertMessage("문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      setAlertMessage("문제가 발생했습니다.<br />잠시 후 다시 시도해주세요.");
     } finally {
       setShowSuccessModal(true);
       // 3초 뒤 메인 페이지로 이동
@@ -148,7 +162,7 @@ const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
             secondButton={() => setShowConfirmModal(false)}
             secondButtonText={"취소하기"}
           />
-        ) : clubLimits <= 2 ? (
+        ) : (
           <NotiPopUp
             onClose={() => {
               setShowConfirmModal(false);
@@ -162,14 +176,37 @@ const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
             secondButton={() => setShowConfirmModal(false)}
             secondButtonText={"취소하기"}
           />
+        ))}
+      {/* 관리자/매니저 탈퇴 불가 / 동아리 폐쇄 불가*/}
+      {showBlockedModal &&
+        (isWithdrawal ? (
+          <NotiPopUp
+            onClose={() => setShowBlockedModal(false)}
+            icon="not"
+            modalType={"x-button"}
+            title={
+              role === "ADMIN"
+                ? "관리자는 탈퇴가 불가능해요"
+                : "매니저는 탈퇴가 불가능해요"
+            }
+            description={`동아리를 탈퇴하기 위해서는\n회원의 직책을 일반회원으로 변경해 주세요.`}
+          />
         ) : (
           <NotiPopUp
             onClose={() => {
-              setShowConfirmModal(false);
+              setShowBlockedModal(false);
             }}
             icon={"warning"}
-            title={"동아리원 수가 2명 이상이에요"}
-            description={`동아리는 동아리 관리자가\n유일한 구성원일 때만 폐쇄가 가능해요.`}
+            title={
+              role !== "ADMIN"
+                ? "동아리 폐쇄는 관리자만 할 수 있어요"
+                : "동아리원 수가 2명 이상이에요"
+            }
+            description={
+              role !== "ADMIN"
+                ? `동아리를 폐쇄하려면 관리자 권한이 필요해요.\n관리자에게 요청해 주세요.`
+                : `동아리는 동아리 관리자가\n유일한 구성원일 때만 폐쇄가 가능해요.`
+            }
             modalType={"x-button"}
           />
         ))}
