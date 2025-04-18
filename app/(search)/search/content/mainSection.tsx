@@ -145,7 +145,7 @@ const MainSection = () => {
           height={96}
           className="md:w-[124px] md:h-[124px]"
         />
-        <div className="flex flex-col">
+        <div className="flex flex-coll justify-center items-center">
           <div className="flex flex-row text-mobile_h4_sb md:text-h1_contents_title">
             <h1 className="text-primary">{query}</h1>
             <h1 className="text-text1">에 대한 검색 결과가 없어요.</h1>
@@ -274,7 +274,7 @@ const MainSection = () => {
             height={96}
             className="md: w-[124px] md:h-[124px]"
           />
-          <div className="flex flex-col">
+          <div className="flex flex-col justify-center items-center">
             <div className="flex flex-row text-mobile_h4_sb md:text-h1_contents_title">
               <h1 className="text-primary">{query}</h1>
               <h1 className="text-text1">에 대한 검색 결과가 없어요.</h1>
@@ -419,7 +419,7 @@ const MainSection = () => {
               height={96}
               className="md: w-[124px] md:h-[124px]"
             />
-            <div className="flex flex-col">
+            <div className="flex flex-coll justify-center items-center">
               <div className="flex flex-row text-mobile_h4_sb md:text-h1_contents_title">
                 <h1 className="text-primary">{query}</h1>
                 <h1 className="text-text1">에 대한 검색 결과가 없어요.</h1>
