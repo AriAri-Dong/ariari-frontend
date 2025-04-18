@@ -28,6 +28,9 @@ export const CLUBS_INTERNAL_RANKING = "/clubs/internal/ranking";
 export const CLUBS_EXTERNAL = "/clubs/external";
 export const CLUBS_EXTERNAL_RANKING = "/clubs/external/ranking";
 
+// == CLUB_MEMBERS ==
+export const CLUB_MEMBERS = "/club-members";
+
 // == AUTH TEST ==
 export const TEST_TOKEN = "/test/auth/token";
 export const TEST_USER = "/test/auth/USER";

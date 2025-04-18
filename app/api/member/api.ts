@@ -4,6 +4,8 @@ import {
   MEMBERS_MY_PROFILE,
   MEMBERS,
   MEMBERS_MY,
+  CLUB_MEMBERS,
+  CLUBS,
 } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
 import {
@@ -84,7 +86,7 @@ export const getClubMembers = async (
   };
   try {
     const { data } = await axiosInstance.get<ClubMemberListRes>(
-      `/clubs/${clubId}/club-members`,
+      `${CLUBS}/${clubId}${CLUB_MEMBERS}`,
       { params }
     );
     return data;
@@ -100,7 +102,7 @@ export const putClubMembersRole = async (
 ) => {
   try {
     const { data } = await axiosInstance.put<ClubMemberListRes>(
-      `/club-members/${memberId}/role`,
+      `${CLUB_MEMBERS}/${memberId}/role`,
 
       { clubMemberRoleType: newRole }
     );
@@ -117,7 +119,7 @@ export const putClubMembersStatus = async (
 ) => {
   try {
     const { data } = await axiosInstance.put<ClubMemberListRes>(
-      `/clubs/${clubId}/club-members/status?clubMemberIds=${memberIds.join(
+      `${CLUBS}/${clubId}${CLUB_MEMBERS}/status?clubMemberIds=${memberIds.join(
         ","
       )}`,
       { clubMemberStatusType: newStatus }
@@ -143,7 +145,7 @@ export const entrustAdmin = async (memberId: string) => {
 export const deleteClubMember = async (memberId: string) => {
   try {
     const { data } = await axiosInstance.delete<ClubMemberListRes>(
-      `club-members/${memberId}`
+      `${CLUB_MEMBERS}/${memberId}`
     );
     return data;
   } catch (err) {
@@ -171,7 +173,7 @@ export const getMemberList = async (nickname: string) => {
 export const withdrawalClub = async (clubMemberId: string) => {
   try {
     const response = await axiosInstance.delete<ClubMemberListRes>(
-      `/club-members/withdrawal/${clubMemberId}`
+      `${CLUB_MEMBERS}/withdrawal/${clubMemberId}`
     );
     return response.status;
   } catch (err) {
