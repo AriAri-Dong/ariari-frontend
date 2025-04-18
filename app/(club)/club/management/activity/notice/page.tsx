@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import Alert from "@/components/alert/alert";
@@ -15,15 +15,16 @@ import ClubNoticeDropdown from "@/components/dropdown/clubNoticeDropdown";
 import pin from "@/images/icon/pin.svg";
 import CreateNoticeModal from "@/components/modal/club/notice/createNoticeModal";
 import CreateNoticeBottomSheet from "@/components/bottomSheet/notice/createNoticeBottomsheet";
+import { useClubContext } from "@/context/ClubContext";
+import { useClubPinnedNoticeQuery } from "@/hooks/club/useClubNoticeQuery";
+import { useClubNoticeMutation } from "@/hooks/club/useClubNoticeMutation";
 
 const NoticePage = () => {
-  const router = useRouter();
   const isMdUp = useResponsive("md");
+  const params = useSearchParams();
+  const clubId = params.get("clubId") || "";
 
-  // 임시 권한 설정 (API 연동 전)
-  const [authority, setAuthority] = useState<
-    "USER" | "MEMBER" | "ADMIN" | "SERVICE_ADMIN"
-  >("ADMIN");
+  const { role } = useClubContext();
 
   const [openNotice, setOpenNotice] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -32,27 +33,32 @@ const NoticePage = () => {
     isPinned: boolean;
   } | null>(null);
 
+  const { pinnedNoticeList, isLoading } = useClubPinnedNoticeQuery(clubId);
+  const { addClubNotice } = useClubNoticeMutation();
+
   const handleDropdownToggle = (id: string, isPinned: boolean) => {
     setOpenDropdown((prev) =>
       prev?.id === id && prev?.isPinned === isPinned ? null : { id, isPinned }
     );
   };
 
-  const handleRouter = () => {
-    // 모집 공고 임시 경로
-    router.push("/");
-  };
-
   const handleWrite = () => {
     setOpenNotice(true);
   };
 
-  const handleSubmitSuccess = () => {
-    setAlertMessage("공지사항이 등록되었습니다.");
-    setOpenNotice(false);
+  const handleSubmitSuccess = (formData: FormData) => {
+    addClubNotice.mutate(
+      { clubId, formData },
+      {
+        onSuccess: () => {
+          setAlertMessage("공지사항이 등록되었습니다.");
+          setOpenNotice(false);
+        },
+      }
+    );
   };
 
-  const pinnedNotices = NOTICE_DATA.filter((notice) => notice.pin);
+  if (!role) return;
 
   return (
     <>
@@ -70,7 +76,7 @@ const NoticePage = () => {
                   className="text-subtext2 text-mobile_body2_m md:text-h4
               mb-4 md:mt-9 md:mb-[22px]"
                 >
-                  총 {NOTICE_DATA.length}개의 공지사항이 있어요.
+                  총 {clubId.length}개의 공지사항이 있어요.
                 </p>
                 <div>
                   <div className="flex items-center gap-3 md:gap-4 md:mb-4 mb-3">
@@ -86,31 +92,30 @@ const NoticePage = () => {
                     </h1>
                   </div>
                   <div className="md:mb-0 mb-4">
-                    {NOTICE_DATA.filter((notice) => notice.pin).map(
-                      (notice, index) => (
-                        <ClubNoticeDropdown
-                          key={`pinned-${notice.id}`}
-                          notice={notice}
-                          isOpen={
-                            openDropdown?.id === notice.id &&
-                            openDropdown?.isPinned
-                          }
-                          setOpenDropdownId={() =>
-                            handleDropdownToggle(notice.id, true)
-                          }
-                          pin={true}
-                          isFirstPin={index === 0}
-                          isLastPin={index === pinnedNotices.length - 1}
-                          isSinglePin={pinnedNotices.length === 1}
-                          role={authority}
-                        />
-                      )
-                    )}
+                    {pinnedNoticeList.map((notice, index) => (
+                      <ClubNoticeDropdown
+                        key={`pinned-${notice.id}`}
+                        idx={index + 1}
+                        notice={notice}
+                        isOpen={
+                          openDropdown?.id === notice.id &&
+                          openDropdown?.isPinned
+                        }
+                        setOpenDropdownId={() =>
+                          handleDropdownToggle(notice.id, true)
+                        }
+                        pin={true}
+                        isFirstPin={index === 0}
+                        isLastPin={index === pinnedNoticeList.length - 1}
+                        isSinglePin={pinnedNoticeList.length === 1}
+                        role={role}
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
-              <ClubNoticeHeader role={authority} />
-              <div className="flex flex-col gap-2.5">
+              <ClubNoticeHeader role={role} />
+              {/* <div className="flex flex-col gap-2.5">
                 {NOTICE_DATA.map((notice) => (
                   <ClubNoticeDropdown
                     key={`normal-${notice.id}`}
@@ -122,10 +127,10 @@ const NoticePage = () => {
                       handleDropdownToggle(notice.id, false)
                     }
                     pin={false}
-                    role={authority}
+                    role={role}
                   />
                 ))}
-              </div>
+              </div> */}
               <div className="flex justify-center mt-9 md:mt-10">
                 <PlusBtn title={"더보기"} onClick={() => {}} />
               </div>
@@ -140,12 +145,14 @@ const NoticePage = () => {
               <CreateNoticeModal
                 onClose={() => setOpenNotice(false)}
                 onSubmit={handleSubmitSuccess}
+                setAlertMessage={setAlertMessage}
               />
             )
           : openNotice && (
               <CreateNoticeBottomSheet
                 onClose={() => setOpenNotice(false)}
                 onSubmit={handleSubmitSuccess}
+                setAlertMessage={setAlertMessage}
               />
             )}
         {alertMessage && (

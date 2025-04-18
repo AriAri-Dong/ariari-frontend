@@ -1,96 +1,40 @@
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import close from "@/images/icon/close.svg";
-import Alert from "@/components/alert/alert";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import CustomInput from "@/components/input/customInput";
 import RadioBtn from "@/components/button/radioBtn";
 import RoundPlusBtn from "@/components/button/iconBtn/roundPlusBtn";
 import img_delete from "@/images/icon/img_delete.svg";
+import { useClubNoticeForm } from "@/hooks/club/useNoticeForm";
 
 export interface CreateNoticeModalProps {
   onClose: () => void;
-  onSubmit: (data: {
-    title: string;
-    details: string;
-    images: string[];
-  }) => void;
+  onSubmit: (formData: FormData) => void;
+  setAlertMessage: (message: string) => void;
 }
 
 const MAX_IMAGES = 10;
 
-const CreateNoticeModal = ({ onClose, onSubmit }: CreateNoticeModalProps) => {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  const [title, setTitle] = useState<string>("");
-  const [details, setDetails] = useState<string>("");
-  const [pin, setPin] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
-
-  const validateForm = () => {
-    if (!title.trim()) {
-      setAlertMessage("공지사항 제목을 입력해주세요.");
-      return false;
-    }
-    if (!details.trim()) {
-      setAlertMessage("공지사항 상세 내용을 입력해주세요.");
-      return false;
-    }
-    return true;
-  };
-
-  const handleImageDelete = (index: number) => {
-    setUploadedImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const triggerFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const newImages: string[] = [];
-      const maxFileSize = 100 * 1024 * 1024;
-      const allowedExtensions = ["image/png", "image/jpeg"];
-
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-
-        if (file.size > maxFileSize) {
-          setAlertMessage("파일 용량은 100MB를 초과할 수 없습니다.");
-          return;
-        }
-        if (!allowedExtensions.includes(file.type)) {
-          setAlertMessage("png, jpg 파일만 업로드 가능합니다.");
-          return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (e.target?.result) {
-            setUploadedImages((prev) => {
-              if (prev.length < MAX_IMAGES) {
-                return [...prev, e.target!.result as string];
-              }
-              return prev;
-            });
-          }
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-  };
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      onSubmit({ title, details, images: uploadedImages });
-      onClose();
-    }
-  };
+const CreateNoticeModal = ({
+  onClose,
+  onSubmit,
+  setAlertMessage,
+}: CreateNoticeModalProps) => {
+  const {
+    title,
+    body,
+    isFixed,
+    setTitle,
+    setBody,
+    setIsFixed,
+    fileInputRef,
+    uploadedImages,
+    handleFileChange,
+    handleImageDelete,
+    triggerFileInput,
+    handleSubmit,
+  } = useClubNoticeForm({ onSubmit, setAlertMessage });
 
   // 스크롤 금지
   useEffect(() => {
@@ -136,9 +80,9 @@ const CreateNoticeModal = ({ onClose, onSubmit }: CreateNoticeModalProps) => {
             className="mb-4"
           />
           <RadioBtn
-            isChecked={pin}
+            isChecked={isFixed}
             label={"공지사항 상단에 고정하기"}
-            onClick={() => setPin(!pin)}
+            onClick={() => setIsFixed(!isFixed)}
             className={"py-1 px-[6px]"}
           />
 
@@ -194,8 +138,8 @@ const CreateNoticeModal = ({ onClose, onSubmit }: CreateNoticeModalProps) => {
           <div className="px-1">
             <textarea
               placeholder="동아리원들에게 공지하실 내용을 작성해 주세요."
-              value={details}
-              onChange={(e) => setDetails(e.target.value)}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
               maxLength={3000}
               className="w-full p-2 border-0 rounded-md resize-none text-body1_r text-subtext1 
                   focus:outline-none focus:ring-[1px] focus:ring-searchbarborder placeholder:text-unselected 
@@ -206,13 +150,10 @@ const CreateNoticeModal = ({ onClose, onSubmit }: CreateNoticeModalProps) => {
 
         {/* 하단 버튼 */}
         <div className="flex items-center justify-end mt-6 pb-1 gap-[33px]">
-          <p className="text-unselected text-h4">{details.length}/3000</p>
+          <p className="text-unselected text-h4">{body.length}/3000</p>
           <SmallBtn title="등록하기" onClick={handleSubmit} />
         </div>
       </div>
-      {alertMessage && (
-        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
-      )}
     </div>
   );
 };
