@@ -15,7 +15,7 @@ export const getServiceNotices = async () => {
 // 서비스 공지사항 상세 조회
 export const getServiceNoticesDetail = async (systemNoticeId: number) => {
   const { data } = await axios.get<SystemNoticeDetailResponse>(
-    `${SERVICE_NOTICES}/${systemNoticeId}`
+    `${SERVICE_NOTICES}/${systemNoticeId}/details`
   );
   return data.systemNoticeData;
 };
