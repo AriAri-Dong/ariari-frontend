@@ -1,4 +1,4 @@
-import { CLUBS } from "@/api/apiUrl";
+import { CLUB_NOTICE, CLUBS } from "@/api/apiUrl";
 import axiosInstance from "@/api/axiosInstance";
 import { ClubNoticeDataRes } from "@/types/club";
 
@@ -10,7 +10,7 @@ import { ClubNoticeDataRes } from "@/types/club";
 export const getClubFixedNoticeList = async (clubId: string) => {
   try {
     const res = await axiosInstance.get<ClubNoticeDataRes>(
-      `${CLUBS}/${clubId}/club-notices/fix`
+      `${CLUBS}/${clubId}${CLUB_NOTICE}/fix`
     );
     return res.data;
   } catch (error) {
