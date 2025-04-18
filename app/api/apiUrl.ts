@@ -64,3 +64,6 @@ export const FINANCIAL_RECORDS = "/financial-records";
 
 // == CLUB_REVIEW ==
 export const CLUB_REVIEW_TAG = "club-review/tag-data";
+
+// == CLUB_NOTICE ==
+export const CLUB_NOTICE = "/club-notices";
