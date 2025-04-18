@@ -479,7 +479,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 9,
     label: "동아리 폐쇠",
-    url: "/club/close",
+    url: "/club/management/close",
     subUrl: [],
   },
 ];
