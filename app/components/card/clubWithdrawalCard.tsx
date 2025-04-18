@@ -97,7 +97,7 @@ const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
     getClubMembers(clubId).then((data) => {
       setClubLimits(data?.pageInfo.totalSize || 0);
     });
-  }, [isWithdrawal]);
+  }, [clubId, isWithdrawal]);
 
   return (
     <div className="w-full flex flex-col gap-7 rounded-8 bg-background mt-5 mb-20 md:mb-[124px] md:mt-0 md:px-6 md:py-[26px] md:gap-10">
