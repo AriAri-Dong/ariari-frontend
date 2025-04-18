@@ -18,3 +18,30 @@ export const getClubFixedNoticeList = async (clubId: string) => {
     throw error;
   }
 };
+
+// 동아리 공지사항 등록
+export interface AddClubNoticeParams {
+  clubId: string;
+  formData: FormData;
+}
+
+export const addClubNotice = async ({
+  clubId,
+  formData,
+}: AddClubNoticeParams) => {
+  try {
+    const res = await axiosInstance.post(
+      `${CLUBS}/${clubId}${CLUB_NOTICE}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log("Failed to post club notice", error);
+    throw error;
+  }
+};
