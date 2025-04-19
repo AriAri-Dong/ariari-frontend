@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import Image from "next/image";
 import vector from "@/images/icon/backVector.svg";
 import pull_down from "@/images/icon/sub_pull_down.svg";
-import { ApplicationFromViewModalProps } from "./applicationFormViewModal";
+import { ApplicationFormViewModalProps } from "./applicationFormViewModal";
 import SingleSelectOptions from "@/components/pulldown/singleSelectOptions";
 import Contour from "@/components/bar/contour";
 import FileBadge from "@/components/badge/fileBadge";
@@ -15,7 +15,7 @@ const MobileApplicationFormViewModal = ({
   portfolio,
   portfolioData,
   fields,
-}: ApplicationFromViewModalProps) => {
+}: ApplicationFormViewModalProps) => {
   const optionsRef = useRef<HTMLDivElement | null>(null);
 
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);

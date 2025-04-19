@@ -1,6 +1,6 @@
-
 import { ClubData } from "@/types/club";
 import { PageInfo } from "@/types/pageInfo";
+import { ApplyFormData } from "./application";
 
 export type ProcedureType = "DOCUMENT" | "INTERVIEW";
 export type RecruitmentStatusType = "SCHEDULED" | "OPEN" | "CLOSED";
@@ -19,6 +19,25 @@ export interface RecruitmentData {
   // isActivated: boolean;
   recruitmentStatusType: RecruitmentStatusType;
   isMyBookmark: boolean;
+  recruitmentNoteDataList: RecruitmentNoteData[];
+}
+export interface ClubRecruitmentListResponse {
+  recruitmentDataList: RecruitmentData[];
+  pageInfo: PageInfo;
+}
+
+export interface RecruitmentSaveReq {
+  title: string;
+  body: string;
+  procedureType: "DOCUMENT" | "INTERVIEW";
+  limits: number;
+  startDateTime: string;
+  endDateTime: string;
+  recruitmentNotes: RecruitmentNoteData[];
+}
+export interface FormDataRequest {
+  saveReq: RecruitmentSaveReq;
+  file: File | null;
 }
 
 export interface RecruitmentNoteData {
@@ -28,10 +47,6 @@ export interface RecruitmentNoteData {
 export interface ApplyQuestionData {
   id: number;
   body: string;
-}
-
-export interface ApplyFormData {
-  applyQuestionDataList: ApplyQuestionData[];
 }
 
 export interface RecruitmentResponse {

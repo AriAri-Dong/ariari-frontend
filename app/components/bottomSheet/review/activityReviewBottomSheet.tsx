@@ -2,12 +2,13 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import close from "@/images/icon/close.svg";
 
-import { REVIEW_BADGE_LIST } from "@/data/reviewBadge";
 import { ActivityReviewProps } from "@/types/components/review";
 import Alert from "@/components/alert/alert";
 import ReviewBadgeContainer from "@/components/badge/review/reviewBadgeContainer";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import CustomInput from "@/components/input/customInput";
+import { TagData, TagIconType } from "@/types/review";
+import { getClubTag } from "@/api/review/api";
 
 const ActivityReviewBottomSheet = ({
   onClose,
@@ -15,32 +16,30 @@ const ActivityReviewBottomSheet = ({
 }: ActivityReviewProps) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
-  const [details, setDetails] = useState<string>("");
+  const [body, setBody] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [selectedBadges, setSelectedBadges] = useState<number[]>([]);
 
-  const handleBadgeSelection = (id: number) => {
-    if (selectedBadges.includes(id)) {
-      setSelectedBadges(selectedBadges.filter((badgeId) => badgeId !== id));
+  const [tagData, setTagData] = useState<TagData[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagIconType[]>([]);
+
+  const handleTagSelection = (tagIcon: TagIconType) => {
+    if (selectedTags.includes(tagIcon)) {
+      setSelectedTags(selectedTags.filter((item) => item !== tagIcon));
     } else {
-      setSelectedBadges([...selectedBadges, id]);
+      setSelectedTags([...selectedTags, tagIcon]);
     }
   };
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
 
   const validateForm = () => {
     if (!title.trim()) {
       setAlertMessage("활동후기 제목을 입력해주세요.");
       return false;
     }
-    if (!details.trim()) {
+    if (!body.trim()) {
       setAlertMessage("활동후기 내용을 입력해주세요.");
       return false;
     }
-    if (selectedBadges.length === 0) {
+    if (selectedTags.length === 0) {
       setAlertMessage("좋았던 점을 최소 1개 이상 선택해주세요.");
       return false;
     }
@@ -49,7 +48,7 @@ const ActivityReviewBottomSheet = ({
 
   const handleSubmit = () => {
     if (validateForm()) {
-      onSubmit({ title, details, badges: selectedBadges });
+      onSubmit({ title, body, icons: selectedTags });
       onClose();
     }
   };
@@ -63,6 +62,16 @@ const ActivityReviewBottomSheet = ({
     return () => {
       document.body.style.overflow = "auto";
     };
+  }, []);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  useEffect(() => {
+    getClubTag().then((res) => {
+      setTagData(res);
+    });
   }, []);
 
   return (
@@ -107,9 +116,9 @@ const ActivityReviewBottomSheet = ({
             <span className="text-noti text-mobile_body3_m pl-1">*</span>
           </h3>
           <ReviewBadgeContainer
-            REVIEW_BADGE_LIST={REVIEW_BADGE_LIST}
-            onBadgeSelect={handleBadgeSelection}
-            selectedBadges={selectedBadges}
+            tags={tagData}
+            onTagSelect={handleTagSelection}
+            selectedTags={selectedTags}
             className="flex-col items-start"
           />
 
@@ -122,8 +131,8 @@ const ActivityReviewBottomSheet = ({
           <div className="p-1">
             <textarea
               placeholder="동아리 분위기, 개인적 평가 등 자유롭게 할동 후기를 기재해 주세요."
-              value={details}
-              onChange={(e) => setDetails(e.target.value)}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
               maxLength={1000}
               className="w-full p-2 border-0 rounded-md resize-none text-mobile_body1_r 
                   text-subtext1 focus:outline-none focus:ring-[1px] 

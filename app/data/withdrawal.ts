@@ -1,6 +1,6 @@
-import { WithdrawalInfoItem } from "@/types/components/withdrawInfo";
+import { NoticeItem } from "@/types/components/withdrawInfo";
 
-export const WITHDRAWAL_INFO: WithdrawalInfoItem[] = [
+export const WITHDRAWAL_INFO: NoticeItem[] = [
   {
     title: "탈퇴 후 데이터 삭제 관련 안내",
     description:
@@ -49,7 +49,7 @@ export const WITHDRAWAL_INFO: WithdrawalInfoItem[] = [
   },
 ];
 
-export const CLUB_WITHDRAWAL_INFO_MANAGER: WithdrawalInfoItem[] = [
+export const CLUB_WITHDRAWAL_INFO_MANAGER: NoticeItem[] = [
   {
     title: "동아리 폐쇄 조건",
     description:
@@ -62,7 +62,7 @@ export const CLUB_WITHDRAWAL_INFO_MANAGER: WithdrawalInfoItem[] = [
   {
     title: "동아리 강제 폐쇄",
     description:
-      "부적절한 사용이 지속될 경우, 플랫폼의 판단에 따라 동아리가 강제 폐쇄될 수 있습니다",
+      "부적절한 사용이 지속될 경우, 플랫폼의 판단에 따라 동아리가 강제 폐쇄될 수 있습니다.",
     sections: [
       "아래와 같은 경우, 플랫폼의 판단에 따라 동아리가 강제 폐쇄될 수 있습니다",
       "-아리아리 동아리 운영 원칙 및 아리아리 이용수칙을 위반한 경우",
@@ -94,7 +94,7 @@ export const CLUB_WITHDRAWAL_INFO_MANAGER: WithdrawalInfoItem[] = [
   },
 ];
 
-export const CLUB_WITHDRAWAL_INFO_GENERAL: WithdrawalInfoItem[] = [
+export const CLUB_WITHDRAWAL_INFO_GENERAL: NoticeItem[] = [
   {
     title: "자율적 탈퇴 권한",
     description: null,

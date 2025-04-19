@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import ClubInfoSection from "../../../content/clubInfoSection";
+import React, { useEffect, useState } from "react";
 import Alert from "@/components/alert/alert";
 import useResponsive from "@/hooks/useResponsive";
 import NoticeBanner from "@/components/banner/noticeBanner";
@@ -15,27 +14,39 @@ import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import TransparentSmallBtn from "@/components/button/basicBtn/transparentSmallBtn";
 import ApplicationFromPreviewModal from "@/components/modal/club/preview/applicationFormPreviewModal";
-import { BADGE_ITEMS, BADGE_TITLES } from "@/data/club";
-import MobileApplicationFromPreviewModal from "@/components/modal/club/preview/mobileApplicationFormPreviewModal";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import ApplicationFormPeviewBottomSheet from "@/components/bottomSheet/preview/applicationPreviewBottomSheet";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
-import ClubInfoWrapper from "@/(club)/club/content/clubInfoWrapper";
+import { ApplicationKeys, ApplyQuestionData } from "@/types/application";
+import { APPLICATION_DISPLAY_INFO } from "@/data/application";
+import { useClubApplyFormQuery } from "@/hooks/club/applyForm/useClubApplyFormQuery";
+import { useClubApplyFormMutation } from "@/hooks/club/applyForm/useClubApplyFormMutation";
+import { useSearchParams } from "next/navigation";
 
 const ApplicationFormPage = () => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") || "";
   const isMdUp = useResponsive("md");
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [name, setName] = useState<string>("");
   const [nameError, setNameError] = useState<string | null>(null);
-  const [selectedBadges, setSelectedBadges] = useState<string[]>([]);
+  const [selectedBadges, setSelectedBadges] = useState<ApplicationKeys[]>([]);
   const [documentQuestions, setDocumentQuestions] = useState<
-    { question: string }[]
-  >([{ question: "" }]);
-  const [portfolioCollection, setPortfolioCollection] = useState<string>("");
+    ApplyQuestionData[]
+  >([]);
   const [isPortfolioCollected, setIsPortfolioCollected] =
     useState<boolean>(true);
   const [openPreview, setOpenPreview] = useState<boolean>(false);
+  const { specialQuestions, applyQuestionDataList, isLoading, portfolio } =
+    useClubApplyFormQuery(clubId);
+  const { updateApplicationForm } = useClubApplyFormMutation({
+    options: {
+      onSuccess: () =>
+        setAlertMessage("지원서 양식이 정상적으로 등록되었습니다."),
+      onError: () => setAlertMessage("지원서 양식 등록에 실패했습니다."),
+    },
+  });
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -47,7 +58,7 @@ const ApplicationFormPage = () => {
     }
   };
 
-  const handleBadgeClick = (text: string) => {
+  const handleBadgeClick = (text: ApplicationKeys) => {
     setSelectedBadges((prev) =>
       prev.includes(text)
         ? prev.filter((item) => item !== text)
@@ -56,36 +67,63 @@ const ApplicationFormPage = () => {
   };
 
   const addDocumentQuestion = () => {
-    setDocumentQuestions((prev) => [...prev, { question: "", answer: "" }]);
+    const id = Math.floor(Math.random() * 9e17 + 1e17).toString(); // 고유id 생성
+    setDocumentQuestions((prev) => [...prev, { id: id, body: "" }]);
   };
 
-  const removeDocumentQuestion = (index: number) => {
+  const removeDocumentQuestion = (index: string) => {
     if (documentQuestions.length > 1) {
-      setDocumentQuestions((prev) => prev.filter((_, i) => i !== index));
+      setDocumentQuestions((prev) => prev.filter((item) => item.id !== index));
     }
   };
 
-  // 문항 입력값 변경 처리
   const handleDocumentQuestionChange = (
-    index: number,
-    field: "question",
+    id: string,
+    field: "body",
     value: string
   ) => {
-    const updatedQuestions = [...documentQuestions];
-    updatedQuestions[index][field] = value;
-    setDocumentQuestions(updatedQuestions);
+    setDocumentQuestions((prevQuestions) =>
+      prevQuestions.map((item, i) =>
+        item.id === id ? { ...item, [field]: value } : item
+      )
+    );
   };
 
   const togglePortfolioCollection = (isCollected: boolean) => {
     setIsPortfolioCollected(isCollected);
-    if (!isCollected) {
-      setPortfolioCollection("");
-    }
   };
 
   const handlePreview = () => {
     setOpenPreview(true);
   };
+  const handleSubmitForm = () => {
+    updateApplicationForm.mutate({
+      data: {
+        requiresPortfolio: isPortfolioCollected,
+        applyQuestionList: [
+          ...selectedBadges,
+          ...documentQuestions.map((item) => item.body),
+        ],
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    if (applyQuestionDataList) {
+      setDocumentQuestions(applyQuestionDataList);
+    }
+    if (specialQuestions) {
+      const filteredBadges = Object.entries(specialQuestions)
+        .filter(([_, val]) => val !== null)
+        .map(([key]) => key) as ApplicationKeys[];
+      setSelectedBadges(filteredBadges);
+    }
+    if (typeof portfolio === "boolean") {
+      setIsPortfolioCollected(portfolio);
+    }
+  }, [applyQuestionDataList, specialQuestions, portfolio, isLoading]);
 
   return (
     <>
@@ -125,18 +163,18 @@ const ApplicationFormPage = () => {
                     setName("");
                     setNameError(null);
                     setSelectedBadges([]);
-                    setDocumentQuestions([{ question: "" }]);
+                    setDocumentQuestions([{ id: "", body: "" }]);
                   }}
                 />
               </div>
               <Contour className={"mt-2.5 mb-[14px]"} />
               <div className="flex flex-wrap gap-2.5">
-                {BADGE_TITLES.map((item) => (
+                {Object.values(APPLICATION_DISPLAY_INFO).map((item) => (
                   <ToggleBadge
-                    key={item}
-                    text={item}
-                    isSelected={selectedBadges.includes(item)}
-                    onClick={() => handleBadgeClick(item)}
+                    key={item.key}
+                    text={item.name}
+                    isSelected={selectedBadges.includes(item.key)}
+                    onClick={() => handleBadgeClick(item.key)}
                   />
                 ))}
               </div>
@@ -153,25 +191,27 @@ const ApplicationFormPage = () => {
               </div>
               <Contour className={"mt-2.5"} />
               {documentQuestions.map((docQuestion, index) => (
-                <div className="flex flex-col" key={`doc-${index}`}>
+                <div className="flex flex-col" key={`doc-${docQuestion.id}`}>
                   <div className="flex justify-between mb-2.5 mt-[14px] md:mt-5 md:mb-[13px]">
                     <h3 className="text-text1 text-mobile_h4_sb md:text-h4_sb">{`문항 - ${
                       index + 1
                     }`}</h3>
                     {index !== 0 && (
                       <DeleteBtn
-                        onClick={() => removeDocumentQuestion(index)}
+                        onClick={() =>
+                          removeDocumentQuestion(docQuestion.id.toString())
+                        }
                       />
                     )}
                   </div>
                   <div className="flex flex-col gap-3">
                     <CustomInput
-                      value={docQuestion.question}
+                      value={docQuestion.body}
                       placeholder={"문항을 작성해주세요"}
                       onChange={(e) =>
                         handleDocumentQuestionChange(
-                          index,
-                          "question",
+                          docQuestion.id,
+                          "body",
                           e.target.value
                         )
                       }
@@ -195,12 +235,6 @@ const ApplicationFormPage = () => {
                   onClick={() => togglePortfolioCollection(false)}
                 />
               </div>
-              <CustomInput
-                value={portfolioCollection}
-                placeholder={"포트폴리오 수집 목적을 입력해 주세요."}
-                onChange={(e) => setPortfolioCollection(e.target.value)}
-                disable={!isPortfolioCollected}
-              />
               {/* 모바일 버튼 */}
               <div className="md:hidden felx flex-col mt-10">
                 <LargeBtn title={"저장하기"} onClick={() => {}} />
@@ -218,7 +252,11 @@ const ApplicationFormPage = () => {
                   onClick={handlePreview}
                   round={true}
                 />
-                <SmallBtn title={"저장하기"} onClick={() => {}} round={true} />
+                <SmallBtn
+                  title={"저장하기"}
+                  onClick={handleSubmitForm}
+                  round={true}
+                />
               </div>
             </div>
           </div>
@@ -228,18 +266,7 @@ const ApplicationFormPage = () => {
               <ApplicationFromPreviewModal
                 onClose={() => setOpenPreview(false)}
                 portfolioCollected={isPortfolioCollected}
-                selectedFields={selectedBadges.map((badgeName) => {
-                  const field = BADGE_ITEMS.find(
-                    (item) => item.name === badgeName
-                  );
-                  return (
-                    field || {
-                      name: badgeName,
-                      type: "text",
-                      placeholder: `${badgeName}을(를) 입력해주세요.`,
-                    }
-                  );
-                })}
+                selectedFields={selectedBadges}
                 documentQuestions={documentQuestions}
               />
             )
@@ -247,18 +274,7 @@ const ApplicationFormPage = () => {
               <ApplicationFormPeviewBottomSheet
                 onClose={() => setOpenPreview(false)}
                 portfolioCollected={isPortfolioCollected}
-                selectedFields={selectedBadges.map((badgeName) => {
-                  const field = BADGE_ITEMS.find(
-                    (item) => item.name === badgeName
-                  );
-                  return (
-                    field || {
-                      name: badgeName,
-                      type: "text",
-                      placeholder: `${badgeName}을(를) 입력해주세요.`,
-                    }
-                  );
-                })}
+                selectedFields={selectedBadges}
                 documentQuestions={documentQuestions}
               />
             )}

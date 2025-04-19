@@ -6,6 +6,7 @@ import {
   RECRUITMENT_INTERNAL,
   RECRUITMENT_RANKING_EXTERNAL,
   RECRUITMENT_RANKING_INTERNAL,
+  RECRUITMENT_SEARCH,
 } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
 import { ClubSearchCondition, Pageable } from "@/types/api";
@@ -157,6 +158,32 @@ export const getExternalRecruitments = async (
   }
 };
 
+// 모집공고 검색 조회
+export const getRecruitmentInfo = async (
+  query: string,
+  pageable: Pageable
+): Promise<ClubRecruitmentListResponse> => {
+  try {
+    const params = {
+      query,
+      page: pageable.page,
+      size: pageable.size,
+      ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
+    };
+
+    const response = await axiosInstance.get<ClubRecruitmentListResponse>(
+      RECRUITMENT_SEARCH,
+      {
+        params,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching club info:", error);
+    throw error;
+  }
+};
+
 // 모집공고 북마크 등록
 export const addRecruitmentBookmark = async (recruitmentId: string) => {
   try {
@@ -293,6 +320,28 @@ export const deleteRecruitmentBookmark = async (recruitmentId: string) => {
   try {
     const response = await axiosInstance.delete(
       `/recruitments/${recruitmentId}/bookmark`
+    );
+    return response.status;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
+// 모집공고 등록
+export const postRecruitment = async (clubId: string, formData: FormData) => {
+  try {
+    const response = await axiosInstance.post(
+      `/clubs/${clubId}/recruitments`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
     return response.status;
   } catch (err) {

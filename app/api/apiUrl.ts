@@ -13,6 +13,7 @@ export const MEMBER_MY_NOTIFICATION = "/member/alarm";
 
 // == RECRUITMENT ==
 export const RECRUITMENT = "/recruitments";
+export const RECRUITMENT_SEARCH = "/recruitments/search";
 export const RECRUITMENT_EXTERNAL = "/recruitments/external";
 export const RECRUITMENT_INTERNAL = "/recruitments/internal";
 export const RECRUITMENT_BOOKMARKS = "/recruitments/my-bookmarks";
@@ -29,6 +30,9 @@ export const CLUBS_INTERNAL_RANKING = "/clubs/internal/ranking";
 export const CLUBS_EXTERNAL = "/clubs/external";
 export const CLUBS_EXTERNAL_RANKING = "/clubs/external/ranking";
 
+// == CLUB_MEMBERS ==
+export const CLUB_MEMBERS = "/club-members";
+
 // == AUTH TEST ==
 export const TEST_TOKEN = "/test/auth/token";
 export const TEST_USER = "/test/auth/USER";
@@ -41,12 +45,17 @@ export const SCHOOLS_VALIDATE = "/schools/auth/validate";
 export const SCHOOLS_SEND = "/schools/auth/send";
 export const SCHOOLS_CANCEL = "/schools/auth/cancel";
 
+// == APPLY ==
+export const APPLY_MY = "/applies/my";
+
 // == APPLY_TEMPS ==
 export const APPLY_TEMPS = "/apply-temp";
-export const APPLY_TEMPS_MY = "/apply-temp/my";
+export const APPLY_TEMPS_MY = "/apply-temps/my";
+
+// == APPLY_FORM ==
+export const APPLY_FORM = "/apply-forms";
 
 // == REPORT ==
-
 export const REPORT_CLUB = "/report/clubs";
 export const REPORT_MEMBER = "/report/members";
 export const REPORT_PASSREVIEW = "/report/passReview";
@@ -56,3 +65,19 @@ export const REPORT_CLUB_QUESTION = "/reports/clubQuestions";
 export const REPORT_APPLY = "/report/apply";
 export const REPORT_RECRUITMENT = "/report/recruitments";
 export const REPORT_CLUB_REVIEW = "/report/clubReviews";
+
+// == SERVICE ==
+export const SERVICE_NOTICES = "/service-notices";
+export const SERVICE_FAQS = "/service-faqs";
+
+// == CLUB ACTIVITY ==
+export const CLUB_ACTIVITY = "/club-activity";
+export const CLUB_ACTIVITY_DETAIL = "/club-activity/detail";
+export const CLUB_ACTIVITY_LIKE = "/club-activity/like";
+export const CLUB_ACTIVITY_COMMENT = "/club-activity/comment";
+export const CLUB_ACTIVITY_COMMENT_LICK = "/club-activity/comment/like";
+export const CLUB_ACTIVITY_COMMENT_BLOCK = "/club-activity/comment/block";// == CLUB_FINANCE ==
+export const FINANCIAL_RECORDS = "/financial-records";
+
+// == CLUB_REVIEW ==
+export const CLUB_REVIEW_TAG = "club-review/tag-data";

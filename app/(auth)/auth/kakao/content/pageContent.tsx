@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import HeaderToken from "@/api/headerToken";
 import LoginLoading from "./loginLoading";
@@ -8,12 +8,15 @@ import { getTokenWithCode } from "@/api/login/api";
 import { getMemberData } from "@/api/member/api";
 import axiosInstance from "@/api/axiosInstance";
 import { useUserStore } from "@/providers/userStoreProvider";
+import { authStore } from "@/stores/userStore";
 
 export default function SignInPageContent() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [kakaoCode, setKakaoCode] = useState<string>("");
   const { signIn, setUserData } = useUserStore((state) => state);
+  const { signOut } = authStore.getState();
 
   useEffect(() => {
     const curKakaoCode = searchParams.get("code") || "";
@@ -52,7 +55,15 @@ export default function SignInPageContent() {
         router.replace(`/${res1.isFirstLogin ? "?firstLogin=1" : ""}`);
       })
       .catch(() => {
-        router.replace("/");
+        signOut();
+        alert("로그인에 실패했습니다.\n다시 시도해주세요.");
+        localStorage.removeItem("ariari-storage");
+        sessionStorage.removeItem("accessToken");
+        sessionStorage.removeItem("refreshToken");
+        router.push("/");
+        if (pathname === "/") {
+          window.location.reload();
+        }
       });
   }, [kakaoCode, router, setUserData, signIn]);
 
