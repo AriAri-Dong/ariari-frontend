@@ -87,9 +87,6 @@ const ApplicationFieldForm = ({
         {portfolioCollected && (
           <div className="flex flex-col">
             <h3 className="flex text-text1 text-h3 mb-2.5">포트폴리오</h3>
-            <p className="text-[#7D8595] text-body1_r">
-              포트폴리오 수집 목적 :
-            </p>
             <div className="flex flex-wrap gap-4 mt-5">
               {/* 파일 첨부 버튼 */}
               <SmallBtn

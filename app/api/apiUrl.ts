@@ -48,6 +48,9 @@ export const APPLY_MY = "/applies/my";
 export const APPLY_TEMPS = "/apply-temp";
 export const APPLY_TEMPS_MY = "/apply-temps/my";
 
+// == APPLY_FORM ==
+export const APPLY_FORM = "/apply-forms";
+
 // == REPORT ==
 
 export const REPORT_CLUB = "/report/clubs";
