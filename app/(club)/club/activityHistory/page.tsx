@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useResponsive from "@/hooks/useResponsive";
 
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
@@ -29,7 +29,16 @@ const ActivityHistoryPage = () => {
   const [hasMore, setHasMore] = useState<boolean>(false);
 
   const { role, clubInfo } = useClubContext();
-  if (role === undefined) return null;
+
+  useEffect(() => {
+    if (role !== undefined && clubInfo?.clubData.id) {
+      fetchActivities();
+    }
+  }, [role, clubInfo]);
+
+  if (role === undefined) {
+    return null;
+  }
 
   console.log("role", role);
 
@@ -65,10 +74,6 @@ const ActivityHistoryPage = () => {
       );
     }
   };
-
-  useEffect(() => {
-    fetchActivities();
-  }, [clubInfo?.clubData.id]);
 
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
