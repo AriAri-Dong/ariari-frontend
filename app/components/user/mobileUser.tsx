@@ -114,6 +114,7 @@ const MobileUser = () => {
       {isNotificationModalOpen && (
         <MobileNotificationModal
           onclose={() => setIsNotificationModalOpen(false)}
+          target="member"
         />
       )}
 

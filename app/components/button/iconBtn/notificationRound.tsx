@@ -29,7 +29,7 @@ const NotificationRoundBtn = ({ size, onClick }: NotificationProps) => {
 
   return (
     <button
-      className="w-10 h-10 border border-menuborder bg-background rounded-full hover:bg-hover"
+      className="flex justify-center w-10 h-10 border border-menuborder bg-background rounded-full hover:bg-hover"
       onClick={onClick}
     >
       <Image

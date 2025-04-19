@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 interface TabProps {
@@ -10,6 +10,8 @@ interface TabProps {
 const Tabs = ({ data }: TabProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const params = useSearchParams();
+  const clubId = params.get("clubId");
 
   // URL과 일치하는 탭을 찾아 활성화
   const currentTab = data.find((tab) => tab.url === pathname);
@@ -27,7 +29,7 @@ const Tabs = ({ data }: TabProps) => {
 
   const handleTabClick = (tabId: number, url: string) => {
     setActiveTab(tabId);
-    router.push(url);
+    router.push(`${url}?clubId=${clubId}`);
   };
 
   return (
