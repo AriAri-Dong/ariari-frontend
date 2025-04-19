@@ -12,6 +12,7 @@ export const MEMBERS_MY_PROFILE = "/members/my/profile";
 
 // == RECRUITMENT ==
 export const RECRUITMENT = "/recruitments";
+export const RECRUITMENT_SEARCH = "/recruitments/search";
 export const RECRUITMENT_EXTERNAL = "/recruitments/external";
 export const RECRUITMENT_INTERNAL = "/recruitments/internal";
 export const RECRUITMENT_BOOKMARKS = "/recruitments/my-bookmarks";
@@ -49,6 +50,9 @@ export const APPLY_MY = "/applies/my";
 // == APPLY_TEMPS ==
 export const APPLY_TEMPS = "/apply-temp";
 export const APPLY_TEMPS_MY = "/apply-temps/my";
+
+// == APPLY_FORM ==
+export const APPLY_FORM = "/apply-forms";
 
 // == REPORT ==
 

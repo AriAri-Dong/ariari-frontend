@@ -33,7 +33,9 @@ const AcceptanceReviewDropdown = ({
   isOpenReview,
 }: AcceptanceReviewDropdownProps) => {
   const isMdUp = useResponsive("md");
-  const memberId = useUserStore(useShallow((state) => state.memberData.id));
+  const memberId = useUserStore(
+    useShallow((state) => state.memberData.memberId)
+  );
 
   const [reviewDetail, setReviewDetail] = useState<PassReviewDetail | null>(
     null
