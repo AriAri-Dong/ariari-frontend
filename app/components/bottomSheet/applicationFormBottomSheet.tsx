@@ -111,7 +111,6 @@ const ApplicationFormBottomSheet = ({
   // 유효성 검사 및 요청 데이터 생성
   const createApplySaveReq = (type: "APPLY" | "APPLY_TEMP"): FormData => {
     if (type == "APPLY" && !name) {
-      setAlertMessage("이름을 입력해주세요.");
       throw new Error("이름을 입력해주세요.");
     }
 
