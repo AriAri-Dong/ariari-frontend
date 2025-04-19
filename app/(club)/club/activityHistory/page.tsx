@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useResponsive from "@/hooks/useResponsive";
 
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
@@ -14,85 +14,143 @@ import PostBox from "@/components/dropdown/postBox";
 import ActivityCreateForm from "./components/activityCreateForm";
 import Alert from "@/components/alert/alert";
 
-import { CLUB_ACTIVITY_DATA } from "@/data/clubActivity";
-import { ClubActivity } from "@/types/club";
+import { useClubContext } from "@/context/ClubContext";
+import { getClubActivities } from "@/api/club/activity/api";
+import { ClubActivity } from "@/types/clubActivity";
 
 const ActivityHistoryPage = () => {
   const router = useRouter();
   const isMdUp = useResponsive("md");
 
-  const [posts, setPosts] = useState<ClubActivity[]>(CLUB_ACTIVITY_DATA);
+  const [activities, setActivities] = useState<ClubActivity[]>([]);
   const [isWriteFormOpen, setIsWriteFormOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [page, setPage] = useState<number>(0);
+  const [hasMore, setHasMore] = useState<boolean>(false);
 
-  const [authority, setAuthority] = useState<
-    null | "GENERAL" | "MANAGER" | "ADMIN"
-  >("ADMIN");
+  const { role, clubInfo } = useClubContext();
+
+  useEffect(() => {
+    if (role !== undefined && clubInfo?.clubData.id) {
+      fetchActivities();
+    }
+  }, [role, clubInfo]);
+
+  if (role === undefined) {
+    return null;
+  }
+
+  console.log("role", role);
 
   const handleRouter = () => {
-    router.push("/club/recruitment/clubId=${clubId}");
+    router.push(`/club/recruitment/clubId=${clubInfo?.clubData.id}`);
+  };
+
+  const fetchActivities = async (pageToLoad = 0) => {
+    if (!clubInfo?.clubData.id) return;
+
+    try {
+      const { activities: fetched, pageInfo } = await getClubActivities(
+        clubInfo.clubData.id,
+        {
+          page: pageToLoad,
+          size: 10,
+          sort: ["createdDateTime,desc"],
+        }
+      );
+
+      if (pageToLoad === 0) {
+        setActivities(fetched);
+      } else {
+        setActivities((prev) => [...prev, ...fetched]);
+      }
+
+      setPage(pageToLoad);
+
+      setHasMore(pageToLoad + 1 < pageInfo.totalPages);
+    } catch (err) {
+      setAlertMessage(
+        "활동 내역을 불러오는 데 실패했어요. <br/> 잠시후 다시 시도해주세요."
+      );
+    }
   };
 
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
-      <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
+      <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:mt-8 md:px-5">
         <MobileMenu />
         <div className="flex lg:gap-9">
-          {/* 임시 메뉴 */}
           <div className="flex flex-col">
             <LeftMenu />
           </div>
           <div className="w-full">
             <p className="mb-4 text-subtext2 text-mobile_body2_m md:text-h4 md:mb-[22px]">
-              총 {posts.length}개의 활동내역이 있어요.
+              총 {activities.length}개의 활동내역이 있어요.
             </p>
             <div className="flex flex-col gap-2.5">
-              {posts.map((post) => (
+              {activities.map((activity) => (
                 <PostBox
-                  key={post.clubActivityId}
-                  data={post}
-                  role={authority}
+                  key={activity.clubActivityId}
+                  data={activity}
+                  role={role}
+                  // nickname={
+                  //   role === "ADMIN" || role === "MANAGER"
+                  //     ? "동아리 대표"
+                  //     : clubInfo?.clubMemberData.memberData.nickname || ""
+                  // }
+                  nickname={"동아리 대표"}
                 />
               ))}
             </div>
-            <div className="flex justify-center mt-9 md:mt-10">
-              <PlusBtn title={"더보기"} onClick={() => {}} />
-            </div>
+            {hasMore && (
+              <div className="flex justify-center mt-9 md:mt-10">
+                <PlusBtn
+                  title={"더보기"}
+                  onClick={() => fetchActivities(page + 1)}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
-      {/* 모집안내 바 - pc */}
-      {authority == null && (
+
+      {role === null && (
         <RecruitmentGuideFloatingBar
           deadline={new Date("2024-12-31T23:59:59")}
-          isWriteButtonVisible={true}
+          isWriteButtonVisible={false}
           handleWrite={() => setIsWriteFormOpen(true)}
         />
       )}
 
-      {/* ====== 모집안내 - mobile ======  */}
-      {!isMdUp && authority == null && (
-        <div className={`fixed bottom-5  left-50% translate-1/2`}>
+      {!isMdUp && role === null && (
+        <div className="fixed bottom-5 left-50% translate-1/2">
           <DarkBtn title={"모집공고 보기"} onClick={handleRouter} />
         </div>
       )}
 
-      {/* ====== 작성버튼 ======*/}
-      {(authority == "ADMIN" || authority === "MANAGER") && (
+      {role !== null && (role === "ADMIN" || role === "MANAGER") && (
         <div className="fixed w-full bottom-5 px-5 flex justify-end md:bottom-[44px] md:max-w-[1248px] md:px-5">
           <WriteBtn onClick={() => setIsWriteFormOpen(true)} />
         </div>
       )}
-      {/* ====== 작성 Form ====== */}
       {isWriteFormOpen && (
         <ActivityCreateForm
+          clubId={clubInfo?.clubData.id || ""}
           onClose={() => setIsWriteFormOpen(false)}
-          onSubmit={() => {
-            setAlertMessage("정상 등록되었습니다");
+          onSubmit={async () => {
+            try {
+              await fetchActivities();
+              setAlertMessage("활동 내역이 등록되었습니다");
+              setIsWriteFormOpen(false);
+              return true;
+            } catch {
+              setAlertMessage("업로드 후 데이터를 불러오는 데 실패했어요.");
+              return false;
+            }
           }}
         />
       )}
-      {/* ====== 알림 ======*/}
+
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}

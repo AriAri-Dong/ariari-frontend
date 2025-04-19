@@ -3,7 +3,7 @@ import SendBtn from "@/components/button/iconBtn/sendBtn";
 import useResponsive from "@/hooks/useResponsive";
 
 interface CommentInputProps {
-  onSend: () => void;
+  onSend: (text: string) => void;
   placeholder?: string;
   initialText?: string;
 }
@@ -17,8 +17,10 @@ const CommentInput = ({
   const isMdUp = useResponsive("md");
 
   const handleSubmit = () => {
-    if (comment.trim().length === 0) return;
-    onSend();
+    const trimmed = comment.trim();
+    if (trimmed.length === 0) return;
+
+    onSend(trimmed);
     setComment("");
   };
 
@@ -36,7 +38,7 @@ const CommentInput = ({
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder={placeholder ? placeholder : "댓글을 입력해주세요."}
+        placeholder={placeholder ?? "댓글을 입력해주세요."}
         className="w-full py-1.5 bg-searchbar text-subtext1 placeholder:text-subtext2 text-mobile_body1_r md:py-1.5 md:text-body1_r focus:outline-none placeholder:text-subtext1"
       />
       <div className="flex items-center gap-4">
