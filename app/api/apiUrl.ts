@@ -65,3 +65,9 @@ export const REPORT_CLUB_REVIEW = "/report/clubReviews";
 // == SERVICE ==
 export const SERVICE_NOTICES = "/service-notices";
 export const SERVICE_FAQS = "/service-faqs";
+
+// == CLUB_FINANCE ==
+export const FINANCIAL_RECORDS = "/financial-records";
+
+// == CLUB_REVIEW ==
+export const CLUB_REVIEW_TAG = "club-review/tag-data";
