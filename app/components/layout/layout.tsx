@@ -19,26 +19,27 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/recruitment",
     "/club/management/activity/accounting",
     "/club/management/members",
+    "/club/management/close",
+    "/club/withdrawal",
     "/search",
   ];
   const bgPaths = ["/application", "/help"];
   // md 이상만 bg 적용하는 path
-  const mobileBgPaths = [
-    "/terms",
+  const mobileBgPaths = new Set([
+    "/terms/club",
+    "/terms/privacy",
+    "/terms/user",
     "/user/club/create",
     "/user/userInfo",
     "/withdrawal",
-    "/club/close",
     "/club/management/recruitment/create",
-  ];
+  ]);
 
   const isSpecialComponent = specialPaths.some((path) =>
     pathname.includes(path)
   );
   const isBgComponent = bgPaths.some((path) => pathname.includes(path));
-  const isBgComponentOnlyMobile = mobileBgPaths.some((path) =>
-    pathname.includes(path)
-  );
+  const isBgComponentOnlyMobile = mobileBgPaths.has(pathname);
 
   return (
     <SearchTermContext.Provider value={{ searchTerm, setSearchTerm }}>

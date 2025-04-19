@@ -347,3 +347,13 @@ export const getExternalClubRanking = (fieldType: string) => {
       throw error;
     });
 };
+
+// 동아리 폐쇄
+export const deleteClub = async (clubId: string) => {
+  try {
+    const response = await axiosInstance.delete(`${CLUBS}/close/${clubId}`);
+    return response.status;
+  } catch (error) {
+    throw error;
+  }
+};
