@@ -22,7 +22,10 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
   const { setRole, setClubInfo } = useClubContext();
 
   const isMdUp = useResponsive("md");
-  const clubDetailPathsOnlyMdUp = ["/club/withdrawal", "/club/close"];
+  const clubDetailPathsOnlyMdUp = [
+    "/club/withdrawal",
+    "/club/management/close",
+  ];
   const withoutClubDetailPaths = ["/club/management/recruitment/create"];
 
   // md 이상인 경우에만 clubInfo 컴포넌트를 보여주는 path인지 확인
@@ -30,10 +33,13 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
     pathname.includes(path)
   );
   // clubInfo 컴포넌트가 없는 path 확인
-  const isWithoutClubDetailPaths = clubDetailPathsOnlyMdUp.some((path) =>
+  const isWithoutClubDetailPaths = withoutClubDetailPaths.some((path) =>
     pathname.includes(path)
   );
-
+  // 1. 제외 경로 X
+  // 2. 모바일에서도 보여도 되는 경우 또는 MdUp
+  const shouldShowClubInfo =
+    !isWithoutClubDetailPaths && (!isClubDetailOnlyMdUpComponent || isMdUp);
 
   useEffect(() => {
     if (!clubInfo) return;
@@ -41,7 +47,7 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
       setRole(clubInfo.clubMemberData.clubMemberRoleType);
     }
     setClubInfo(clubInfo);
-  }, [clubInfo, setRole]);
+  }, [clubInfo, isSignIn, setClubInfo, setRole]);
 
   if (isLoading) {
     return <Loading />;
@@ -53,8 +59,7 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       {/* === 상단 동아리 정보(공통 영역) === */}
-      {!isWithoutClubDetailPaths ||
-        ((!isClubDetailOnlyMdUpComponent || isMdUp) && <ClubInfoWrapper />)}
+      {shouldShowClubInfo && <ClubInfoWrapper />}
       {children}
     </div>
   );
