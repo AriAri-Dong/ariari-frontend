@@ -55,7 +55,6 @@ export const APPLY_TEMPS_MY = "/apply-temps/my";
 export const APPLY_FORM = "/apply-forms";
 
 // == REPORT ==
-
 export const REPORT_CLUB = "/report/clubs";
 export const REPORT_MEMBER = "/report/members";
 export const REPORT_PASSREVIEW = "/report/passReview";
@@ -65,6 +64,10 @@ export const REPORT_CLUB_QUESTION = "/reports/clubQuestions";
 export const REPORT_APPLY = "/report/apply";
 export const REPORT_RECRUITMENT = "/report/recruitments";
 export const REPORT_CLUB_REVIEW = "/report/clubReviews";
+
+// == SERVICE ==
+export const SERVICE_NOTICES = "/service-notices";
+export const SERVICE_FAQS = "/service-faqs";
 
 // == CLUB_FINANCE ==
 export const FINANCIAL_RECORDS = "/financial-records";

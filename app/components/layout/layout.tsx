@@ -46,9 +46,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <div className="flex flex-col min-h-screen">
         <Header />
         <main
-          className={`flex-grow flex justify-center items-center 
-            ${isBgComponent && "bg-sub_bg"} 
-            ${isBgComponentOnlyMobile && "md:bg-sub_bg"}`}
+          className={`flex-grow flex justify-center 
+    ${pathname.includes("/help") ? "" : "items-center"} 
+    ${isBgComponent && "bg-sub_bg"} 
+    ${isBgComponentOnlyMobile && "md:bg-sub_bg"}`}
         >
           <div
             className={`w-full ${
