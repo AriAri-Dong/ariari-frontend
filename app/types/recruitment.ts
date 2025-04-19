@@ -7,7 +7,7 @@ export type RecruitmentStatusType = "SCHEDULED" | "OPEN" | "CLOSED";
 
 export interface RecruitmentData {
   id: string;
-  clubId: number; // 동아리 ID
+  clubId: string; // 동아리 ID
   title: string;
   body: string;
   posterUri: string;
@@ -57,6 +57,7 @@ export interface RecruitmentResponse {
   bookmarks: number;
   isMyClub: boolean;
   isMyApply: boolean;
+  myRecentApplyTempId: string;
 }
 export interface ClubRecruitmentListResponse {
   recruitmentDataList: RecruitmentData[];

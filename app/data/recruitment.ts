@@ -71,7 +71,7 @@ export const RECRUITMENT_GUIDE_DATA = [
 export const RECRUITMENT_DATA: RecruitmentData[] = [
   {
     id: "1",
-    clubId: 1,
+    clubId: "1",
     title: "프로그래밍 동아리 신입 모집",
     body: "코딩에 관심 있는 열정적인 신입 회원을 모집합니다!",
     posterUri: noimage,
@@ -87,7 +87,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "2",
-    clubId: 2,
+    clubId: "2",
     title: "사진 동아리 신입 모집 사진 동아리 신입 모집 사진 동아리 신입 모집",
     body: "사진 촬영 및 편집에 관심 있는 분들을 환영합니다!",
     posterUri: noimage,
@@ -103,7 +103,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "3",
-    clubId: 3,
+    clubId: "3",
     title: "연극 동아리 신입 모집",
     body: "연기에 열정 있는 분들을 위한 동아리입니다. 함께 무대를 만들어보아요!",
     posterUri: noimage,
@@ -119,7 +119,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "4",
-    clubId: 4,
+    clubId: "4",
     title: "봉사 동아리 신입 모집",
     body: "봉사를 통해 따뜻한 마음을 나누고 싶으신 분들을 모집합니다.",
     posterUri: noimage,
@@ -135,7 +135,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "5",
-    clubId: 5,
+    clubId: "5",
     title: "댄스 동아리 신입 모집",
     body: "춤을 사랑하고 열정을 가진 분들을 모집합니다. 장르는 자유!",
     posterUri: noimage,
@@ -151,7 +151,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "6",
-    clubId: 6,
+    clubId: "6",
     title: "음악 동아리 신입 모집",
     body: "보컬, 악기 연주 등 음악을 사랑하는 분들을 모집합니다.",
     posterUri: noimage,
@@ -167,7 +167,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "7",
-    clubId: 7,
+    clubId: "7",
     title: "영화 동아리 신입 모집",
     body: "영화를 보고 토론하며 작품을 만드는 재미를 느껴보세요!",
     posterUri: noimage,
@@ -183,7 +183,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "8",
-    clubId: 8,
+    clubId: "8",
     title: "프로그래밍 동아리 신입 모집",
     body: "코딩에 관심 있는 열정적인 신입 회원을 모집합니다!",
     posterUri: noimage,
@@ -199,7 +199,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "9",
-    clubId: 9,
+    clubId: "9",
     title: "사진 동아리 신입 모집",
     body: "사진 촬영 및 편집에 관심 있는 분들을 환영합니다!",
     posterUri: noimage,
@@ -215,7 +215,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "10",
-    clubId: 10,
+    clubId: "10",
     title: "연극 동아리 신입 모집",
     body: "연기에 열정 있는 분들을 위한 동아리입니다. 함께 무대를 만들어보아요!",
     posterUri: noimage,
@@ -231,7 +231,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "11",
-    clubId: 11,
+    clubId: "11",
     title: "봉사 동아리 신입 모집",
     body: "봉사를 통해 따뜻한 마음을 나누고 싶으신 분들을 모집합니다.",
     posterUri: noimage,
@@ -247,7 +247,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "12",
-    clubId: 12,
+    clubId: "12",
     title: "댄스 동아리 신입 모집",
     body: "춤을 사랑하고 열정을 가진 분들을 모집합니다. 장르는 자유!",
     posterUri: noimage,
@@ -263,7 +263,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "13",
-    clubId: 13,
+    clubId: "13",
     title: "음악 동아리 신입 모집",
     body: "보컬, 악기 연주 등 음악을 사랑하는 분들을 모집합니다.",
     posterUri: noimage,
@@ -279,7 +279,7 @@ export const RECRUITMENT_DATA: RecruitmentData[] = [
   },
   {
     id: "14",
-    clubId: 14,
+    clubId: "14",
     title: "영화 동아리 신입 모집",
     body: "영화를 보고 토론하며 작품을 만드는 재미를 느껴보세요!",
     posterUri: noimage,

@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import RadioBtn from "@/components/button/radioBtn";
 import TextInputWithCounter from "@/components/input/textInputWithCounter";
-import { BADGE_ITEMS } from "@/data/club";
 import CustomInput from "@/components/input/customInput";
 import useResponsive from "@/hooks/useResponsive";
 import TextareaWithCounter from "@/components/textArea/textareaWithCounter";
 import SingleDateCalendar from "@/components/calendar/singleDateCalendar";
-import { ApplicationKeys } from "@/types/application";
+import { ApplicationKeys, SpecialQuestionList } from "@/types/application";
 import { APPLICATION_DISPLAY_INFO } from "@/data/application";
 
 interface RenderFieldProps {
   keyName: ApplicationKeys;
-  inputValues: Partial<Record<ApplicationKeys, string>>;
+  inputValues: Partial<SpecialQuestionList>;
   handleInputChange: (key: ApplicationKeys, value: string) => void;
 }
 

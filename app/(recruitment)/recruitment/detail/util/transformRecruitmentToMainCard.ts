@@ -12,6 +12,7 @@ export function transformRecruitmentToMainCard(
     isMyClub,
     isMyApply,
     applyFormData,
+    myRecentApplyTempId,
   } = recruitmentResponse;
 
   return {
@@ -37,5 +38,6 @@ export function transformRecruitmentToMainCard(
     isMyRecruitmentScrap: recruitmentData.isMyBookmark,
     isMyClubBookmark: clubData.isMyBookmark,
     applyFormData: applyFormData,
+    myRecentApplyTempId: myRecentApplyTempId,
   };
 }

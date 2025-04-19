@@ -49,7 +49,7 @@ const ClubActivities = ({
       .filter((item) => item.id !== recruitmentId)
       .slice(0, prevRecruitmentListLength);
     setVisibleRecruitmentList(list);
-  }, [prevRecruitmentListLength, prevRecruitmentList]);
+  }, [prevRecruitmentListLength, prevRecruitmentList, recruitmentId]);
 
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full">

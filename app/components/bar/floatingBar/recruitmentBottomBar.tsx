@@ -17,20 +17,32 @@ import { useShallow } from "zustand/shallow";
 import { useUserStore } from "@/providers/userStoreProvider";
 import ApplicationFormModal from "@/components/modal/club/applicationFormModal";
 import { ClubInfoCard } from "@/types/components/card";
+import { RecruitmentData } from "@/types/recruitment";
+import { ClubData } from "@/types/club";
+import { ApplyFormData } from "@/types/application";
+import ApplicationFormBottomSheet from "@/components/bottomSheet/applicationFormBottomSheet";
 
 interface RecruitmentBottomBar {
-  recruitmentData: ClubInfoCard;
-  isMyBookmark: boolean;
-  bookmarks: number;
-  endDate: string;
+  recruitmentData: RecruitmentData;
+  clubData: ClubData;
+  applyFormData: ApplyFormData | null;
+  myRecentApplyTempId?: string | null;
+  handleApplyTempId?: (tempId: string | null) => void;
   isMyApply: boolean;
+  isMyClub: boolean;
+  bookmarks: number;
+  type?: "PREVIEW" | "APPLYING" | "GENERAL";
 }
 const RecruitmentBottomBar = ({
   recruitmentData,
-  isMyBookmark,
-  bookmarks,
-  endDate,
+  clubData,
+  applyFormData,
+  myRecentApplyTempId,
+  handleApplyTempId,
   isMyApply,
+  isMyClub,
+  bookmarks,
+  type = "GENERAL",
 }: RecruitmentBottomBar) => {
   const params = useSearchParams();
   const id = params.get("id");
@@ -41,14 +53,20 @@ const RecruitmentBottomBar = ({
     useState<boolean>(false);
 
   const [count, setCount] = useState<number>(bookmarks);
-  const [isScrap, setIsScrap] = useState<boolean>(isMyBookmark);
+  const [isScrap, setIsScrap] = useState<boolean>(recruitmentData.isMyBookmark);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const dDay = calculateRemainingDays(endDate);
+  const dDay = calculateRemainingDays(recruitmentData.endDateTime);
   const dDayContent =
-    dDay === "마감" ? "마감" : isMyApply ? "지원 완료" : `지원하기 ${dDay}`;
+    dDay === "마감"
+      ? "마감"
+      : isMyClub
+      ? "가입 완료"
+      : isMyApply
+      ? "지원 완료"
+      : `지원하기 ${dDay}`;
 
-  const isApplyAvailable = dDay !== "마감" && !isMyApply;
+  const isApplyAvailable = dDay !== "마감" && !isMyApply && !isMyClub;
 
   const onHeartClick = () => {
     if (!isSignIn) {
@@ -83,6 +101,10 @@ const RecruitmentBottomBar = ({
   };
 
   const onApply = () => {
+    if (!isSignIn) {
+      setAlertMessage("로그인 후 이용 가능합니다.");
+      return;
+    }
     if (isApplyAvailable) {
       setIsApplicationFormOpen(true);
     }
@@ -109,19 +131,22 @@ const RecruitmentBottomBar = ({
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
       {isApplicationFormOpen &&
-        recruitmentData.applyFormData &&
+        applyFormData &&
+        type === "GENERAL" &&
         (isMdUp ? (
           <ApplicationFormModal
-            recruitmentData={recruitmentData}
-            applyFormData={recruitmentData.applyFormData}
+            recruitmentId={recruitmentData.id}
+            myRecentApplyTempId={myRecentApplyTempId}
+            handleApplyTempId={handleApplyTempId}
             onClose={() => {
               setIsApplicationFormOpen(false);
             }}
           />
         ) : (
-          <ApplicationFormModal
-            recruitmentData={recruitmentData}
-            applyFormData={recruitmentData.applyFormData}
+          <ApplicationFormBottomSheet
+            recruitmentId={recruitmentData.id}
+            myRecentApplyTempId={myRecentApplyTempId}
+            handleApplyTempId={handleApplyTempId}
             onClose={() => {
               setIsApplicationFormOpen(false);
             }}

@@ -1,5 +1,7 @@
 "use client";
 
+import formatDateToDot from "@/utils/formatDateToDot";
+
 interface RecruitmentSummaryProps {
   members: number;
   startDate: string;
@@ -21,6 +23,8 @@ const RecruitmentSummary = ({
   endDate,
   procedureType,
 }: RecruitmentSummaryProps) => {
+  const startDateTime = startDate ? formatDateToDot(startDate) : "";
+  const endDateTime = endDate ? formatDateToDot(endDate) : "";
   return (
     <div className="felx text-subtext1 space-y-[14px]">
       <div className="flex flex-row gap-[65px]">
@@ -42,7 +46,7 @@ const RecruitmentSummary = ({
           모집 기간
         </p>
         <p className="text-mobile_body2_r md:text-body1_m">
-          {startDate} ~ {endDate}
+          {startDateTime} ~ {endDateTime}
         </p>
       </div>
     </div>
