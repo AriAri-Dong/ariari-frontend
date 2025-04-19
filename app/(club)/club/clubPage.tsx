@@ -44,7 +44,7 @@ const ClubPage = ({ children }: { children: React.ReactNode }) => {
       setRole(clubInfo.clubMemberData.clubMemberRoleType);
     }
     setClubInfo(clubInfo);
-  }, [clubInfo, isSignIn, setClubInfo, setRole]);
+  }, [clubInfo, setClubInfo, setRole]);
 
   if (isLoading) {
     return <Loading />;
