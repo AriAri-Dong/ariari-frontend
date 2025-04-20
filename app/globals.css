@@ -19,3 +19,7 @@ body {
 .slick-list .slick-track .slick-slide > div {
   margin-inline: 9px;
 }
+
+.icon-svg path {
+  fill: inherit;
+}

@@ -1,14 +1,80 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import backVector from "@/images/icon/backVector.svg";
-import vector from "@/images/icon/vector.svg";
-import { TEMP_DATA } from "@/data/notification";
+import { useRouter, useSearchParams } from "next/navigation";
+import NotificationList from "@/components/list/notificationList";
+import WhiteButton from "@/components/button/basicBtn/whiteBtn";
+import {
+  useClubNotificationQuery,
+  useMyNotificationQuery,
+} from "@/hooks/notification/useNotificationQuery";
+import { useNotificationMutations } from "@/hooks/notification/useNotificationMutation";
 
 interface ModalProps {
   onclose: () => void;
+  target: "club" | "member";
 }
 
-const MobileNotificationModal = ({ onclose }: ModalProps) => {
+/**
+ * 모바일 화면에서 공통으로 사용되는 알림 모달(전체화면)
+ * @param onClose 모달 닫기 함수
+ * @param target club- 동아리 상세 페이지 내 동아리 알림 / member- 헤더 유저 알림
+ * @returns
+ */
+const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
+  const router = useRouter();
+  const params = useSearchParams();
+  const clubId = params.get("clubId") || "";
+
+  const clubNotiQuery = useClubNotificationQuery(clubId || "", {
+    enabled: target === "club" && !!clubId,
+  });
+
+  const myNotiQuery = useMyNotificationQuery({
+    enabled: target === "member",
+  });
+
+  const {
+    notificationList,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = {
+    ...(target === "club" ? clubNotiQuery : myNotiQuery),
+    notificationList:
+      target === "club"
+        ? clubNotiQuery.clubNotifications
+        : myNotiQuery.myNotifications,
+  };
+
+  // 알림 클릭 시 읽음 처리
+  const { markClubNotificationAsRead, markMemberNotificationAsRead } =
+    useNotificationMutations();
+
+  const handleNotificationClick = (
+    notificationId: string,
+    uri: string | null
+  ) => {
+    const mutation =
+      target === "club"
+        ? markClubNotificationAsRead
+        : markMemberNotificationAsRead;
+
+    mutation.mutate(
+      { alarmId: notificationId },
+      {
+        onSettled: () => {
+          onclose();
+          if (uri) {
+            router.push(uri);
+          }
+        },
+      }
+    );
+  };
+
   // 전체 화면 스크롤 방지 (이중 스크롤이 생겨서 넣었습니다.)
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -18,8 +84,8 @@ const MobileNotificationModal = ({ onclose }: ModalProps) => {
   }, []);
 
   return (
-    <div className="fixed inset-0 bg-white z-50 px-4">
-      <div className="flex flex-row justify-between pt-[46px] md:hidden">
+    <div className="fixed inset-0 bg-white z-50 px-4 lg:hidden">
+      <div className="flex flex-row justify-between pt-[46px]">
         <div className="flex gap-2 mb-5">
           <Image
             src={backVector}
@@ -27,7 +93,7 @@ const MobileNotificationModal = ({ onclose }: ModalProps) => {
             width={24}
             height={24}
             onClick={onclose}
-            className="md:hidden cursor-pointer"
+            className="cursor-pointer"
           />
           <h1 className="text-text1 text-mobile_h1_contents_title">알림</h1>
         </div>
@@ -36,26 +102,20 @@ const MobileNotificationModal = ({ onclose }: ModalProps) => {
         className="flex flex-col overflow-y-scroll custom-scrollbar"
         style={{ maxHeight: "calc(100vh - 113px)" }}
       >
-        {TEMP_DATA.map((item, index) => (
-          <div
-            key={index}
-            className={`flex items-center justify-between px-2.5 cursor-pointer ${
-              index === TEMP_DATA.length - 1
-                ? "pt-[14px] pb-[6px]"
-                : index === 0
-                ? "border-b pb-[14px] pt-[6px]"
-                : "border-b py-[14px]"
-            }`}
-          >
-            <div className="flex flex-col">
-              <h3 className="text-text1 text-mobile_body1_m">{item.title}</h3>
-              <p className="text-unselected text-mobile_body4_r">{item.date}</p>
-            </div>
-            <Image src={vector} alt={"바로가기"} width={16} height={16} />
+        <NotificationList
+          notificationList={notificationList}
+          onClickNotification={handleNotificationClick}
+          className="first:pt-[6px] last:pb-[6px]"
+        />
+        {hasNextPage && (
+          <div className="w-full mt-6 flex justify-center">
+            <WhiteButton
+              title={isFetchingNextPage ? "불러오는 중" : "더보기"}
+              onClick={fetchNextPage}
+            />
           </div>
-        ))}
+        )}
       </div>
-      <div className="h-5" />
     </div>
   );
 };

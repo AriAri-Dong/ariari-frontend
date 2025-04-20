@@ -307,98 +307,121 @@ export const BADGE_TITLES = [
   "동아리를 알게 된 경로",
 ];
 
+export const CLUB_LEFT_MENU_TABS = [
+  { id: 0, type: "menu", label: "동아리 메뉴" },
+  { id: 1, type: "notification", label: "동아리 알림" },
+];
+
+// 일반 사용자(동아리 소속 x)
 export const CLUB_LEFT_MENU_USER = [
   {
     id: 1,
     label: "활동내역",
+    icon: "activity_history",
     url: "/club/activityHistory",
   },
   {
     id: 2,
     label: "모집공고",
-    url: "/",
+    icon: "recruit_announcement",
+    url: "/club/recruitment",
     subUrl: [],
   },
   {
     id: 3,
     label: "FAQ / Q&A",
+    icon: "help",
     url: "/club/help",
     subUrl: [],
   },
   {
     id: 4,
     label: "활동후기",
+    icon: "activity_history",
     url: "/club/review/activity",
     subUrl: [],
   },
   {
     id: 5,
     label: "합격후기",
+    icon: "acceptance_review",
     url: "/club/review/acceptance",
     subUrl: [],
   },
 ];
 
+// 동아리 일반 회원(role- GENERAL)
 export const CLUB_LEFT_MENU_MEMBER = [
   {
     id: 1,
     label: "활동내역",
+    icon: "activity_history",
     url: "/club/activityHistory",
   },
   {
     id: 2,
     label: "공지사항",
-    url: "/club/notice",
+    icon: "announcement",
+    url: "/club/management/activity/notice",
     subUrl: [],
   },
   {
     id: 3,
     label: "일정 (미구현)",
+    icon: "schedule",
     url: "/club/create",
     subUrl: [],
   },
   {
     id: 4,
     label: "회계내역",
-    url: "/club/review/activity",
+    icon: "accounting",
+    url: "/club/management/activity/accounting",
     subUrl: [],
   },
   {
     id: 5,
     label: "모집공고",
-    url: "/club/review/acceptance",
+    icon: "recruit_announcement",
+    url: "/club/recruitment",
     subUrl: [],
   },
   {
     id: 6,
     label: "활동후기",
+    icon: "activity_history",
     url: "/club/review/activity",
     subUrl: [],
   },
   {
     id: 7,
     label: "합격후기",
+    icon: "acceptance_review",
     url: "/club/review/acceptance",
     subUrl: [],
   },
   {
     id: 8,
     label: "FAQ / Q&A",
+    icon: "help",
     url: "/club/help",
     subUrl: [],
   },
   {
     id: 9,
     label: "동아리 탈퇴 ",
+    icon: "withdrawal",
     url: "/club/withdrawal",
     subUrl: [],
   },
 ];
 
+// 동아리 관리자(role- ADMIN, MANAGER)
 export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 1,
     label: "모집관리",
+    icon: "recruit_management",
     url: "/",
     subUrl: [
       {
@@ -421,12 +444,14 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 2,
     label: "동아리 멤버 관리",
+    icon: "members",
     url: "/club/management/members",
     subUrl: [],
   },
   {
     id: 3,
     label: "활동관리",
+    icon: "activity_management",
     url: "/",
     subUrl: [
       {
@@ -449,36 +474,42 @@ export const CLUB_LEFT_MENU_ADMIN = [
   {
     id: 4,
     label: "활동내역",
+    icon: "activity_history",
     url: "/club/activityHistory",
     subUrl: [],
   },
   {
     id: 5,
     label: "FAQ / Q&A",
+    icon: "help",
     url: "/club/help",
     subUrl: [],
   },
   {
     id: 6,
     label: "활동후기",
+    icon: "activity_history",
     url: "/club/review/activity",
     subUrl: [],
   },
   {
     id: 7,
     label: "합격후기",
+    icon: "acceptance_review",
     url: "/club/review/acceptance",
     subUrl: [],
   },
   {
     id: 8,
     label: "동아리 탈퇴",
+    icon: "withdrawal",
     url: "/club/withdrawal",
     subUrl: [],
   },
   {
     id: 9,
     label: "동아리 폐쇠",
+    icon: "close_club",
     url: "/club/management/close",
     subUrl: [],
   },
