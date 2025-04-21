@@ -1,6 +1,6 @@
 import { CLUB_NOTICE, CLUBS } from "@/api/apiUrl";
 import axiosInstance from "@/api/axiosInstance";
-import { ClubNoticeDataRes } from "@/types/club";
+import { ClubNoticeDataRes, ClubNoticeDetail } from "@/types/club";
 
 /**
  * 상단에 고정된 동아리 공지사항 리스트 조회
@@ -15,6 +15,18 @@ export const getClubFixedNoticeList = async (clubId: string) => {
     return res.data;
   } catch (error) {
     console.log("Failed to fetch fixed club notices", error);
+    throw error;
+  }
+};
+
+// 동아리 공지사항 상세 조회
+export const getClubNoticeDetail = async (clubNoticeId: string) => {
+  try {
+    const res = await axiosInstance.get<ClubNoticeDetail>(
+      `${CLUB_NOTICE}/${clubNoticeId}`
+    );
+    return res.data;
+  } catch (error) {
     throw error;
   }
 };
