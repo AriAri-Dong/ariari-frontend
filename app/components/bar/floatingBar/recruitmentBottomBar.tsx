@@ -1,33 +1,29 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import useResponsive from "@/hooks/useResponsive";
+
 import MediumBtn from "@/components/button/basicBtn/mediumBtn";
 import BookmarkBtn from "@/components/button/iconBtn/bookmarkBtn";
 import SahreBtn from "@/components/button/iconBtn/shareBtn";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import { calculateRemainingDays } from "@/utils/dateFormatter";
-import { useRouter, useSearchParams } from "next/navigation";
-import useResponsive from "@/hooks/useResponsive";
-import {
-  deleteRecruitmentBookmark,
-  postRecruitmentBookmark,
-} from "@/api/recruitment/api";
 import Alert from "@/components/alert/alert";
 import { useShallow } from "zustand/shallow";
 import { useUserStore } from "@/providers/userStoreProvider";
 import ApplicationFormModal from "@/components/modal/club/applicationFormModal";
-import { ClubInfoCard } from "@/types/components/card";
 import { RecruitmentData } from "@/types/recruitment";
-import { ClubData } from "@/types/club";
-import { ApplyFormData } from "@/types/application";
 import ApplicationFormBottomSheet from "@/components/bottomSheet/applicationFormBottomSheet";
+
+import {
+  deleteRecruitmentBookmark,
+  postRecruitmentBookmark,
+} from "@/api/recruitment/api";
 
 interface RecruitmentBottomBar {
   recruitmentData: RecruitmentData;
-  clubData: ClubData;
-  applyFormData: ApplyFormData | null;
   myRecentApplyTempId?: string | null;
-  handleApplyTempId?: (tempId: string | null) => void;
   isMyApply: boolean;
   isMyClub: boolean;
   bookmarks: number;
@@ -35,10 +31,7 @@ interface RecruitmentBottomBar {
 }
 const RecruitmentBottomBar = ({
   recruitmentData,
-  clubData,
-  applyFormData,
   myRecentApplyTempId,
-  handleApplyTempId,
   isMyApply,
   isMyClub,
   bookmarks,
@@ -47,7 +40,6 @@ const RecruitmentBottomBar = ({
   const params = useSearchParams();
   const id = params.get("id");
   const isMdUp = useResponsive("md");
-  const router = useRouter();
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
   const [isApplicationFormOpen, setIsApplicationFormOpen] =
     useState<boolean>(false);
@@ -131,24 +123,27 @@ const RecruitmentBottomBar = ({
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
       {isApplicationFormOpen &&
-        applyFormData &&
         type === "GENERAL" &&
         (isMdUp ? (
           <ApplicationFormModal
             recruitmentId={recruitmentData.id}
             myRecentApplyTempId={myRecentApplyTempId}
-            handleApplyTempId={handleApplyTempId}
             onClose={() => {
               setIsApplicationFormOpen(false);
+            }}
+            onSubmit={() => {
+              setAlertMessage("지원서가 제출되었습니다.");
             }}
           />
         ) : (
           <ApplicationFormBottomSheet
             recruitmentId={recruitmentData.id}
             myRecentApplyTempId={myRecentApplyTempId}
-            handleApplyTempId={handleApplyTempId}
             onClose={() => {
               setIsApplicationFormOpen(false);
+            }}
+            onSubmit={() => {
+              setAlertMessage("지원서가 제출되었습니다.");
             }}
           />
         ))}

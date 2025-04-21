@@ -14,38 +14,22 @@ import {
 } from "@/api/recruitment/api";
 import Loading from "@/components/feedback/loading";
 import ErrorNotice from "@/components/feedback/error";
+import { useRecruitmentDetailQuery } from "@/hooks/recruitment/useRecruitmentDetailQuery";
 
 const RecruitmentDetail = () => {
   const params = useSearchParams();
-  const recruitmentId = params.get("id");
+  const recruitmentId = params.get("id") || "";
+  // 모집 상세
+  const {
+    data: recruitmentData,
+    isLoading,
+    error,
+  } = useRecruitmentDetailQuery(recruitmentId);
 
   // 이전 모집공고
   const [prevRecruitmentList, setPrevRecruitmentList] = useState<
     RecruitmentData[]
   >([]);
-  // 모집상세
-  const [recruitmentData, setRecruitmentData] = useState<RecruitmentResponse>();
-
-  const [loading, setLoading] = useState(true);
-  const [errorMsg, setError] = useState<string | null>(null);
-
-  // 모집공고 상세
-  useEffect(() => {
-    if (!recruitmentId) return;
-
-    setLoading(true);
-    getRecruitmentDetail(recruitmentId)
-      .then((res) => {
-        setRecruitmentData(res);
-        setError(null);
-      })
-      .catch((err) => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [recruitmentId]);
 
   // 이전 모집공고
   useEffect(() => {
@@ -63,11 +47,18 @@ const RecruitmentDetail = () => {
     fetchPrevRecruitment();
   }, [recruitmentData?.clubData.id]);
 
-  if (loading) {
+  if (isLoading) {
     return <Loading />;
   }
-  if (errorMsg) {
-    return <ErrorNotice description={errorMsg} />;
+  if (error) {
+    return (
+      <ErrorNotice
+        title="Notice"
+        description={
+          error.message || "페이지를 불러오는 중 문제가 발생했습니다"
+        }
+      />
+    );
   }
 
   if (!recruitmentData || !recruitmentId) {

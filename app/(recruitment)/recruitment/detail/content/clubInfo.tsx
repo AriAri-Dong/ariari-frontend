@@ -64,13 +64,6 @@ const ClubInfo = ({
   const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const [applyTempId, setApplyTempId] = useState<string | null>(
-    myRecentApplyTempId
-  );
-  const handleApplyTempId = (tempId: string | null) => {
-    setApplyTempId(tempId);
-  };
-
   const onClubHeartClick = () => {
     if (!isSignIn) {
       setAlertMessage("로그인 후 이용 가능합니다.");
@@ -228,14 +221,11 @@ const ClubInfo = ({
                 <div className="bg-background px-4 pt-2 pb-6 md:px-0 md:pt-0 md:pb-0">
                   <RecruitmentBottomBar
                     recruitmentData={recruitmentData}
-                    clubData={clubData}
-                    applyFormData={applyFormData}
-                    myRecentApplyTempId={applyTempId}
-                    handleApplyTempId={handleApplyTempId}
                     bookmarks={bookmarks}
                     isMyApply={isMyApply}
                     isMyClub={isMyClub}
                     type={type}
+                    myRecentApplyTempId={myRecentApplyTempId}
                   />
                 </div>
               </div>
