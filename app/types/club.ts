@@ -145,19 +145,27 @@ export interface MyClubListRes {
   myClubDataList: MyClubData[];
 }
 
+export interface ClubNoticeImageData {
+  id: string;
+  imageUri: string;
+}
+
 export interface ClubNoticeData {
   id: string;
   title: string;
   body: string;
   isFixed: true;
   createdDateTime: string;
-  clubNoticeImageData: {
-    id: string;
-    imageUri: string;
-  };
+  clubNoticeImageData: ClubNoticeImageData;
 }
 
 export interface ClubNoticeDataRes {
   clubNoticeDataList: ClubNoticeData[];
   pageInfo: PageInfo;
+}
+
+export interface ClubNoticeDetail {
+  clubNoticeData: ClubNoticeData;
+  clubMemberData: Omit<ClubMemberData, "profileType">;
+  clubNoticeImageDataList: ClubNoticeImageData[];
 }
