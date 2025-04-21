@@ -31,7 +31,7 @@ const Step3 = ({
       <h3 className="text-center text-subtext1 text-h4_r mb-8 whitespace-pre">
         {description}
       </h3>
-      <div className="mb-8 h-[300px] overflow-auto min-h-">
+      <div className="mb-8 h-[300px] overflow-auto">
         {clubs.map((club, index) => (
           <div key={club.id}>
             <SelectAdministrator
