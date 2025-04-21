@@ -13,6 +13,7 @@ export interface ApplyData {
   memberData: MemberData;
   recruitmentTitle: string;
   clubName: string;
+  recruitmentId: string;
 }
 
 export interface ApplyListRes {
@@ -26,6 +27,7 @@ export interface ApplyTempData {
   createdDateTime: string;
   recruitmentTitle: string;
   clubName: string;
+  recruitmentId: string;
 }
 
 export interface ApplyTempListRes {
