@@ -11,8 +11,8 @@ import RadioBtn from "@/components/button/radioBtn";
 export interface AccountingProps {
   onClose: () => void;
   onSubmit: (data: {
-    date: Date | null;
-    transaction: boolean | null;
+    date: Date;
+    transaction: boolean;
     amount: number;
     details: string;
   }) => void;
@@ -47,8 +47,7 @@ const AccountingModal = ({ onClose, onSubmit }: AccountingProps) => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      onSubmit({ date, transaction, amount, details });
-      onClose();
+      onSubmit({ date: date!, transaction: transaction!, amount, details });
     }
   };
 

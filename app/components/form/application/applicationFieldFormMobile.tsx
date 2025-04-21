@@ -79,7 +79,6 @@ const ApplicationFieldFormMobile = ({
             handleInputChange={handleInputChange}
           />
         ))}
-
         {/* 문항 */}
         {documentQuestions
           .filter((item) => item.body.trim() !== "")
@@ -104,6 +103,7 @@ const ApplicationFieldFormMobile = ({
               </div>
             );
           })}
+
       </div>
       {/* 포트폴리오 */}
       {portfolioCollected && (

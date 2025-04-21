@@ -6,25 +6,17 @@ import useResponsive from "@/hooks/useResponsive";
 import HeaderSection from "./content/headerSection";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import ClubWithdrawalCard from "@/components/card/clubWithdrawalCard";
-import { CLUB_MEMBER_DATA } from "@/data/clubMembers";
-import { ClubMemberData } from "@/types/member";
 
 const ClubWithdrawalPage = () => {
   const isMdUp = useResponsive("md");
-  const [clubMember, setClubMember] = useState<ClubMemberData | null>(
-    CLUB_MEMBER_DATA[1]
-  ); // 0 => 일반회원, 1 => 관리자로 테스트가능
 
   return (
-    <div>
+    <div className="md:bg-sub_bg">
       {!isMdUp && <HeaderSection title={"동아리 탈퇴하기"} />}
-      <div className="flex lg:gap-9 md:mt-8">
+      <div className="flex lg:gap-9 md:pt-8 flex lg:gap-9 md:pt-8 max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx mx-auto">
         {/* 임시 메뉴 */}
         <LeftMenu />
-        <ClubWithdrawalCard
-          isWithdrawal={true}
-          role={clubMember?.clubMemberRoleType || null}
-        />
+        <ClubWithdrawalCard isWithdrawal={true} />
       </div>
     </div>
   );

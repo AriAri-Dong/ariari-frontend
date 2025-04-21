@@ -29,7 +29,9 @@ const ActivityReviewDropdown = ({
   isOpenReview,
 }: ActivityReviewDropdownProps) => {
   // 추후 memberId로 수정
-  const memberId = useUserStore(useShallow((state) => state.memberData.id));
+  const memberId = useUserStore(
+    useShallow((state) => state.memberData.memberId)
+  );
   const isMdUp = useResponsive("md");
 
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
