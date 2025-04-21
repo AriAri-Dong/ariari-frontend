@@ -16,6 +16,10 @@ import DotMenuDropDown from "./option/dotMenuDropdown";
 import IconBtn from "../button/withIconBtn/IconBtn";
 import ReportModal from "../modal/reportModal";
 import ReportBottomSheet from "../bottomSheet/report/reportBottomSheet";
+import { ClubNoticeData } from "@/types/club";
+import formatDateToDot from "@/utils/formatDateToDot";
+import { useClubNoticeDetail } from "@/hooks/club/useClubNoticeQuery";
+import defaultImgBg from "@/images/defaultAriariBg.svg";
 
 const OPTION = [
   { id: 1, label: "수정하기" },
@@ -23,14 +27,8 @@ const OPTION = [
 ];
 
 interface ClubNoticeDropdownProps {
-  notice: {
-    id: string;
-    title: string;
-    date: string;
-    text: string;
-    userName: string;
-    imageUrls: any[];
-  };
+  idx: number;
+  notice: ClubNoticeData;
   isOpen: boolean;
   setOpenDropdownId: (id: string | null) => void;
   pin: boolean;
@@ -41,6 +39,7 @@ interface ClubNoticeDropdownProps {
 }
 
 const ClubNoticeDropdown = ({
+  idx,
   notice,
   isOpen,
   setOpenDropdownId,
@@ -61,6 +60,10 @@ const ClubNoticeDropdown = ({
   const [modifyOpen, setModifyOpen] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const { noticeDetail, isLoading, isError, error } = useClubNoticeDetail(
+    notice.id,
+    { enabled: isOpen }
+  );
 
   const handleVectorClick = useCallback(() => {
     setOpenDropdownId(isOpen ? null : notice.id);
@@ -102,16 +105,24 @@ const ClubNoticeDropdown = ({
     }
   };
 
+  const noticeImgCount = noticeDetail?.clubNoticeImageDataList.length ?? 0;
   const isFirstSlide = currentImageIndex === 0;
-  const isLastSlide = currentImageIndex === notice.imageUrls.length - 1;
+  const isLastSlide =
+    noticeImgCount > 0 && currentImageIndex === noticeImgCount - 1;
 
   const handlers = useSwipeable({
-    onSwipedLeft: () =>
+    onSwipedLeft: () => {
+      if (!noticeDetail) return;
       setCurrentImageIndex((prev) =>
-        prev < notice.imageUrls.length - 1 ? prev + 1 : prev
-      ),
-    onSwipedRight: () =>
-      setCurrentImageIndex((prev) => (prev > 0 ? prev - 1 : prev)),
+        prev < noticeDetail?.clubNoticeImageDataList.length - 1
+          ? prev + 1
+          : prev
+      );
+    },
+    onSwipedRight: () => {
+      if (!noticeDetail) return;
+      setCurrentImageIndex((prev) => (prev > 0 ? prev - 1 : prev));
+    },
     preventScrollOnSwipe: true,
     trackTouch: true,
     trackMouse: true,
@@ -167,7 +178,7 @@ const ClubNoticeDropdown = ({
         <div className="flex w-full justify-between">
           <div className="flex items-center gap-6">
             <p className="w-[66px] text-center md:block hidden text-subtext2 text-mobile_body3_r">
-              {notice.id}
+              {idx}
             </p>
             <div className="flex items-center gap-1 md:gap-2">
               <h1 className="text-text1 text-mobile_body1_m md:text-h4">
@@ -179,14 +190,14 @@ const ClubNoticeDropdown = ({
                 width={16}
                 height={16}
                 className={`md:w-5 md:h-5 ${
-                  notice.imageUrls.length > 0 ? "" : "hidden"
+                  notice.clubNoticeImageData ? "" : "hidden"
                 }`}
               />
             </div>
           </div>
           <div className="flex items-center gap-[22px]">
             <p className="text-subtext2 hidden md:flex text-mobile_body3_r">
-              2024.03.04
+              {formatDateToDot(notice.createdDateTime)}
             </p>
             <div className="flex gap-1 md:gap-[6px]">
               <Image
@@ -231,12 +242,11 @@ const ClubNoticeDropdown = ({
           </div>
         </div>
         <p className="text-subtext2 text-mobile_body4_r md:hidden">
-          {notice.date}
+          {formatDateToDot(notice.createdDateTime)}
         </p>
       </div>
-
       {/* === 드롭다운 영역 === */}
-      {isOpen && (
+      {isOpen && noticeDetail && (
         <div className="md:mt-[34px] mt-4">
           <div className="flex items-center gap-10">
             <Image
@@ -248,12 +258,12 @@ const ClubNoticeDropdown = ({
             />
             <div className="flex w-full flex-col gap-[14px] md:gap-[23px]">
               <h1 className="text-subtext1 text-mobile_body1_r md:text-body1_r">
-                {notice.text}
+                {notice.title}
               </h1>
               <div className="flex justify-between items-center">
-                <p className="text-unselected text-mobile_body2_m md:text-body2_m">
+                {/* <p className="text-unselected text-mobile_body2_m md:text-body2_m">
                   {notice.userName}
-                </p>
+                </p> */}
                 {role === "MEMBER" && (
                   <IconBtn
                     type={"declaration"}
@@ -267,11 +277,14 @@ const ClubNoticeDropdown = ({
           </div>
 
           {/* 이미지 영역 */}
-          {notice.imageUrls.length > 0 && (
+          {noticeImgCount > 0 && (
             <div {...handlers} className="relative w-full mt-4 md:mt-5">
               <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
                 <Image
-                  src={notice.imageUrls[currentImageIndex]}
+                  src={
+                    noticeDetail.clubNoticeImageDataList[currentImageIndex]
+                      .imageUri || defaultImgBg
+                  }
                   alt={`notice-image-${currentImageIndex + 1}`}
                   layout="fill"
                   objectFit="cover"
@@ -299,11 +312,11 @@ const ClubNoticeDropdown = ({
 
               {/* 이미지 개수 */}
               <div
-                className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white70 
+                className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white70
                 py-1 px-2.5 rounded-12 backdrop-blur-sm"
               >
                 <p className="text-center text-mobile_body3_r md:text-body3_r text-subtext2">
-                  {currentImageIndex + 1} / {notice.imageUrls.length}
+                  {currentImageIndex + 1} / {noticeImgCount}
                 </p>
               </div>
             </div>
