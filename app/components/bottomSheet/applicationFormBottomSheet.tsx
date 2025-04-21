@@ -8,34 +8,74 @@ import Alert from "@/components/alert/alert";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import TransparentLargeBtn from "../button/basicBtn/transparentLargeBtn";
 
-import {
-  deleteMyApplyTmp,
-  getApplicationTemp,
-  postApplication,
-  postApplicationTemp,
-  putApplicationTemp,
-} from "@/api/apply/api";
+import { getApplicationTemp } from "@/api/apply/api";
 import {
   ApplicationKeys,
   ApplyAnswerReq,
   ApplyQuestionData,
   SpecialQuestionList,
 } from "@/types/application";
-import { APPLICATION_DISPLAY_INFO } from "@/data/application";
 import { ApplicationFormModalProps } from "../modal/club/applicationFormModal";
 import ApplicationFieldFormMobile from "../form/application/applicationFieldFormMobile";
 import { RecruitmentResponse } from "@/types/recruitment";
 import { getRecruitmentDetail } from "@/api/recruitment/api";
+import {
+  useDeleteTmpMutation,
+  usePostTempApplicationMutation,
+  usePutTempApplicationMutation,
+  useSubmitApplicationMutation,
+} from "@/hooks/apply/useApplyMutation";
 
 const ApplicationFormBottomSheet = ({
   recruitmentId,
   myRecentApplyTempId,
-  handleApplyTempId,
   onClose,
+  onSubmit,
 }: ApplicationFormModalProps) => {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
+  const deleteTmp = useDeleteTmpMutation({
+    recruitmentId,
+    onSuccess: () => {},
+    onError: () => {},
+  });
+
+  const { mutate: submitApplication } = useSubmitApplicationMutation({
+    recruitmentId,
+    onSuccess: () => {
+      onSubmit();
+      onClose();
+      // 지원서 제출 후 임시 지원서 삭제
+      if (recentApplyTempId) {
+        deleteTmp.mutate(recentApplyTempId);
+      }
+    },
+    onError: () => {
+      setAlertMessage("지원서 제출에 실패했습니다.");
+    },
+  });
+
+  const { mutate: saveTempApplication } = usePostTempApplicationMutation({
+    recruitmentId,
+
+    onSuccess: (res) => {
+      setAlertMessage("임시 저장되었습니다.");
+      setRecentApplyTempId(res);
+    },
+    onError: () => {
+      setAlertMessage("임시 저장에 실패했습니다.");
+    },
+  });
+
+  const { mutate: updateTempApplication } = usePutTempApplicationMutation({
+    onSuccess: () => {
+      setAlertMessage("임시 저장되었습니다.");
+    },
+    onError: () => {
+      setAlertMessage("임시 저장 수정에 실패했습니다.");
+    },
+  });
   // 모집상세 관련 상태
   const [recruitmentData, setRecruitmentData] =
     useState<RecruitmentResponse | null>(null);
@@ -161,40 +201,12 @@ const ApplicationFormBottomSheet = ({
       const formData = createApplySaveReq(type);
       // 지원
       if (type === "APPLY") {
-        postApplication(recruitmentId, formData).then((res) => {
-          if (res === 200) {
-            setAlertMessage("지원서 제출이 완료되었습니다.");
-            if (recentApplyTempId) {
-              deleteMyApplyTmp(recentApplyTempId);
-            }
-            router.push("/application");
-          } else {
-            setAlertMessage("지원서 제출에 실패했습니다.");
-          }
-        });
+        submitApplication({ recruitmentId, formData });
       } else {
-        // 임시지원 수정
         if (recentApplyTempId) {
-          putApplicationTemp(recentApplyTempId, formData).then((res) => {
-            if (res === 200) {
-              setAlertMessage("임시 저장되었습니다.");
-            } else {
-              setAlertMessage("문제가 발생했습니다.");
-            }
-          });
-          // 임시지원 생성
+          updateTempApplication({ applyTempId: recentApplyTempId, formData });
         } else {
-          postApplicationTemp(recruitmentId, formData).then((res) => {
-            if (res) {
-              setAlertMessage("임시 저장되었습니다.");
-              setRecentApplyTempId(res);
-              if (handleApplyTempId) {
-                handleApplyTempId(res);
-              }
-            } else {
-              setAlertMessage("문제가 발생했습니다.");
-            }
-          });
+          saveTempApplication({ recruitmentId, formData });
         }
       }
     } catch (error) {

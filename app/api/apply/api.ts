@@ -74,6 +74,7 @@ export const getApplyForm = async (clubId: string) => {
 // 내 임시 지원 리스트 조회
 export const getMyApplyTmpList = async () => {
   try {
+    console.log("내 임시 지원 리스트 조회");
     const response = await axiosInstance.get<ApplyTempListRes>(APPLY_TEMPS_MY);
     return response.data;
   } catch (err) {
@@ -141,7 +142,9 @@ export const postApplication = async (
 };
 
 // 임시 지원 상세 조회
-export const getApplicationTemp = async (applyTempId: string) => {
+export const getApplicationTemp = async (
+  applyTempId: string
+): Promise<ApplyTempDetailRes> => {
   try {
     const response = await axiosInstance.get<ApplyTempDetailRes>(
       `apply-temps/${applyTempId}`

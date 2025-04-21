@@ -13,35 +13,75 @@ import {
 } from "@/types/application";
 import TransparentSmallBtn from "@/components/button/basicBtn/transparentSmallBtn";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
-import {
-  deleteMyApplyTmp,
-  getApplicationTemp,
-  postApplication,
-  postApplicationTemp,
-  putApplicationTemp,
-} from "@/api/apply/api";
+import { getApplicationTemp } from "@/api/apply/api";
 import Alert from "@/components/alert/alert";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { RecruitmentResponse } from "@/types/recruitment";
 import { getRecruitmentDetail } from "@/api/recruitment/api";
 import Loading from "@/components/feedback/loading";
+import {
+  useDeleteTmpMutation,
+  usePostTempApplicationMutation,
+  usePutTempApplicationMutation,
+  useSubmitApplicationMutation,
+} from "@/hooks/apply/useApplyMutation";
 
 export interface ApplicationFormModalProps {
   recruitmentId: string;
   myRecentApplyTempId?: string | null;
-  handleApplyTempId?: (tempId: string) => void;
   onClose: () => void;
+  onSubmit: () => void;
 }
 
 const ApplicationFormModal = ({
   recruitmentId,
   myRecentApplyTempId,
-  handleApplyTempId,
   onClose,
+  onSubmit,
 }: ApplicationFormModalProps) => {
-  const router = useRouter();
   const nickname = useUserStore((state) => state.memberData.nickname);
   const profileType = useUserStore((state) => state.memberData.profileType);
+  const deleteTmp = useDeleteTmpMutation({
+    recruitmentId,
+    onSuccess: () => {},
+    onError: () => {},
+  });
+
+  const { mutate: submitApplication } = useSubmitApplicationMutation({
+    recruitmentId,
+    onSuccess: () => {
+      onSubmit();
+      onClose();
+      // 지원서 제출 후 임시 지원서 삭제
+      if (recentApplyTempId) {
+        deleteTmp.mutate(recentApplyTempId);
+      }
+    },
+    onError: () => {
+      setAlertMessage("지원서 제출에 실패했습니다.");
+    },
+  });
+
+  const { mutate: saveTempApplication } = usePostTempApplicationMutation({
+    recruitmentId,
+
+    onSuccess: (res) => {
+      setAlertMessage("임시 저장되었습니다.");
+      setRecentApplyTempId(res);
+    },
+    onError: () => {
+      setAlertMessage("임시 저장에 실패했습니다.");
+    },
+  });
+
+  const { mutate: updateTempApplication } = usePutTempApplicationMutation({
+    onSuccess: () => {
+      setAlertMessage("임시 저장되었습니다.");
+    },
+    onError: () => {
+      setAlertMessage("임시 저장 수정에 실패했습니다.");
+    },
+  });
 
   // 모집상세 관련 상태
   const [recruitmentData, setRecruitmentData] =
@@ -170,42 +210,12 @@ const ApplicationFormModal = ({
       const formData = createApplySaveReq(type);
       // 지원
       if (type === "APPLY") {
-        postApplication(recruitmentId, formData).then((res) => {
-          if (res === 200) {
-            setAlertMessage("지원서 제출이 완료되었습니다.");
-            if (recentApplyTempId) {
-              deleteMyApplyTmp(recentApplyTempId);
-            }
-            router.push("/application");
-          } else {
-            setAlertMessage(
-              "지원서 제출에 실패했습니다.<br />다시 시도해주세요."
-            );
-          }
-        });
+        submitApplication({ recruitmentId, formData });
       } else {
-        // 임시지원 수정
         if (recentApplyTempId) {
-          putApplicationTemp(recentApplyTempId, formData).then((res) => {
-            if (res === 200) {
-              setAlertMessage("임시 저장되었습니다.");
-            } else {
-              setAlertMessage("문제가 발생했습니다.");
-            }
-          });
-          // 임시지원 생성
+          updateTempApplication({ applyTempId: recentApplyTempId, formData });
         } else {
-          postApplicationTemp(recruitmentId, formData).then((res) => {
-            if (res) {
-              setAlertMessage("임시 저장되었습니다.");
-              setRecentApplyTempId(res);
-              if (handleApplyTempId) {
-                handleApplyTempId(res);
-              }
-            } else {
-              setAlertMessage("문제가 발생했습니다.");
-            }
-          });
+          saveTempApplication({ recruitmentId, formData });
         }
       }
     } catch (error) {
@@ -299,6 +309,9 @@ const ApplicationFormModal = ({
       id="background"
       className="fixed flex-col gap-5 inset-0 z-50 flex
           items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
     >
       <div
         className="absolute top-4 right-4 cursor-pointer bg-white p-2 border border-menuborder rounded-full"
