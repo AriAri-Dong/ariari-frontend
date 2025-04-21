@@ -1,17 +1,18 @@
 "use client";
 
+import { useState } from "react";
+import { useUserStore } from "@/providers/userStoreProvider";
+
 import Image from "next/image";
-import SubPullDown from "../pulldown/subPullDown";
+import defaultImg from "@/images/icon/defaultAriari.svg";
+import MemberSearch from "../input/memberSearch";
+import Alert from "../alert/alert";
+
 import { Delegator } from "@/types/components/delegate";
 import { ClubData } from "@/types/club";
-import MemberSearch from "../input/memberSearch";
-import { useEffect, useState } from "react";
-import { entrustAdmin, getClubMembers } from "@/api/member/api";
 import { ClubMemberData, MemberData } from "@/types/member";
 
-import no_image from "@/images/noImage/no-image.jpg";
-import Alert from "../alert/alert";
-import { useUserStore } from "@/providers/userStoreProvider";
+import { entrustAdmin } from "@/api/member/api";
 
 interface SelectAdministratorProps {
   club: ClubData;
@@ -56,7 +57,7 @@ const SelectAdministrator = ({
   return (
     <div className="flex justify-start items-center px-2.5 py-2 gap-4 md:gap-3.5">
       <Image
-        src={club.profileUri || no_image}
+        src={club.profileUri || defaultImg}
         alt={"club_image"}
         className="rounded-full object-cover w-12 h-12 md:w-[68px] md:h-[68px]"
       />
