@@ -6,6 +6,7 @@ import {
   CLUBS_INTERNAL,
   CLUBS_INTERNAL_RANKING,
   CLUBS_MY,
+  CLUBS_MY_ADMIN,
   CLUBS_MY_BOOKMARKS,
   CLUBS_SEARCH,
 } from "../apiUrl";
@@ -16,7 +17,7 @@ import {
   ClubInfoResponse,
   CreateClubData,
 } from "@/types/api";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 // 동아리 수정
 export const updateClubInfo = async (clubId: number) => {
@@ -309,7 +310,7 @@ export const updateClubWithFiles = async (
       formData.append("bannerFile", bannerFile);
     }
 
-    const response = await axiosInstance.put(`/clubs/${clubId}`, formData, {
+    const response = await axiosInstance.put(`${CLUBS}/${clubId}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -351,7 +352,7 @@ export const getExternalClubRanking = (fieldType: string) => {
 // 내가 ADMIN인 동아리 조회
 export const getMyAdminClubs = async () => {
   try {
-    const response = await axiosInstance.get<ClubResponse>("/clubs/my/admin");
+    const response = await axiosInstance.get<ClubResponse>(CLUBS_MY_ADMIN);
     return response.data;
   } catch (err) {
     if (err instanceof AxiosError) {

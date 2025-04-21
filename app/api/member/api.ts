@@ -6,6 +6,7 @@ import {
   MEMBERS_MY,
   CLUB_MEMBERS,
   CLUBS,
+  CLUB_MEMBERS_,
 } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
 import {
@@ -134,7 +135,7 @@ export const putClubMembersStatus = async (
 export const entrustAdmin = async (memberId: string) => {
   try {
     const { data } = await axiosInstance.patch<ClubMemberListRes>(
-      `club_members/${memberId}/entrust-admin`
+      `${CLUB_MEMBERS_}/${memberId}/entrust-admin`
     );
     return data;
   } catch (err) {
