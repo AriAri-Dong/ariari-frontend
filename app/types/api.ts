@@ -14,7 +14,6 @@ export type AuthResponseType = {
 
 export type UserDataResponseType = {
   memberData: {
-    id: string;
     memberId: string;
     nickname: string;
     profileType: string;

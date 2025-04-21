@@ -12,7 +12,7 @@ const MobileHeaderSection = () => {
   };
 
   return (
-    <div className="md:hidden flex flex-row justify-between mt-[46px] mb-5">
+    <div className="flex flex-row justify-between mt-[46px] mb-5">
       <div className="flex gap-2">
         <Image
           src={vector}
@@ -20,7 +20,7 @@ const MobileHeaderSection = () => {
           width={24}
           height={24}
           onClick={handleGoBack}
-          className="md:hidden cursor-pointer"
+          className="cursor-pointer"
         />
         <h1 className="text-text1 text-mobile_h1_contents_title">고객센터</h1>
       </div>

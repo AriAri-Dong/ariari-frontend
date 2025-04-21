@@ -3,14 +3,14 @@
 import Image from "next/image";
 import error from "@/images/icon/error.svg";
 
-import { WithdrawalInfoItem } from "@/types/components/withdrawInfo";
 import { useRouter } from "next/navigation";
+import { NoticeItem } from "@/types/components/withdrawInfo";
 
-interface WithdrawalCardProps {
-  info: WithdrawalInfoItem;
+interface NoticeCardProps {
+  info: NoticeItem;
 }
 
-const WithdrawalCard = ({ info }: WithdrawalCardProps) => {
+const NoticeCard = ({ info }: NoticeCardProps) => {
   const router = useRouter();
   let sectionIndex = 0;
 
@@ -34,16 +34,22 @@ const WithdrawalCard = ({ info }: WithdrawalCardProps) => {
       <div className="flex flex-col gap-2">
         {info.sections.map((item, index) => {
           const isDescription = item.startsWith("-");
-          const text = isDescription ? item.slice(1).trim() : item;
-          if (!isDescription) sectionIndex++;
+          const isDoubleDescription = item.startsWith("--");
+          const text =
+            isDescription || isDoubleDescription
+              ? item.slice(isDoubleDescription ? 2 : 1).trim()
+              : item;
+          if (!isDescription && !isDoubleDescription) sectionIndex++;
           return (
             <div
               key={index}
               className="flex gap-1.5 text-mobile_body1_r md:text-body3_m text-icon"
             >
               {info.sections.length !== 1 &&
-                (isDescription ? (
-                  <p className="w-2 text-center">·</p>
+                (isDoubleDescription ? (
+                  <p className="ml-2 w-2 text-center">◦</p>
+                ) : isDescription ? (
+                  <p className="w-2 text-center">•</p>
                 ) : (
                   <p className="w-2">{sectionIndex + "."}</p>
                 ))}
@@ -64,4 +70,4 @@ const WithdrawalCard = ({ info }: WithdrawalCardProps) => {
   );
 };
 
-export default WithdrawalCard;
+export default NoticeCard;

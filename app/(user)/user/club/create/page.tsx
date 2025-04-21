@@ -20,22 +20,33 @@ import Alert from "@/components/alert/alert";
 import NotiPopUp from "@/components/modal/notiPopUp";
 import { createClubWithFile, getAllClubsInfo } from "@/api/club/api";
 import { convertToServerFormat } from "@/utils/convertToServerFormat";
-import {
-  ClubResponse,
-  ClubSearchCondition,
-  CreateClubData,
-  Pageable,
-} from "@/types/api";
+import { ClubResponse, CreateClubData } from "@/types/api";
 
 const OPTIONS = [
   {
     label: "동아리 소속",
     key: "affiliationType",
     data: AFFILIATION_TYPE.slice(1),
+    placeholder: AFFILIATION_TYPE[0].label,
   },
-  { label: "동아리 분야", key: "fieldType", data: FIELD_TYPE.slice(1) },
-  { label: "동아리 지역", key: "areaType", data: AREA_TYPE.slice(1) },
-  { label: "동아리 대상", key: "targetType", data: TARGET_TYPE.slice(1) },
+  {
+    label: "동아리 분야",
+    key: "fieldType",
+    data: FIELD_TYPE.slice(1),
+    placeholder: FIELD_TYPE[0].label,
+  },
+  {
+    label: "동아리 지역",
+    key: "areaType",
+    data: AREA_TYPE.slice(1),
+    placeholder: AREA_TYPE[0].label,
+  },
+  {
+    label: "동아리 대상",
+    key: "targetType",
+    data: TARGET_TYPE.slice(1),
+    placeholder: TARGET_TYPE[0].label,
+  },
 ];
 
 const CreateClubPage = () => {
@@ -281,7 +292,7 @@ const CreateClubPage = () => {
           maxLength={30}
           className="mb-[30px] md:mb-7 max-w-[770px]"
         />
-        {OPTIONS.map(({ label, key, data }) => (
+        {OPTIONS.map(({ label, key, data, placeholder }) => (
           <div className="flex flex-col mb-[30px] md:mb-7" key={key}>
             <h3 className="flex text-mobile_h3 mb-[14px] md:text-h3 md:mb-[18px]">
               {label}
@@ -295,6 +306,7 @@ const CreateClubPage = () => {
                   key as keyof typeof selections
                 )}
                 selectedOption={selections[key as keyof typeof selections]}
+                placeholder={placeholder}
               />
             </div>
           </div>

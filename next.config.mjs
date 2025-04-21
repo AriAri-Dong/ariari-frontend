@@ -28,7 +28,25 @@ const nextConfig = {
   },
 
   webpack: (config) => {
+    // current file loader rule
+    const fileLoaderRule = config.module.rules.find((rule) =>
+      rule.test?.test?.(".svg")
+    );
     config.resolve.fallback = { fs: false };
+    config.module.rules.push(
+      {
+        ...fileLoaderRule,
+        test: /\.svg$/i,
+        resourceQuery: { not: [/svgr/] },
+      },
+      {
+        test: /\.svg$/i,
+        issuer: fileLoaderRule.issuer,
+        resourceQuery: /svgr/,
+        use: ["@svgr/webpack"],
+      }
+    );
+
     return config;
   },
   async rewrites() {
