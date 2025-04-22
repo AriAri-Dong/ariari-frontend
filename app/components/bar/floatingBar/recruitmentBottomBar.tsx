@@ -1,54 +1,64 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import useResponsive from "@/hooks/useResponsive";
+
 import MediumBtn from "@/components/button/basicBtn/mediumBtn";
 import BookmarkBtn from "@/components/button/iconBtn/bookmarkBtn";
 import SahreBtn from "@/components/button/iconBtn/shareBtn";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import { calculateRemainingDays } from "@/utils/dateFormatter";
-import { useRouter, useSearchParams } from "next/navigation";
-import useResponsive from "@/hooks/useResponsive";
-import {
-  deleteRecruitmentBookmark,
-  postRecruitmentBookmark,
-} from "@/api/recruitment/api";
 import Alert from "@/components/alert/alert";
 import { useShallow } from "zustand/shallow";
 import { useUserStore } from "@/providers/userStoreProvider";
 import ApplicationFormModal from "@/components/modal/club/applicationFormModal";
-import { ClubInfoCard } from "@/types/components/card";
+import { RecruitmentData } from "@/types/recruitment";
+import ApplicationFormBottomSheet from "@/components/bottomSheet/applicationFormBottomSheet";
+
+import {
+  deleteRecruitmentBookmark,
+  postRecruitmentBookmark,
+} from "@/api/recruitment/api";
 
 interface RecruitmentBottomBar {
-  recruitmentData: ClubInfoCard;
-  isMyBookmark: boolean;
-  bookmarks: number;
-  endDate: string;
+  recruitmentData: RecruitmentData;
+  myRecentApplyTempId?: string | null;
   isMyApply: boolean;
+  isMyClub: boolean;
+  bookmarks: number;
+  type?: "PREVIEW" | "APPLYING" | "GENERAL";
 }
 const RecruitmentBottomBar = ({
   recruitmentData,
-  isMyBookmark,
-  bookmarks,
-  endDate,
+  myRecentApplyTempId,
   isMyApply,
+  isMyClub,
+  bookmarks,
+  type = "GENERAL",
 }: RecruitmentBottomBar) => {
   const params = useSearchParams();
   const id = params.get("id");
   const isMdUp = useResponsive("md");
-  const router = useRouter();
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
   const [isApplicationFormOpen, setIsApplicationFormOpen] =
     useState<boolean>(false);
 
   const [count, setCount] = useState<number>(bookmarks);
-  const [isScrap, setIsScrap] = useState<boolean>(isMyBookmark);
+  const [isScrap, setIsScrap] = useState<boolean>(recruitmentData.isMyBookmark);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const dDay = calculateRemainingDays(endDate);
+  const dDay = calculateRemainingDays(recruitmentData.endDateTime);
   const dDayContent =
-    dDay === "마감" ? "마감" : isMyApply ? "지원 완료" : `지원하기 ${dDay}`;
+    dDay === "마감"
+      ? "마감"
+      : isMyClub
+      ? "가입 완료"
+      : isMyApply
+      ? "지원 완료"
+      : `지원하기 ${dDay}`;
 
-  const isApplyAvailable = dDay !== "마감" && !isMyApply;
+  const isApplyAvailable = dDay !== "마감" && !isMyApply && !isMyClub;
 
   const onHeartClick = () => {
     if (!isSignIn) {
@@ -83,6 +93,10 @@ const RecruitmentBottomBar = ({
   };
 
   const onApply = () => {
+    if (!isSignIn) {
+      setAlertMessage("로그인 후 이용 가능합니다.");
+      return;
+    }
     if (isApplyAvailable) {
       setIsApplicationFormOpen(true);
     }
@@ -109,21 +123,27 @@ const RecruitmentBottomBar = ({
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
       {isApplicationFormOpen &&
-        recruitmentData.applyFormData &&
+        type === "GENERAL" &&
         (isMdUp ? (
           <ApplicationFormModal
-            recruitmentData={recruitmentData}
-            applyFormData={recruitmentData.applyFormData}
+            recruitmentId={recruitmentData.id}
+            myRecentApplyTempId={myRecentApplyTempId}
             onClose={() => {
               setIsApplicationFormOpen(false);
             }}
+            onSubmit={() => {
+              setAlertMessage("지원서가 제출되었습니다.");
+            }}
           />
         ) : (
-          <ApplicationFormModal
-            recruitmentData={recruitmentData}
-            applyFormData={recruitmentData.applyFormData}
+          <ApplicationFormBottomSheet
+            recruitmentId={recruitmentData.id}
+            myRecentApplyTempId={myRecentApplyTempId}
             onClose={() => {
               setIsApplicationFormOpen(false);
+            }}
+            onSubmit={() => {
+              setAlertMessage("지원서가 제출되었습니다.");
             }}
           />
         ))}

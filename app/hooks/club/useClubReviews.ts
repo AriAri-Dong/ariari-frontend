@@ -28,7 +28,7 @@ export const useClubReviews = (
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  // 후기 목록 불러오기
+  // 활동 후기 목록 불러오기
   const fetchClubReviews = useCallback(() => {
     setLoading(true);
     getClubReview(clubId, page, size, sort)

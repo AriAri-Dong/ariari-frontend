@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { useUserStore } from "@/providers/userStoreProvider";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
-import ApplicationFieldForm from "@/components/form/application/applicationFieldForm";
-import ClubInfo from "@/(recruitment)/recruitment/detail/content/clubInfo";
-import { profileImageMap } from "@/utils/mappingProfile";
+
+import Alert from "@/components/alert/alert";
+import LargeBtn from "@/components/button/basicBtn/largeBtn";
+import TransparentLargeBtn from "../button/basicBtn/transparentLargeBtn";
+
+import { getApplicationTemp } from "@/api/apply/api";
 import {
   ApplicationKeys,
   ApplyAnswerReq,
   ApplyQuestionData,
   SpecialQuestionList,
 } from "@/types/application";
-import TransparentSmallBtn from "@/components/button/basicBtn/transparentSmallBtn";
-import SmallBtn from "@/components/button/basicBtn/smallBtn";
-import { getApplicationTemp } from "@/api/apply/api";
-import Alert from "@/components/alert/alert";
-import { usePathname, useRouter } from "next/navigation";
+import { ApplicationFormModalProps } from "../modal/club/applicationFormModal";
+import ApplicationFieldFormMobile from "../form/application/applicationFieldFormMobile";
 import { RecruitmentResponse } from "@/types/recruitment";
 import { getRecruitmentDetail } from "@/api/recruitment/api";
-import Loading from "@/components/feedback/loading";
 import {
   useDeleteTmpMutation,
   usePostTempApplicationMutation,
@@ -26,21 +26,15 @@ import {
   useSubmitApplicationMutation,
 } from "@/hooks/apply/useApplyMutation";
 
-export interface ApplicationFormModalProps {
-  recruitmentId: string;
-  myRecentApplyTempId?: string | null;
-  onClose: () => void;
-  onSubmit: () => void;
-}
-
-const ApplicationFormModal = ({
+const ApplicationFormBottomSheet = ({
   recruitmentId,
   myRecentApplyTempId,
   onClose,
   onSubmit,
 }: ApplicationFormModalProps) => {
-  const nickname = useUserStore((state) => state.memberData.nickname);
-  const profileType = useUserStore((state) => state.memberData.profileType);
+  const router = useRouter();
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
   const deleteTmp = useDeleteTmpMutation({
     recruitmentId,
     onSuccess: () => {},
@@ -82,7 +76,6 @@ const ApplicationFormModal = ({
       setAlertMessage("임시 저장 수정에 실패했습니다.");
     },
   });
-
   // 모집상세 관련 상태
   const [recruitmentData, setRecruitmentData] =
     useState<RecruitmentResponse | null>(null);
@@ -162,7 +155,6 @@ const ApplicationFormModal = ({
     }
 
     const applyAnswers: ApplyAnswerReq[] = [];
-    // 선택항목 유효성 검사
     if (specialQuestionList) {
       Object.entries(specialQuestionList).forEach(([key, applyQuestionId]) => {
         if (!applyQuestionId) return;
@@ -174,7 +166,6 @@ const ApplicationFormModal = ({
           });
       });
     }
-    // 추가 항목
     if (documentQuestions) {
       Object.entries(documentQuestions).forEach(([id, item]) => {
         if (answers[item.id])
@@ -230,6 +221,7 @@ const ApplicationFormModal = ({
   // 지원 양식 적용
   useEffect(() => {
     if (!recruitmentData?.applyFormData) return;
+
     setPortfolioCollected(recruitmentData.applyFormData.portfolio);
     setDocumentQuestions(recruitmentData.applyFormData.applyQuestionDataList);
     setSpecialQuestionList(recruitmentData.applyFormData.specialQuestionList);
@@ -247,7 +239,6 @@ const ApplicationFormModal = ({
     }
   }, [recruitmentData?.applyFormData]);
 
-  // 임시 지원 내용 적용
   useEffect(() => {
     if (myRecentApplyTempId)
       getApplicationTemp(myRecentApplyTempId).then(async (res) => {
@@ -298,6 +289,10 @@ const ApplicationFormModal = ({
   }, [recruitmentId]);
 
   useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "auto";
@@ -305,93 +300,67 @@ const ApplicationFormModal = ({
   }, []);
 
   return (
-    <div
-      id="background"
-      className="fixed flex-col gap-5 inset-0 z-50 flex
-          items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-    >
+    <div className="fixed inset-0 z-50 flex items-end bg-black/50">
+      <div className="absolute inset-0" onClick={handleClose} />
       <div
-        className="absolute top-4 right-4 cursor-pointer bg-white p-2 border border-menuborder rounded-full"
-        onClick={handleClose}
+        className={`relative w-full bg-background px-4 rounded-t-[24px] shadow-default transition-transform duration-300 ${
+          isVisible ? "translate-y-0" : "translate-y-full"
+        } flex flex-col`}
+        style={{ height: "calc(100vh - 40px)" }}
       >
-        <Image src={close} alt={"닫기"} width={24} height={24} />
-      </div>
-      {/* Header */}
-      <div
-        className="bg-background flex w-[900px] h-14 rounded-[32px] 
-          items-center justify-between py-[14px] px-6"
-      >
-        <div className="flex gap-3 items-center">
+        {/* 제목 영역 */}
+        <div className="flex justify-between mt-[22px] mb-4">
+          <h1 className="text-text1 text-mobile_h1_contents_title">
+            지원서 작성하기
+          </h1>
           <Image
-            src={profileImageMap[profileType ?? "ARIARI_MONKEY"]}
-            alt={"프로필"}
-            width={32}
-            height={32}
+            src={close}
+            alt={"닫기"}
+            width={20}
+            height={20}
+            onClick={handleClose}
           />
-          <h1 className="text-text1 text-h4_sb">{`${nickname}의 지원서`}</h1>
         </div>
-      </div>
-      <div className="bg-white w-[900px] max-h-[75vh] rounded-2xl shadow-modal flex flex-col p-6">
-        {recruitmentData ? (
-          <div className="custom-scrollbar overflow-y-auto">
-            <div className="pb-2 border-b border-menuborder">
-              <ClubInfo
-                recruitmentData={recruitmentData.recruitmentData}
-                type="APPLYING"
-                clubData={recruitmentData.clubData}
-                applyFormData={recruitmentData.applyFormData}
-                isMyApply={recruitmentData.isMyApply}
-                bookmarks={recruitmentData.bookmarks}
-                isMyClub={false}
-              />
-            </div>
-            <div className="pt-[48px]">
-              <ApplicationFieldForm
-                selectedFields={selectedFields}
-                portfolioCollected={portfolioCollected}
-                documentQuestions={documentQuestions}
-                name={name}
-                setName={setName}
-                fileName={fileName}
-                handleFileChange={handleFileChange}
-                handleRemoveFile={handleRemoveFile}
-                answers={answers}
-                handleAnswerChange={handleAnswerChange}
-                url={url}
-                setUrl={setUrl}
-                inputValues={inputValues}
-                handleInputChange={handleInputChange}
-              />
-            </div>
-            <div className="flex gap-4 justify-center mt-[42px]">
-              <TransparentSmallBtn
-                title={"임시저장"}
-                round={true}
-                onClick={() => handelSubmit("APPLY_TEMP")}
-              />
-              <SmallBtn
-                title={"제출하기"}
-                onClick={() => handelSubmit("APPLY")}
-                round={true}
-                className="h-[44px] flex flex-col items-center justify-center"
-              />
-            </div>
-            {alertMessage && (
-              <Alert
-                text={alertMessage}
-                onClose={() => setAlertMessage(null)}
-              />
-            )}
-          </div>
-        ) : (
-          <Loading className="md:min-h-[150px]" />
+        {/* 구분선 */}
+        <div className="h-[1px] bg-menuborder" />
+
+        {/* 스크롤 가능한 내용 영역 */}
+        <div className="flex-1 overflow-y-auto pt-[22px] mb-[14px]">
+          <ApplicationFieldFormMobile
+            selectedFields={selectedFields}
+            portfolioCollected={portfolioCollected}
+            documentQuestions={documentQuestions}
+            name={name}
+            setName={setName}
+            fileName={fileName}
+            handleFileChange={handleFileChange}
+            handleRemoveFile={handleRemoveFile}
+            answers={answers}
+            handleAnswerChange={handleAnswerChange}
+            url={url}
+            setUrl={setUrl}
+            inputValues={inputValues}
+            handleInputChange={handleInputChange}
+          />
+        </div>
+        {/* 고정 버튼 영역 */}
+        <div className="pb-6 pt-[6px] flex gap-2">
+          <TransparentLargeBtn
+            title={"임시저장"}
+            onClick={() => handelSubmit("APPLY_TEMP")}
+          />
+          <LargeBtn
+            title={"제출하기"}
+            onClick={() => handelSubmit("APPLY")}
+            className="flex flex-col items-center justify-center"
+          />
+        </div>
+        {alertMessage && (
+          <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
       </div>
     </div>
   );
 };
 
-export default ApplicationFormModal;
+export default ApplicationFormBottomSheet;

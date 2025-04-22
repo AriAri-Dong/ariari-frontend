@@ -4,6 +4,7 @@ import {
   ClubRegionType,
   ParticipantType,
 } from "./club";
+import { TagData } from "./review";
 
 export type AuthResponseType = {
   accessToken: string;
@@ -38,7 +39,7 @@ export type Pageable = {
 
 // 개별 동아리 데이터 타입
 export type ClubData = {
-  id: number;
+  id: string;
   name: string;
   profileUri: string;
   body: string;
@@ -51,6 +52,7 @@ export type ClubData = {
     name: string;
   };
   bookmarkCount: number;
+  badgeType?: TagData;
 };
 
 // 동아리 목록 API 응답 타입
@@ -136,4 +138,8 @@ export interface CreateClubTypeData {
   categoryType: ClubFieldType;
   regionType: ClubRegionType;
   participantType: ParticipantType;
+}
+
+export interface IdResponse {
+  id: string;
 }

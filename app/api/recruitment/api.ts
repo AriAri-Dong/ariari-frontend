@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  CLUBS,
   RECRUITMENT,
   RECRUITMENT_BOOKMARKS,
   RECRUITMENT_EXTERNAL,
@@ -241,7 +242,7 @@ export const getBookmarkRecruitment = async (
 export const getClubRecruitment = async (clubId: string) => {
   try {
     const { data } = await axiosInstance.get<ClubRecruitmentListResponse>(
-      `/clubs/${clubId}/recruitments`
+      `${CLUBS}/${clubId}/recruitments`
     );
     return data;
   } catch (err) {
@@ -252,7 +253,7 @@ export const getClubRecruitment = async (clubId: string) => {
 // 모집 종료
 export const endRecruitment = async (recruitmentId: string) => {
   try {
-    const { data } = await axiosInstance.put(`/recruitments/${recruitmentId}`);
+    const { data } = await axiosInstance.put(`${RECRUITMENT}/${recruitmentId}`);
     return data;
   } catch (err) {
     console.log("모집종료 실패", err);
@@ -263,7 +264,7 @@ export const endRecruitment = async (recruitmentId: string) => {
 export const deleteRecruitment = async (recruitmentId: string) => {
   try {
     const { data } = await axiosInstance.delete(
-      `/recruitments/${recruitmentId}`
+      `${RECRUITMENT}/${recruitmentId}`
     );
     return data;
   } catch (err) {
@@ -274,7 +275,7 @@ export const deleteRecruitment = async (recruitmentId: string) => {
 export const getRecruitmentDetail = async (recruitmentId: string) => {
   try {
     const response = await axiosInstance.get<RecruitmentResponse>(
-      `/recruitments/${recruitmentId}`
+      `${RECRUITMENT}/${recruitmentId}`
     );
     return response.data;
   } catch (err) {
@@ -290,7 +291,7 @@ export const getRecruitmentDetail = async (recruitmentId: string) => {
 export const getClubRecruitmentList = async (clubId: string) => {
   try {
     const response = await axiosInstance.get<ClubRecruitmentListResponse>(
-      `/clubs/${clubId}/recruitments`
+      `${CLUBS}/${clubId}/recruitments`
     );
     return response.data;
   } catch (err) {
@@ -302,7 +303,7 @@ export const getClubRecruitmentList = async (clubId: string) => {
 export const postRecruitmentBookmark = async (recruitmentId: string) => {
   try {
     const response = await axiosInstance.post(
-      `/recruitments/${recruitmentId}/bookmark`
+      `${RECRUITMENT}/${recruitmentId}/bookmark`
     );
     return response.status;
   } catch (err) {
@@ -319,7 +320,7 @@ export const postRecruitmentBookmark = async (recruitmentId: string) => {
 export const deleteRecruitmentBookmark = async (recruitmentId: string) => {
   try {
     const response = await axiosInstance.delete(
-      `/recruitments/${recruitmentId}/bookmark`
+      `${RECRUITMENT}/${recruitmentId}/bookmark`
     );
     return response.status;
   } catch (err) {
@@ -335,7 +336,7 @@ export const deleteRecruitmentBookmark = async (recruitmentId: string) => {
 export const postRecruitment = async (clubId: string, formData: FormData) => {
   try {
     const response = await axiosInstance.post(
-      `/clubs/${clubId}/recruitments`,
+      `${CLUBS}/${clubId}/recruitments`,
       formData,
       {
         headers: {

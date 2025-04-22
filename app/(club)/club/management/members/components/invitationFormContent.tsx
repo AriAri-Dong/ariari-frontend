@@ -88,6 +88,7 @@ const InvitationFormContent = ({
               nickname={nickname}
               setNickname={setNickname}
               setErrorMessage={setErrorMessage}
+              type="TOTAL_MEMBER"
             />
             <SmallBtn
               title={"초대하기"}

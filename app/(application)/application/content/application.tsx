@@ -3,42 +3,47 @@
 import { useEffect, useMemo, useState } from "react";
 import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
+import {
+  useMyApplyListQuery,
+  useMyApplyTmpListQuery,
+} from "@/hooks/apply/useApplyQuery";
 
 import Image from "next/image";
 import notice from "@/images/icon/notice.svg";
 
+import ListSection from "./listSection";
 import SubTap from "@/components/tab/subTap";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import Alert from "@/components/alert/alert";
 import ErrorNotice from "@/components/feedback/error";
 
 import { OptionType } from "@/types/components/pulldown";
-import { ApplyData, ApplyTempData } from "@/types/application";
-import {
-  deleteMyApply,
-  deleteMyApplyTmp,
-  getMyApplyList,
-  getMyApplyTmpList,
-} from "@/api/apply/api";
-import ListSection from "./listSection";
 
 const ITEMS_PER_PAGE = 10;
 
 const Application = () => {
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
 
-  // 지원 전체
-  const [allApplications, setAllApplications] = useState<ApplyData[]>([]);
-  // 임시지원
-  const [tempList, setTempList] = useState<ApplyTempData[]>([]);
-  // 전형 진행중
-  const [inProgressApplications, setInProgressApplications] = useState<
-    ApplyData[]
-  >([]);
-  // 최종 발표 완료
-  const [finishedApplications, setFinishedApplications] = useState<ApplyData[]>(
-    []
-  );
+  const { data: { allApplications = [], totalCount: applyCount = 0 } = {} } =
+    useMyApplyListQuery();
+  const { data: { tempList = [], totalCount: tmpApplyCount = 0 } = {} } =
+    useMyApplyTmpListQuery();
+
+  const inProgressApplications = useMemo(() => {
+    return allApplications.filter(
+      (item) =>
+        item.applyStatusType === "PENDENCY" ||
+        item.applyStatusType === "INTERVIEW"
+    );
+  }, [allApplications]);
+
+  const finishedApplications = useMemo(() => {
+    return allApplications.filter(
+      (item) =>
+        item.applyStatusType === "APPROVE" || item.applyStatusType === "REFUSAL"
+    );
+  }, [allApplications]);
+
   const [options, setOptions] = useState<OptionType[]>([
     { id: 0, label: "전체" },
     { id: 1, label: "작성중" },
@@ -57,58 +62,6 @@ const Application = () => {
   const handleLoadMore = () => {
     setVisibleItems((prev) => prev + ITEMS_PER_PAGE);
   };
-  // 지원서 삭제
-  const handleDeleteTmpApply = async (
-    id: string,
-    type: "APPLY" | "TEMP_APPLY"
-  ) => {
-    if (type === "TEMP_APPLY") {
-      deleteMyApplyTmp(id)
-        .then(() => {
-          setTempList((prev) => prev.filter((item) => item.id !== id));
-        })
-        .catch((err) => {
-          setAlertMessage(err.message);
-        });
-    }
-    if (type === "APPLY") {
-      deleteMyApply(id)
-        .then(() => {
-          setAllApplications((prev) => prev.filter((item) => item.id !== id));
-        })
-        .catch((err) => {
-          setAlertMessage(err.message);
-        });
-    }
-  };
-
-  // 지원서 조회
-  useEffect(() => {
-    const fetchApplications = async () => {
-      if (isSignIn) {
-        // 지원서
-        getMyApplyList()
-          .then((data) => {
-            setAllApplications(data.applyDataList);
-          })
-          .catch((err) => {
-            setErrorMessage(err.message);
-          });
-        // 임시 지원
-        getMyApplyTmpList()
-          .then((data) => {
-            setTempList(data.applyDataList);
-          })
-          .catch((err) => {
-            setErrorMessage(err.message);
-          });
-      } else {
-        setErrorMessage("로그인하여 지원서를 조회하고 지원 내역을 관리하세요.");
-        setErrorTitle("Member Only");
-      }
-    };
-    fetchApplications();
-  }, []);
 
   useEffect(() => {
     // 전형 진행중, 최종발표 완료 업데이트
@@ -122,9 +75,6 @@ const Application = () => {
       (item) =>
         item.applyStatusType === "APPROVE" || item.applyStatusType === "REFUSAL"
     );
-
-    setInProgressApplications(inProgress);
-    setFinishedApplications(finished);
 
     // 지원서 개수 업데이트
     setOptions(
@@ -166,6 +116,14 @@ const Application = () => {
   if (errorMessage) {
     return (
       <ErrorNotice description={errorMessage} title={errorTitle ?? undefined} />
+    );
+  }
+  if (!isSignIn) {
+    return (
+      <ErrorNotice
+        description="로그인 후 내 지원 내역을 확인할 수 있어요"
+        title="Please Sign In"
+      />
     );
   }
 
@@ -214,10 +172,7 @@ const Application = () => {
         </div>
       </div>
       <div className="flex flex-col md:flex-grow md:mb-[124px] mb-[80px] min-h-[300px] md:min-h-[450px] ">
-        <ListSection
-          dataList={filteredApplications.slice(0, visibleItems)}
-          handleDelete={handleDeleteTmpApply}
-        />
+        <ListSection dataList={filteredApplications.slice(0, visibleItems)} />
         {visibleItems < filteredApplications.length && (
           <div className="self-center mt-9 md:mt-10">
             <PlusBtn title={"더보기"} onClick={handleLoadMore} />

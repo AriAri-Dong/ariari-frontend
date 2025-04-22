@@ -2,12 +2,13 @@ import React from "react";
 
 import SelectAdministrator from "@/components/card/selectAdministrator";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
-import { Delegator, JoinedClub } from "@/types/components/delegate";
+import { Delegator } from "@/types/components/delegate";
+import { ClubData } from "@/types/club";
 
 interface StepProps {
-  clubs: JoinedClub[];
-  selectedDelegates: Record<number, Delegator>;
-  onDelegateSelect: (clubId: number, user: Delegator) => void;
+  clubs: ClubData[];
+  selectedDelegates: Record<string, Delegator>;
+  onDelegateSelect: (clubId: string, user: Delegator) => void;
   handleNextStep: () => void;
 }
 const Step3 = ({
@@ -30,17 +31,14 @@ const Step3 = ({
       <h3 className="text-center text-subtext1 text-h4_r mb-8 whitespace-pre">
         {description}
       </h3>
-      <div className="mb-8">
+      <div className="mb-8 h-[300px] overflow-auto">
         {clubs.map((club, index) => (
           <div key={club.id}>
             <SelectAdministrator
               club={club}
-              selectedUser={
-                selectedDelegates[club.id] || { name: "없음", id: "" }
-              }
-              setSelectedUser={(name: string, id: number) => {
+              selectedUser={selectedDelegates[club.id] || null}
+              setSelectedUser={(name: string, id: string) => {
                 onDelegateSelect(club.id, { name, id });
-                console.log(club.name, name, id);
               }}
             />
             {index !== clubs.length - 1 && (

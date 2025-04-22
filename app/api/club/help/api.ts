@@ -15,7 +15,7 @@ export const getClubFaqList = async (
 ) => {
   try {
     const res = await axiosInstance.get<ClubFaqListRes>(
-      `/clubs/${clubId}/club-faqs`,
+      `${CLUBS}/${clubId}/club-faqs`,
       {
         params: {
           page,
@@ -57,7 +57,7 @@ export const getClubQnaList = async (
 ) => {
   try {
     const res = await axiosInstance.get<ClubQnaListRes>(
-      `/clubs/${clubId}/club-questions`,
+      `${CLUBS}/${clubId}/club-questions`,
       {
         params: {
           page,

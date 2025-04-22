@@ -6,6 +6,7 @@ import {
   MEMBERS_MY,
   CLUB_MEMBERS,
   CLUBS,
+  CLUB_MEMBERS_,
 } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
 import {
@@ -73,7 +74,7 @@ export const getMemberData = async () => {
 // 동아리 회원 리스트 조회
 export const getClubMembers = async (
   clubId: string,
-  statusType?: clubMemberStatusType,
+  statusType?: clubMemberStatusType | undefined,
   query?: string, //검색어
   page?: number,
   size?: number
@@ -134,7 +135,7 @@ export const putClubMembersStatus = async (
 export const entrustAdmin = async (memberId: string) => {
   try {
     const { data } = await axiosInstance.patch<ClubMemberListRes>(
-      `club_members/${memberId}/entrust-admin`
+      `${CLUB_MEMBERS_}/${memberId}/entrust-admin`
     );
     return data;
   } catch (err) {
@@ -153,11 +154,16 @@ export const deleteClubMember = async (memberId: string) => {
   }
 };
 // 닉네임으로 회원 통합 검색
-export const getMemberList = async (nickname: string) => {
-  const params = {
-    nickname: nickname,
+export const getMemberList = async (
+  nickname: string,
+  page?: number,
+  size?: number
+) => {
+  const params: Record<string, any> = {
+    ...(nickname && { nickname }),
+    ...(page && { page }),
+    ...(size && { size }),
   };
-
   try {
     const { data } = await axiosInstance.get<MemberListRes>(MEMBERS, {
       params,

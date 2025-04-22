@@ -8,27 +8,13 @@ import {
   SpecialQuestionList,
 } from "@/types/application";
 import RenderField from "@/(club)/club/components/renderField";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FileBadge from "@/components/badge/fileBadge";
 import TextareaWithCounter from "@/components/textArea/textareaWithCounter";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
+import RadioBtn from "@/components/button/radioBtn";
+import { ApplicationFieldFormProps } from "./applicationFieldForm";
 
-interface ApplicationFieldFormProps {
-  selectedFields: ApplicationKeys[];
-  portfolioCollected: boolean;
-  name: string;
-  setName: (value: string) => void;
-  fileName: string | null;
-  handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleRemoveFile: () => void;
-  answers: Record<string, string>;
-  handleAnswerChange: (index: string, value: string) => void;
-  url: string;
-  setUrl: (value: string) => void;
-  documentQuestions: ApplyQuestionData[];
-  inputValues: Partial<Record<ApplicationKeys, string>>;
-  handleInputChange: (fieldKey: ApplicationKeys, value: string) => void;
-}
 const ApplicationFieldFormMobile = ({
   selectedFields,
   name,
@@ -45,6 +31,28 @@ const ApplicationFieldFormMobile = ({
   handleInputChange,
   documentQuestions,
 }: ApplicationFieldFormProps) => {
+  const [portfolioType, setPortfolioType] = useState<"URL" | "FILE">("URL");
+
+  const handlePortfolioTypeChange = (type: "URL" | "FILE") => {
+    setPortfolioType(type);
+
+    if (type === "FILE") {
+      setUrl("");
+    }
+
+    if (type === "URL") {
+      handleRemoveFile();
+    }
+  };
+
+  useEffect(() => {
+    if (fileName) {
+      setPortfolioType("FILE");
+    } else {
+      setPortfolioType("URL");
+    }
+  }, [fileName]);
+
   return (
     <div className="flex-1 overflow-y-auto custom-scrollbar">
       <div className="flex flex-col gap-[30px]">
@@ -96,48 +104,68 @@ const ApplicationFieldFormMobile = ({
             );
           })}
 
-        {/* 포트폴리오 */}
-        {portfolioCollected && (
-          <div className="flex flex-col">
-            <h3 className="flex text-text1 text-mobile_h3 mb-2.5">
-              포트폴리오
-            </h3>
-            <CustomInput
-              value={""}
-              placeholder={"게시물 주소(URL)를 입력해 주세요."}
-              onChange={() => {}}
-              className="mt-[14px]"
+      </div>
+      {/* 포트폴리오 */}
+      {portfolioCollected && (
+        <div className="flex flex-col pt-[30px]">
+          <h3 className="flex text-text1 text-mobile_h3 mb-2.5">포트폴리오</h3>
+          <div className="flex gap-x-6 p-1 ml-1.5 flex-wrap">
+            <RadioBtn
+              isChecked={portfolioType === "URL"}
+              label={"URL 입력"}
+              onClick={() => {
+                handlePortfolioTypeChange("URL");
+              }}
             />
-            {fileName ? (
-              <div className="flex items-center gap-2 mt-[14px]">
-                <Image
-                  src={close}
-                  alt={"삭제"}
-                  width={20}
-                  height={20}
-                  onClick={handleRemoveFile}
-                  className="cursor-pointer"
-                />
-                <FileBadge fileName={fileName} />
-              </div>
-            ) : null}
-            <LargeBtn
-              title={"pdf 파일 첨부"}
-              onClick={() =>
-                document.getElementById("fileInputMobile")?.click()
-              }
-              className="mt-[14px]"
-            />
-            <input
-              id="fileInputMobile"
-              type="file"
-              accept=".pdf"
-              onChange={handleFileChange}
-              className="hidden"
+            <RadioBtn
+              isChecked={portfolioType === "FILE"}
+              label={"파일 첨부"}
+              onClick={() => {
+                handlePortfolioTypeChange("FILE");
+              }}
             />
           </div>
-        )}
-      </div>
+          {portfolioType === "URL" && (
+            <CustomInput
+              value={url || ""}
+              placeholder={"게시물 주소(URL)를 입력해 주세요."}
+              onChange={(e) => setUrl(e.target.value)}
+              className="mt-[14px]"
+            />
+          )}
+          {fileName ? (
+            <div className="flex items-center gap-2 mt-[14px]">
+              <Image
+                src={close}
+                alt={"삭제"}
+                width={20}
+                height={20}
+                onClick={handleRemoveFile}
+                className="cursor-pointer"
+              />
+              <FileBadge fileName={fileName} />
+            </div>
+          ) : null}
+          {portfolioType === "FILE" && (
+            <>
+              <LargeBtn
+                title={"pdf 파일 첨부"}
+                onClick={() =>
+                  document.getElementById("fileInputMobile")?.click()
+                }
+                className="mt-[14px]"
+              />
+              <input
+                id="fileInputMobile"
+                type="file"
+                accept=".pdf"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };

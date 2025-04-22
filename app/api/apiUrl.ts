@@ -24,6 +24,7 @@ export const RECRUITMENT_RANKING_INTERNAL = "/recruitments/internal/ranking";
 export const CLUBS = "/clubs";
 export const CLUBS_SEARCH = "/clubs/search";
 export const CLUBS_MY = "/clubs/my";
+export const CLUBS_MY_ADMIN = "/clubs/my/admin";
 export const CLUBS_MY_BOOKMARKS = "/clubs/my-bookmarks";
 export const CLUBS_INTERNAL = "/clubs/internal";
 export const CLUBS_INTERNAL_RANKING = "/clubs/internal/ranking";
@@ -32,6 +33,7 @@ export const CLUBS_EXTERNAL_RANKING = "/clubs/external/ranking";
 
 // == CLUB_MEMBERS ==
 export const CLUB_MEMBERS = "/club-members";
+export const CLUB_MEMBERS_ = "/club_members";
 
 // == AUTH TEST ==
 export const TEST_TOKEN = "/test/auth/token";
@@ -46,10 +48,11 @@ export const SCHOOLS_SEND = "/schools/auth/send";
 export const SCHOOLS_CANCEL = "/schools/auth/cancel";
 
 // == APPLY ==
+export const APPLY = "/applies";
 export const APPLY_MY = "/applies/my";
 
 // == APPLY_TEMPS ==
-export const APPLY_TEMPS = "/apply-temp";
+export const APPLY_TEMPS = "/apply-temps";
 export const APPLY_TEMPS_MY = "/apply-temps/my";
 
 // == APPLY_FORM ==
@@ -76,8 +79,16 @@ export const CLUB_ACTIVITY_DETAIL = "/club-activity/detail";
 export const CLUB_ACTIVITY_LIKE = "/club-activity/like";
 export const CLUB_ACTIVITY_COMMENT = "/club-activity/comment";
 export const CLUB_ACTIVITY_COMMENT_LICK = "/club-activity/comment/like";
-export const CLUB_ACTIVITY_COMMENT_BLOCK = "/club-activity/comment/block";// == CLUB_FINANCE ==
+export const CLUB_ACTIVITY_COMMENT_BLOCK = "/club-activity/comment/block";
+
+// == CLUB_FINANCE ==
 export const FINANCIAL_RECORDS = "/financial-records";
 
 // == CLUB_REVIEW ==
-export const CLUB_REVIEW_TAG = "club-review/tag-data";
+export const CLUB_REVIEW = "/club-review";
+export const CLUB_REVIEW_DETAIL = "/club-review/detail";
+export const CLUB_REVIEW_TAG = "/club-review/tag-data";
+
+// == PASS_REVIEW ==
+export const PASS_REVIEW = "/pass-review";
+export const PASS_REVIEW_DETAIL = "/pass-review/detail";

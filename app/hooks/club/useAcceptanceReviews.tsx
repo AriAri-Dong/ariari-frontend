@@ -25,8 +25,8 @@ export const useAcceptanceReviews = (
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  // 후기 목록 불러오기
-  const fetchClubReviews = useCallback(() => {
+  // 합격 후기 목록 불러오기
+  const fetchAcceptanceReviews = useCallback(() => {
     setLoading(true);
     getAcceptanceReview(clubId, page, size, sort)
       .then((res) => {
@@ -44,16 +44,16 @@ export const useAcceptanceReviews = (
       });
   }, [clubId, page, sort, size]);
 
-  // 후기 등록 핸들러
+  // 합격 후기 등록 핸들러
   const handleSubmit = (data: PassReviewSaveReq) => {
     postAcceptanceReview(clubId, data)
       .then(() => {
         setPage(0);
         setReview([]);
-        setAlertMessage("활동후기가 등록되었습니다.");
+        setAlertMessage("합격후기가 등록되었습니다.");
         setIsReviewModalOpen(false);
 
-        fetchClubReviews();
+        fetchAcceptanceReviews();
       })
       .catch((err) => {
         setAlertMessage(err.message);
@@ -72,8 +72,8 @@ export const useAcceptanceReviews = (
 
   // 초기 데이터 로드
   useEffect(() => {
-    fetchClubReviews();
-  }, [fetchClubReviews]);
+    fetchAcceptanceReviews();
+  }, [fetchAcceptanceReviews]);
 
   return {
     review,

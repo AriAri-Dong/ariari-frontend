@@ -6,7 +6,7 @@ import Image from "next/image";
 import { getClubsInfo } from "@/api/club/api";
 import ClubInfoCard from "@/components/card/clubInfoCard";
 import ClubIntroduction from "@/components/card/clubIntroduction";
-import { ClubListData, ClubResponse } from "@/types/api";
+import { ClubData, ClubListData, ClubResponse } from "@/types/api";
 import notIcon from "@/images/icon/popup/not.svg";
 import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import SearchRecruitmentCard from "@/components/card/searchRecruitmentCard";
@@ -38,7 +38,7 @@ const MainSection = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [clubData, setClubData] = useState<ClubListData[]>([]);
+  const [clubData, setClubData] = useState<ClubData[]>([]);
   const [clubTotalSize, setClubTotalSize] = useState<number>(0);
   const [recruitmentData, setRecruitmentData] = useState<RecruitmentData[]>([]);
   const [recruitmentTotalSize, setRecruitmentTotalSize] = useState<number>(0);
