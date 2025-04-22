@@ -1,8 +1,11 @@
 import {
+  getNormalClubNoticeList,
   getClubFixedNoticeList,
   getClubNoticeDetail,
 } from "@/api/club/notice/api";
-import { useQuery } from "@tanstack/react-query";
+import { ClubNoticeDataRes } from "@/types/club";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 // 고정된 동아리 공지사항 리스트 조회
 export const useClubPinnedNoticeQuery = (clubId: string) => {
@@ -16,6 +19,39 @@ export const useClubPinnedNoticeQuery = (clubId: string) => {
     isLoading,
     isError,
     error,
+  };
+};
+
+// 전체 동아리 공지사항 리스트 조회
+export const useClubNoticeQuery = (clubId: string) => {
+  const {
+    data,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    isError,
+    isLoading,
+  } = useInfiniteQuery<ClubNoticeDataRes, AxiosError>({
+    queryKey: ["club", clubId, "notices"],
+    queryFn: ({ pageParam = 0 }) =>
+      getNormalClubNoticeList(clubId, pageParam as number),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      const nextPage = allPages.length;
+      const totalPages = lastPage.pageInfo.totalPages;
+
+      return totalPages > nextPage ? nextPage : undefined;
+    },
+  });
+
+  return {
+    notices: data?.pages.flatMap((page) => page.clubNoticeDataList) || [],
+    totalSize: data?.pages[0].pageInfo.totalSize ?? 0,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    isLoadingNotices: isLoading,
+    isNoticesError: isError,
   };
 };
 

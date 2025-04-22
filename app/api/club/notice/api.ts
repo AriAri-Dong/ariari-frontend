@@ -1,5 +1,6 @@
 import { CLUB_NOTICE, CLUBS } from "@/api/apiUrl";
 import axiosInstance from "@/api/axiosInstance";
+import { Pageable } from "@/types/api";
 import { ClubNoticeDataRes, ClubNoticeDetail } from "@/types/club";
 
 /**
@@ -15,6 +16,32 @@ export const getClubFixedNoticeList = async (clubId: string) => {
     return res.data;
   } catch (error) {
     console.log("Failed to fetch fixed club notices", error);
+    throw error;
+  }
+};
+
+/**
+ * 동아리 공지사항 전체 리스트 조회
+ * @param clubId
+ * @returns 전체 공지사항 리스트
+ */
+export const getNormalClubNoticeList = async (
+  clubId: string,
+  page: Pageable["page"]
+) => {
+  try {
+    const res = await axiosInstance.get<ClubNoticeDataRes>(
+      `${CLUBS}/${clubId}${CLUB_NOTICE}`,
+      {
+        params: {
+          page: page,
+          size: 1,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log("Failed to fetch normal club notices", error);
     throw error;
   }
 };
