@@ -1,5 +1,13 @@
 import { AxiosError } from "axios";
-import { APPLY_MY, APPLY_TEMPS_MY } from "../apiUrl";
+import {
+  APPLY,
+  APPLY_FORM,
+  APPLY_MY,
+  APPLY_TEMPS,
+  APPLY_TEMPS_MY,
+  CLUBS,
+  RECRUITMENT,
+} from "../apiUrl";
 import axiosInstance from "../axiosInstance";
 import {
   ApplyFormData,
@@ -55,7 +63,7 @@ export const getMyApplyList = async () => {
 export const getApplyForm = async (clubId: string) => {
   try {
     const response = await axiosInstance.get<ApplyFormRes>(
-      `/clubs/${clubId}/apply-forms`
+      `${CLUBS}/${clubId}${APPLY_FORM}`
     );
     return response.data;
   } catch (err) {
@@ -86,7 +94,7 @@ export const getMyApplyTmpList = async () => {
 // 지원 삭제
 export const deleteMyApply = async (applyId: string) => {
   try {
-    const response = await axiosInstance.delete(`/applies/${applyId}`);
+    const response = await axiosInstance.delete(`${APPLY}/${applyId}`);
     return response.status;
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -101,7 +109,9 @@ export const deleteMyApply = async (applyId: string) => {
 // 임시 지원 삭제
 export const deleteMyApplyTmp = async (applyTempId: string) => {
   try {
-    const response = await axiosInstance.delete(`/apply-temps/${applyTempId}`);
+    const response = await axiosInstance.delete(
+      `${APPLY_TEMPS}/${applyTempId}`
+    );
     return response.status;
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -132,7 +142,7 @@ export const postApplicationForm = async (
     }
 
     const response = await axiosInstance.post(
-      `/recruitments/${recruitmentId}/applies`,
+      `${RECRUITMENT}/${recruitmentId}${APPLY}`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },

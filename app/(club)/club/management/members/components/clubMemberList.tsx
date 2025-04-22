@@ -68,7 +68,7 @@ const ClubMemberList = ({
                 setAlertMessage("관리자는 선택할 수 없습니다");
                 return;
               }
-              toggleMember(data.memberData.id);
+              toggleMember(data.memberData.memberId);
             }}
             className="md:w-5 md:h-5 cursor-pointer"
           />
@@ -82,7 +82,7 @@ const ClubMemberList = ({
                   return;
                 } else {
                   handleStatusChange(
-                    [data.memberData.id],
+                    [data.memberData.memberId],
                     MAP_STATUS_TO_EN[value]
                   );
                 }
@@ -142,7 +142,7 @@ const ClubMemberList = ({
                 return;
               } else {
                 handleStatusChange(
-                  [data.memberData.id],
+                  [data.memberData.memberId],
                   MAP_STATUS_TO_EN[value]
                 );
               }

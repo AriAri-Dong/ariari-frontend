@@ -14,7 +14,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       clubMemberStatusType: "ACTIVE",
       profileType: "ARIARI_MOUSE",
       memberData: {
-        id: "101",
+        memberId: "101",
         nickname: "길동이",
         profileType: "ARIARI_MOUSE",
       },
@@ -33,7 +33,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       clubMemberStatusType: "ACTIVE",
       profileType: "ARIARI_MOUSE",
       memberData: {
-        id: "102",
+        memberId: "102",
         nickname: "영희",
         profileType: "ARIARI_MOUSE",
       },
@@ -52,7 +52,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       clubMemberStatusType: "ACTIVE",
       profileType: "ARIARI_MOUSE",
       memberData: {
-        id: "103",
+        memberId: "103",
         nickname: "철수",
         profileType: "ARIARI_MOUSE",
       },
@@ -71,7 +71,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       clubMemberStatusType: "ACTIVE",
       profileType: "ARIARI_MOUSE",
       memberData: {
-        id: "103",
+        memberId: "103",
         nickname: "철수",
         profileType: "ARIARI_MOUSE",
       },
@@ -90,7 +90,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       clubMemberStatusType: "ACTIVE",
       profileType: "ARIARI_MOUSE",
       memberData: {
-        id: "103",
+        memberId: "103",
         nickname: "철수",
         profileType: "ARIARI_MOUSE",
       },
@@ -109,7 +109,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       clubMemberStatusType: "ACTIVE",
       profileType: "ARIARI_MOUSE",
       memberData: {
-        id: "101",
+        memberId: "101",
         nickname: "길동이",
         profileType: "ARIARI_MOUSE",
       },
@@ -128,7 +128,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       clubMemberStatusType: "ACTIVE",
       profileType: "ARIARI_MOUSE",
       memberData: {
-        id: "102",
+        memberId: "102",
         nickname: "영희",
         profileType: "ARIARI_MOUSE",
       },
@@ -147,7 +147,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       clubMemberStatusType: "ACTIVE",
       profileType: "ARIARI_MOUSE",
       memberData: {
-        id: "103",
+        memberId: "103",
         nickname: "철수",
         profileType: "ARIARI_MOUSE",
       },
@@ -166,7 +166,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       clubMemberStatusType: "ACTIVE",
       profileType: "ARIARI_MOUSE",
       memberData: {
-        id: "103",
+        memberId: "103",
         nickname: "철수",
         profileType: "ARIARI_MOUSE",
       },
@@ -185,7 +185,7 @@ export const FAQ_DATA: ClubFaqData[] = [
       clubMemberStatusType: "ACTIVE",
       profileType: "ARIARI_MOUSE",
       memberData: {
-        id: "103",
+        memberId: "103",
         nickname: "철수",
         profileType: "ARIARI_MOUSE",
       },
