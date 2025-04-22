@@ -46,7 +46,7 @@ const NoticePage = () => {
     hasNextPage,
     isNoticesError,
   } = useClubNoticeQuery(clubId);
-  const { addClubNotice } = useClubNoticeMutation();
+  const { addNotice } = useClubNoticeMutation({ clubId });
 
   const handleDropdownToggle = (id: string, isPinned: boolean) => {
     setOpenDropdown((prev) =>
@@ -59,7 +59,7 @@ const NoticePage = () => {
   };
 
   const handleSubmitSuccess = (formData: FormData) => {
-    addClubNotice.mutate(
+    addNotice.mutate(
       { clubId, formData },
       {
         onSuccess: () => {
