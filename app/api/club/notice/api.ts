@@ -84,3 +84,14 @@ export const addClubNotice = async ({
     throw error;
   }
 };
+
+// 공지사항 삭제
+export const deleteClubNotice = async (clubNoticeId: string) => {
+  try {
+    const res = await axiosInstance.delete(`${CLUB_NOTICE}/${clubNoticeId}`);
+    return res.data;
+  } catch (error) {
+    console.log("failed to delete club notice", error);
+    throw error;
+  }
+};
