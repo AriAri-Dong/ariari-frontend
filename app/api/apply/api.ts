@@ -9,12 +9,15 @@ import {
   RECRUITMENT,
 } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
+
+import { IdResponse } from "@/types/api";
 import {
   ApplyFormData,
   ApplyFormRes,
   ApplyListRes,
   ApplySaveReq,
   ApplyTempListRes,
+  ApplyTempDetailRes,
 } from "@/types/application";
 
 export const getAppliedList = async (
@@ -79,6 +82,7 @@ export const getApplyForm = async (clubId: string) => {
 // 내 임시 지원 리스트 조회
 export const getMyApplyTmpList = async () => {
   try {
+    console.log("내 임시 지원 리스트 조회");
     const response = await axiosInstance.get<ApplyTempListRes>(APPLY_TEMPS_MY);
     return response.data;
   } catch (err) {
@@ -123,26 +127,82 @@ export const deleteMyApplyTmp = async (applyTempId: string) => {
   }
 };
 // 지원 등록
-export const postApplicationForm = async (
+export const postApplication = async (
   recruitmentId: string,
-  saveReq: ApplySaveReq,
-  file?: File
+  formData: FormData
 ) => {
   try {
-    const formData = new FormData();
-
-    formData.append(
-      "saveReq",
-      new Blob([JSON.stringify(saveReq)], { type: "application/json" })
-    );
-
-    // 파일이 있으면 추가
-    if (file) {
-      formData.append("file", file);
-    }
-
     const response = await axiosInstance.post(
       `${RECRUITMENT}/${recruitmentId}${APPLY}`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+
+    return response.status;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
+
+// 임시 지원 상세 조회
+export const getApplicationTemp = async (
+  applyTempId: string
+): Promise<ApplyTempDetailRes> => {
+  try {
+    const response = await axiosInstance.get<ApplyTempDetailRes>(
+      `${APPLY_TEMPS}/${applyTempId}`
+    );
+
+    return response.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
+
+// 임시 지원 저장
+export const postApplicationTemp = async (
+  recruitmentId: string,
+  formData: FormData
+) => {
+  try {
+    const response = await axiosInstance.post<IdResponse>(
+      `${RECRUITMENT}/${recruitmentId}/apply-temps`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+
+    return response.data.id;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
+// 임시 지원 수정
+export const putApplicationTemp = async (
+  applyTempId: string,
+  formData: FormData
+) => {
+  try {
+    const response = await axiosInstance.put<string>(
+      `/${RECRUITMENT}/${applyTempId}`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },

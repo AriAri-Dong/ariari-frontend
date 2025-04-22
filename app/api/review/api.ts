@@ -10,7 +10,13 @@ import {
   PassReviewSaveReq,
   TagData,
 } from "@/types/review";
-import { CLUB_REVIEW_TAG } from "../apiUrl";
+import {
+  CLUB_REVIEW,
+  CLUB_REVIEW_DETAIL,
+  CLUB_REVIEW_TAG,
+  PASS_REVIEW,
+  PASS_REVIEW_DETAIL,
+} from "../apiUrl";
 
 // 동아리 활동후기 리스트
 export const getClubReview = async (
@@ -26,7 +32,7 @@ export const getClubReview = async (
       ...(sort && { sort }),
     };
     const { data } = await axiosInstance.get<ClubReviewListRes>(
-      `/club-review/${clubId}`,
+      `${CLUB_REVIEW}/${clubId}`,
       { params }
     );
     console.log(data);
@@ -44,7 +50,7 @@ export const getClubReview = async (
 export const getClubReviewDetail = async (clubReviewId: string) => {
   try {
     const { data } = await axiosInstance.get<ClubReviewDetail>(
-      `/club-review/detail/${clubReviewId}`
+      `${CLUB_REVIEW_DETAIL}/${clubReviewId}`
     );
     return data;
   } catch (err) {
@@ -61,7 +67,7 @@ export const getClubReviewDetail = async (clubReviewId: string) => {
 export const getClubTagStatistics = async (clubId: string) => {
   try {
     const { data } = await axiosInstance.get<TagData[]>(
-      `club-review/${clubId}/tag-statistics`
+      `${CLUB_REVIEW}/${clubId}/tag-statistics`
     );
     return data;
   } catch (err) {
@@ -95,7 +101,7 @@ export const postClubReview = async (
   data: ClubReviewSaveReq
 ) => {
   try {
-    const res = await axiosInstance.post(`/club-review/${clubId}`, data);
+    const res = await axiosInstance.post(`${CLUB_REVIEW}/${clubId}`, data);
     return res.status;
   } catch (err) {
     if (err instanceof AxiosError) {
@@ -123,7 +129,7 @@ export const getAcceptanceReview = async (
       ...(sort && { sort }),
     };
     const { data } = await axiosInstance.get<PassReviewListRes>(
-      `/pass-review/${clubId}`,
+      `${PASS_REVIEW}/${clubId}`,
       { params }
     );
     return data;
@@ -137,11 +143,11 @@ export const getAcceptanceReview = async (
   }
 };
 
-// 동아리 활동후기 상세 조회
+// 동아리 합격후기 상세 조회
 export const getAccectanceReviewDetail = async (clubReviewId: string) => {
   try {
     const { data } = await axiosInstance.get<PassReviewDetail>(
-      `/pass-review/detail/${clubReviewId}`
+      `${PASS_REVIEW_DETAIL}/${clubReviewId}`
     );
     return data;
   } catch (err) {
@@ -159,7 +165,7 @@ export const postAcceptanceReview = async (
   data: PassReviewSaveReq
 ) => {
   try {
-    const res = await axiosInstance.post(`/pass-review/${clubId}`, data);
+    const res = await axiosInstance.post(`${PASS_REVIEW}/${clubId}`, data);
     return res.status;
   } catch (err) {
     if (err instanceof AxiosError) {

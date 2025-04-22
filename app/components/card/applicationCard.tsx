@@ -18,18 +18,27 @@ import NotiPopUp from "../modal/notiPopUp";
 import daysDifference from "@/utils/dayDifference";
 import formatDateToDot from "@/utils/formatDateToDot";
 import { ApplyData, ApplyStatusType, ApplyTempData } from "@/types/application";
+import ApplicationFormModal from "../modal/club/applicationFormModal";
+import ApplicationFormBottomSheet from "../bottomSheet/applicationFormBottomSheet";
+import useResponsive from "@/hooks/useResponsive";
+import {
+  useDeleteApplyMutation,
+  useDeleteTmpMutation,
+} from "@/hooks/apply/useApplyMutation";
+import Alert from "../alert/alert";
 
 export interface ApplicationCardProps {
   data: ApplyData | ApplyTempData;
   applicationStatus: ApplyStatusType | "DRAFT";
-  handleDelete: (id: string, type: "APPLY" | "TEMP_APPLY") => void;
+  type: "APPLY" | "TEMP_APPLY";
+  handleDeleteSuccess: () => void;
+  handleDeleteError: () => void;
 }
 
 /**
  *
  * @param data 지원 정보
  * @param applicationStatus 동아리 지원 상태
- * @param handleDelete 지원 삭제 핸들러
  *
  * @returns
  */
@@ -37,19 +46,36 @@ export interface ApplicationCardProps {
 const ApplicationCard = ({
   data,
   applicationStatus,
-  handleDelete,
+  type,
+  handleDeleteSuccess,
+  handleDeleteError,
 }: ApplicationCardProps) => {
-  const router = useRouter();
+  const isMdUp = useResponsive("md");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const deleteTmp = useDeleteTmpMutation({
+    recruitmentId: data.recruitmentId,
+    onSuccess: handleDeleteSuccess,
+    onError: handleDeleteError,
+  });
+  const deleteApply = useDeleteApplyMutation({
+    recruitmentId: data.recruitmentId,
+    onSuccess: handleDeleteSuccess,
+    onError: handleDeleteError,
+  });
 
   const onApplicationClick = () => {
-    //
+    setIsApplicationFormOpen(true);
   };
   const onDeleteClick = () => {
-    handleDelete(
-      data.id,
-      applicationStatus === "DRAFT" ? "TEMP_APPLY" : "APPLY"
-    );
+    if (type === "APPLY") {
+      deleteApply.mutate(data.id);
+    }
+    if (type === "TEMP_APPLY") {
+      deleteTmp.mutate(data.id);
+    }
   };
 
   const status = [
@@ -157,16 +183,19 @@ const ApplicationCard = ({
             {formatDateToDot(data.createdDateTime)}
           </div>
           {canDelete && (
-            <button className="hidden md:flex w-7 h-7 justify-center items-center p-0.5 rounded-full cursor-pointer hover:bg-hover focus:bg-hover">
+            <button
+              className="hidden md:flex w-7 h-7 justify-center items-center p-0.5 rounded-full cursor-pointer hover:bg-hover focus:bg-hover"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsModalOpen(true);
+              }}
+            >
               <Image
                 src={deleteIcon}
                 alt={"delete"}
                 width={24}
                 height={24}
                 className=""
-                onClick={() => {
-                  setIsModalOpen(true);
-                }}
               />
             </button>
           )}
@@ -195,6 +224,35 @@ const ApplicationCard = ({
           secondButtonText="아니요"
           modalType="button"
         />
+      )}
+      {type === "TEMP_APPLY" &&
+        isApplicationFormOpen &&
+        (isMdUp ? (
+          <ApplicationFormModal
+            recruitmentId={data.recruitmentId}
+            myRecentApplyTempId={data.id}
+            onClose={() => {
+              setIsApplicationFormOpen(false);
+            }}
+            onSubmit={() => {
+              setAlertMessage("지원서가 제출되었습니다.");
+            }}
+          />
+        ) : (
+          <ApplicationFormBottomSheet
+            recruitmentId={data.recruitmentId}
+            myRecentApplyTempId={data.id}
+            onClose={() => {
+              setIsApplicationFormOpen(false);
+            }}
+            onSubmit={() => {
+              setAlertMessage("지원서가 제출되었습니다.");
+            }}
+          />
+        ))}
+      {/* == 알림 == */}
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
     </div>
   );

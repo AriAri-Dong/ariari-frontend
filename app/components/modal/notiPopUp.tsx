@@ -70,6 +70,7 @@ const NotiPopUp = (props: NotiPopUpProps) => {
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
       style={{ zIndex: 1000 }}
+      onClick={(e) => e.stopPropagation()}
     >
       <div className="absolute inset-0" onClick={onClose}></div>
 
