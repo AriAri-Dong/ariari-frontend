@@ -85,4 +85,10 @@ export const CLUB_ACTIVITY_COMMENT_BLOCK = "/club-activity/comment/block";
 export const FINANCIAL_RECORDS = "/financial-records";
 
 // == CLUB_REVIEW ==
-export const CLUB_REVIEW_TAG = "club-review/tag-data";
+export const CLUB_REVIEW = "/club-review";
+export const CLUB_REVIEW_DETAIL = "/club-review/detail";
+export const CLUB_REVIEW_TAG = "/club-review/tag-data";
+
+// == PASS_REVIEW ==
+export const PASS_REVIEW = "/pass-review";
+export const PASS_REVIEW_DETAIL = "/pass-review/detail";

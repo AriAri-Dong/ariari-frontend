@@ -157,7 +157,7 @@ export const getApplicationTemp = async (
 ): Promise<ApplyTempDetailRes> => {
   try {
     const response = await axiosInstance.get<ApplyTempDetailRes>(
-      `apply-temps/${applyTempId}`
+      `${APPLY_TEMPS}/${applyTempId}`
     );
 
     return response.data;
@@ -178,7 +178,7 @@ export const postApplicationTemp = async (
 ) => {
   try {
     const response = await axiosInstance.post<IdResponse>(
-      `/recruitments/${recruitmentId}/apply-temps`,
+      `${RECRUITMENT}/${recruitmentId}/apply-temps`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -202,7 +202,7 @@ export const putApplicationTemp = async (
 ) => {
   try {
     const response = await axiosInstance.put<string>(
-      `/apply-temps/${applyTempId}`,
+      `/${RECRUITMENT}/${applyTempId}`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },

@@ -15,7 +15,7 @@ export const getClubFaqList = async (
 ) => {
   try {
     const res = await axiosInstance.get<ClubFaqListRes>(
-      `/clubs/${clubId}/club-faqs`,
+      `${CLUBS}/${clubId}/club-faqs`,
       {
         params: {
           page,
