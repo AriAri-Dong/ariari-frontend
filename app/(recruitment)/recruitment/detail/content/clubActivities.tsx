@@ -79,13 +79,13 @@ const ClubActivities = ({
             </div>
           </>
         )}
-        {review.length > 0 && (
+        <h1 className="text-mobile_h1_contents_title md:text-h1_contents_title text-text1 mt-[68px]">
+          동아리 합격 후기
+        </h1>
+        {review.length > 0 ? (
           <>
-            <h1 className="text-mobile_h1_contents_title md:text-h1_contents_title text-text1 mt-[68px]">
-              동아리 합격 후기
-            </h1>
             <div className="flex flex-col mt-5 gap-3 md:gap-2.5">
-              {review.map((item, index) => {
+              {review.map((item) => {
                 return (
                   <AcceptanceReviewDropdown
                     key={item.id}
@@ -102,13 +102,16 @@ const ClubActivities = ({
               </div>
             )}
           </>
+        ) : (
+          <div className="text-center p-10 text-subtext2 text-mobile_body2_m md:text-body2_m md:p-20">
+            아직 합격 후기가 없습니다.
+          </div>
         )}
-        {visibleRecruitmentList.length > 0 && (
+        <h1 className="text-mobile_h1_contents_title mt-12 md:text-h1_contents_title text-text1 md:mt-[68px]">
+          이전 모집 공고
+        </h1>
+        {visibleRecruitmentList.length > 0 ? (
           <>
-            <h1 className="text-mobile_h1_contents_title mt-12 md:text-h1_contents_title text-text1 md:mt-[68px]">
-              이전 모집 공고
-            </h1>
-
             <div className="flex flex-col mt-5 gap-3 md:gap-2.5">
               {visibleRecruitmentList.map((item) => (
                 <RecruitmentCard
@@ -137,6 +140,10 @@ const ClubActivities = ({
               )}
             </div>
           </>
+        ) : (
+          <div className="text-center p-10 text-subtext2 text-mobile_body2_m md:text-body2_m md:p-20">
+            이전 모집 공고가 없습니다.
+          </div>
         )}
         <div className="h-[80px] md:h-[124px]"></div>
       </div>
