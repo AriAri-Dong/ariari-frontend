@@ -62,7 +62,7 @@ const ClubNoticeDropdown = ({
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const { noticeDetail, isLoading, isError, error } = useClubNoticeDetail(
     notice.id,
-    { enabled: isOpen }
+    { enabled: !!isOpen }
   );
 
   const handleVectorClick = useCallback(() => {
@@ -258,7 +258,7 @@ const ClubNoticeDropdown = ({
             />
             <div className="flex w-full flex-col gap-[14px] md:gap-[23px]">
               <h1 className="text-subtext1 text-mobile_body1_r md:text-body1_r">
-                {notice.title}
+                {notice.body}
               </h1>
               <div className="flex justify-between items-center">
                 {/* <p className="text-unselected text-mobile_body2_m md:text-body2_m">

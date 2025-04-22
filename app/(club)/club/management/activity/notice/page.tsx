@@ -16,7 +16,10 @@ import pin from "@/images/icon/pin.svg";
 import CreateNoticeModal from "@/components/modal/club/notice/createNoticeModal";
 import CreateNoticeBottomSheet from "@/components/bottomSheet/notice/createNoticeBottomsheet";
 import { useClubContext } from "@/context/ClubContext";
-import { useClubPinnedNoticeQuery } from "@/hooks/club/useClubNoticeQuery";
+import {
+  useClubNoticeQuery,
+  useClubPinnedNoticeQuery,
+} from "@/hooks/club/useClubNoticeQuery";
 import { useClubNoticeMutation } from "@/hooks/club/useClubNoticeMutation";
 
 const NoticePage = () => {
@@ -34,6 +37,15 @@ const NoticePage = () => {
   } | null>(null);
 
   const { pinnedNoticeList, isLoading } = useClubPinnedNoticeQuery(clubId);
+  const {
+    notices,
+    totalSize,
+    isLoadingNotices,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    isNoticesError,
+  } = useClubNoticeQuery(clubId);
   const { addClubNotice } = useClubNoticeMutation();
 
   const handleDropdownToggle = (id: string, isPinned: boolean) => {
@@ -76,7 +88,7 @@ const NoticePage = () => {
                   className="text-subtext2 text-mobile_body2_m md:text-h4
               mb-4 md:mt-9 md:mb-[22px]"
                 >
-                  총 {clubId.length}개의 공지사항이 있어요.
+                  총 {totalSize}개의 공지사항이 있어요.
                 </p>
                 <div>
                   <div className="flex items-center gap-3 md:gap-4 md:mb-4 mb-3">
@@ -115,14 +127,13 @@ const NoticePage = () => {
                 </div>
               </div>
               <ClubNoticeHeader role={role} />
-              {/* <div className="flex flex-col gap-2.5">
-                {NOTICE_DATA.map((notice) => (
+              <div className="flex flex-col gap-2.5">
+                {notices.map((notice, idx) => (
                   <ClubNoticeDropdown
                     key={`normal-${notice.id}`}
+                    idx={idx + 1}
                     notice={notice}
-                    isOpen={
-                      openDropdown?.id === notice.id && !openDropdown?.isPinned
-                    }
+                    isOpen={openDropdown?.id === notice.id}
                     setOpenDropdownId={() =>
                       handleDropdownToggle(notice.id, false)
                     }
@@ -130,10 +141,15 @@ const NoticePage = () => {
                     role={role}
                   />
                 ))}
-              </div> */}
-              <div className="flex justify-center mt-9 md:mt-10">
-                <PlusBtn title={"더보기"} onClick={() => {}} />
               </div>
+              {hasNextPage && (
+                <div className="flex justify-center mt-9 md:mt-10">
+                  <PlusBtn
+                    title={isFetchingNextPage ? "불러오는 중" : "더보기"}
+                    onClick={fetchNextPage}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
