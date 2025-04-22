@@ -35,7 +35,7 @@ export const getNormalClubNoticeList = async (
       {
         params: {
           page: page,
-          size: 1,
+          size: 10,
         },
       }
     );
