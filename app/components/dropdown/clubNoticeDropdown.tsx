@@ -20,6 +20,10 @@ import { ClubNoticeData } from "@/types/club";
 import formatDateToDot from "@/utils/formatDateToDot";
 import { useClubNoticeDetail } from "@/hooks/club/useClubNoticeQuery";
 import defaultImgBg from "@/images/defaultAriariBg.svg";
+import { useClubNoticeMutation } from "@/hooks/club/useClubNoticeMutation";
+import { useSearchParams } from "next/navigation";
+import CreateNoticeModal from "../modal/club/notice/createNoticeModal";
+import CreateNoticeBottomSheet from "../bottomSheet/notice/createNoticeBottomsheet";
 
 const OPTION = [
   { id: 1, label: "수정하기" },
@@ -49,6 +53,8 @@ const ClubNoticeDropdown = ({
   isSinglePin,
   role,
 }: ClubNoticeDropdownProps) => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") || "";
   const menuRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
 
@@ -64,6 +70,7 @@ const ClubNoticeDropdown = ({
     notice.id,
     { enabled: !!isOpen }
   );
+  const { deleteNotice } = useClubNoticeMutation({ clubId });
 
   const handleVectorClick = useCallback(() => {
     setOpenDropdownId(isOpen ? null : notice.id);
@@ -96,13 +103,21 @@ const ClubNoticeDropdown = ({
   };
 
   const handleDelete = () => {
+    deleteNotice.mutate(
+      { clubNoticeId: notice.id },
+      {
+        onSuccess: () => {
+          setIsNotiPopUpOpen(false);
+          setAlertMessage("삭제 되었습니다.");
+        },
+        onError: () => {
+          setAlertMessage(
+            `에러가 발생했습니다.<br /> 잠시 후 다시 시도해주세요.`
+          );
+        },
+      }
+    );
     setIsNotiPopUpOpen(false);
-    // 임시 구현 (api)
-    if (true) {
-      setAlertMessage("삭제 되었습니다.");
-    } else {
-      setAlertMessage(`에러가 발생했습니다.<br /> 잠시 후 다시 시도해주세요.`);
-    }
   };
 
   const noticeImgCount = noticeDetail?.clubNoticeImageDataList.length ?? 0;
@@ -354,6 +369,21 @@ const ClubNoticeDropdown = ({
           secondButtonText="취소하기"
         />
       )}
+      {isMdUp
+        ? modifyOpen && (
+            <CreateNoticeModal
+              onClose={() => setModifyOpen(false)}
+              onSubmit={() => {}}
+              setAlertMessage={setAlertMessage}
+            />
+          )
+        : modifyOpen && (
+            <CreateNoticeBottomSheet
+              onClose={() => setModifyOpen(false)}
+              onSubmit={() => {}}
+              setAlertMessage={setAlertMessage}
+            />
+          )}
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
