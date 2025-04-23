@@ -17,13 +17,7 @@ const MyClub = () => {
   const [isLastSlide, setIsLastSlide] = useState(false);
 
   const [myClub, setMyClub] = useState<MyClubData[]>([]);
-
-  const now = new Date();
-  const mm = String(now.getMonth() + 1).padStart(2, "0");
-  const dd = String(now.getDate()).padStart(2, "0");
-  const hh = String(now.getHours()).padStart(2, "0");
-  const min = String(now.getMinutes()).padStart(2, "0");
-  const formatted = `${mm}.${dd} ${hh}:${min}`;
+  const [updateTime, setUpdateTime] = useState<string>("");
 
   const checkScrollPosition = throttle(() => {
     const el = scrollRef.current;
@@ -60,6 +54,15 @@ const MyClub = () => {
     getMyClubList()
       .then((res) => {
         setMyClub(res.myClubDataList);
+
+        const now = new Date();
+        const mm = String(now.getMonth() + 1).padStart(2, "0");
+        const dd = String(now.getDate()).padStart(2, "0");
+        const hh = String(now.getHours()).padStart(2, "0");
+        const min = String(now.getMinutes()).padStart(2, "0");
+        const formatted = `${mm}.${dd} ${hh}:${min}`;
+
+        setUpdateTime(formatted);
       })
       .catch((err) => {
         console.error(err);
@@ -73,7 +76,7 @@ const MyClub = () => {
           나의 동아리
         </h1>
         {isMdUp ? (
-          <div className="text-body3_r text-subtext2">{formatted} 기준</div>
+          <div className="text-body3_r text-subtext2">{updateTime} 기준</div>
         ) : (
           <RoundPlusBtn
             className="shrink-0 w-[28px] h-[28px]"
@@ -134,8 +137,6 @@ const MyClub = () => {
           ))}
         </div>
       )}
-
-      <div></div>
     </section>
   );
 };
