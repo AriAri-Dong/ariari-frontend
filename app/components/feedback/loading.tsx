@@ -11,20 +11,7 @@ interface LoadingProps {
 }
 
 const Loading = ({ className = "", lottieClassName = "" }: LoadingProps) => {
-  const [isForward, setIsForward] = useState<number>(1);
   const lottieRef = useRef<any>(null);
-
-  // 재생, 역재생 반복
-  const handleComplete = () => {
-    setIsForward(-isForward);
-    lottieRef.current.setDirection(-isForward);
-  };
-
-  useEffect(() => {
-    if (lottieRef.current) {
-      lottieRef.current.play();
-    }
-  }, [isForward]);
 
   return (
     <div
@@ -32,11 +19,10 @@ const Loading = ({ className = "", lottieClassName = "" }: LoadingProps) => {
     >
       <Lottie
         animationData={loading}
-        loop={false}
-        autoPlay
+        loop={true}
+        autoPlay={true}
         className={`text-center w-20 h-20 ${lottieClassName}`}
         lottieRef={lottieRef}
-        onComplete={handleComplete}
       />
       <p className="text-mobile_h4_r text-subtext1">Loading..</p>
     </div>
