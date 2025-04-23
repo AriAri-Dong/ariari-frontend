@@ -32,7 +32,7 @@ const MyClubCard = ({ club }: MyClubCardProps) => {
     <div
       className="flex flex-col gap-1.5 w-[56px] cursor-pointer
         md:w-[282px] md:py-2 md:pl-2.5 md:pr-5
-        md:flex-row md:space-between md:items-center md:gap-3.5 md:rounded-48 md:bg-hover "
+        md:flex-row md:space-between md:items-center md:gap-3.5 md:rounded-48 md:bg-hover md:active:bg-pressed"
       onClick={() => {
         router.push(`/club/activityHistory?clubId=${club.id}`);
       }}
