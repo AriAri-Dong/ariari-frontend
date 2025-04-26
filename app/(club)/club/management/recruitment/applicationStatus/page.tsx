@@ -20,7 +20,12 @@ import { ApplyData } from "@/types/application";
 import { useUpdateStatusMutation } from "@/hooks/apply/useApplicationMutation";
 import { APPLY_STATUS_VALUE_MAP } from "@/constants/application";
 import Alert from "@/components/alert/alert";
-import UpdateApplyStatusOptions from "@/components/dropdown/UpdateApplyStatusOptions";
+import UpdateApplyStatusOptions from "@/components/dropdown/updateApplyStatusOptions";
+import { useApplyStatusOptions } from "@/hooks/apply/useApplyStatusOptions";
+import InterviewNoticeModal from "@/components/modal/club/interviewNoticeModal";
+import InterviewNoticeBottomSheet from "@/components/bottomSheet/interviewNoticeBottomSheet";
+import ApplicationFromViewModal from "@/components/modal/club/applicationFormViewModal";
+import MobileApplicationFormViewModal from "@/components/modal/club/mobileApplicationFormViewModal";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
@@ -46,9 +51,6 @@ const ApplicationStatusPage = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>(
     FILTER_TABS[0].label
   );
-  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false); // 지원상태 변경 옵션 목록 open 여부
-  const [selectedStatus, setSelectedStatus] = useState<string>(""); // 변경하고자 하는 지원 상태
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 지원상태 변경 확인 모달 open 여부
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -57,8 +59,22 @@ const ApplicationStatusPage = () => {
     null,
   ]);
 
-  const [isFormOpen, setIsFormOpen] = useState<boolean>(false); // 지원서 상세 열람 모달 open 여부
   const [checkedApplications, setCheckedApplications] = useState<string[]>([]);
+  const [openApplicationId, setOpenApplicationId] = useState<string | null>(
+    null
+  );
+  const {
+    isModalOpen,
+    setIsModalOpen,
+    isOptionsOpen,
+    setIsOptionsOpen,
+    selectedOption,
+    setSelectedOption,
+    isInterviewOpen,
+    setIsInterviewOpen,
+
+    optionsRef,
+  } = useApplyStatusOptions();
 
   // 지원 목록 조건에 따른 필터링
   const {
@@ -119,13 +135,42 @@ const ApplicationStatusPage = () => {
     setCheckedApplications([]);
   };
 
+  // 지원 상태 변경 옵션 목록 중 메뉴 클릭
+  const handleMenuClick = (label: string) => {
+    setIsOptionsOpen(false);
+    if (!checkedApplications.length) {
+      setAlertMessage("선택된 지원서가 없습니다.");
+      return;
+    }
+  };
+
   // 지원 상태 변경 확인 모달 내 '변경하기' 버튼 클릭
   const handleStatusChange = () => {
+    if (!selectedOption) return;
+    if (selectedOption === "면접중") {
+      setIsModalOpen(false);
+      setIsInterviewOpen(true);
+      return;
+    }
     updateApplicationStatus.mutate({
       applications: checkedApplications,
-      type: APPLY_STATUS_VALUE_MAP[selectedStatus],
+      type: APPLY_STATUS_VALUE_MAP[selectedOption],
     });
     setIsModalOpen(false);
+  };
+
+  // 면접 확인 메세지 전송
+  const handleSubmitInterviewNotice = (message: string) => {
+    if (!message) {
+      setAlertMessage("면접 메세지를 입력해주세요.");
+      return;
+    }
+    updateApplicationStatus.mutate({
+      applications: checkedApplications,
+      type: APPLY_STATUS_VALUE_MAP["면접중"],
+      interviewMessage: message,
+    });
+    setIsInterviewOpen(false);
   };
 
   useEffect(() => {
@@ -225,9 +270,10 @@ const ApplicationStatusPage = () => {
                     checkedApplications={checkedApplications}
                     isOptionsOpen={isOptionsOpen}
                     setIsOptionsOpen={setIsOptionsOpen}
-                    setSelectedStatus={setSelectedStatus}
+                    setSelectedStatus={setSelectedOption}
                     setAlertMessage={setAlertMessage}
                     setIsModalOpen={setIsModalOpen}
+                    optionsRef={optionsRef}
                   />
                 </div>
               ) : (
@@ -247,12 +293,14 @@ const ApplicationStatusPage = () => {
                     checkedApplications={checkedApplications}
                     isOptionsOpen={isOptionsOpen}
                     setIsOptionsOpen={setIsOptionsOpen}
-                    setSelectedStatus={setSelectedStatus}
+                    setSelectedStatus={setSelectedOption}
                     setAlertMessage={setAlertMessage}
                     setIsModalOpen={setIsModalOpen}
+                    optionsRef={optionsRef}
                   />
                 </div>
               )}
+
               {/* 지원서 목록 */}
               <div className="flex flex-col  gap-2.5">
                 {applicationsList.map((item: ApplyData) => {
@@ -261,10 +309,10 @@ const ApplicationStatusPage = () => {
                       key={item.id}
                       applyInfo={item}
                       isChecked={checkedApplications.includes(item.id)}
-                      setOpenOptions={() => setIsOptionsOpen(!isOptionsOpen)}
                       onCheck={(isChecked) =>
                         handleSingleCheck(item.id, isChecked)
                       }
+                      setOpenApplication={setOpenApplicationId}
                     />
                   );
                 })}
@@ -277,22 +325,65 @@ const ApplicationStatusPage = () => {
             </div>
           </div>
         </div>
-        {isMdUp ? isFormOpen && null : isFormOpen && null}
-
-        {isModalOpen && (
-          <NotiPopUp
-            onClose={() => setIsModalOpen(false)}
-            icon="delete"
-            title="지원상태 변경"
-            description={`선택한 지원자들의 지원상태를 \n ${selectedStatus}로 변경할까요?`}
-            firstButton={handleStatusChange}
-            firstButtonText="변경하기"
-            secondButton={() => setIsModalOpen(false)}
-            secondButtonText="취소하기"
-            modalType="button"
-          />
-        )}
       </div>
+
+      {/* ===== 지원 상태 변경 확인 모달 ===== */}
+      {isModalOpen && (
+        <NotiPopUp
+          onClose={() => setIsModalOpen(false)}
+          icon="delete"
+          title="지원상태 변경"
+          description={`선택한 지원자들의 지원상태를 \n ${selectedOption}으로 변경할까요?`}
+          firstButton={handleStatusChange}
+          firstButtonText="변경하기"
+          secondButton={() => setIsModalOpen(false)}
+          secondButtonText="취소하기"
+          modalType="button"
+        />
+      )}
+
+      {/* ===== 면접 확인 메세지 전송 모달 ===== */}
+      {isMdUp
+        ? isInterviewOpen && (
+            <InterviewNoticeModal
+              onClose={() => setIsInterviewOpen(false)}
+              onSubmit={(message: string) =>
+                handleSubmitInterviewNotice(message)
+              }
+            />
+          )
+        : isInterviewOpen && (
+            <InterviewNoticeBottomSheet
+              onClose={() => setIsInterviewOpen(false)}
+              onSubmit={(message: string) =>
+                handleSubmitInterviewNotice(message)
+              }
+            />
+          )}
+
+      {/* ===== 지원서 상세보기 모달 =====*/}
+      {isMdUp
+        ? openApplicationId && (
+            <ApplicationFromViewModal
+              applyId={openApplicationId}
+              onClose={() => setOpenApplicationId(null)}
+              setIsModalOpen={setIsModalOpen}
+              setSelectedOption={setSelectedOption}
+              isOptionsOpen={isOptionsOpen}
+              setIsOptionsOpen={setIsOptionsOpen}
+            />
+          )
+        : openApplicationId && (
+            <MobileApplicationFormViewModal
+              applyId={openApplicationId}
+              setIsOptionsOpen={setIsOptionsOpen}
+              onClose={() => setOpenApplicationId(null)}
+              setIsModalOpen={setIsModalOpen}
+              setSelectedOption={setSelectedOption}
+              isOptionsOpen={isOptionsOpen}
+            />
+          )}
+
       {/* ====== 알림 ======*/}
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />

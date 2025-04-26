@@ -2,44 +2,33 @@ import { useState } from "react";
 import ResultBadge from "../badge/resultBadge";
 import TransparentSmallBtn from "../button/basicBtn/transparentSmallBtn";
 import CheckBox from "../checkBox/checkBox";
-import InterviewNoticeModal from "../modal/club/interviewNoticeModal";
-import useResponsive from "@/hooks/useResponsive";
-import InterviewNoticeBottomSheet from "../bottomSheet/interviewNoticeBottomSheet";
 import Alert from "../alert/alert";
-import ApplicationFromViewModal from "../modal/club/applicationFormViewModal";
-import MobileApplicationFormViewModal from "../modal/club/mobileApplicationFormViewModal";
 import { ApplyData } from "@/types/application";
 import { APPLY_STATUS_MAP } from "@/constants/application";
 
 interface ApplicationFormCardProps {
   applyInfo: ApplyData;
   isChecked: boolean;
-  setOpenOptions: () => void;
   onCheck: (isChecked: boolean) => void;
+  setOpenApplication: (id: string) => void;
 }
 
 const ApplicationFormCard = ({
   applyInfo,
   isChecked,
-  setOpenOptions,
   onCheck,
+  setOpenApplication,
 }: ApplicationFormCardProps) => {
   const { id, memberData, name, applyStatusType, recruitmentTitle } = applyInfo;
   const applyStatus = APPLY_STATUS_MAP[applyStatusType];
-
-  const isMdUp = useResponsive("md");
-
-  const [openFormModal, setOpenFormModal] = useState<boolean>(false);
-  const [openNoticeModal, setOpenNoticeModal] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const handleSubmitSuccess = () => {
-    setAlertMessage("면접 안내를 전송했습니다.");
-    setOpenNoticeModal(false);
-  };
+  // const handleSubmitSuccess = () => {
+  //   setAlertMessage("면접 안내를 전송했습니다.");
+  // };
 
   const handleView = () => {
-    setOpenFormModal(true);
+    setOpenApplication(id);
   };
 
   return (
@@ -78,33 +67,6 @@ const ApplicationFormCard = ({
           className="hidden md:block"
         />
       </div>
-      {isMdUp
-        ? openNoticeModal && (
-            <InterviewNoticeModal
-              onClose={() => setOpenNoticeModal(false)}
-              onSubmit={handleSubmitSuccess}
-            />
-          )
-        : openNoticeModal && (
-            <InterviewNoticeBottomSheet
-              onClose={() => setOpenNoticeModal(false)}
-              onSubmit={handleSubmitSuccess}
-            />
-          )}
-      {isMdUp
-        ? openFormModal && (
-            <ApplicationFromViewModal
-              applyId={id}
-              onClose={() => setOpenFormModal(false)}
-            />
-          )
-        : openFormModal && (
-            <MobileApplicationFormViewModal
-              applyId={id}
-              onOpenStatusOptions={setOpenOptions}
-              onClose={() => setOpenFormModal(false)}
-            />
-          )}
 
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
