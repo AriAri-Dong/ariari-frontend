@@ -310,14 +310,28 @@ export const getApplicationDetail = async (applyId: string) => {
 export type UpdateApplicationStatusParams = {
   applications: string[];
   type: StatusValue;
+  interviewMessage?: string;
+};
+
+const getRequestBody = (
+  type: StatusValue,
+  applications: string[],
+  interviewMessage?: string
+) => {
+  if (type === "interview") {
+    return { applyIds: applications, interviewMessage };
+  }
+  return applications;
 };
 
 export const updateApplicationStatus = async ({
   applications,
   type,
+  interviewMessage,
 }: UpdateApplicationStatusParams) => {
   try {
-    const res = await axiosInstance.post(`/applies/${type}`, applications);
+    const body = getRequestBody(type, applications, interviewMessage);
+    const res = await axiosInstance.post(`/applies/${type}`, body);
     return res.data;
   } catch (error) {
     console.log("Failed to update application status", error);
