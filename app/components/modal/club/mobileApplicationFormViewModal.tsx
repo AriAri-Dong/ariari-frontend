@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import vector from "@/images/icon/backVector.svg";
-import pull_down from "@/images/icon/sub_pull_down.svg";
 import { ApplicationFromViewModalProps } from "./applicationFormViewModal";
 import Contour from "@/components/bar/contour";
 import FileBadge from "@/components/badge/fileBadge";
@@ -11,17 +10,21 @@ import { useApplyDetailQuery } from "@/hooks/apply/useApplicationQuery";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import ApplicationFields from "@/components/list/applicationFields";
 import { getProfileImage } from "@/utils/profileImage";
+import UpdateApplyStatusOptions from "@/components/dropdown/updateApplyStatusOptions";
 
 interface MobileApplicationFormViewModal extends ApplicationFromViewModalProps {
-  onOpenStatusOptions: () => void;
+  setIsOptionsOpen: (isOpen: boolean) => void;
 }
 
 const MobileApplicationFormViewModal = ({
   applyId,
-  onOpenStatusOptions,
+  setIsOptionsOpen,
+  isOptionsOpen,
+  setIsModalOpen,
+  setSelectedOption,
   onClose,
 }: MobileApplicationFormViewModal) => {
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const optionsRef = useRef<HTMLDivElement | null>(null);
 
   const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
   const {
@@ -37,7 +40,7 @@ const MobileApplicationFormViewModal = ({
   };
 
   const handleMenuClick = (label: string) => {
-    setSelectedStatus(label);
+    // setSelectedStatus(label);
   };
 
   if (!applyData) {
@@ -82,13 +85,14 @@ const MobileApplicationFormViewModal = ({
               </p>
             </div>
           </div>
-          <div
-            className="relative flex items-center gap-1 cursor-pointer"
-            onClick={onOpenStatusOptions}
-          >
-            <p className="text-subtext2 text-mobile_body2_m">지원상태 변경</p>
-            <Image alt={"버튼"} src={pull_down} width={20} height={20} />
-          </div>
+          <UpdateApplyStatusOptions
+            checkedApplications={[applyId]}
+            isOptionsOpen={isOptionsOpen}
+            setIsModalOpen={setIsModalOpen}
+            setIsOptionsOpen={setIsOptionsOpen}
+            setSelectedStatus={setSelectedOption}
+            optionsRef={optionsRef}
+          />
         </div>
         <Contour className="mb-6" />
       </div>

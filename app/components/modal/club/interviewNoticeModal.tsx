@@ -4,10 +4,17 @@ import close from "@/images/icon/close.svg";
 import help from "@/images/icon/help.svg";
 import Alert from "@/components/alert/alert";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
-import { InterviewNoticeProps } from "@/types/components/review";
 import Contour from "@/components/bar/contour";
 
-const InterviewNoticeModal = ({ onClose, onSubmit }: InterviewNoticeProps) => {
+export interface InterviewNoticeModalProps {
+  onClose: () => void;
+  onSubmit: (message: string) => void;
+}
+
+const InterviewNoticeModal = ({
+  onClose,
+  onSubmit,
+}: InterviewNoticeModalProps) => {
   const [details, setDetails] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
@@ -21,7 +28,7 @@ const InterviewNoticeModal = ({ onClose, onSubmit }: InterviewNoticeProps) => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      onSubmit();
+      onSubmit(details);
       onClose();
     }
   };

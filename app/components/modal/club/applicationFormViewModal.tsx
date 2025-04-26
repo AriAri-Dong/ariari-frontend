@@ -1,7 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
-import SingleSelectOptions from "@/components/pulldown/singleSelectOptions";
-import vector from "@/images/icon/sub_pull_down.svg";
 import ResultBadge from "@/components/badge/resultBadge";
 import close from "@/images/icon/close.svg";
 import FileBadge from "@/components/badge/fileBadge";
@@ -13,24 +11,26 @@ import defaultImg from "@/images/icon/defaultAriari.svg";
 import { APPLY_STATUS_MAP } from "@/constants/application";
 import ApplicationFields from "@/components/list/applicationFields";
 import { getProfileImage } from "@/utils/profileImage";
+import UpdateApplyStatusOptions from "@/components/dropdown/updateApplyStatusOptions";
 
 export interface ApplicationFormViewModalProps {
   applyId: string;
   onClose: () => void;
+  isOptionsOpen: boolean;
+  setIsOptionsOpen: (isOpen: boolean) => void;
+  setSelectedOption: (option: string) => void;
+  setIsModalOpen: (isOpen: boolean) => void;
 }
 
 const ApplicationFormViewModal = ({
   applyId,
   onClose,
-  data,
-  portfolio,
-  portfolioData,
-  fields,
-}: ApplicationFormViewModalProps) => {
+  isOptionsOpen,
+  setIsOptionsOpen,
+  setSelectedOption,
+  setIsModalOpen,
+}: ApplicationFromViewModalProps) => {
   const optionsRef = useRef<HTMLDivElement | null>(null);
-
-  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
   const {
@@ -42,7 +42,7 @@ const ApplicationFormViewModal = ({
   } = applyDetail ?? {};
 
   const handleMenuClick = (label: string) => {
-    setSelectedStatus(label);
+    setSelectedOption(label);
   };
 
   const handleClose = () => {
@@ -97,26 +97,14 @@ const ApplicationFormViewModal = ({
           </span>
         </div>
         <div className="flex gap-2">
-          <div
-            className="relative flex items-center gap-2 cursor-pointer"
-            onClick={() => setIsOptionsOpen(!isOptionsOpen)}
-          >
-            <p className="text-subtext2 text-body1_m">지원상태 변경</p>
-            <Image alt={"버튼"} src={vector} width={28} height={28} />
-            {isOptionsOpen && (
-              <div
-                ref={optionsRef}
-                className="absolute top-full mt-2 z-50 left-12"
-              >
-                <SingleSelectOptions
-                  selectedOption={selectedStatus}
-                  optionData={[...STATUS_OPTIONS]}
-                  size="medium"
-                  handleMenuClick={handleMenuClick}
-                />
-              </div>
-            )}
-          </div>
+          <UpdateApplyStatusOptions
+            checkedApplications={[applyId]}
+            isOptionsOpen={isOptionsOpen}
+            setIsOptionsOpen={setIsOptionsOpen}
+            setSelectedStatus={setSelectedOption}
+            setIsModalOpen={setIsModalOpen}
+            optionsRef={optionsRef}
+          />
           <ResultBadge status={APPLY_STATUS_MAP[applyData.applyStatusType]} />
         </div>
       </div>
