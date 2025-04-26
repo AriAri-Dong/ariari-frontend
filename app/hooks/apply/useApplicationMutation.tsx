@@ -21,8 +21,12 @@ export const useUpdateStatusMutation = ({
   const clubId = params.get("clubId") || "";
 
   const mutation = useMutation({
-    mutationFn: ({ applications, type }: UpdateApplicationStatusParams) =>
-      updateApplicationStatus({ applications, type }),
+    mutationFn: ({
+      applications,
+      type,
+      interviewMessage,
+    }: UpdateApplicationStatusParams) =>
+      updateApplicationStatus({ applications, type, interviewMessage }),
     onSuccess: (_, variables) => {
       const { applications } = variables;
       // 지원서 목록 데이터 갱신

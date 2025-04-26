@@ -4,13 +4,13 @@ import close from "@/images/icon/close.svg";
 import help from "@/images/icon/help.svg";
 import LargeBtn from "../button/basicBtn/largeBtn";
 import Alert from "../alert/alert";
-import { AcceptanceReviewProps } from "@/types/components/review";
 import Contour from "../bar/contour";
+import { InterviewNoticeModalProps } from "../modal/club/interviewNoticeModal";
 
 const InterviewNoticeBottomSheet = ({
   onClose,
   onSubmit,
-}: AcceptanceReviewProps) => {
+}: InterviewNoticeModalProps) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [details, setDetails] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
@@ -29,7 +29,7 @@ const InterviewNoticeBottomSheet = ({
 
   const handleSubmit = () => {
     if (validateForm()) {
-      onSubmit();
+      onSubmit(details);
       onClose();
     }
   };
