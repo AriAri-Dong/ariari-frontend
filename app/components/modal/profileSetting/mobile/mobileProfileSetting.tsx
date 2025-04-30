@@ -5,6 +5,7 @@ import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import backVector from "@/images/icon/backVector.svg";
 import Image from "next/image";
 import Alert from "@/components/alert/alert";
+import Step0 from "./step0";
 import Step1 from "./step1";
 import Step2 from "./step2";
 import Step3 from "./step3";
@@ -24,7 +25,7 @@ interface ProfileSettingProps {
 
 /**
  *
- * @param step 단계 (1-4)
+ * @param step 단계 (0-4)
  * @param onNextStep 특정 step으로 넘어가는 함수
  * @returns
  */
@@ -84,6 +85,13 @@ const MobileProfileSetting = ({
 
   const handleNextStep = async () => {
     setAlertMessage(null);
+
+    if (step === 0) {
+      if (!profileData.agreements) {
+        setAlertMessage("모든 약관에 동의해주세요.");
+        return;
+      }
+    }
 
     if (step === 1) {
       // 사용자 이름 유효성 검사
@@ -175,9 +183,14 @@ const MobileProfileSetting = ({
             className={step === 1 ? "hidden" : ""}
           />
           <h1 className="flex-1 text-center text-text1 text-mobile_h1_contents_title mr-6">
-            {step === 1 ? "프로필 생성" : "학교 등록"}
+            {step === 0
+              ? "이용약관 동의"
+              : step === 1
+              ? "프로필 생성"
+              : "학교 등록"}
           </h1>
         </div>
+        {step === 0 && <Step0 />}
         {step === 1 && <Step1 />}
         {step === 2 && <Step2 />}
         {step === 3 && (
@@ -192,12 +205,15 @@ const MobileProfileSetting = ({
           title={step === 3 ? `학교 인증하기 ${formatTime(timeLeft)}` : "다음"}
           onClick={handleNextStep}
         />
-        <button
-          onClick={handleSkip}
-          className="text-primary text-mobile_body2_sb py-2.5"
-        >
-          건너뛰기
-        </button>
+        {step === 2 ||
+          (step === 3 && (
+            <button
+              onClick={handleSkip}
+              className="text-primary text-mobile_body2_sb py-2.5"
+            >
+              건너뛰기
+            </button>
+          ))}
         {alertMessage && (
           <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
