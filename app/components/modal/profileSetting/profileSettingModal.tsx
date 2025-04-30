@@ -11,7 +11,7 @@ interface LoginModalProps {
 }
 
 const ProfileSettingModal = ({ onClose }: LoginModalProps) => {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(0);
 
   const handleNextStep = (nextStep: number) => {
     setStep(nextStep);
