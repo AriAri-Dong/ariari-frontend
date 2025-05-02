@@ -5,6 +5,7 @@ import defaultImg from "@/images/icon/defaultAriari.svg";
 import { MyClubData } from "@/types/club";
 import { useRouter } from "next/navigation";
 import { formatRelativeTime } from "@/utils/formatRelativeTime";
+import { formatKSTTime } from "@/utils/formatKSTTime";
 
 const getLatestClubDate = (
   club: MyClubData
@@ -53,7 +54,7 @@ const MyClubCard = ({ club }: MyClubCardProps) => {
           <div className="flex gap-1 text-body3_m text-subtext2 whitespace-nowrap ">
             <p>{latest.msg}</p>
             <p>·</p>
-            <p>{formatRelativeTime(latest.date)}</p>
+            <p>{formatRelativeTime(formatKSTTime(latest.date))}</p>
           </div>
         )}
       </div>
