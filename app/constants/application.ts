@@ -20,3 +20,10 @@ export const BADGE_TITLE_MAP = BADGE_ITEMS.reduce((acc, item) => {
   acc[item.key] = item.name;
   return acc;
 }, {} as Record<string, string>);
+
+// 지원현황 - 지원서별 지원 상태 변경 옵션
+export const STATUS_OPTIONS = [
+  { id: 1, label: "면접중" },
+  { id: 2, label: "합격" },
+  { id: 3, label: "불합격" },
+];

@@ -1,10 +1,10 @@
 import Image from "next/image";
 import SingleSelectOptions from "../pulldown/singleSelectOptions";
 import vector from "@/images/icon/sub_pull_down.svg";
-import { STATUS_OPTIONS } from "@/(club)/club/management/recruitment/applicationStatus/page";
 import useResponsive from "@/hooks/useResponsive";
 import CommonBottomSheet from "../bottomSheet/commonBottomSheet";
 import { useEffect, useRef, useState } from "react";
+import { STATUS_OPTIONS } from "@/constants/application";
 
 interface UpdateApplyStatusOptionProps {
   checkedApplications: string[];
