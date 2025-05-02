@@ -10,12 +10,6 @@ import {
   RECRUITMENT,
 } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
-import {
-  ApplicationListConditionReq,
-  ApplyDetailRes,
-  ApplyListRes,
-} from "@/types/application";
-import { StatusValue } from "@/constants/application";
 
 import { StatusValue } from "@/constants/application";
 
