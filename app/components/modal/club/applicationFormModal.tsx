@@ -167,21 +167,19 @@ const ApplicationFormModal = ({
       Object.entries(specialQuestionList).forEach(([key, applyQuestionId]) => {
         if (!applyQuestionId) return;
 
-        if (inputValues[key as ApplicationKeys])
-          applyAnswers.push({
-            applyQuestionId,
-            body: inputValues[key as ApplicationKeys]!,
-          });
+        applyAnswers.push({
+          applyQuestionId,
+          body: inputValues[key as ApplicationKeys] || "",
+        });
       });
     }
     // 추가 항목
     if (documentQuestions) {
       Object.entries(documentQuestions).forEach(([id, item]) => {
-        if (answers[item.id])
-          applyAnswers.push({
-            applyQuestionId: item.id,
-            body: answers[item.id],
-          });
+        applyAnswers.push({
+          applyQuestionId: item.id,
+          body: answers[item.id] || "",
+        });
       });
     }
 
