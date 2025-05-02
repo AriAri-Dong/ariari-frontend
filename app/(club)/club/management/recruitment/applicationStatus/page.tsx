@@ -133,15 +133,6 @@ const ApplicationStatusPage = () => {
     setCheckedApplications([]);
   };
 
-  // 지원 상태 변경 옵션 목록 중 메뉴 클릭
-  // const handleMenuClick = (label: string) => {
-  //   setIsOptionsOpen(false);
-  //   if (!checkedApplications.length) {
-  //     setAlertMessage("선택된 지원서가 없습니다.");
-  //     return;
-  //   }
-  // };
-
   // 지원 상태 변경 확인 모달 내 '변경하기' 버튼 클릭
   const handleStatusChange = () => {
     if (!selectedOption) return;
