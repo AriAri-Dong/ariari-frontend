@@ -6,7 +6,7 @@ import useResponsive from "@/hooks/useResponsive";
 import CommonBottomSheet from "../bottomSheet/commonBottomSheet";
 import { useEffect, useRef, useState } from "react";
 
-interface UpdateApplyStatusOptionsProps {
+interface UpdateApplyStatusOptionProps {
   checkedApplications: string[];
   setAlertMessage?: (message: string) => void;
   setSelectedStatus: (status: string) => void;
@@ -14,12 +14,12 @@ interface UpdateApplyStatusOptionsProps {
 }
 
 // 지원상태 변경 옵션 open trigger(공통 버튼+dropdown/bottomSheet)
-const UpdateApplyStatusOptions = ({
+const UpdateApplyStatusOption = ({
   checkedApplications,
   setAlertMessage,
   setSelectedStatus,
   setIsModalOpen,
-}: UpdateApplyStatusOptionsProps) => {
+}: UpdateApplyStatusOptionProps) => {
   const optionsRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
   const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
@@ -88,4 +88,4 @@ const UpdateApplyStatusOptions = ({
   );
 };
 
-export default UpdateApplyStatusOptions;
+export default UpdateApplyStatusOption;

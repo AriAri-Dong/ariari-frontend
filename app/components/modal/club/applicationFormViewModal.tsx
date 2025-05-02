@@ -7,7 +7,7 @@ import defaultImg from "@/images/icon/defaultAriari.svg";
 import { APPLY_STATUS_MAP } from "@/constants/application";
 import ApplicationFields from "@/components/list/applicationFields";
 import { getProfileImage } from "@/utils/profileImage";
-import UpdateApplyStatusOptions from "@/components/dropdown/updateApplyStatusOptions";
+import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOption";
 
 export interface ApplicationFormViewModalProps {
   applyId: string;
@@ -83,7 +83,7 @@ const ApplicationFormViewModal = ({
           </span>
         </div>
         <div className="flex gap-2">
-          <UpdateApplyStatusOptions
+          <UpdateApplyStatusOption
             checkedApplications={[applyId]}
             setSelectedStatus={setSelectedOption}
             setIsModalOpen={setIsModalOpen}

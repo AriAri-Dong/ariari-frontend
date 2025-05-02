@@ -1,20 +1,20 @@
 import React, { useRef } from "react";
 import Image from "next/image";
 import vector from "@/images/icon/backVector.svg";
-import { ApplicationFromViewModalProps } from "./applicationFormViewModal";
+import { ApplicationFormViewModalProps } from "./applicationFormViewModal";
 import Contour from "@/components/bar/contour";
 import { useApplyDetailQuery } from "@/hooks/apply/useApplicationQuery";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import ApplicationFields from "@/components/list/applicationFields";
 import { getProfileImage } from "@/utils/profileImage";
-import UpdateApplyStatusOptions from "@/components/dropdown/updateApplyStatusOptions";
+import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOption";
 
 const MobileApplicationFormViewModal = ({
   applyId,
   setIsModalOpen,
   setSelectedOption,
   onClose,
-}: ApplicationFromViewModalProps) => {
+}: ApplicationFormViewModalProps) => {
   const optionsRef = useRef<HTMLDivElement | null>(null);
 
   const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
@@ -58,7 +58,7 @@ const MobileApplicationFormViewModal = ({
           <div className="flex gap-2.5">
             <Image
               src={
-                getProfileImage(applyData?.memberData?.profileType) ||
+                getProfileImage(applyData?.memberData?.profileType || null) ||
                 defaultImg
               }
               alt={"프로필"}
@@ -72,7 +72,7 @@ const MobileApplicationFormViewModal = ({
               </p>
             </div>
           </div>
-          <UpdateApplyStatusOptions
+          <UpdateApplyStatusOption
             checkedApplications={[applyId]}
             setIsModalOpen={setIsModalOpen}
             setSelectedStatus={setSelectedOption}

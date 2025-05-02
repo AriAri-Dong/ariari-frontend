@@ -25,7 +25,7 @@ import InterviewNoticeModal from "@/components/modal/club/interviewNoticeModal";
 import InterviewNoticeBottomSheet from "@/components/bottomSheet/interviewNoticeBottomSheet";
 import ApplicationFromViewModal from "@/components/modal/club/applicationFormViewModal";
 import MobileApplicationFormViewModal from "@/components/modal/club/mobileApplicationFormViewModal";
-import UpdateApplyStatusOptions from "@/components/dropdown/updateApplyStatusOptions";
+import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOption";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
@@ -255,7 +255,7 @@ const ApplicationStatusPage = () => {
                       )
                     }
                   />
-                  <UpdateApplyStatusOptions
+                  <UpdateApplyStatusOption
                     checkedApplications={checkedApplications}
                     setSelectedStatus={setSelectedOption}
                     setAlertMessage={setAlertMessage}
@@ -275,7 +275,7 @@ const ApplicationStatusPage = () => {
                       )
                     }
                   />
-                  <UpdateApplyStatusOptions
+                  <UpdateApplyStatusOption
                     checkedApplications={checkedApplications}
                     setSelectedStatus={setSelectedOption}
                     setAlertMessage={setAlertMessage}
