@@ -20,12 +20,12 @@ import { ApplyData } from "@/types/application";
 import { useUpdateStatusMutation } from "@/hooks/apply/useApplicationMutation";
 import { APPLY_STATUS_VALUE_MAP } from "@/constants/application";
 import Alert from "@/components/alert/alert";
-import UpdateApplyStatusOptions from "@/components/dropdown/updateApplyStatusOptions";
 import { useApplyStatusOptions } from "@/hooks/apply/useApplyStatusOptions";
 import InterviewNoticeModal from "@/components/modal/club/interviewNoticeModal";
 import InterviewNoticeBottomSheet from "@/components/bottomSheet/interviewNoticeBottomSheet";
 import ApplicationFromViewModal from "@/components/modal/club/applicationFormViewModal";
 import MobileApplicationFormViewModal from "@/components/modal/club/mobileApplicationFormViewModal";
+import UpdateApplyStatusOptions from "@/components/dropdown/updateApplyStatusOptions";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
@@ -66,14 +66,12 @@ const ApplicationStatusPage = () => {
   const {
     isModalOpen,
     setIsModalOpen,
-    isOptionsOpen,
-    setIsOptionsOpen,
+    // isOptionsOpen,
+    // setIsOptionsOpen,
     selectedOption,
     setSelectedOption,
     isInterviewOpen,
     setIsInterviewOpen,
-
-    optionsRef,
   } = useApplyStatusOptions();
 
   // 지원 목록 조건에 따른 필터링
@@ -136,13 +134,13 @@ const ApplicationStatusPage = () => {
   };
 
   // 지원 상태 변경 옵션 목록 중 메뉴 클릭
-  const handleMenuClick = (label: string) => {
-    setIsOptionsOpen(false);
-    if (!checkedApplications.length) {
-      setAlertMessage("선택된 지원서가 없습니다.");
-      return;
-    }
-  };
+  // const handleMenuClick = (label: string) => {
+  //   setIsOptionsOpen(false);
+  //   if (!checkedApplications.length) {
+  //     setAlertMessage("선택된 지원서가 없습니다.");
+  //     return;
+  //   }
+  // };
 
   // 지원 상태 변경 확인 모달 내 '변경하기' 버튼 클릭
   const handleStatusChange = () => {
@@ -268,12 +266,9 @@ const ApplicationStatusPage = () => {
                   />
                   <UpdateApplyStatusOptions
                     checkedApplications={checkedApplications}
-                    isOptionsOpen={isOptionsOpen}
-                    setIsOptionsOpen={setIsOptionsOpen}
                     setSelectedStatus={setSelectedOption}
                     setAlertMessage={setAlertMessage}
                     setIsModalOpen={setIsModalOpen}
-                    optionsRef={optionsRef}
                   />
                 </div>
               ) : (
@@ -291,12 +286,9 @@ const ApplicationStatusPage = () => {
                   />
                   <UpdateApplyStatusOptions
                     checkedApplications={checkedApplications}
-                    isOptionsOpen={isOptionsOpen}
-                    setIsOptionsOpen={setIsOptionsOpen}
                     setSelectedStatus={setSelectedOption}
                     setAlertMessage={setAlertMessage}
                     setIsModalOpen={setIsModalOpen}
-                    optionsRef={optionsRef}
                   />
                 </div>
               )}
@@ -342,6 +334,25 @@ const ApplicationStatusPage = () => {
         />
       )}
 
+      {/* ===== 지원서 상세보기 모달 =====*/}
+      {isMdUp
+        ? openApplicationId && (
+            <ApplicationFromViewModal
+              applyId={openApplicationId}
+              onClose={() => setOpenApplicationId(null)}
+              setIsModalOpen={setIsModalOpen}
+              setSelectedOption={setSelectedOption}
+            />
+          )
+        : openApplicationId && (
+            <MobileApplicationFormViewModal
+              applyId={openApplicationId}
+              onClose={() => setOpenApplicationId(null)}
+              setIsModalOpen={setIsModalOpen}
+              setSelectedOption={setSelectedOption}
+            />
+          )}
+
       {/* ===== 면접 확인 메세지 전송 모달 ===== */}
       {isMdUp
         ? isInterviewOpen && (
@@ -358,29 +369,6 @@ const ApplicationStatusPage = () => {
               onSubmit={(message: string) =>
                 handleSubmitInterviewNotice(message)
               }
-            />
-          )}
-
-      {/* ===== 지원서 상세보기 모달 =====*/}
-      {isMdUp
-        ? openApplicationId && (
-            <ApplicationFromViewModal
-              applyId={openApplicationId}
-              onClose={() => setOpenApplicationId(null)}
-              setIsModalOpen={setIsModalOpen}
-              setSelectedOption={setSelectedOption}
-              isOptionsOpen={isOptionsOpen}
-              setIsOptionsOpen={setIsOptionsOpen}
-            />
-          )
-        : openApplicationId && (
-            <MobileApplicationFormViewModal
-              applyId={openApplicationId}
-              setIsOptionsOpen={setIsOptionsOpen}
-              onClose={() => setOpenApplicationId(null)}
-              setIsModalOpen={setIsModalOpen}
-              setSelectedOption={setSelectedOption}
-              isOptionsOpen={isOptionsOpen}
             />
           )}
 

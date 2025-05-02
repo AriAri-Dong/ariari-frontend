@@ -12,18 +12,12 @@ import ApplicationFields from "@/components/list/applicationFields";
 import { getProfileImage } from "@/utils/profileImage";
 import UpdateApplyStatusOptions from "@/components/dropdown/updateApplyStatusOptions";
 
-interface MobileApplicationFormViewModal extends ApplicationFromViewModalProps {
-  setIsOptionsOpen: (isOpen: boolean) => void;
-}
-
 const MobileApplicationFormViewModal = ({
   applyId,
-  setIsOptionsOpen,
-  isOptionsOpen,
   setIsModalOpen,
   setSelectedOption,
   onClose,
-}: MobileApplicationFormViewModal) => {
+}: ApplicationFromViewModalProps) => {
   const optionsRef = useRef<HTMLDivElement | null>(null);
 
   const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
@@ -37,10 +31,6 @@ const MobileApplicationFormViewModal = ({
 
   const handleClose = () => {
     onClose();
-  };
-
-  const handleMenuClick = (label: string) => {
-    // setSelectedStatus(label);
   };
 
   if (!applyData) {
@@ -87,11 +77,8 @@ const MobileApplicationFormViewModal = ({
           </div>
           <UpdateApplyStatusOptions
             checkedApplications={[applyId]}
-            isOptionsOpen={isOptionsOpen}
             setIsModalOpen={setIsModalOpen}
-            setIsOptionsOpen={setIsOptionsOpen}
             setSelectedStatus={setSelectedOption}
-            optionsRef={optionsRef}
           />
         </div>
         <Contour className="mb-6" />
