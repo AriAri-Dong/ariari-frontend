@@ -9,13 +9,8 @@ import {
   CLUBS,
   RECRUITMENT,
 } from "../apiUrl";
-import { APPLY_TEMPS_MY } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
-import {
-  ApplicationListConditionReq,
-  ApplyDetailRes,
-  ApplyListRes,
-} from "@/types/application";
+
 import { StatusValue } from "@/constants/application";
 
 import { IdResponse } from "@/types/api";
@@ -227,44 +222,6 @@ export const putApplicationTemp = async (
       }
     }
     throw new Error("문제가 발생했습니다.");
-  }
-};
-
-// 동아리 상세 - 지원 현황 리스트
-export const getApplicationsList = async (
-  clubId: string,
-  condition: ApplicationListConditionReq,
-  page: Pageable["page"]
-) => {
-  try {
-    const res = await axiosInstance.get<ApplyListRes>(
-      `club/${clubId}/applies`,
-      {
-        params: {
-          ...condition,
-          page: page,
-          size: 10,
-        },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    console.log("Error fetching applications list", error);
-    return {
-      applyDataList: [],
-      pageInfo: { contentSize: 0, totalSize: 0, totalPages: 0 },
-    };
-  }
-};
-
-// 지원현황 - 지원서 상세 조회
-export const getApplicationDetail = async (applyId: string) => {
-  try {
-    const res = await axiosInstance.get<ApplyDetailRes>(`/applies/${applyId}`);
-    return res.data;
-  } catch (error) {
-    console.log("Error fetching application detail");
-    throw error;
   }
 };
 

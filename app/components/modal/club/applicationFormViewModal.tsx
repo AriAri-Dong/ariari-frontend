@@ -21,7 +21,7 @@ const ApplicationFormViewModal = ({
   onClose,
   setSelectedOption,
   setIsModalOpen,
-}: ApplicationFromViewModalProps) => {
+}: ApplicationFormViewModalProps) => {
   const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
   const {
     applyData,
@@ -71,7 +71,7 @@ const ApplicationFormViewModal = ({
         <div className="flex gap-3 items-center">
           <Image
             src={
-              getProfileImage(applyData?.memberData?.profileType) || defaultImg
+              getProfileImage(applyData.memberData.profileType!) || defaultImg
             }
             alt={"프로필"}
             width={32}
