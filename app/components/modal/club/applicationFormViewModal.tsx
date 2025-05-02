@@ -2,10 +2,6 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import ResultBadge from "@/components/badge/resultBadge";
 import close from "@/images/icon/close.svg";
-import FileBadge from "@/components/badge/fileBadge";
-import CustomInput from "@/components/input/customInput";
-import PDFDownloadBtn from "@/components/button/pdfDownloadBtn";
-import { STATUS_OPTIONS } from "@/(club)/club/management/recruitment/applicationStatus/page";
 import { useApplyDetailQuery } from "@/hooks/apply/useApplicationQuery";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import { APPLY_STATUS_MAP } from "@/constants/application";
@@ -104,32 +100,9 @@ const ApplicationFormViewModal = ({
             name={applyData.name}
             specialAnswerList={specialAnswerList!}
             applyAnswerDataList={applyAnswerDataList || []}
+            fileUri={fileUri}
+            portfolioUrl={portfolioUrl}
           />
-          {/* {portfolio && portfolioData && (
-            <>
-              <div className="flex flex-col gap-2.5 mt-10">
-                <h3 className="text-text1 text-h3">포트폴리오</h3>
-                <p className="text-subtext2 text-body1_r">
-                  포트폴리오 수집 목적 문구
-                </p>
-              </div>
-              <div className="flex gap-2 mt-5 mb-3 ">
-                {portfolioData.portfolioFile && (
-                  <FileBadge fileName={portfolioData.portfolioFile} />
-                )}
-                <PDFDownloadBtn
-                  file={portfolioData.portfolioFile}
-                  fileName={`${data.name}_Portfolio`}
-                />
-              </div>
-              <CustomInput
-                disable={true}
-                value={portfolioData.portfolioText}
-                placeholder={""}
-                onChange={() => {}}
-              />
-            </>
-          )} */}
         </div>
       </div>
     </div>

@@ -3,9 +3,6 @@ import Image from "next/image";
 import vector from "@/images/icon/backVector.svg";
 import { ApplicationFromViewModalProps } from "./applicationFormViewModal";
 import Contour from "@/components/bar/contour";
-import FileBadge from "@/components/badge/fileBadge";
-import PDFDownloadBtn from "@/components/button/pdfDownloadBtn";
-import CustomInput from "@/components/input/customInput";
 import { useApplyDetailQuery } from "@/hooks/apply/useApplicationQuery";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import ApplicationFields from "@/components/list/applicationFields";
@@ -91,33 +88,9 @@ const MobileApplicationFormViewModal = ({
           name={applyData.name}
           specialAnswerList={specialAnswerList!}
           applyAnswerDataList={applyAnswerDataList || []}
+          fileUri={fileUri}
+          portfolioUrl={portfolioUrl}
         />
-        {/* {portfolio && portfolioData && (
-          <>
-            <div className="flex flex-col gap-2.5 mt-[30px]">
-              <h3 className="text-text1 text-mobile_h3">포트폴리오</h3>
-              <p className="text-subtext2 text-mobile_body3_r">
-                포트폴리오 수집 목적 문구
-              </p>
-            </div>
-            <CustomInput
-              disable={true}
-              value={portfolioData.portfolioText}
-              placeholder={""}
-              onChange={() => {}}
-              className="mt-[14px]"
-            />
-            <div className="flex gap-2 mt-[14px] mb-20">
-              {portfolioData.portfolioFile && (
-                <FileBadge fileName={portfolioData.portfolioFile} />
-              )}
-              <PDFDownloadBtn
-                file={portfolioData.portfolioFile}
-                fileName={`${data.name}_Portfolio`}
-              />
-            </div>
-          </>
-        )} */}
       </div>
     </div>
   );
