@@ -4,28 +4,25 @@ import vector from "@/images/icon/sub_pull_down.svg";
 import { STATUS_OPTIONS } from "@/(club)/club/management/recruitment/applicationStatus/page";
 import useResponsive from "@/hooks/useResponsive";
 import CommonBottomSheet from "../bottomSheet/commonBottomSheet";
+import { useEffect, useRef, useState } from "react";
 
 interface UpdateApplyStatusOptionsProps {
-  isOptionsOpen: boolean;
-  setIsOptionsOpen: (isOpen: boolean) => void;
   checkedApplications: string[];
   setAlertMessage?: (message: string) => void;
   setSelectedStatus: (status: string) => void;
   setIsModalOpen: (isOpen: boolean) => void;
-  optionsRef: React.RefObject<HTMLDivElement>;
 }
 
 // 지원상태 변경 옵션 open trigger(공통 버튼+dropdown/bottomSheet)
 const UpdateApplyStatusOptions = ({
-  isOptionsOpen,
-  setIsOptionsOpen,
   checkedApplications,
   setAlertMessage,
   setSelectedStatus,
   setIsModalOpen,
-  optionsRef,
 }: UpdateApplyStatusOptionsProps) => {
+  const optionsRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
+  const [isOptionsOpen, setIsOptionsOpen] = useState<boolean>(false);
 
   // 지원 상태 변경 옵션 목록 중 메뉴 클릭
   const handleMenuClick = (label: string) => {
@@ -37,6 +34,21 @@ const UpdateApplyStatusOptions = ({
     setSelectedStatus(label);
     setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        optionsRef.current &&
+        !optionsRef.current.contains(event.target as Node)
+      ) {
+        setIsOptionsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>

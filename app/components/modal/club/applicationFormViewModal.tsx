@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import ResultBadge from "@/components/badge/resultBadge";
 import close from "@/images/icon/close.svg";
@@ -15,8 +15,6 @@ import UpdateApplyStatusOptions from "@/components/dropdown/updateApplyStatusOpt
 export interface ApplicationFromViewModalProps {
   applyId: string;
   onClose: () => void;
-  isOptionsOpen: boolean;
-  setIsOptionsOpen: (isOpen: boolean) => void;
   setSelectedOption: (option: string) => void;
   setIsModalOpen: (isOpen: boolean) => void;
 }
@@ -24,13 +22,9 @@ export interface ApplicationFromViewModalProps {
 const ApplicationFromViewModal = ({
   applyId,
   onClose,
-  isOptionsOpen,
-  setIsOptionsOpen,
   setSelectedOption,
   setIsModalOpen,
 }: ApplicationFromViewModalProps) => {
-  const optionsRef = useRef<HTMLDivElement | null>(null);
-
   const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
   const {
     applyData,
@@ -39,10 +33,6 @@ const ApplicationFromViewModal = ({
     fileUri,
     portfolioUrl,
   } = applyDetail ?? {};
-
-  const handleMenuClick = (label: string) => {
-    setSelectedOption(label);
-  };
 
   const handleClose = () => {
     onClose();
@@ -98,11 +88,8 @@ const ApplicationFromViewModal = ({
         <div className="flex gap-2">
           <UpdateApplyStatusOptions
             checkedApplications={[applyId]}
-            isOptionsOpen={isOptionsOpen}
-            setIsOptionsOpen={setIsOptionsOpen}
             setSelectedStatus={setSelectedOption}
             setIsModalOpen={setIsModalOpen}
-            optionsRef={optionsRef}
           />
           <ResultBadge status={APPLY_STATUS_MAP[applyData.applyStatusType]} />
         </div>
