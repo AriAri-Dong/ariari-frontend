@@ -202,7 +202,7 @@ export const putApplicationTemp = async (
 ) => {
   try {
     const response = await axiosInstance.put<string>(
-      `/${RECRUITMENT}/${applyTempId}`,
+      `${APPLY_TEMPS}/${applyTempId}`,
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
