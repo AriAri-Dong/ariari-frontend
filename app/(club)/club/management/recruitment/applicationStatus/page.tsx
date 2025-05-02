@@ -10,7 +10,6 @@ import ApplicationFormCard from "@/components/card/applicationFormCard";
 import NotiPopUp from "@/components/modal/notiPopUp";
 import PullDown from "@/components/pulldown/pullDown";
 import SubSearchInput from "@/components/input/subSearchInput";
-import RangeCalendar from "@/components/calendar/rangeCalendar";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import { useApplicationQuery } from "@/hooks/apply/useApplicationQuery";
@@ -26,6 +25,7 @@ import InterviewNoticeBottomSheet from "@/components/bottomSheet/interviewNotice
 import ApplicationFromViewModal from "@/components/modal/club/applicationFormViewModal";
 import MobileApplicationFormViewModal from "@/components/modal/club/mobileApplicationFormViewModal";
 import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOption";
+import StatelessRangeCalendar from "@/components/calendar/statelessRangeCalendar";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
@@ -208,7 +208,7 @@ const ApplicationStatusPage = () => {
                     />
                   </div>
                   <div className="smm:block hidden">
-                    <RangeCalendar
+                    <StatelessRangeCalendar
                       onDateChange={setDateRange}
                       selectedRange={dateRange}
                     />
@@ -221,7 +221,7 @@ const ApplicationStatusPage = () => {
                   />
                 </div>
                 <div className="smm:hidden block">
-                  <RangeCalendar
+                  <StatelessRangeCalendar
                     onDateChange={setDateRange}
                     selectedRange={dateRange}
                   />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../../public/style/custom.css";
@@ -8,21 +8,29 @@ import calendarIcon from "@/images/icon/calender.svg";
 interface CustomCalendarProps {
   placeholder?: string;
   onDateChange?: (date: [Date | null, Date | null]) => void;
-  selectedRange: [Date | null, Date | null];
 }
 
 /**
  * 조회 기간을 선택하는 캘린더
  * @param placeholder
  * @param onDateChange 데이터 변경 핸들러
- * @param selectedRange
  * @returns
  */
 const RangeCalendar = ({
   placeholder = "조회기간",
   onDateChange,
-  selectedRange,
 }: CustomCalendarProps) => {
+  const [selectedRange, setSelectedRange] = useState<
+    [Date | null, Date | null]
+  >([null, null]);
+
+  const handleDateChange = (dates: [Date | null, Date | null]) => {
+    setSelectedRange(dates);
+    if (onDateChange) {
+      onDateChange(dates);
+    }
+  };
+
   const formatDate = (date: Date | null): string => {
     return date
       ? date
@@ -44,7 +52,7 @@ const RangeCalendar = ({
     <div className="relative md:h-[44px]">
       <DatePicker
         selected={selectedRange[0]}
-        onChange={onDateChange}
+        onChange={handleDateChange}
         startDate={selectedRange[0]}
         endDate={selectedRange[1]}
         selectsRange={true}
