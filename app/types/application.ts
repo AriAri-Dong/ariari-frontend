@@ -137,50 +137,7 @@ export interface ApplyAnswerData {
 export interface ApplyDetailRes {
   applyData: ApplyData;
   applyAnswerDataList: ApplyAnswerData[];
-  fileUri?: string;
-  portfolioUrl?: string;
-}
-
-export interface ApplicationListConditionReq {
-  isPendent: boolean;
-  query?: string;
-  startDateTime?: string;
-  endDateTime?: string;
-}
-
-export interface ApplyAnswerData {
-  body: string;
-  applyQuestionData: {
-    id: string;
-    body: string;
-  };
-}
-
-export type ApplySpecialFieldKeys =
-  | "gender"
-  | "birthday"
-  | "phone"
-  | "email"
-  | "education"
-  | "major"
-  | "occupation"
-  | "mbti"
-  | "availablePeriod"
-  | "preferredActivityField"
-  | "hobby"
-  | "sns"
-  | "motivation"
-  | "activityExperience"
-  | "skill"
-  | "aspiration"
-  | "availableTime"
-  | "referralSource";
-
-// 추가 예정
-export interface ApplyDetailRes {
-  applyData: ApplyData;
-  applyAnswerDataList: ApplyAnswerData[];
-  specialAnswerList: Record<ApplySpecialFieldKeys, string | null>;
+  specialAnswerList: Record<ApplicationKeys, string | null>;
   fileUri?: string;
   portfolioUrl?: string;
 }
