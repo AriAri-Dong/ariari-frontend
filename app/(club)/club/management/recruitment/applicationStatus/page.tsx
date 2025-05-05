@@ -26,6 +26,7 @@ import ApplicationFromViewModal from "@/components/modal/club/applicationFormVie
 import MobileApplicationFormViewModal from "@/components/modal/club/mobileApplicationFormViewModal";
 import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOption";
 import StatelessRangeCalendar from "@/components/calendar/statelessRangeCalendar";
+import useDebounce from "@/hooks/useDebounce";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
@@ -47,6 +48,7 @@ const ApplicationStatusPage = () => {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const debounceSearchQuery = useDebounce<string>(searchQuery);
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
     null,
@@ -59,8 +61,6 @@ const ApplicationStatusPage = () => {
   const {
     isModalOpen,
     setIsModalOpen,
-    // isOptionsOpen,
-    // setIsOptionsOpen,
     selectedOption,
     setSelectedOption,
     isInterviewOpen,
@@ -79,7 +79,7 @@ const ApplicationStatusPage = () => {
     isError,
   } = useApplicationQuery(clubId, {
     isPendent: selectedFilter === "대기중",
-    query: searchQuery,
+    query: debounceSearchQuery,
     startDateTime: dateRange[0] ? formatLocalDateTime(dateRange[0]) : undefined,
     endDateTime: dateRange[1] ? formatLocalDateTime(dateRange[1]) : undefined,
   });
@@ -234,53 +234,54 @@ const ApplicationStatusPage = () => {
                   className="lg:hidden"
                 />
               </div>
-              {isMdUp ? (
-                <div
-                  className="flex-row justify-between items-center w-full my-2.5 hidden md:flex
+              {applicationsList.length > 0 &&
+                (isMdUp ? (
+                  <div
+                    className="flex-row justify-between items-center w-full my-2.5 hidden md:flex
                   py-2.5 pl-6 pr-[150px] rounded-lg bg-white70 text-subtext2 text-body1_m"
-                >
-                  <AllCheckBox
-                    isChecked={
-                      checkedApplications.length === applicationsList.length
-                    }
-                    label={"전체 선택"}
-                    onClick={() =>
-                      handleAllCheck(
-                        checkedApplications.length !== applicationsList.length
-                      )
-                    }
-                  />
-                  <UpdateApplyStatusOption
-                    checkedApplications={checkedApplications}
-                    setSelectedStatus={setSelectedOption}
-                    setAlertMessage={setAlertMessage}
-                    setIsModalOpen={setIsModalOpen}
-                  />
-                </div>
-              ) : (
-                <div className="flex justify-between mb-4">
-                  <AllCheckBox
-                    isChecked={
-                      checkedApplications.length === applicationsList.length
-                    }
-                    label={"전체 선택"}
-                    onClick={() =>
-                      handleAllCheck(
-                        checkedApplications.length !== applicationsList.length
-                      )
-                    }
-                  />
-                  <UpdateApplyStatusOption
-                    checkedApplications={checkedApplications}
-                    setSelectedStatus={setSelectedOption}
-                    setAlertMessage={setAlertMessage}
-                    setIsModalOpen={setIsModalOpen}
-                  />
-                </div>
-              )}
+                  >
+                    <AllCheckBox
+                      isChecked={
+                        checkedApplications.length === applicationsList.length
+                      }
+                      label={"전체 선택"}
+                      onClick={() =>
+                        handleAllCheck(
+                          checkedApplications.length !== applicationsList.length
+                        )
+                      }
+                    />
+                    <UpdateApplyStatusOption
+                      checkedApplications={checkedApplications}
+                      setSelectedStatus={setSelectedOption}
+                      setAlertMessage={setAlertMessage}
+                      setIsModalOpen={setIsModalOpen}
+                    />
+                  </div>
+                ) : (
+                  <div className="flex justify-between mb-4">
+                    <AllCheckBox
+                      isChecked={
+                        checkedApplications.length === applicationsList.length
+                      }
+                      label={"전체 선택"}
+                      onClick={() =>
+                        handleAllCheck(
+                          checkedApplications.length !== applicationsList.length
+                        )
+                      }
+                    />
+                    <UpdateApplyStatusOption
+                      checkedApplications={checkedApplications}
+                      setSelectedStatus={setSelectedOption}
+                      setAlertMessage={setAlertMessage}
+                      setIsModalOpen={setIsModalOpen}
+                    />
+                  </div>
+                ))}
 
               {/* 지원서 목록 */}
-              <div className="flex flex-col  gap-2.5">
+              <div className="flex flex-col gap-2.5">
                 {applicationsList.map((item: ApplyData) => {
                   return (
                     <ApplicationFormCard
