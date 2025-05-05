@@ -4,7 +4,7 @@ import { PageInfo } from "./pageInfo";
 import { RecruitmentData } from "./recruitment";
 
 export type ApplyStatusType = "PENDENCY" | "APPROVE" | "REFUSAL" | "INTERVIEW";
-export type AppyStatusText = "대기중" | "합격" | "불합격" | "면접중";
+export type ApplyStatusText = "대기중" | "합격" | "불합격" | "면접중";
 
 export interface ApplyData {
   id: string;

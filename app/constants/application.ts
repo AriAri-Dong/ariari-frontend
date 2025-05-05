@@ -1,7 +1,7 @@
 import { BADGE_ITEMS } from "@/data/club";
-import { ApplyStatusType, AppyStatusText } from "@/types/application";
+import { ApplyStatusType, ApplyStatusText } from "@/types/application";
 
-export const APPLY_STATUS_MAP: Record<ApplyStatusType, AppyStatusText> = {
+export const APPLY_STATUS_MAP: Record<ApplyStatusType, ApplyStatusText> = {
   PENDENCY: "대기중",
   INTERVIEW: "면접중",
   APPROVE: "합격",
