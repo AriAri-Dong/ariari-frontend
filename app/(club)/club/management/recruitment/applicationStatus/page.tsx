@@ -215,6 +215,7 @@ const ApplicationStatusPage = () => {
                   </div>
 
                   <SubSearchInput
+                    inputValue={searchQuery}
                     onSearch={handleSearchQuery}
                     placeholder={"이름 또는 공고 제목"}
                     className="lg:block hidden"
@@ -227,6 +228,7 @@ const ApplicationStatusPage = () => {
                   />
                 </div>
                 <SubSearchInput
+                  inputValue={searchQuery}
                   onSearch={handleSearchQuery}
                   placeholder={"이름 또는 공고 제목"}
                   className="lg:hidden"
