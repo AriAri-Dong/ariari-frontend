@@ -6,6 +6,7 @@ import LargeBtn from "../button/basicBtn/largeBtn";
 import Alert from "../alert/alert";
 import Contour from "../bar/contour";
 import { InterviewNoticeModalProps } from "../modal/club/interviewNoticeModal";
+import NotiPopUp from "../modal/notiPopUp";
 
 const InterviewNoticeBottomSheet = ({
   onClose,
@@ -14,6 +15,7 @@ const InterviewNoticeBottomSheet = ({
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [details, setDetails] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   useEffect(() => {
     setIsVisible(true);
@@ -35,6 +37,10 @@ const InterviewNoticeBottomSheet = ({
   };
 
   const handleClose = () => {
+    if (details.trim()) {
+      setShowConfirmModal(true);
+      return;
+    }
     onClose();
   };
 
@@ -104,6 +110,20 @@ const InterviewNoticeBottomSheet = ({
       </div>
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+      )}
+
+      {/* ====== 면접 메세지 close 확인 모달 ======*/}
+      {showConfirmModal && (
+        <NotiPopUp
+          onClose={() => setShowConfirmModal(false)}
+          title="작성 중단하기"
+          description="작성 중인 내용이 저장되지 않고 사라집니다."
+          modalType="button"
+          firstButton={() => setShowConfirmModal(false)}
+          firstButtonText="취소"
+          secondButton={onClose}
+          secondButtonText="확인"
+        />
       )}
     </div>
   );

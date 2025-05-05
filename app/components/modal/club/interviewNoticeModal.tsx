@@ -5,6 +5,7 @@ import help from "@/images/icon/help.svg";
 import Alert from "@/components/alert/alert";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import Contour from "@/components/bar/contour";
+import NotiPopUp from "../notiPopUp";
 
 export interface InterviewNoticeModalProps {
   onClose: () => void;
@@ -17,6 +18,7 @@ const InterviewNoticeModal = ({
 }: InterviewNoticeModalProps) => {
   const [details, setDetails] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   const validateForm = () => {
     if (!details.trim()) {
@@ -34,6 +36,10 @@ const InterviewNoticeModal = ({
   };
 
   const handleClose = () => {
+    if (details.trim()) {
+      setShowConfirmModal(true);
+      return;
+    }
     onClose();
   };
 
@@ -99,6 +105,20 @@ const InterviewNoticeModal = ({
           <SmallBtn title="전송하기" onClick={handleSubmit} />
         </div>
       </div>
+
+      {/* ====== 면접 메세지 close 확인 모달 ======*/}
+      {showConfirmModal && (
+        <NotiPopUp
+          onClose={() => setShowConfirmModal(false)}
+          title="작성 중단하기"
+          description="작성 중인 내용이 저장되지 않고 사라집니다."
+          modalType="button"
+          firstButton={() => setShowConfirmModal(false)}
+          firstButtonText="취소"
+          secondButton={onClose}
+          secondButtonText="확인"
+        />
+      )}
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
