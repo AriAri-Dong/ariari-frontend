@@ -8,6 +8,7 @@ import { APPLY_STATUS_MAP } from "@/constants/application";
 import ApplicationFields from "@/components/list/applicationFields";
 import { getProfileImage } from "@/utils/profileImage";
 import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOption";
+import { useUpdateStatusMutation } from "@/hooks/apply/useApplicationMutation";
 
 export interface ApplicationFormViewModalProps {
   applyId: string;

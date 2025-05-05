@@ -135,7 +135,9 @@ const ApplicationStatusPage = () => {
       return;
     }
     updateApplicationStatus.mutate({
-      applications: checkedApplications,
+      applications: openApplicationId
+        ? [openApplicationId]
+        : checkedApplications,
       type: APPLY_STATUS_VALUE_MAP[selectedOption],
     });
     setIsModalOpen(false);
