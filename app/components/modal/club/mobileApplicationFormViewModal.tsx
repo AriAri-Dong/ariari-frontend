@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import Image from "next/image";
 import vector from "@/images/icon/backVector.svg";
 import { ApplicationFormViewModalProps } from "./applicationFormViewModal";
@@ -15,8 +15,6 @@ const MobileApplicationFormViewModal = ({
   setSelectedOption,
   onClose,
 }: ApplicationFormViewModalProps) => {
-  const optionsRef = useRef<HTMLDivElement | null>(null);
-
   const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
   const {
     applyData,

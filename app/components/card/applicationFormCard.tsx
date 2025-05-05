@@ -23,10 +23,6 @@ const ApplicationFormCard = ({
   const applyStatus = APPLY_STATUS_MAP[applyStatusType];
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  // const handleSubmitSuccess = () => {
-  //   setAlertMessage("면접 안내를 전송했습니다.");
-  // };
-
   const handleView = () => {
     setOpenApplication(id);
   };

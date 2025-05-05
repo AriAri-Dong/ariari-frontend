@@ -22,11 +22,11 @@ import Alert from "@/components/alert/alert";
 import { useApplyStatusOptions } from "@/hooks/apply/useApplyStatusOptions";
 import InterviewNoticeModal from "@/components/modal/club/interviewNoticeModal";
 import InterviewNoticeBottomSheet from "@/components/bottomSheet/interviewNoticeBottomSheet";
-import ApplicationFromViewModal from "@/components/modal/club/applicationFormViewModal";
 import MobileApplicationFormViewModal from "@/components/modal/club/mobileApplicationFormViewModal";
 import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOption";
 import StatelessRangeCalendar from "@/components/calendar/statelessRangeCalendar";
 import useDebounce from "@/hooks/useDebounce";
+import ApplicationFormViewModal from "@/components/modal/club/applicationFormViewModal";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
@@ -326,7 +326,7 @@ const ApplicationStatusPage = () => {
       {/* ===== 지원서 상세보기 모달 =====*/}
       {isMdUp
         ? openApplicationId && (
-            <ApplicationFromViewModal
+            <ApplicationFormViewModal
               applyId={openApplicationId}
               onClose={() => setOpenApplicationId(null)}
               setIsModalOpen={setIsModalOpen}

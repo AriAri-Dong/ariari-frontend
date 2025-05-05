@@ -48,9 +48,6 @@ const InterviewNoticeModal = ({
     <div
       id="background"
       className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
-      onClick={(e) =>
-        (e.target as HTMLDivElement).id === "background" && handleClose()
-      }
     >
       <div
         className={`bg-white p-5 shadow-modal rounded-2xl w-[826px] max-h-[90vh] flex flex-col`}

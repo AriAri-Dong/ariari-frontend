@@ -8,7 +8,6 @@ import { APPLY_STATUS_MAP } from "@/constants/application";
 import ApplicationFields from "@/components/list/applicationFields";
 import { getProfileImage } from "@/utils/profileImage";
 import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOption";
-import { useUpdateStatusMutation } from "@/hooks/apply/useApplicationMutation";
 
 export interface ApplicationFormViewModalProps {
   applyId: string;
@@ -54,9 +53,9 @@ const ApplicationFormViewModal = ({
       id="background"
       className="fixed flex-col gap-5 inset-0 z-50 flex
       items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
-      //   onClick={(e) =>
-      //     (e.target as HTMLDivElement).id === "background" && handleClose()
-      //   }
+      onClick={(e) =>
+        (e.target as HTMLDivElement).id === "background" && handleClose()
+      }
     >
       <div
         className="absolute top-4 right-4 cursor-pointer bg-white p-2 border border-menuborder rounded-full"
