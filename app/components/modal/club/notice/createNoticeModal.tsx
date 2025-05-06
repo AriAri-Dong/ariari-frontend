@@ -9,6 +9,7 @@ import img_delete from "@/images/icon/img_delete.svg";
 import { useClubNoticeForm } from "@/hooks/club/useNoticeForm";
 
 export interface CreateNoticeModalProps {
+  modalType: "create" | "modify";
   onClose: () => void;
   onSubmit: (formData: FormData) => void;
   setAlertMessage: (message: string) => void;
@@ -17,6 +18,7 @@ export interface CreateNoticeModalProps {
 const MAX_IMAGES = 10;
 
 const CreateNoticeModal = ({
+  modalType,
   onClose,
   onSubmit,
   setAlertMessage,

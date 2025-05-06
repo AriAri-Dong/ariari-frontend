@@ -159,6 +159,7 @@ const NoticePage = () => {
         {isMdUp
           ? openNotice && (
               <CreateNoticeModal
+                modalType="create"
                 onClose={() => setOpenNotice(false)}
                 onSubmit={handleSubmitSuccess}
                 setAlertMessage={setAlertMessage}
@@ -166,6 +167,7 @@ const NoticePage = () => {
             )
           : openNotice && (
               <CreateNoticeBottomSheet
+                modalType="create"
                 onClose={() => setOpenNotice(false)}
                 onSubmit={handleSubmitSuccess}
                 setAlertMessage={setAlertMessage}
