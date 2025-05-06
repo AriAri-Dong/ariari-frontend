@@ -10,8 +10,13 @@ const nextConfig = {
   },
   output: "standalone",
   images: {
-    // domains: ["d19qg9zwo8is96.cloudfront.net"],
     remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.ariari.kr",
+        port: "",
+        pathname: "/**",
+      },
       {
         protocol: "https",
         hostname: "d19qg9zwo8is96.cloudfront.net",
@@ -56,9 +61,6 @@ const nextConfig = {
         destination: `${API_URL}/:path*`,
       },
     ];
-  },
-  images: {
-    domains: ["d19qg9zwo8is96.cloudfront.net"],
   },
 };
 
