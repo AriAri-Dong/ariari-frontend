@@ -1,3 +1,4 @@
+import { Pageable } from "@/types/api";
 import { AxiosError } from "axios";
 import {
   APPLY,
@@ -10,14 +11,18 @@ import {
 } from "../apiUrl";
 import axiosInstance from "../axiosInstance";
 
+import { StatusValue } from "@/constants/application";
+
 import { IdResponse } from "@/types/api";
 import {
   ApplyFormData,
   ApplyFormRes,
   ApplyListRes,
+  ApplyDetailRes,
   ApplySaveReq,
   ApplyTempListRes,
   ApplyTempDetailRes,
+  ApplicationListConditionReq,
 } from "@/types/application";
 
 export const getAppliedList = async (
@@ -217,5 +222,76 @@ export const putApplicationTemp = async (
       }
     }
     throw new Error("문제가 발생했습니다.");
+  }
+};
+
+// 동아리 상세 - 지원 현황 리스트
+export const getApplicationsList = async (
+  clubId: string,
+  condition: ApplicationListConditionReq,
+  page: Pageable["page"]
+) => {
+  try {
+    const res = await axiosInstance.get<ApplyListRes>(
+      `club/${clubId}/applies`,
+      {
+        params: {
+          ...condition,
+          page: page,
+          size: 10,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log("Error fetching applications list", error);
+    return {
+      applyDataList: [],
+      pageInfo: { contentSize: 0, totalSize: 0, totalPages: 0 },
+    };
+  }
+};
+
+// 지원현황 - 지원서 상세 조회
+export const getApplicationDetail = async (applyId: string) => {
+  try {
+    const res = await axiosInstance.get<ApplyDetailRes>(`/applies/${applyId}`);
+    return res.data;
+  } catch (error) {
+    console.log("Error fetching application detail");
+    throw error;
+  }
+};
+
+// 지원현황 - 지원 상태 변경(관리자)
+export type UpdateApplicationStatusParams = {
+  applications: string[];
+  type: StatusValue;
+  interviewMessage?: string;
+};
+
+const getRequestBody = (
+  type: StatusValue,
+  applications: string[],
+  interviewMessage?: string
+) => {
+  if (type === "interview") {
+    return { applyIds: applications, interviewMessage };
+  }
+  return applications;
+};
+
+export const updateApplicationStatus = async ({
+  applications,
+  type,
+  interviewMessage,
+}: UpdateApplicationStatusParams) => {
+  try {
+    const body = getRequestBody(type, applications, interviewMessage);
+    const res = await axiosInstance.post(`/applies/${type}`, body);
+    return res.data;
+  } catch (error) {
+    console.log("Failed to update application status", error);
+    throw error;
   }
 };
