@@ -12,12 +12,13 @@ import LatestRecruitment from "@/(home)/home/content/latestRecruitment";
 import { useUserStore } from "@/providers/userStoreProvider";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
 import { getMemberData } from "@/api/member/api";
+import MyClub from "./content/myClub";
 
 const HomePageContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isMdUp = useResponsive("md");
-  const { setUserData } = useUserStore((state) => state);
+  const { setUserData, isSignIn } = useUserStore((state) => state);
 
   const [authState, setAuthState] = useState({
     isFirstLogin: false,
@@ -70,6 +71,7 @@ const HomePageContent = () => {
 
   return (
     <div className="w-full">
+      {isSignIn && <MyClub />}
       <ClubRanking />
       <PopularRecruitment />
       <LatestRecruitment />

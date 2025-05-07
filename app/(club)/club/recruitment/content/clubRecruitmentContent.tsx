@@ -197,7 +197,7 @@ const ClubRecruitmentContent = () => {
       {isRecruitementGuideOpen && (
         <RecruitmentGuideForm
           onClose={() => setIsRecruitmentGuideOpen(false)}
-          onSubmit={() => router.push("/club/management/recruitment/create")}
+          onSubmit={() => router.push(`/club/management/recruitment/create?clubId=${clubId}`)}
         />
       )}
 
