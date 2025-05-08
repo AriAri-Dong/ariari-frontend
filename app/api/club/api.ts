@@ -18,6 +18,7 @@ import {
   CreateClubData,
 } from "@/types/api";
 import axios, { AxiosError } from "axios";
+import { MyClubListRes } from "@/types/club";
 
 // 동아리 수정
 export const updateClubInfo = async (clubId: number) => {
@@ -370,5 +371,20 @@ export const deleteClub = async (clubId: string) => {
     return response.status;
   } catch (error) {
     throw error;
+  }
+};
+
+// 내 동아리 조회
+export const getMyClubList = async () => {
+  try {
+    const response = await axiosInstance.get<MyClubListRes>(CLUBS_MY);
+    return response.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
   }
 };

@@ -31,7 +31,7 @@ type XButtonModalProps = {
 
 type NotiPopUpProps = {
   onClose: () => void;
-  icon:
+  icon?:
     | "school"
     | "point"
     | "login"
@@ -51,7 +51,10 @@ type NotiPopUpProps = {
 const NotiPopUp = (props: NotiPopUpProps) => {
   const { onClose, icon, title, description, modalType } = props;
 
-  const iconMap: Record<NotiPopUpProps["icon"], StaticImageData> = {
+  const iconMap: Record<
+    NonNullable<NotiPopUpProps["icon"]>,
+    StaticImageData
+  > = {
     school: schoolIcon,
     point: pointIcon,
     login: loginIcon,
@@ -75,14 +78,15 @@ const NotiPopUp = (props: NotiPopUpProps) => {
       <div className="absolute inset-0" onClick={onClose}></div>
 
       <div className="relative w-[306px] p-5 pt-[52px] bg-white rounded-2xl md:w-[430px] md:pt-[72px] md:pb-[26px] md:px-5">
-        <div className="flex justify-center mb-8 md:mb-[46px]">
-          <Image
-            src={iconMap[icon]}
-            alt={icon}
-            className="w-[96px] h-[96px] md:w-[124px] md:h-[124px]"
-          />
-        </div>
-
+        {icon && iconMap[icon] && (
+          <div className="flex justify-center mb-8 md:mb-[46px]">
+            <Image
+              src={iconMap[icon]}
+              alt={icon}
+              className="w-[96px] h-[96px] md:w-[124px] md:h-[124px]"
+            />
+          </div>
+        )}
         <div className="text-center">
           <h2 className="mb-[12px] text-mobile_h1_contents_title text-text1 md:text-h1_contents_title">
             {title}

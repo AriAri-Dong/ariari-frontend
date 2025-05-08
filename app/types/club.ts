@@ -132,3 +132,15 @@ export interface ClubDetailRes {
   clubData: ClubData;
   clubMemberData: ClubMemberData;
 }
+
+export interface MyClubData {
+  id: string;
+  name: string;
+  profileUri: string;
+  clubNoticeCreatedDt: string | null;
+  clubActivityCreatedDt: string | null;
+}
+
+export interface MyClubListRes {
+  myClubDataList: MyClubData[];
+}
