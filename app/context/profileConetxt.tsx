@@ -4,6 +4,7 @@ import { profileType } from "@/types/member";
 import React, { createContext, useContext, useState } from "react";
 
 export interface ProfileData {
+  agreements: boolean;
   username: string;
   selectedProfileType: profileType;
   email: string;
@@ -23,6 +24,7 @@ export const ProfileProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [profileData, setProfileData] = useState<ProfileData>({
+    agreements: false,
     username: "",
     selectedProfileType: null,
     email: "",

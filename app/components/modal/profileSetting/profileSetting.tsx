@@ -12,6 +12,7 @@ import { formatTime } from "@/utils/timeFormatter";
 import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
 import { updateNickname, updateProfileType } from "@/api/member/api"; // 닉네임과 프로필 변경 API
 import { ProfileData } from "@/context/profileConetxt"; // ProfileData 타입 import
+import Step0 from "./step0";
 
 interface ProfileSettingProps {
   step: number;
@@ -20,7 +21,7 @@ interface ProfileSettingProps {
 
 /**
  *
- * @param step 단계 (1-4)
+ * @param step 단계 (0-4)
  * @param onNextStep 특정 step으로 넘어가는 함수
  * @returns
  */
@@ -66,6 +67,13 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
 
   const handleNextStep = async () => {
     setAlertMessage(null);
+
+    if (step === 0) {
+      if (!profileData.agreements) {
+        setAlertMessage("모든 약관에 동의해주세요.");
+        return;
+      }
+    }
 
     if (step === 1) {
       // 1단계: 사용자 이름 유효성 검사
@@ -146,8 +154,13 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
   return (
     <div className="relative w-[430px] px-5 pb-9 pt-[26px] bg-background rounded-2xl">
       <h1 className="text-text1 text-h1_contents_title mb-8 text-center">
-        {step === 1 ? "프로필 생성" : "학교 등록"}
+        {step === 0
+          ? "이용약관 동의"
+          : step === 1
+          ? "프로필 생성"
+          : "학교 등록"}
       </h1>
+      {step === 0 && <Step0 />}
       {step === 1 && <Step1 />}
       {step === 2 && <Step2 />}
       {step === 3 && (
@@ -158,12 +171,15 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
           title={step === 3 ? `학교 인증하기 ${formatTime(timeLeft)}` : "다음"}
           onClick={handleNextStep}
         />
-        <button
-          onClick={handleSkip}
-          className="text-primary text-body1_sb py-2.5"
-        >
-          건너뛰기
-        </button>
+        {step === 2 ||
+          (step === 3 && (
+            <button
+              onClick={handleSkip}
+              className="text-primary text-body1_sb py-2.5"
+            >
+              건너뛰기
+            </button>
+          ))}
       </div>
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />

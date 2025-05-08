@@ -9,7 +9,7 @@ interface ProfileSettingProps {
 }
 
 const MobileProfileSettingModal = ({ onClose }: ProfileSettingProps) => {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(0);
 
   const handleNextStep = (nextStep: number) => {
     setStep(nextStep);
