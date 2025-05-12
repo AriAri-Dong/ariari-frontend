@@ -29,6 +29,7 @@ const TextInputWithBtn: React.FC<TextInputWithBtnProps> = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          {...(maxLength ? { maxLength } : {})}
         />
         {maxLength && (
           <div className="absolute right-4 top-1/2 -translate-y-1/2 text-unselected text-mobile_body1_r md:right-[22px]">
