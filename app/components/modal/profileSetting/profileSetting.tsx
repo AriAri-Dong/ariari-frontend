@@ -10,8 +10,7 @@ import { useProfileContext } from "@/context/profileConetxt";
 import { validateEmail } from "@/schema/email";
 import { formatTime } from "@/utils/timeFormatter";
 import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
-import { updateNickname, updateProfileType } from "@/api/member/api"; // 닉네임과 프로필 변경 API
-import { ProfileData } from "@/context/profileConetxt"; // ProfileData 타입 import
+import { updateNickname, updateProfileType } from "@/api/member/api";
 
 interface ProfileSettingProps {
   step: number;
