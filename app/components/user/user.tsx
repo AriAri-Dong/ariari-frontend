@@ -79,10 +79,12 @@ const User = () => {
 
           {/* 유저 드롭다운 메뉴 (활성화 시 표시) */}
           {isDropdownOpen && (
-            <UserDropdown
-              optionData={USER_MENU}
-              onClose={() => setIsDropdownOpen(false)}
-            />
+            <div className="absolute left-1/2 top-[60px] transform -translate-x-1/2 z-50">
+              <UserDropdown
+                optionData={USER_MENU}
+                onClose={() => setIsDropdownOpen(false)}
+              />
+            </div>
           )}
         </div>
       ) : (

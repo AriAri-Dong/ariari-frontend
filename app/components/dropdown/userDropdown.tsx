@@ -40,7 +40,7 @@ const UserDropdown = ({ optionData, onClose }: MenuProps) => {
   };
 
   return (
-    <div className="z-50 absolute top-full left-7 w-[180px] mt-2 bg-background rounded-lg border border-menuborder shadow-default">
+    <div className="w-[180px] bg-background rounded-lg border border-menuborder shadow-default z-50">
       {optionData.map((item, index) => (
         <div
           key={item.id}
