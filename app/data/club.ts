@@ -427,7 +427,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
       {
         id: 1,
         label: "모집공고",
-        url: "/club/management/recruitment/announcement",
+        url: "/club/recruitment",
       },
       {
         id: 2,

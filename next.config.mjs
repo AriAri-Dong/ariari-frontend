@@ -24,6 +24,16 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "http",
+        hostname: "cdn.ariari.kr",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.ariari.kr",
+        pathname: "/**",
+      },
     ],
   },
 
@@ -56,9 +66,6 @@ const nextConfig = {
         destination: `${API_URL}/:path*`,
       },
     ];
-  },
-  images: {
-    domains: ["d19qg9zwo8is96.cloudfront.net"],
   },
 };
 

@@ -15,6 +15,7 @@
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "framer-motion": "^12.6.3",
+    "lodash": "^4.17.21",
     "lottie-react": "^2.4.1",
     "next": "^14.2.21",
     "react": "^18",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
     "@tanstack/react-query-devtools": "^5.66.11",
+    "@types/lodash": "^4.17.16",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

@@ -4,6 +4,7 @@ import { PageInfo } from "./pageInfo";
 import { RecruitmentData } from "./recruitment";
 
 export type ApplyStatusType = "PENDENCY" | "APPROVE" | "REFUSAL" | "INTERVIEW";
+export type ApplyStatusText = "대기중" | "합격" | "불합격" | "면접중";
 
 export interface ApplyData {
   id: string;
@@ -115,4 +116,28 @@ export interface ApplyTempDetailRes {
   fileUri: string;
   portfolioUrl: string;
   specialAnswerList: SpecialQuestionList;
+}
+
+export interface ApplicationListConditionReq {
+  isPendent: boolean;
+  query?: string;
+  startDateTime?: string;
+  endDateTime?: string;
+}
+
+export interface ApplyAnswerData {
+  body: string;
+  applyQuestionData: {
+    id: string;
+    body: string;
+  };
+}
+
+// 추가 예정
+export interface ApplyDetailRes {
+  applyData: ApplyData;
+  applyAnswerDataList: ApplyAnswerData[];
+  specialAnswerList: Record<ApplicationKeys, string | null>;
+  fileUri?: string;
+  portfolioUrl?: string;
 }
