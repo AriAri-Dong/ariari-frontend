@@ -24,6 +24,16 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "http",
+        hostname: "cdn.ariari.kr",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.ariari.kr",
+        pathname: "/**",
+      },
     ],
   },
 
@@ -49,17 +59,14 @@ const nextConfig = {
 
     return config;
   },
-  async rewrites() {
-    return [
-      {
-        source: "/:path*",
-        destination: `${API_URL}/:path*`,
-      },
-    ];
-  },
-  images: {
-    domains: ["d19qg9zwo8is96.cloudfront.net"],
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/api/v1:path*",
+  //       destination: `${API_URL}:path*`,
+  //     },
+  //   ];
+  // },
 };
 
 export default nextConfig;
