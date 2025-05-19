@@ -1,6 +1,6 @@
 import axios from "axios";
 import { refreshAccessToken } from "./login/api";
-import { authStore } from "@/stores/userStore";
+import { useAuthStore } from "@/stores/authStore";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -10,43 +10,46 @@ const axiosInstance = axios.create({
   },
 });
 
-// 요청 인터셉터 (모든 요청에 accessToken 자동 추가)
+// 요청 인터셉터
 axiosInstance.interceptors.request.use((config) => {
-  const { accessToken } = authStore.getState();
+  const { accessToken } = useAuthStore.getState();
   if (accessToken) {
     config.headers["Authorization"] = `${accessToken}`;
   }
   return config;
 });
 
-// 응답 인터셉터 (401 처리)
+// 응답 인터셉터
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    if (
-      !error.response ||
-      (error.response.status === 401 && !originalRequest._retry)
-    ) {
+    // accessToken 재발급 로직
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
         const newAccessToken = await refreshAccessToken();
         if (!newAccessToken) throw new Error("토큰 재발급 실패");
 
-        // Zustand 상태 업데이트
-        authStore.getState().setAccessToken(newAccessToken);
+        // 기존 refreshToken 재사용
+        const { refreshToken } = useAuthStore.getState();
 
-        // axios 기본 헤더 업데이트
-        axiosInstance.defaults.headers.common["Authorization"] = newAccessToken;
+        // setAuth로 토큰 갱신
+        useAuthStore.getState().setAuth({
+          accessToken: newAccessToken,
+          refreshToken: refreshToken!,
+          oauthSignUpKey: null,
+        });
 
-        // 기존 요청 헤더 업데이트
+        // 재요청 Authorization 설정
         originalRequest.headers["Authorization"] = `${newAccessToken}`;
+
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         console.error("RefreshToken 만료됨. 로그아웃 처리.");
-        authStore.getState().signOut();
+        useAuthStore.getState().logout();
         window.location.href = "/";
         return Promise.reject(refreshError);
       }
