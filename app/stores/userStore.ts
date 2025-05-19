@@ -8,7 +8,6 @@ export type UserState = {
   refreshToken: string;
   id: string;
   isSignIn: boolean;
-  isFirstLogin: boolean;
   memberData: {
     memberId: string;
     nickname: string;
@@ -20,15 +19,9 @@ export type UserState = {
 };
 
 export type UserActions = {
-  signIn: ({
-    accessToken,
-    refreshToken,
-    isFirstLogin,
-    isSignIn,
-  }: {
+  signIn: (data: {
     accessToken: string;
     refreshToken: string;
-    isFirstLogin: boolean;
     isSignIn: boolean;
   }) => void;
   signOut: () => void;
@@ -43,7 +36,6 @@ export const defaultInitState: UserState = {
   refreshToken: "",
   id: "",
   isSignIn: false,
-  isFirstLogin: false,
   memberData: {
     memberId: "",
     nickname: "",
@@ -56,16 +48,16 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
   return createStore<UserStore>()(
     devtools(
       persist(
-        (set, get) => ({
+        (set) => ({
           ...initState,
-          signIn: ({ accessToken, refreshToken, isFirstLogin, isSignIn }) =>
-            set((state) => ({
-              ...state,
+
+          signIn: ({ accessToken, refreshToken, isSignIn }) =>
+            set(() => ({
               accessToken,
               refreshToken,
-              isFirstLogin,
               isSignIn,
             })),
+
           signOut: () =>
             set(() => {
               localStorage.removeItem("ariari-storage");
@@ -74,6 +66,7 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
 
               return defaultInitState;
             }),
+
           setUserData: (userData) =>
             set((state) => ({
               ...state,
