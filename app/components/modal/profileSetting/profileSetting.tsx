@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Step0 from "./step0";
 import Step1 from "./step1";
 import Step2 from "./step2";
 import Step3 from "./step3";
@@ -10,9 +11,10 @@ import { useProfileContext } from "@/context/profileConetxt";
 import { validateEmail } from "@/schema/email";
 import { formatTime } from "@/utils/timeFormatter";
 import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
-import { updateNickname, updateProfileType } from "@/api/member/api"; // 닉네임과 프로필 변경 API
-import { ProfileData } from "@/context/profileConetxt"; // ProfileData 타입 import
-import Step0 from "./step0";
+import { updateNickname, updateProfileType } from "@/api/member/api";
+import { useRouter } from "next/navigation";
+import { signUpWithKey } from "@/api/login/api";
+import { useAuthStore } from "@/stores/authStore";
 
 interface ProfileSettingProps {
   step: number;
@@ -26,6 +28,8 @@ interface ProfileSettingProps {
  * @returns
  */
 const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
+  const router = useRouter();
+  const { oauthSignUpKey, setAuth } = useAuthStore();
   const { profileData } = useProfileContext();
 
   const [timeLeft, setTimeLeft] = useState<number>(300); // 인증 시간 (5분)
@@ -96,35 +100,34 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
         return;
       }
 
-      // 이메일 검증 통과 후 3단계로 넘어감
-      resetTimer();
-      onNextStep(3);
+      // 이메일 형식 확인 + 타이머
+      try {
+        await resetTimer();
+        onNextStep(3);
+      } catch (error) {
+        setAlertMessage("인증 메일 발송에 실패했습니다. 다시 시도해주세요.");
+      }
     } else if (step === 3) {
       const isValid = await validateCurrentStep();
-      if (!isValid) {
-        return;
-      }
+      if (!isValid) return;
 
-      // 닉네임과 프로필 변경 API 호출
       try {
-        // 프로필 타입이 null이면 처리하지 않고 오류 메시지를 띄움
-        if (!profileData.selectedProfileType) {
-          setAlertMessage("프로필을 선택해주세요.");
-          return; // 프로필 타입이 null인 경우에는 다음 단계로 넘어가지 않도록 함
+        if (!oauthSignUpKey) {
+          setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
+          return;
         }
+        // 회원가입
+        const res = await signUpWithKey(oauthSignUpKey);
+        console.log("회원가입 중....");
+        setAuth({
+          accessToken: res.accessToken,
+          refreshToken: res.refreshToken,
+          oauthSignUpKey: null,
+        });
 
-        // 1. 닉네임 변경 API
-        await updateNickname(profileData.username);
-
-        // 2. 프로필 변경 API
-        await updateProfileType(profileData.selectedProfileType);
-
-        // 3. 모든 API 호출 성공 후 4단계로 진행
         onNextStep(4);
       } catch (error) {
-        setAlertMessage(
-          "닉네임 또는 프로필 변경에 실패했습니다. 다시 시도해주세요."
-        );
+        setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
       }
     } else {
       onNextStep(step + 1);
@@ -147,8 +150,25 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
     }
   }, [step]);
 
-  const handleSkip = () => {
-    onNextStep(4);
+  const handleSkip = async () => {
+    if (!oauthSignUpKey) {
+      setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
+      return;
+    }
+
+    try {
+      const res = await signUpWithKey(oauthSignUpKey);
+
+      setAuth({
+        accessToken: res.accessToken,
+        refreshToken: res.refreshToken,
+        oauthSignUpKey: null,
+      });
+
+      onNextStep(4);
+    } catch (error) {
+      setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   return (
