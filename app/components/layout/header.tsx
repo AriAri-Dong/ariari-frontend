@@ -3,6 +3,7 @@
 import React, { useContext, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+
 import logo from "@/images/logo/logo.svg";
 import SearchInput from "../input/searchInput";
 import SearchTermContext from "@/context/searchTermContext";
@@ -11,15 +12,17 @@ import User from "../user/user";
 import HeaderTab from "../tab/headerTab";
 import SmallBtn from "../button/basicBtn/smallBtn";
 import MobileUser from "../user/mobileUser";
-import { useUserStore } from "@/providers/userStoreProvider";
+
 import { getMemberData } from "@/api/member/api";
+import { useUserStore } from "@/providers/userStoreProvider";
+import { useAuthStore } from "@/stores/authStore";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
-
   const { setSearchTerm } = useContext(SearchTermContext);
-  const { signIn, setUserData } = useUserStore((state) => state);
+  const { setUserData } = useUserStore((state) => state);
+  const { accessToken } = useAuthStore();
 
   const handleHomeClick = () => {
     router.push("/");
@@ -55,8 +58,6 @@ const Header = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const accessToken = sessionStorage.getItem("accessToken");
-
       if (!accessToken || accessToken.trim() === "" || accessToken === "null") {
         console.log("비로그인 상태 → 사용자 정보 요청 생략");
         localStorage.removeItem("ariari-storage");
@@ -75,7 +76,7 @@ const Header = () => {
     };
 
     fetchUserData();
-  }, [setUserData]);
+  }, [accessToken, setUserData]);
 
   return (
     <header
