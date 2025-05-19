@@ -1,21 +1,23 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import close from "@/images/icon/close.svg";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import CustomInput from "@/components/input/customInput";
-import { CreateNoticeModalProps } from "@/components/modal/club/notice/createNoticeModal";
 import RoundPlusBtn from "@/components/button/iconBtn/roundPlusBtn";
 import img_delete from "@/images/icon/img_delete.svg";
 import RadioBtn from "@/components/button/radioBtn";
 import { useClubNoticeForm } from "@/hooks/club/useNoticeForm";
+import { ClubNoticeFormModalProps } from "@/components/modal/club/notice/clubNoticeFormModal";
 
 const MAX_IMAGES = 10;
 
-const CreateNoticeBottomSheet = ({
+const ClubNoticeFormBottomsheet = ({
+  modalType,
   onClose,
   onSubmit,
   setAlertMessage,
-}: CreateNoticeModalProps) => {
+  initialValues,
+}: ClubNoticeFormModalProps) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const {
@@ -26,12 +28,18 @@ const CreateNoticeBottomSheet = ({
     setBody,
     setIsFixed,
     fileInputRef,
+    existingImages,
     uploadedImages,
     handleFileChange,
     handleImageDelete,
     triggerFileInput,
     handleSubmit,
-  } = useClubNoticeForm({ onSubmit, setAlertMessage });
+  } = useClubNoticeForm({
+    modalType,
+    onSubmit,
+    setAlertMessage,
+    initialValues,
+  });
 
   useEffect(() => {
     setIsVisible(true);
@@ -94,11 +102,30 @@ const CreateNoticeBottomSheet = ({
             </p>
           </div>
           <div className="flex flex-wrap gap-2 items-center">
+            {/* 기존 이미지 */}
+            {existingImages.map((image, idx) => (
+              <div key={image.id} className="relative">
+                <Image
+                  src={image.imageUri}
+                  alt={`existing-${image.id}`}
+                  width={100}
+                  height={100}
+                  className="rounded-lg object-cover w-[100px] h-[100px]"
+                />
+                <button
+                  onClick={() => handleImageDelete(idx, true)}
+                  className="absolute top-0 right-0 translate-x-1/5 translate-y-1/5 mr-2 mt-2"
+                >
+                  <Image src={img_delete} alt="삭제" width={20} height={20} />
+                </button>
+              </div>
+            ))}
+            {/* 새 업로드 이미지 */}
             {uploadedImages.map((image, index) => (
-              <div key={index} className="relative">
+              <div key={image} className="relative">
                 <Image
                   src={image}
-                  alt={`Uploaded ${index}`}
+                  alt={`upload-${index}`}
                   width={96}
                   height={96}
                   className="rounded-lg object-cover w-[96px] h-[96px]"
@@ -160,4 +187,4 @@ const CreateNoticeBottomSheet = ({
   );
 };
 
-export default CreateNoticeBottomSheet;
+export default ClubNoticeFormBottomsheet;

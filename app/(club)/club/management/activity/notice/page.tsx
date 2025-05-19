@@ -13,14 +13,14 @@ import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import ClubNoticeHeader from "./components/clubNoticeHeader";
 import ClubNoticeDropdown from "@/components/dropdown/clubNoticeDropdown";
 import pin from "@/images/icon/pin.svg";
-import CreateNoticeModal from "@/components/modal/club/notice/createNoticeModal";
-import CreateNoticeBottomSheet from "@/components/bottomSheet/notice/createNoticeBottomsheet";
 import { useClubContext } from "@/context/ClubContext";
 import {
   useClubNoticeQuery,
   useClubPinnedNoticeQuery,
 } from "@/hooks/club/useClubNoticeQuery";
 import { useClubNoticeMutation } from "@/hooks/club/useClubNoticeMutation";
+import ClubNoticeFormModal from "@/components/modal/club/notice/clubNoticeFormModal";
+import ClubNoticeFormBottomsheet from "@/components/bottomSheet/notice/clubNoticeFormBottomSheet";
 
 const NoticePage = () => {
   const isMdUp = useResponsive("md");
@@ -58,9 +58,17 @@ const NoticePage = () => {
     setOpenNotice(true);
   };
 
-  const handleSubmitSuccess = (formData: FormData) => {
+  // 새 공지 등록
+  const handleAddNotice = (
+    payload: {
+      title: string;
+      body: string;
+      isFixed: boolean;
+    },
+    uploadedImages: string[]
+  ) => {
     addNotice.mutate(
-      { clubId, formData },
+      { clubId, payload, uploadedImages },
       {
         onSuccess: () => {
           setAlertMessage("공지사항이 등록되었습니다.");
@@ -158,18 +166,18 @@ const NoticePage = () => {
         </div>
         {isMdUp
           ? openNotice && (
-              <CreateNoticeModal
+              <ClubNoticeFormModal
                 modalType="create"
                 onClose={() => setOpenNotice(false)}
-                onSubmit={handleSubmitSuccess}
+                onSubmit={handleAddNotice}
                 setAlertMessage={setAlertMessage}
               />
             )
           : openNotice && (
-              <CreateNoticeBottomSheet
+              <ClubNoticeFormBottomsheet
                 modalType="create"
                 onClose={() => setOpenNotice(false)}
-                onSubmit={handleSubmitSuccess}
+                onSubmit={handleAddNotice}
                 setAlertMessage={setAlertMessage}
               />
             )}

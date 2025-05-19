@@ -1,22 +1,48 @@
-import { formatBase64ToFile } from "@/utils/formatBase64ToFile";
+import { ClubNoticeImageData } from "@/types/club";
 import { useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export const MAX_IMAGES = 10;
 const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 interface useClubNoticeFormProps {
-  onSubmit: (formData: FormData) => void;
+  modalType: "create" | "modify";
+  onSubmit: (
+    payload: {
+      title: string;
+      body: string;
+      isFixed: boolean;
+      deletedImageIds?: string[];
+    },
+    uploadedImages: string[]
+  ) => void;
   setAlertMessage: (message: string) => void;
+  initialValues?: {
+    title: string;
+    body: string;
+    isFixed: boolean;
+    images?: ClubNoticeImageData[];
+  };
 }
 export const useClubNoticeForm = ({
+  modalType,
   onSubmit,
   setAlertMessage,
+  initialValues,
 }: useClubNoticeFormProps) => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") || "";
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [title, setTitle] = useState<string>("");
-  const [body, setBody] = useState<string>("");
-  const [isFixed, setIsFixed] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>(initialValues?.title ?? "");
+  const [body, setBody] = useState<string>(initialValues?.body ?? "");
+  const [isFixed, setIsFixed] = useState<boolean>(
+    initialValues?.isFixed ?? false
+  );
+  const [existingImages, setExistingImages] = useState<ClubNoticeImageData[]>(
+    initialValues?.images ?? []
+  );
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
 
   const validateForm = () => {
@@ -31,8 +57,12 @@ export const useClubNoticeForm = ({
     return true;
   };
 
-  const handleImageDelete = (index: number) => {
-    setUploadedImages((prev) => prev.filter((_, i) => i !== index));
+  const handleImageDelete = (id: string, isExisting?: boolean) => {
+    if (isExisting) {
+      setExistingImages((prev) => prev.filter((image) => image.id !== id));
+    } else {
+      setUploadedImages((prev) => prev.filter((image_id) => image_id !== id));
+    }
   };
 
   const triggerFileInput = () => {
@@ -74,20 +104,24 @@ export const useClubNoticeForm = ({
     }
   };
 
-  // 공지사항 등록
+  // 공지사항 등록/수정
   const handleSubmit = () => {
-    if (validateForm()) {
-      const formData = new FormData();
+    if (!validateForm()) return;
 
-      formData.append("saveReq", JSON.stringify({ title, body, isFixed }));
-      uploadedImages.forEach((image, idx) => {
-        const fileName = `club-notice-${idx}`;
-        const file = formatBase64ToFile(image, fileName);
-        if (file) {
-          formData.append("files", file);
-        }
-      });
-      onSubmit(formData);
+    // 등록
+    if (modalType === "create") {
+      onSubmit({ title, body, isFixed }, uploadedImages);
+    }
+    // 수정
+    else {
+      const deletedImageIds = (initialValues?.images ?? [])
+        .filter(
+          (initialImage) =>
+            !existingImages.some((curImage) => curImage.id === initialImage.id)
+        )
+        .map((image) => image.id);
+
+      onSubmit({ title, body, isFixed, deletedImageIds }, uploadedImages);
     }
   };
 
@@ -98,6 +132,7 @@ export const useClubNoticeForm = ({
     setBody,
     isFixed,
     setIsFixed,
+    existingImages,
     uploadedImages,
     fileInputRef,
     handleImageDelete,

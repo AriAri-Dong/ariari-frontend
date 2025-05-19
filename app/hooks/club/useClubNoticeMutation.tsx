@@ -1,6 +1,6 @@
 import {
   addClubNotice,
-  AddClubNoticeParams,
+  updateClubNotice,
   deleteClubNotice,
 } from "@/api/club/notice/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -17,13 +17,27 @@ export const useClubNoticeMutation = ({ clubId }: { clubId: string }) => {
 
   // 공지사항 등록
   const addNotice = useMutation({
-    mutationFn: ({ formData }: AddClubNoticeParams) =>
-      addClubNotice({ clubId, formData }),
+    mutationFn: addClubNotice,
     onSuccess: () => {
       invalidateNoticeQueries(clubId);
     },
     onError: (error) => {
       console.log("add new club notice error", error);
+    },
+  });
+
+  // 공지사항 수정
+  const updateNotice = useMutation({
+    mutationFn: updateClubNotice,
+    onSuccess: (_, variables) => {
+      const { clubNoticeId } = variables;
+      invalidateNoticeQueries(clubId);
+      queryClient.invalidateQueries({
+        queryKey: ["club-notice", clubNoticeId],
+      });
+    },
+    onError: (error) => {
+      console.log("update club notice error", error);
     },
   });
 
@@ -39,7 +53,5 @@ export const useClubNoticeMutation = ({ clubId }: { clubId: string }) => {
     },
   });
 
-  return { addNotice, deleteNotice };
+  return { addNotice, updateNotice, deleteNotice };
 };
-
-// 동아리 공지사항 삭제

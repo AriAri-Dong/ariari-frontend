@@ -7,22 +7,38 @@ import RadioBtn from "@/components/button/radioBtn";
 import RoundPlusBtn from "@/components/button/iconBtn/roundPlusBtn";
 import img_delete from "@/images/icon/img_delete.svg";
 import { useClubNoticeForm } from "@/hooks/club/useNoticeForm";
+import { ClubNoticeImageData } from "@/types/club";
 
-export interface CreateNoticeModalProps {
+export interface ClubNoticeFormModalProps {
   modalType: "create" | "modify";
   onClose: () => void;
-  onSubmit: (formData: FormData) => void;
+  onSubmit: (
+    payload: {
+      title: string;
+      body: string;
+      isFixed: boolean;
+      deletedImageIds?: string[];
+    },
+    uploadImages: string[]
+  ) => void;
   setAlertMessage: (message: string) => void;
+  initialValues?: {
+    title: string;
+    body: string;
+    isFixed: boolean;
+    images?: ClubNoticeImageData[];
+  };
 }
 
 const MAX_IMAGES = 10;
 
-const CreateNoticeModal = ({
+const ClubNoticeFormModal = ({
   modalType,
   onClose,
   onSubmit,
   setAlertMessage,
-}: CreateNoticeModalProps) => {
+  initialValues,
+}: ClubNoticeFormModalProps) => {
   const {
     title,
     body,
@@ -31,13 +47,18 @@ const CreateNoticeModal = ({
     setBody,
     setIsFixed,
     fileInputRef,
+    existingImages,
     uploadedImages,
     handleFileChange,
     handleImageDelete,
     triggerFileInput,
     handleSubmit,
-  } = useClubNoticeForm({ onSubmit, setAlertMessage });
-
+  } = useClubNoticeForm({
+    modalType,
+    onSubmit,
+    setAlertMessage,
+    initialValues,
+  });
   // 스크롤 금지
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -97,24 +118,44 @@ const CreateNoticeModal = ({
           </div>
 
           <div className="flex flex-wrap gap-2 items-center">
-            {uploadedImages.map((image, index) => (
-              <div key={index} className="relative">
+            {/* 기존 이미지 */}
+            {existingImages.map((image, idx) => (
+              <div key={image.id} className="relative">
                 <Image
-                  src={image}
-                  alt={`Uploaded ${index}`}
+                  src={image.imageUri}
+                  alt={`existing-${image.id}`}
                   width={100}
                   height={100}
                   className="rounded-lg object-cover w-[100px] h-[100px]"
                 />
                 <button
-                  onClick={() => handleImageDelete(index)}
+                  onClick={() => handleImageDelete(image.id, true)}
                   className="absolute top-0 right-0 translate-x-1/5 translate-y-1/5 mr-2 mt-2"
                 >
                   <Image src={img_delete} alt="삭제" width={20} height={20} />
                 </button>
               </div>
             ))}
-
+            {/* 새 업로드 이미지 */}
+            {uploadedImages.map((image, index) => {
+              return (
+                <div key={image} className="relative">
+                  <Image
+                    src={image}
+                    alt={`upload-${index}`}
+                    width={100}
+                    height={100}
+                    className="rounded-lg object-cover w-[100px] h-[100px]"
+                  />
+                  <button
+                    onClick={() => handleImageDelete(image)}
+                    className="absolute top-0 right-0 translate-x-1/5 translate-y-1/5 mr-2 mt-2"
+                  >
+                    <Image src={img_delete} alt="삭제" width={20} height={20} />
+                  </button>
+                </div>
+              );
+            })}
             {uploadedImages.length < MAX_IMAGES && (
               <label className="flex w-[100px] h-[100px] justify-center items-center">
                 <input
@@ -160,4 +201,4 @@ const CreateNoticeModal = ({
   );
 };
 
-export default CreateNoticeModal;
+export default ClubNoticeFormModal;

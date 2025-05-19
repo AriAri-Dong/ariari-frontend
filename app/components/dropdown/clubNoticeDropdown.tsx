@@ -22,8 +22,8 @@ import { useClubNoticeDetail } from "@/hooks/club/useClubNoticeQuery";
 import defaultImgBg from "@/images/defaultAriariBg.svg";
 import { useClubNoticeMutation } from "@/hooks/club/useClubNoticeMutation";
 import { useSearchParams } from "next/navigation";
-import CreateNoticeModal from "../modal/club/notice/createNoticeModal";
-import CreateNoticeBottomSheet from "../bottomSheet/notice/createNoticeBottomsheet";
+import CreateNoticeModal from "../modal/club/notice/clubNoticeFormModal";
+import CreateNoticeBottomSheet from "../bottomSheet/notice/clubNoticeFormBottomSheet";
 
 const OPTION = [
   { id: 1, label: "수정하기" },
@@ -68,8 +68,9 @@ const ClubNoticeDropdown = ({
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const { noticeDetail, isLoading, isError, error } = useClubNoticeDetail(
     notice.id,
-    { enabled: !!isOpen }
+    { enabled: isOpen || modifyOpen }
   );
+  const { updateNotice } = useClubNoticeMutation({ clubId });
   const { deleteNotice } = useClubNoticeMutation({ clubId });
 
   const handleVectorClick = useCallback(() => {
@@ -118,6 +119,27 @@ const ClubNoticeDropdown = ({
       }
     );
     setIsNotiPopUpOpen(false);
+  };
+
+  // 공지사항 수정
+  const handleSubmit = (
+    payload: {
+      title: string;
+      body: string;
+      isFixed: boolean;
+      deletedImageIds: string[];
+    },
+    uploadedImages: string[]
+  ) => {
+    updateNotice.mutate(
+      { clubNoticeId: notice.id, payload, uploadedImages },
+      {
+        onSuccess: () => {
+          setAlertMessage("공지사항이 수정되었습니다.");
+          setModifyOpen(false);
+        },
+      }
+    );
   };
 
   const noticeImgCount = noticeDetail?.clubNoticeImageDataList.length ?? 0;
@@ -276,9 +298,6 @@ const ClubNoticeDropdown = ({
                 {notice.body}
               </h1>
               <div className="flex justify-between items-center">
-                {/* <p className="text-unselected text-mobile_body2_m md:text-body2_m">
-                  {notice.userName}
-                </p> */}
                 {role === "MEMBER" && (
                   <IconBtn
                     type={"declaration"}
@@ -369,21 +388,36 @@ const ClubNoticeDropdown = ({
           secondButtonText="취소하기"
         />
       )}
-      {isMdUp
-        ? modifyOpen && (
-            <CreateNoticeModal
-              onClose={() => setModifyOpen(false)}
-              onSubmit={() => {}}
-              setAlertMessage={setAlertMessage}
-            />
-          )
-        : modifyOpen && (
-            <CreateNoticeBottomSheet
-              onClose={() => setModifyOpen(false)}
-              onSubmit={() => {}}
-              setAlertMessage={setAlertMessage}
-            />
-          )}
+      {modifyOpen &&
+        noticeDetail &&
+        (isMdUp ? (
+          <CreateNoticeModal
+            modalType="modify"
+            onClose={() => setModifyOpen(false)}
+            onSubmit={handleSubmit}
+            setAlertMessage={setAlertMessage}
+            initialValues={{
+              title: notice.title,
+              body: notice.body,
+              isFixed: notice.isFixed,
+              images: noticeDetail?.clubNoticeImageDataList,
+            }}
+          />
+        ) : (
+          <CreateNoticeBottomSheet
+            modalType="modify"
+            onClose={() => setModifyOpen(false)}
+            onSubmit={handleSubmit}
+            setAlertMessage={setAlertMessage}
+            initialValues={{
+              title: notice.title,
+              body: notice.body,
+              isFixed: notice.isFixed,
+              images: noticeDetail?.clubNoticeImageDataList,
+            }}
+          />
+        ))}
+
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
