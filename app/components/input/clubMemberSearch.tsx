@@ -6,6 +6,7 @@ import noimage from "@/images/test/test.svg";
 import searchIcon from "@/images/icon/search.svg";
 
 import { profileImageMap } from "@/utils/mappingProfile";
+import useDebounce from "@/hooks/useDebounce";
 
 const CONTENT_SIZE = 10;
 
@@ -31,9 +32,10 @@ const ClubMemberSearch = ({
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   useEffect(() => {
-    if (searchTerm.trim() === "") {
+    if (debouncedSearchTerm.trim() === "") {
       setMembers([]);
       setPage(0);
       setHasMore(true);
@@ -42,7 +44,7 @@ const ClubMemberSearch = ({
 
     setLoading(true);
     // 동아리 회원 검색
-    getClubMembers(clubId, undefined, searchTerm, page, CONTENT_SIZE)
+    getClubMembers(clubId, undefined, debouncedSearchTerm, page, CONTENT_SIZE)
       .then((res) => {
         if (res) {
           const newMembers = res.clubMemberDataList;
@@ -54,7 +56,7 @@ const ClubMemberSearch = ({
         }
       })
       .finally(() => setLoading(false));
-  }, [clubId, searchTerm, page]);
+  }, [clubId, debouncedSearchTerm, page]);
 
   // 멤버 목록 무한 스크롤
   useEffect(() => {
@@ -153,7 +155,9 @@ const ClubMemberSearch = ({
                     <div className="text-body1_sb text-text1 text-mobile_body1_m">
                       {member.name}
                     </div>
-                    <div>{member.memberData.nickname}</div>
+                    <div className="text-subtext2 text-mobile_body3_r md:text-body3_r">
+                      {member.memberData.nickname}
+                    </div>
                   </div>
                 </div>
               );
