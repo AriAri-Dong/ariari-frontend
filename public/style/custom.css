@@ -92,3 +92,26 @@
   background-color: #589bff !important;
   color: #fff !important;
 }
+
+/* --- 이벤트 캘린더 --- */
+.event-calendar.react-datepicker {
+  width: 100%;
+}
+/* 이벤트 캘린더 헤더 */
+.event-calendar .react-datepicker__header {
+  padding: 0 !important;
+  margin: auto;
+}
+.event-calendar .react-datepicker__month-container {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .event-calendar .react-datepicker__month-container {
+    width: 256px;
+  }
+
+  .event-calendar.react-datepicker {
+    width: 256px;
+  }
+}
