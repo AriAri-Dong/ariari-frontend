@@ -1,14 +1,41 @@
 "use client";
 
-import React, { useState, ReactNode } from "react";
+import React, { useEffect, useState, ReactNode } from "react";
+import useResponsive from "@/hooks/useResponsive";
+import { usePathname } from "next/navigation";
+
 import SearchTermContext from "@/context/searchTermContext";
 import Footer from "./footer";
 import Header from "./header";
-import { usePathname } from "next/navigation";
+import { useAuthStore } from "@/stores/authStore";
+import ProfileSettingModal from "../modal/profileSetting/profileSettingModal";
+import MobileProfileSettingModal from "../modal/profileSetting/mobile/mobileProfileSettingModal";
+
+// 최대 노출 횟수
+const MAX_MODAL_COUNT_PER_SESSION = 3;
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
+  const isMd = useResponsive("md");
+
+  const { accessToken, oauthSignUpKey } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  useEffect(() => {
+    const rawCount = sessionStorage.getItem("profileModalCount");
+    const shownCount = rawCount ? parseInt(rawCount, 10) : 0;
+
+    if (
+      !accessToken &&
+      oauthSignUpKey &&
+      shownCount < MAX_MODAL_COUNT_PER_SESSION
+    ) {
+      setShowProfileModal(true);
+      sessionStorage.setItem("profileModalCount", String(shownCount + 1));
+    }
+  }, [accessToken, oauthSignUpKey]);
+
   const specialPaths = [
     "/recruitment/detail",
     "/club/review",
@@ -24,7 +51,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/search",
   ];
   const bgPaths = ["/application", "/help"];
-  // md 이상만 bg 적용하는 path
   const mobileBgPaths = new Set([
     "/terms/club",
     "/terms/privacy",
@@ -47,9 +73,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
         <Header />
         <main
           className={`flex-grow flex justify-center 
-    ${pathname.includes("/help") ? "" : "items-center"} 
-    ${isBgComponent && "bg-sub_bg"} 
-    ${isBgComponentOnlyMobile && "md:bg-sub_bg"}`}
+            ${pathname.includes("/help") ? "" : "items-center"} 
+            ${isBgComponent && "bg-sub_bg"} 
+            ${isBgComponentOnlyMobile && "md:bg-sub_bg"}`}
         >
           <div
             className={`w-full ${
@@ -62,6 +88,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
           </div>
         </main>
         <Footer />
+        {showProfileModal &&
+          (isMd ? (
+            <ProfileSettingModal onClose={() => setShowProfileModal(false)} />
+          ) : (
+            <MobileProfileSettingModal
+              onClose={() => setShowProfileModal(false)}
+            />
+          ))}
       </div>
     </SearchTermContext.Provider>
   );
