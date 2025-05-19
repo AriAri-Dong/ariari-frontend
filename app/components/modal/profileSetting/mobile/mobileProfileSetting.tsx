@@ -16,6 +16,8 @@ import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
 import { updateNickname, updateProfileType } from "@/api/member/api";
 import { useRouter } from "next/navigation";
+import { signUpWithKey } from "@/api/login/api";
+import { useAuthStore } from "@/stores/authStore";
 
 interface ProfileSettingProps {
   step: number;
@@ -35,6 +37,7 @@ const MobileProfileSetting = ({
   onClose,
 }: ProfileSettingProps) => {
   const router = useRouter();
+  const { oauthSignUpKey, setAuth } = useAuthStore();
   const { profileData } = useProfileContext();
 
   const [timeLeft, setTimeLeft] = useState<number>(300);
@@ -55,8 +58,25 @@ const MobileProfileSetting = ({
     }
   };
 
-  const handleSkip = () => {
-    onClose();
+  const handleSkip = async () => {
+    if (!oauthSignUpKey) {
+      setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
+      return;
+    }
+
+    try {
+      const res = await signUpWithKey(oauthSignUpKey);
+
+      setAuth({
+        accessToken: res.accessToken,
+        refreshToken: res.refreshToken,
+        oauthSignUpKey: null,
+      });
+
+      onNextStep(4);
+    } catch (error) {
+      setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   const validateCurrentStep = async () => {
@@ -112,33 +132,30 @@ const MobileProfileSetting = ({
       onNextStep(3);
     } else if (step === 3) {
       const isValid = await validateCurrentStep();
-      if (!isValid) {
-        return;
-      }
+      if (!isValid) return;
 
-      // 인증 완료 후 API 호출
       try {
-        // 닉네임 변경 API 호출
-        await updateNickname(profileData.username);
+        if (!oauthSignUpKey) {
+          setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
+          return;
+        }
+        // 회원가입
+        const res = await signUpWithKey(oauthSignUpKey);
+        console.log("회원가입 중....");
+        setAuth({
+          accessToken: res.accessToken,
+          refreshToken: res.refreshToken,
+          oauthSignUpKey: null,
+        });
 
-        // 프로필 변경 API 호출
-        await updateProfileType(profileData.selectedProfileType);
-
-        // 두 API 호출이 성공적으로 완료된 후 페이지 이동
-        onClose(); // 인증 완료 후 모달을 닫기
-
-        // 페이지 이동 시 firstLogin=1 쿼리 파라미터 추가
-        router.push("/home?firstLogin=1");
+        onNextStep(4);
       } catch (error) {
-        setAlertMessage(
-          "닉네임 또는 프로필 변경에 실패했습니다. 다시 시도해주세요."
-        );
+        setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
       }
     } else {
       onNextStep(step + 1);
     }
   };
-
   const handleBack = () => {
     if (step > 1) {
       onNextStep(step - 1);
