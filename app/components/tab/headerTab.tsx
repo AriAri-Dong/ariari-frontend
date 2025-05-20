@@ -77,17 +77,16 @@ const HeaderTab = () => {
 
   useEffect(() => {
     const activeIndex = menu.findIndex((item) => item.path === pathname);
-    if (pathname === "/") {
-      setActiveId(null);
-      return;
-    }
 
     if (activeIndex !== -1) {
       setActiveId(menu[activeIndex].id);
+    } else {
+      setActiveId(null); // ❗ 일치하지 않으면 바/활성 없음
     }
+
     updateBarPosition();
     scrollToActiveItem();
-  }, [menu]);
+  }, [pathname, menu]);
 
   useEffect(() => {
     if (navRef.current) {
@@ -123,7 +122,7 @@ const HeaderTab = () => {
           </div>
         ))}
       </nav>
-      {pathname !== "/" && (
+      {activeId !== null && (
         <div
           className="absolute bottom-0 h-[1px] md:h-[3px] bg-text1 transition-all duration-300"
           style={{ width: `${barWidth}px`, left: `${barLeft}px` }}

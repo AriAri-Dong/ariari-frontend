@@ -31,7 +31,7 @@ export const getInternalRecruitmentRanking = async () => {
 // 교외 모집 랭킹 리스트 조회
 export const getExternalRecruitmentRanking = async () => {
   try {
-    const { data } = await axios.get(RECRUITMENT_RANKING_EXTERNAL);
+    const { data } = await axiosInstance.get(RECRUITMENT_RANKING_EXTERNAL);
     console.log("성공 >>>", data);
     return data;
   } catch (err) {
@@ -145,7 +145,7 @@ export const getExternalRecruitments = async (
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
     };
 
-    const response = await axios.get<ClubRecruitmentListResponse>(
+    const response = await axiosInstance.get<ClubRecruitmentListResponse>(
       RECRUITMENT_EXTERNAL,
       {
         params,

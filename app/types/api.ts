@@ -9,7 +9,7 @@ import { TagData } from "./review";
 export type AuthResponseType = {
   accessToken: string;
   refreshToken: string;
-  isFirstLogin: boolean;
+  oauthSignUpKey: string;
 };
 
 export type UserDataResponseType = {

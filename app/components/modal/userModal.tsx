@@ -21,6 +21,7 @@ const UserModal = ({ onClose }: UserModalProps) => {
   const router = useRouter();
   const username = useUserStore((state) => state.memberData.nickname);
   const profileType = useUserStore((state) => state.memberData.profileType);
+  const signOutUser = useUserStore((state) => state.signOut);
 
   const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
 
@@ -28,7 +29,7 @@ const UserModal = ({ onClose }: UserModalProps) => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await logout(signOutUser);
     } catch (error) {
       console.error("로그아웃 오류:", error);
     }

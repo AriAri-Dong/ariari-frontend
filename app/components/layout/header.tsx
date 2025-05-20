@@ -3,6 +3,7 @@
 import React, { useContext, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+
 import logo from "@/images/logo/logo.svg";
 import SearchInput from "../input/searchInput";
 import SearchTermContext from "@/context/searchTermContext";
@@ -11,16 +12,17 @@ import User from "../user/user";
 import HeaderTab from "../tab/headerTab";
 import SmallBtn from "../button/basicBtn/smallBtn";
 import MobileUser from "../user/mobileUser";
-import { useUserStore } from "@/providers/userStoreProvider";
+
 import { getMemberData } from "@/api/member/api";
-import SmallButton from "../button/smallButton";
+import { useUserStore } from "@/providers/userStoreProvider";
+import { useAuthStore } from "@/stores/authStore";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
-
   const { setSearchTerm } = useContext(SearchTermContext);
-  const { signIn, setUserData } = useUserStore((state) => state);
+  const { setUserData } = useUserStore((state) => state);
+  const { accessToken } = useAuthStore();
 
   const handleHomeClick = () => {
     router.push("/");
@@ -56,13 +58,10 @@ const Header = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const accessToken = sessionStorage.getItem("accessToken");
-
-      if (!accessToken || accessToken.trim() === "" || accessToken === "null") {
+      if (!accessToken || accessToken.trim() === "") {
         console.log("비로그인 상태 → 사용자 정보 요청 생략");
+        localStorage.removeItem("ariari-auth");
         localStorage.removeItem("ariari-storage");
-        sessionStorage.removeItem("accessToken");
-        sessionStorage.removeItem("refreshToken");
         return;
       }
 
@@ -72,11 +71,13 @@ const Header = () => {
         console.log("유저 데이터 >>", res);
       } catch (error) {
         console.error("유저 데이터 불러오기 실패:", error);
+        localStorage.removeItem("ariari-auth");
+        localStorage.removeItem("ariari-storage");
       }
     };
 
     fetchUserData();
-  }, [setUserData]);
+  }, [accessToken, setUserData]);
 
   return (
     <header
@@ -98,15 +99,9 @@ const Header = () => {
           <div className="hidden md:block">
             <div className="flex gap-x-5">
               <User />
-              <SmallButton
-                title={"동아리 만들기"}
-                onClick={() => {
-                  router.push("/user/club/create");
-                }}
-              />
-              {/* <Tooltip message="동아리 관리 버튼을 설명하는 헬프 텍스트 입니다. 000 (최대 55자)">
+              <Tooltip message="동아리 관리 버튼을 설명하는 헬프 텍스트 입니다. 000 (최대 55자)">
                 <SmallBtn title={"동아리 관리"} onClick={handleButtonClick} />
-              </Tooltip> */}
+              </Tooltip>
             </div>
           </div>
         </div>
