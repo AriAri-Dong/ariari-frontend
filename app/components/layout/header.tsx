@@ -13,6 +13,7 @@ import SmallBtn from "../button/basicBtn/smallBtn";
 import MobileUser from "../user/mobileUser";
 import { useUserStore } from "@/providers/userStoreProvider";
 import { getMemberData } from "@/api/member/api";
+import SmallButton from "../button/smallButton";
 
 const Header = () => {
   const router = useRouter();
@@ -97,9 +98,15 @@ const Header = () => {
           <div className="hidden md:block">
             <div className="flex gap-x-5">
               <User />
-              <Tooltip message="동아리 관리 버튼을 설명하는 헬프 텍스트 입니다. 000 (최대 55자)">
+              <SmallButton
+                title={"동아리 만들기"}
+                onClick={() => {
+                  router.push("/user/club/create");
+                }}
+              />
+              {/* <Tooltip message="동아리 관리 버튼을 설명하는 헬프 텍스트 입니다. 000 (최대 55자)">
                 <SmallBtn title={"동아리 관리"} onClick={handleButtonClick} />
-              </Tooltip>
+              </Tooltip> */}
             </div>
           </div>
         </div>
