@@ -8,24 +8,19 @@ import calendarIcon from "@/images/icon/calender.svg";
 interface CustomCalendarProps {
   placeholder?: string;
   onDateChange?: (date: Date | null) => void;
-  initialDate?: Date | null;
 }
 
 /**
  * 단일 날짜를 선택하는 캘린더
  * @param placeholder
  * @param onDateChange 데이터 변경 핸들러
- * @param initialDate 초기 날짜
  * @returns
  */
 const SingleDateCalendar = ({
   placeholder = "날짜 선택",
-  initialDate,
   onDateChange,
 }: CustomCalendarProps) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(
-    initialDate ? initialDate : null
-  );
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);

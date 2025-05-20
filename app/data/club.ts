@@ -367,9 +367,9 @@ export const CLUB_LEFT_MENU_MEMBER = [
   },
   {
     id: 3,
-    label: "일정",
+    label: "일정 (미구현)",
     icon: "schedule",
-    url: "/club/event",
+    url: "/club/create",
     subUrl: [],
   },
   {
@@ -462,7 +462,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
       {
         id: 2,
         label: "일정",
-        url: "/club/event",
+        url: "/club/management/activity/schedule",
       },
       {
         id: 3,
