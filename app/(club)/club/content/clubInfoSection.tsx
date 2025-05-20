@@ -204,12 +204,16 @@ const ClubInfoSection = () => {
       {isMdUp
         ? isReportOpen && (
             <ReportModal
+              id={clubInfo.clubData.id}
+              reportTargetType="CLUB"
               onClose={() => setIsReportOpen(false)}
               onSubmit={handleReportSubmit}
             />
           )
         : isReportOpen && (
             <ReportBottomSheet
+              id={clubInfo.clubData.id}
+              reportTargetType="CLUB"
               onClose={() => setIsReportOpen(false)}
               onSubmit={handleReportSubmit}
             />
