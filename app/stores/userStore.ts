@@ -4,8 +4,6 @@ import { devtools, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 
 export type UserState = {
-  accessToken: string;
-  refreshToken: string;
   id: string;
   isSignIn: boolean;
   memberData: {
@@ -15,25 +13,18 @@ export type UserState = {
   };
   schoolData: {
     name: string;
-  } | null;
+  };
 };
 
 export type UserActions = {
-  signIn: (data: {
-    accessToken: string;
-    refreshToken: string;
-    isSignIn: boolean;
-  }) => void;
+  signIn: (data: { isSignIn: boolean }) => void;
   signOut: () => void;
   setUserData: (userData: UserDataResponseType) => void;
-  setAccessToken: (accessToken: string) => void;
 };
 
 export type UserStore = UserState & UserActions;
 
 export const defaultInitState: UserState = {
-  accessToken: "",
-  refreshToken: "",
   id: "",
   isSignIn: false,
   memberData: {
@@ -41,7 +32,9 @@ export const defaultInitState: UserState = {
     nickname: "",
     profileType: null,
   },
-  schoolData: null,
+  schoolData: {
+    name: "",
+  },
 };
 
 export const createUserStore = (initState: UserState = defaultInitState) => {
@@ -51,21 +44,12 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
         (set) => ({
           ...initState,
 
-          signIn: ({ accessToken, refreshToken, isSignIn }) =>
+          signIn: ({ isSignIn }) =>
             set(() => ({
-              accessToken,
-              refreshToken,
               isSignIn,
             })),
 
-          signOut: () =>
-            set(() => {
-              localStorage.removeItem("ariari-storage");
-              sessionStorage.removeItem("accessToken");
-              sessionStorage.removeItem("refreshToken");
-
-              return defaultInitState;
-            }),
+          signOut: () => set(() => defaultInitState),
 
           setUserData: (userData) =>
             set((state) => ({
@@ -76,13 +60,7 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
               },
               schoolData: userData.schoolData
                 ? { ...userData.schoolData }
-                : null,
-            })),
-
-          setAccessToken: (accessToken) =>
-            set((state) => ({
-              ...state,
-              accessToken,
+                : { name: "" }, // 빈 값으로 fallback
             })),
         }),
         {
