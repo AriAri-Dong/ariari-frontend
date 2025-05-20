@@ -12,15 +12,7 @@ import { ClubNoticeImageData } from "@/types/club";
 export interface ClubNoticeFormModalProps {
   modalType: "create" | "modify";
   onClose: () => void;
-  onSubmit: (
-    payload: {
-      title: string;
-      body: string;
-      isFixed: boolean;
-      deletedImageIds?: string[];
-    },
-    uploadImages: string[]
-  ) => void;
+  onSubmit: (payload: any, uploadImages: string[]) => void;
   setAlertMessage: (message: string) => void;
   initialValues?: {
     title: string;

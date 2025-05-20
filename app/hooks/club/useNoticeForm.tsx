@@ -7,15 +7,7 @@ const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 interface useClubNoticeFormProps {
   modalType: "create" | "modify";
-  onSubmit: (
-    payload: {
-      title: string;
-      body: string;
-      isFixed: boolean;
-      deletedImageIds?: string[];
-    },
-    uploadedImages: string[]
-  ) => void;
+  onSubmit: (payload: any, uploadedImages: string[]) => void;
   setAlertMessage: (message: string) => void;
   initialValues?: {
     title: string;
