@@ -121,7 +121,7 @@ const AcceptanceReviewContent = () => {
         )}
 
         {/* 작성버튼 - 동아리 회원 */}
-        {(role === "GENERAL" || role === "MANAGER") && (
+        {role === "GENERAL" && (
           <div className="fixed w-full bottom-5 px-5 flex justify-end md:bottom-[44px] md:max-w-[1248px] md:px-5">
             <WriteBtn onClick={handleWrite} />
           </div>

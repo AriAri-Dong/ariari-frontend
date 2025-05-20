@@ -19,10 +19,3 @@ export const formatKSTTime = (
 
   return kst.format(format);
 };
-
-export const formatTime = (
-  isoString: string,
-  format = "YYYY-MM-DDTHH:mm:ss.SSSZ"
-): string => {
-  return dayjs(isoString).format(format);
-};

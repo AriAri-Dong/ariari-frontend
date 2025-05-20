@@ -143,7 +143,7 @@ const ClubMemberContent = () => {
         .then(() => {
           setClubMember((prevMembers) =>
             prevMembers!.map((member) =>
-              memberIds.includes(member.id)
+              memberIds.includes(member.memberData.memberId)
                 ? { ...member, clubMemberStatusType: newStatus }
                 : member
             )
