@@ -17,7 +17,7 @@ export const HEADER_MENU_SM = [
 export const USER_MENU = [
   { id: 0, label: "관심 모집공고", path: "/user/interestRecruitment" },
   { id: 1, label: "관심 동아리", path: "/user/interestClub" },
-  { id: 2, label: "내 포인트", path: "/user/myPoint" },
+  // { id: 2, label: "내 포인트", path: "/user/myPoint" },
   { id: 3, label: "동아리 만들기", path: "/user/club/create" },
   { id: 4, label: "회원정보 수정", path: "/user/userInfo" },
   { id: 5, label: "로그아웃", path: "" },

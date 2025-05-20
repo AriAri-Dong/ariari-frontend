@@ -94,7 +94,8 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
                 alt={item.title}
                 layout="fill"
                 objectFit="cover"
-                className="rounded-3xl shadow-default"
+                className="rounded-3xl"
+                // className="rounded-3xl shadow-default"
               />
               <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 md:bottom-5">
                 <DdayBadge date={item.endDateTime} />

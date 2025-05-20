@@ -128,6 +128,15 @@ const config: Config = {
         mobile_body3_sb: ["12px", { fontWeight: 600, lineHeight: "150%" }],
         mobile_body4_r: ["11px", { fontWeight: 500, lineHeight: "150%" }],
       },
+      keyframes: {
+        dropdown: {
+          "0%": { opacity: "0", transform: "translateY(-10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        dropdown: "dropdown 0.2s ease-out",
+      },
     },
   },
   plugins: [
