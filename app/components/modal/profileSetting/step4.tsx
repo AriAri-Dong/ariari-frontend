@@ -5,7 +5,7 @@ import logo from "@/images/profile/logo.svg";
 
 const Step4 = () => {
   return (
-    <div className="relative justify-items-center w-[430px] px-5 pb-9 pt-[72px] bg-background rounded-2xl">
+    <div className="relative justify-center items-center w-[430px] px-5 pb-9 pt-[72px] bg-background rounded-2xl">
       <Image
         src={logo}
         alt={"logo"}
