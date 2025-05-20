@@ -120,14 +120,14 @@ const SearchInput = ({
 
   return (
     <div
-      className={`relative w-full focus-within:border-searchbarborder border border-transparent rounded-xl md:mb-[26px] lg:max-w-[564px] lg:mb-[13px]`}
+      className={`relative w-full focus-within:border-searchbar border border border-transparent rounded-xl md:mb-[26px] lg:max-w-[564px] lg:mb-[13px]`}
     >
       <Image
         src={searchIcon}
         alt="search"
         width={20}
         height={20}
-        className="absolute left-2.5 top-3 md:left-4 md:top-4 md:w-6 md:h-6"
+        className="absolute left-2.5 top-2.5 md:left-4 md:top-[13px] md:w-6 md:h-6"
       />
       <input
         type="text"
