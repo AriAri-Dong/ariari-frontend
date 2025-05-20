@@ -17,6 +17,7 @@ import { getProfileImage } from "@/utils/profileImage";
 
 const MobileUser = () => {
   const profileType = useUserStore((state) => state.memberData.profileType);
+  const signOutUser = useUserStore((state) => state.signOut);
 
   const profileImageSrc = getProfileImage(profileType);
 
@@ -34,11 +35,12 @@ const MobileUser = () => {
   // 로그아웃 실행 함수
   const handleLogout = async () => {
     try {
-      await logout();
+      await logout(signOutUser);
     } catch (error) {
       console.error("로그아웃 오류:", error);
     }
   };
+
   // 알림 아이콘 이미지 가져오기
   const getNotificationImage = () => {
     switch (notificationStatus) {

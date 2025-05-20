@@ -5,6 +5,7 @@ import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import backVector from "@/images/icon/backVector.svg";
 import Image from "next/image";
 import Alert from "@/components/alert/alert";
+import Step0 from "./step0";
 import Step1 from "./step1";
 import Step2 from "./step2";
 import Step3 from "./step3";
@@ -15,6 +16,8 @@ import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
 import { updateNickname, updateProfileType } from "@/api/member/api";
 import { useRouter } from "next/navigation";
+import { signUpWithKey } from "@/api/login/api";
+import { useAuthStore } from "@/stores/authStore";
 
 interface ProfileSettingProps {
   step: number;
@@ -24,7 +27,7 @@ interface ProfileSettingProps {
 
 /**
  *
- * @param step 단계 (1-4)
+ * @param step 단계 (0-4)
  * @param onNextStep 특정 step으로 넘어가는 함수
  * @returns
  */
@@ -34,6 +37,7 @@ const MobileProfileSetting = ({
   onClose,
 }: ProfileSettingProps) => {
   const router = useRouter();
+  const { oauthSignUpKey, setAuth } = useAuthStore();
   const { profileData } = useProfileContext();
 
   const [timeLeft, setTimeLeft] = useState<number>(300);
@@ -54,8 +58,25 @@ const MobileProfileSetting = ({
     }
   };
 
-  const handleSkip = () => {
-    onClose();
+  const handleSkip = async () => {
+    if (!oauthSignUpKey) {
+      setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
+      return;
+    }
+
+    try {
+      const res = await signUpWithKey(oauthSignUpKey);
+
+      setAuth({
+        accessToken: res.accessToken,
+        refreshToken: res.refreshToken,
+        oauthSignUpKey: null,
+      });
+
+      onNextStep(4);
+    } catch (error) {
+      setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   const validateCurrentStep = async () => {
@@ -85,6 +106,13 @@ const MobileProfileSetting = ({
   const handleNextStep = async () => {
     setAlertMessage(null);
 
+    if (step === 0) {
+      if (!profileData.agreements) {
+        setAlertMessage("모든 약관에 동의해주세요.");
+        return;
+      }
+    }
+
     if (step === 1) {
       // 사용자 이름 유효성 검사
       if (!profileData.username || profileData.username.trim() === "") {
@@ -104,33 +132,30 @@ const MobileProfileSetting = ({
       onNextStep(3);
     } else if (step === 3) {
       const isValid = await validateCurrentStep();
-      if (!isValid) {
-        return;
-      }
+      if (!isValid) return;
 
-      // 인증 완료 후 API 호출
       try {
-        // 닉네임 변경 API 호출
-        await updateNickname(profileData.username);
+        if (!oauthSignUpKey) {
+          setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
+          return;
+        }
+        // 회원가입
+        const res = await signUpWithKey(oauthSignUpKey);
+        console.log("회원가입 중....");
+        setAuth({
+          accessToken: res.accessToken,
+          refreshToken: res.refreshToken,
+          oauthSignUpKey: null,
+        });
 
-        // 프로필 변경 API 호출
-        await updateProfileType(profileData.selectedProfileType);
-
-        // 두 API 호출이 성공적으로 완료된 후 페이지 이동
-        onClose(); // 인증 완료 후 모달을 닫기
-
-        // 페이지 이동 시 firstLogin=1 쿼리 파라미터 추가
-        router.push("/home?firstLogin=1");
+        onNextStep(4);
       } catch (error) {
-        setAlertMessage(
-          "닉네임 또는 프로필 변경에 실패했습니다. 다시 시도해주세요."
-        );
+        setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
       }
     } else {
       onNextStep(step + 1);
     }
   };
-
   const handleBack = () => {
     if (step > 1) {
       onNextStep(step - 1);
@@ -175,9 +200,14 @@ const MobileProfileSetting = ({
             className={step === 1 ? "hidden" : ""}
           />
           <h1 className="flex-1 text-center text-text1 text-mobile_h1_contents_title mr-6">
-            {step === 1 ? "프로필 생성" : "학교 등록"}
+            {step === 0
+              ? "이용약관 동의"
+              : step === 1
+              ? "프로필 생성"
+              : "학교 등록"}
           </h1>
         </div>
+        {step === 0 && <Step0 />}
         {step === 1 && <Step1 />}
         {step === 2 && <Step2 />}
         {step === 3 && (
@@ -192,12 +222,15 @@ const MobileProfileSetting = ({
           title={step === 3 ? `학교 인증하기 ${formatTime(timeLeft)}` : "다음"}
           onClick={handleNextStep}
         />
-        <button
-          onClick={handleSkip}
-          className="text-primary text-mobile_body2_sb py-2.5"
-        >
-          건너뛰기
-        </button>
+        {step === 2 ||
+          (step === 3 && (
+            <button
+              onClick={handleSkip}
+              className="text-primary text-mobile_body2_sb py-2.5"
+            >
+              건너뛰기
+            </button>
+          ))}
         {alertMessage && (
           <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}

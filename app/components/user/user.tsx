@@ -29,6 +29,8 @@ const User = () => {
 
   const profileImageSrc = getProfileImage(profileType);
 
+  const isLoggedIn = isSignIn && nickname !== "";
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
@@ -58,7 +60,7 @@ const User = () => {
 
   return (
     <>
-      {isSignIn ? (
+      {isLoggedIn ? (
         // 로그인 상태일 때
         <div className="relative flex items-center space-x-5" ref={dropdownRef}>
           {/* 알림 버튼 (모달 포함) */}
@@ -79,10 +81,12 @@ const User = () => {
 
           {/* 유저 드롭다운 메뉴 (활성화 시 표시) */}
           {isDropdownOpen && (
-            <UserDropdown
-              optionData={USER_MENU}
-              onClose={() => setIsDropdownOpen(false)}
-            />
+            <div className="absolute left-1/2 top-[60px] transform -translate-x-1/2 z-50">
+              <UserDropdown
+                optionData={USER_MENU}
+                onClose={() => setIsDropdownOpen(false)}
+              />
+            </div>
           )}
         </div>
       ) : (

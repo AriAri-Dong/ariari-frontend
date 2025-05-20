@@ -2,21 +2,20 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import HeaderToken from "@/api/headerToken";
 import LoginLoading from "./loginLoading";
 import { getTokenWithCode } from "@/api/login/api";
 import { getMemberData } from "@/api/member/api";
 import axiosInstance from "@/api/axiosInstance";
 import { useUserStore } from "@/providers/userStoreProvider";
-import { authStore } from "@/stores/userStore";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function SignInPageContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [kakaoCode, setKakaoCode] = useState<string>("");
+  const { setAuth, logout } = useAuthStore();
   const { signIn, setUserData } = useUserStore((state) => state);
-  const { signOut } = authStore.getState();
 
   useEffect(() => {
     const curKakaoCode = searchParams.get("code") || "";
@@ -29,43 +28,40 @@ export default function SignInPageContent() {
     if (!kakaoCode) return;
 
     getTokenWithCode(kakaoCode)
-      .then(async (res1) => {
-        signIn({
-          accessToken: res1.accessToken,
-          refreshToken: res1.refreshToken,
-          isFirstLogin: res1.isFirstLogin,
-          isSignIn: true,
+      .then(async (res) => {
+        // 1. AuthStore에 토큰 저장
+        setAuth({
+          accessToken: res.accessToken,
+          refreshToken: res.refreshToken,
+          oauthSignUpKey: res.oauthSignUpKey,
         });
 
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem("accessToken", res1.accessToken);
-          sessionStorage.setItem("refreshToken", res1.refreshToken);
+        // 2. userStore에 로그인 상태 설정
+        signIn({ isSignIn: true });
+
+        // 3. 사용자 정보 불러오기
+        if (res.accessToken) {
+          axiosInstance.defaults.headers.common[
+            "Authorization"
+          ] = `${res.accessToken}`;
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          const userData = await getMemberData();
+          setUserData(userData);
+          console.log("유저 데이터 >>", userData);
         }
 
-        HeaderToken.set(res1.accessToken);
-        axiosInstance.defaults.headers.common[
-          "Authorization"
-        ] = `${res1.accessToken}`;
-
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        const res2 = await getMemberData();
-        setUserData(res2);
-        console.log("유저 데이터 >>", res2);
-
-        router.replace(`/${res1.isFirstLogin ? "?firstLogin=1" : ""}`);
+        router.replace("/");
       })
       .catch(() => {
-        signOut();
+        logout();
         alert("로그인에 실패했습니다.\n다시 시도해주세요.");
-        localStorage.removeItem("ariari-storage");
-        sessionStorage.removeItem("accessToken");
-        sessionStorage.removeItem("refreshToken");
+        localStorage.removeItem("ariari-auth");
         router.push("/");
         if (pathname === "/") {
           window.location.reload();
         }
       });
-  }, [kakaoCode, router, setUserData, signIn]);
+  }, [kakaoCode, router, pathname, setUserData, setAuth, logout, signIn]);
 
   return <LoginLoading />;
 }

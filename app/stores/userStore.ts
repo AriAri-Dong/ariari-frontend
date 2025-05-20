@@ -4,11 +4,8 @@ import { devtools, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 
 export type UserState = {
-  accessToken: string;
-  refreshToken: string;
   id: string;
   isSignIn: boolean;
-  isFirstLogin: boolean;
   memberData: {
     memberId: string;
     nickname: string;
@@ -16,64 +13,44 @@ export type UserState = {
   };
   schoolData: {
     name: string;
-  } | null;
+  };
 };
 
 export type UserActions = {
-  signIn: ({
-    accessToken,
-    refreshToken,
-    isFirstLogin,
-    isSignIn,
-  }: {
-    accessToken: string;
-    refreshToken: string;
-    isFirstLogin: boolean;
-    isSignIn: boolean;
-  }) => void;
+  signIn: (data: { isSignIn: boolean }) => void;
   signOut: () => void;
   setUserData: (userData: UserDataResponseType) => void;
-  setAccessToken: (accessToken: string) => void;
 };
 
 export type UserStore = UserState & UserActions;
 
 export const defaultInitState: UserState = {
-  accessToken: "",
-  refreshToken: "",
   id: "",
   isSignIn: false,
-  isFirstLogin: false,
   memberData: {
     memberId: "",
     nickname: "",
     profileType: null,
   },
-  schoolData: null,
+  schoolData: {
+    name: "",
+  },
 };
 
 export const createUserStore = (initState: UserState = defaultInitState) => {
   return createStore<UserStore>()(
     devtools(
       persist(
-        (set, get) => ({
+        (set) => ({
           ...initState,
-          signIn: ({ accessToken, refreshToken, isFirstLogin, isSignIn }) =>
-            set((state) => ({
-              ...state,
-              accessToken,
-              refreshToken,
-              isFirstLogin,
+
+          signIn: ({ isSignIn }) =>
+            set(() => ({
               isSignIn,
             })),
-          signOut: () =>
-            set(() => {
-              localStorage.removeItem("ariari-storage");
-              sessionStorage.removeItem("accessToken");
-              sessionStorage.removeItem("refreshToken");
 
-              return defaultInitState;
-            }),
+          signOut: () => set(() => defaultInitState),
+
           setUserData: (userData) =>
             set((state) => ({
               ...state,
@@ -83,13 +60,7 @@ export const createUserStore = (initState: UserState = defaultInitState) => {
               },
               schoolData: userData.schoolData
                 ? { ...userData.schoolData }
-                : null,
-            })),
-
-          setAccessToken: (accessToken) =>
-            set((state) => ({
-              ...state,
-              accessToken,
+                : { name: "" }, // 빈 값으로 fallback
             })),
         }),
         {

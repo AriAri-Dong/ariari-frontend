@@ -59,14 +59,14 @@ const nextConfig = {
 
     return config;
   },
-  async rewrites() {
-    return [
-      {
-        source: "/:path*",
-        destination: `${API_URL}/:path*`,
-      },
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/api/v1:path*",
+  //       destination: `${API_URL}:path*`,
+  //     },
+  //   ];
+  // },
 };
 
 export default nextConfig;

@@ -124,7 +124,9 @@ export const getExternalClubsInfo = async (
       ...(pageable.sort ? { sort: pageable.sort.join(",") } : {}),
     };
 
-    const response = await axios.get<ClubResponse>(CLUBS_EXTERNAL, { params });
+    const response = await axiosInstance.get<ClubResponse>(CLUBS_EXTERNAL, {
+      params,
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching club info:", error);
@@ -339,7 +341,7 @@ export const getInternalClubRanking = (fieldType: string) => {
 
 // 교외 동아리 랭킹 조회
 export const getExternalClubRanking = (fieldType: string) => {
-  return axios
+  return axiosInstance
     .get<ClubResponse>(CLUBS_EXTERNAL_RANKING, {
       params: { categoryType: fieldType },
     })
