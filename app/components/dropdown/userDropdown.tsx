@@ -22,6 +22,7 @@ const UserDropdown = ({ optionData, onClose }: MenuProps) => {
   const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
 
   const handleLogout = async () => {
+    console.log("로그아웃 버튼 클릭");
     try {
       await logout(signOutUser);
     } catch (error) {
