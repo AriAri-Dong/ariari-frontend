@@ -77,10 +77,10 @@ const ReportModal = ({
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, []);
+  }, [isSignIn]);
 
-  if (!isSignIn) {
-    useEffect(() => {
+  useEffect(() => {
+    if (!isSignIn) {
       setAlertMessage("로그인 후 이용가능합니다");
 
       const timer = setTimeout(() => {
@@ -89,8 +89,8 @@ const ReportModal = ({
       }, 800);
 
       return () => clearTimeout(timer);
-    }, []);
-  }
+    }
+  }, [isSignIn, onClose]);
   return (
     <>
       {isSignIn && (
