@@ -18,9 +18,10 @@ import {
   addRecruitmentBookmark,
   removeRecruitmentBookmark,
 } from "@/api/recruitment/api";
-import { authStore } from "@/stores/userStore";
 import LoginModal from "../modal/login/loginModal";
 import MobileLoginModal from "../modal/login/mobileLoginModal";
+import { useUserStore } from "@/providers/userStoreProvider";
+import { useShallow } from "zustand/shallow";
 
 interface CardProps {
   data: RecruitmentData[];
@@ -37,7 +38,7 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
   const [isLastSlide, setIsLastSlide] = useState<boolean>(false);
   const slickRef = useRef<Slider>(null);
 
-  const isAuthenticated = authStore.getState().isSignIn;
+  const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn));
 
   useEffect(() => {
     setCardData(data);
@@ -174,7 +175,7 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
                     alt={item.title}
                     layout="fill"
                     objectFit="cover"
-                    className="rounded-3xl shadow-default"
+                    className="rounded-3xl"
                   />
                   <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 md:bottom-5">
                     <DdayBadge date={item.endDateTime} />

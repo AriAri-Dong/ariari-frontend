@@ -32,19 +32,19 @@ const OPTIONS = [
   {
     label: "동아리 분야",
     key: "fieldType",
-    data: FIELD_TYPE.slice(1),
+    data: FIELD_TYPE.filter((_, i) => i > 1),
     placeholder: FIELD_TYPE[0].label,
   },
   {
     label: "동아리 지역",
     key: "areaType",
-    data: AREA_TYPE.slice(1),
+    data: AREA_TYPE.filter((_, i) => i > 1),
     placeholder: AREA_TYPE[0].label,
   },
   {
     label: "동아리 대상",
     key: "targetType",
-    data: TARGET_TYPE.slice(1),
+    data: TARGET_TYPE.filter((_, i) => i > 1),
     placeholder: TARGET_TYPE[0].label,
   },
 ];
@@ -209,7 +209,9 @@ const CreateClubPage = () => {
     setSubmit(false);
 
     if (createdClubId) {
-      router.push(`/club/activityHistory?clubId=${createdClubId}`);
+      router.push(
+        `/club/management/recruitment/create?clubId=${createdClubId}`
+      );
     } else {
       router.push("/exploration");
     }

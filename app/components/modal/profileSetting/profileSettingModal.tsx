@@ -11,7 +11,7 @@ interface LoginModalProps {
 }
 
 const ProfileSettingModal = ({ onClose }: LoginModalProps) => {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(0);
 
   const handleNextStep = (nextStep: number) => {
     setStep(nextStep);
@@ -20,12 +20,16 @@ const ProfileSettingModal = ({ onClose }: LoginModalProps) => {
   const handleClose = () => {
     setStep(1);
     onClose();
+    window.location.reload();
   };
 
   return (
     <ProfileProvider>
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-        <div className="absolute inset-0" onClick={handleClose} />
+        <div
+          className="absolute inset-0"
+          onClick={step === 4 ? handleClose : undefined}
+        />
         {step < 4 ? (
           <ProfileSetting step={step} onNextStep={handleNextStep} />
         ) : (

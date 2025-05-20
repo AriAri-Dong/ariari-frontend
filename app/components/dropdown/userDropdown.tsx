@@ -4,6 +4,7 @@ import { logout } from "@/api/login/api";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AlertWithMessage from "@/components/alert/alertWithMessage";
+import { useUserStore } from "@/providers/userStoreProvider";
 
 interface MenuProps {
   optionData: { id: number; label: string; path: string | null }[];
@@ -16,11 +17,14 @@ interface MenuProps {
  */
 const UserDropdown = ({ optionData, onClose }: MenuProps) => {
   const router = useRouter();
+  const signOutUser = useUserStore((state) => state.signOut);
+
   const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
 
   const handleLogout = async () => {
+    console.log("로그아웃 버튼 클릭");
     try {
-      await logout();
+      await logout(signOutUser);
     } catch (error) {
       console.error("로그아웃 오류:", error);
     }
@@ -40,7 +44,7 @@ const UserDropdown = ({ optionData, onClose }: MenuProps) => {
   };
 
   return (
-    <div className="z-50 absolute top-full left-7 w-[180px] mt-2 bg-background rounded-lg border border-menuborder shadow-default">
+    <div className="w-[180px] bg-background rounded-lg border border-menuborder shadow-default z-50">
       {optionData.map((item, index) => (
         <div
           key={item.id}
