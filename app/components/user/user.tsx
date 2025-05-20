@@ -29,6 +29,8 @@ const User = () => {
 
   const profileImageSrc = getProfileImage(profileType);
 
+  const isLoggedIn = isSignIn && nickname !== "";
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
@@ -58,7 +60,7 @@ const User = () => {
 
   return (
     <>
-      {isSignIn ? (
+      {isLoggedIn ? (
         // 로그인 상태일 때
         <div className="relative flex items-center space-x-5" ref={dropdownRef}>
           {/* 알림 버튼 (모달 포함) */}
