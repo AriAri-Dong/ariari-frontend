@@ -113,7 +113,7 @@ const ClubNoticeFormBottomsheet = ({
                   className="rounded-lg object-cover w-[100px] h-[100px]"
                 />
                 <button
-                  onClick={() => handleImageDelete(idx, true)}
+                  onClick={() => handleImageDelete(image.id, true)}
                   className="absolute top-0 right-0 translate-x-1/5 translate-y-1/5 mr-2 mt-2"
                 >
                   <Image src={img_delete} alt="삭제" width={20} height={20} />
@@ -131,7 +131,7 @@ const ClubNoticeFormBottomsheet = ({
                   className="rounded-lg object-cover w-[96px] h-[96px]"
                 />
                 <button
-                  onClick={() => handleImageDelete(index)}
+                  onClick={() => handleImageDelete(index.toString())}
                   className="absolute top-0 right-0 translate-x-1/5 translate-y-1/5 mr-2 mt-2"
                 >
                   <Image src={img_delete} alt="삭제" width={16} height={16} />
