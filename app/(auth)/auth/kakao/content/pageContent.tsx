@@ -37,11 +37,7 @@ export default function SignInPageContent() {
         });
 
         // 2. userStore에 로그인 상태 설정
-        signIn({
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
-          isSignIn: true,
-        });
+        signIn({ isSignIn: true });
 
         // 3. 사용자 정보 불러오기
         if (res.accessToken) {
