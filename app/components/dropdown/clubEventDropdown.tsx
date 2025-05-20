@@ -37,15 +37,7 @@ interface ClubEventDropdownProps {
   event: ClubEventData;
   isOpen: boolean;
   role: clubMemberRoleType | null;
-  handleEventUpdate: (
-    data: {
-      date: Date;
-      title: string;
-      body: string;
-      location: string;
-    },
-    eventId: string
-  ) => void;
+
   setOpenDropdownId: (id: string | null) => void;
   onDelete: (id: string) => void;
 }
@@ -57,7 +49,6 @@ const ClubEventDropdown = ({
   role,
   setOpenDropdownId,
   onDelete,
-  handleEventUpdate,
 }: ClubEventDropdownProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
@@ -85,7 +76,7 @@ const ClubEventDropdown = ({
       setAlertMessage("출석 삭제에 실패했습니다.");
     },
   });
-
+  // 출석 등록 핸들러
   const handleAttendanceSubmit = async (
     clubEventId: string,
     memberIds: string[]
@@ -158,7 +149,7 @@ const ClubEventDropdown = ({
           {!isMdUp && (
             <div className="flex items-center justify-between">
               <p className="text-body3_m text-subtext2 mb-1.5">
-                {(event.eventDateTime, "YYYY.MM")}
+                {formatTime(event.eventDateTime, "YYYY.MM")}
               </p>
               <Image
                 src={dotMenu}
@@ -173,7 +164,7 @@ const ClubEventDropdown = ({
           <div className="flex gap-4">
             {!isMdUp && (
               <div className="text-mobile_h1_contents_title text-subtext2">
-                {formatKSTTime(event.eventDateTime, "DD")}
+                {formatTime(event.eventDateTime, "DD")}
               </div>
             )}
             <div className="w-full flex justify-between items-center ">
@@ -317,7 +308,6 @@ const ClubEventDropdown = ({
             onClose={() => {
               setModifyOpen(false);
             }}
-            onSubmit={handleEventUpdate}
             type="edit"
             eventData={{
               id: event.id,
@@ -325,6 +315,9 @@ const ClubEventDropdown = ({
               title: event.title,
               body: event.body,
               location: event.location,
+            }}
+            onSubmit={() => {
+              setAlertMessage("일정이 수정되었습니다.");
             }}
           />
         ) : (
@@ -332,7 +325,6 @@ const ClubEventDropdown = ({
             onClose={() => {
               setModifyOpen(false);
             }}
-            onSubmit={handleEventUpdate}
             type="edit"
             eventData={{
               id: event.id,
@@ -340,6 +332,9 @@ const ClubEventDropdown = ({
               title: event.title,
               body: event.body,
               location: event.location,
+            }}
+            onSubmit={() => {
+              setAlertMessage("일정이 수정되었습니다.");
             }}
           />
         ))}

@@ -1,15 +1,18 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import close from "@/images/icon/close.svg";
+import { useSearchParams } from "next/navigation";
+import {
+  useAddClubEventMutation,
+  useUpdateClubEventMutation,
+} from "@/hooks/club/evnet/useClubEventMutation";
 
 import Alert from "@/components/alert/alert";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import CustomInput from "@/components/input/customInput";
-import { AccountingProps } from "../modal/club/accountingModal";
 import SingleDateCalendar from "../calendar/singleDateCalendar";
-import RadioBtn from "../button/radioBtn";
-import CustomNumberInput from "../input/customNumberInput";
+import close from "@/images/icon/close.svg";
 import { ClubEventModalProps } from "../modal/club/clubEventModal";
+import { ClubEventSaveReq } from "@/types/clubEvent";
 
 const ClubEventBottomSheet = ({
   type,
@@ -17,6 +20,8 @@ const ClubEventBottomSheet = ({
   onSubmit,
   eventData,
 }: ClubEventModalProps) => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") ?? "";
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const [date, setDate] = useState<Date | null>(eventData?.date ?? null);
@@ -24,6 +29,70 @@ const ClubEventBottomSheet = ({
   const [body, setBody] = useState<string>(eventData?.body ?? "");
   const [location, setLocation] = useState<string>(eventData?.location ?? "");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  // 일정 등록
+  const { mutate: addClubEvent } = useAddClubEventMutation({
+    clubId,
+    onSuccess: () => {
+      onSubmit();
+      onClose();
+    },
+    onError: () => {
+      setAlertMessage("일정 등록에 실패했습니다.");
+    },
+  });
+
+  // 일정 수정
+  const { mutate: updateClubEvent } = useUpdateClubEventMutation({
+    clubId,
+    onSuccess: () => {
+      onSubmit();
+      onClose();
+    },
+    onError: () => {
+      setAlertMessage("일정 수정에 실패했습니다.");
+    },
+  });
+
+  // 일정 등록 핸들러
+  const handleEventSubmit = async (data: {
+    date: Date;
+    title: string;
+    body: string;
+    location: string;
+  }) => {
+    const { date, title, body, location } = data;
+
+    const payload: ClubEventSaveReq = {
+      title: title,
+      body: body,
+      location: location,
+      eventDateTime: date.toISOString(),
+    };
+
+    addClubEvent({ clubId, data: payload });
+  };
+  // 일정 수정 핸들러
+  const handleEventUpdate = async (
+    data: {
+      date: Date;
+      title: string;
+      body: string;
+      location: string;
+    },
+    clubEventId: string
+  ) => {
+    const { date, title, body, location } = data;
+
+    const payload: ClubEventSaveReq = {
+      title: title,
+      body: body,
+      location: location,
+      eventDateTime: date.toISOString(),
+    };
+
+    updateClubEvent({ clubEventId, data: payload });
+  };
 
   const validateForm = () => {
     if (!date) {
@@ -36,10 +105,17 @@ const ClubEventBottomSheet = ({
     }
     return true;
   };
+
   const handleSubmit = async () => {
     if (!validateForm()) return;
-
-    onSubmit({ date: date!, title, body, location }, eventData?.id ?? "");
+    if (type === "create") {
+      handleEventSubmit({ date: date!, title, body, location });
+    } else {
+      handleEventUpdate(
+        { date: date!, title, body, location },
+        eventData?.id ?? ""
+      );
+    }
     onClose();
   };
 
