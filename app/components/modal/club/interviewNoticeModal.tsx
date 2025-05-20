@@ -4,12 +4,21 @@ import close from "@/images/icon/close.svg";
 import help from "@/images/icon/help.svg";
 import Alert from "@/components/alert/alert";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
-import { InterviewNoticeProps } from "@/types/components/review";
 import Contour from "@/components/bar/contour";
+import NotiPopUp from "../notiPopUp";
 
-const InterviewNoticeModal = ({ onClose, onSubmit }: InterviewNoticeProps) => {
+export interface InterviewNoticeModalProps {
+  onClose: () => void;
+  onSubmit: (message: string) => void;
+}
+
+const InterviewNoticeModal = ({
+  onClose,
+  onSubmit,
+}: InterviewNoticeModalProps) => {
   const [details, setDetails] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   const validateForm = () => {
     if (!details.trim()) {
@@ -21,12 +30,16 @@ const InterviewNoticeModal = ({ onClose, onSubmit }: InterviewNoticeProps) => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      onSubmit();
+      onSubmit(details);
       onClose();
     }
   };
 
   const handleClose = () => {
+    if (details.trim()) {
+      setShowConfirmModal(true);
+      return;
+    }
     onClose();
   };
 
@@ -41,9 +54,6 @@ const InterviewNoticeModal = ({ onClose, onSubmit }: InterviewNoticeProps) => {
     <div
       id="background"
       className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
-      onClick={(e) =>
-        (e.target as HTMLDivElement).id === "background" && handleClose()
-      }
     >
       <div
         className={`bg-white p-5 shadow-modal rounded-2xl w-[826px] max-h-[90vh] flex flex-col`}
@@ -95,6 +105,20 @@ const InterviewNoticeModal = ({ onClose, onSubmit }: InterviewNoticeProps) => {
           <SmallBtn title="전송하기" onClick={handleSubmit} />
         </div>
       </div>
+
+      {/* ====== 면접 메세지 close 확인 모달 ======*/}
+      {showConfirmModal && (
+        <NotiPopUp
+          onClose={() => setShowConfirmModal(false)}
+          title="작성 중단하기"
+          description="작성 중인 내용이 저장되지 않고 사라집니다."
+          modalType="button"
+          firstButton={() => setShowConfirmModal(false)}
+          firstButtonText="취소"
+          secondButton={onClose}
+          secondButtonText="확인"
+        />
+      )}
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
