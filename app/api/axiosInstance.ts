@@ -1,5 +1,5 @@
 import axios from "axios";
-import { refreshAccessToken } from "./login/api";
+import { refreshToken } from "./login/api";
 import { useAuthStore } from "@/stores/authStore";
 
 const axiosInstance = axios.create({
@@ -11,47 +11,51 @@ const axiosInstance = axios.create({
 });
 
 // 요청 인터셉터
-axiosInstance.interceptors.request.use((config) => {
-  const { accessToken } = useAuthStore.getState();
-  if (accessToken) {
-    config.headers["Authorization"] = `${accessToken}`;
-  }
-  return config;
-});
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = useAuthStore.getState().accessToken;
+    if (token) {
+      config.headers.Authorization = `${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-// 응답 인터셉터
+// 응답 인터셉터 – 401일 경우 토큰 재발급 시도
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // accessToken 재발급 로직
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry // 무한루프 방지
+    ) {
       originalRequest._retry = true;
 
       try {
-        const newAccessToken = await refreshAccessToken();
-        if (!newAccessToken) throw new Error("토큰 재발급 실패");
+        const newToken = await refreshToken();
+        if (newToken) {
+          useAuthStore.getState().setAuth({
+            accessToken: newToken,
+            refreshToken: useAuthStore.getState().refreshToken!,
+            oauthSignUpKey: null,
+          });
 
-        // 기존 refreshToken 재사용
-        const { refreshToken } = useAuthStore.getState();
-
-        // setAuth로 토큰 갱신
-        useAuthStore.getState().setAuth({
-          accessToken: newAccessToken,
-          refreshToken: refreshToken!,
-          oauthSignUpKey: null,
-        });
-
-        // 재요청 Authorization 설정
-        originalRequest.headers["Authorization"] = `${newAccessToken}`;
-
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        console.error("RefreshToken 만료됨. 로그아웃 처리.");
+          // 새 토큰으로 Authorization 갱신 후 재요청
+          originalRequest.headers.Authorization = `${newToken}`;
+          return axiosInstance(originalRequest);
+        }
+      } catch (err) {
+        console.error("토큰 갱신 실패", err);
         useAuthStore.getState().logout();
-        window.location.href = "/";
-        return Promise.reject(refreshError);
+        localStorage.removeItem("ariari-auth");
+        localStorage.removeItem("ariari-storage");
+
+        window.location.reload();
+
+        alert("로그인 세션이 만료되었습니다. \n 다시 로그인해주세요.");
       }
     }
 
