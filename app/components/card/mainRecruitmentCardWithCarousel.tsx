@@ -18,9 +18,10 @@ import {
   addRecruitmentBookmark,
   removeRecruitmentBookmark,
 } from "@/api/recruitment/api";
-import { authStore } from "@/stores/userStore";
 import LoginModal from "../modal/login/loginModal";
 import MobileLoginModal from "../modal/login/mobileLoginModal";
+import { useUserStore } from "@/providers/userStoreProvider";
+import { useShallow } from "zustand/shallow";
 
 interface CardProps {
   data: RecruitmentData[];
@@ -37,7 +38,7 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
   const [isLastSlide, setIsLastSlide] = useState<boolean>(false);
   const slickRef = useRef<Slider>(null);
 
-  const isAuthenticated = authStore.getState().isSignIn;
+  const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn));
 
   useEffect(() => {
     setCardData(data);
