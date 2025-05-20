@@ -127,7 +127,7 @@ const ClubNoticeDropdown = ({
       title: string;
       body: string;
       isFixed: boolean;
-      deletedImageIds: string[];
+      deletedImageIds?: string[];
     },
     uploadedImages: string[]
   ) => {
