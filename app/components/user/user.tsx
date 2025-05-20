@@ -71,7 +71,7 @@ const User = () => {
           {/* 프로필 및 닉네임 표시 (드롭다운 토글 버튼) */}
           <button
             className="relative flex items-center space-x-2 p-2 text-subtext2 cursor-pointer rounded-[30px]
-            hover:bg-hover focus:bg-pressed"
+            hover:bg-hover active:bg-pressed"
             onClick={toggleDropdown}
           >
             <Image src={profileImageSrc} alt="profile" width={40} height={40} />
