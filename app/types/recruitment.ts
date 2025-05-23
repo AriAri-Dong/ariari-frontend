@@ -19,7 +19,6 @@ export interface RecruitmentData {
   // isActivated: boolean;
   recruitmentStatusType: RecruitmentStatusType;
   isMyBookmark: boolean;
-  recruitmentNoteDataList: RecruitmentNoteData[];
 }
 export interface ClubRecruitmentListResponse {
   recruitmentDataList: RecruitmentData[];
@@ -62,4 +61,7 @@ export interface RecruitmentResponse {
 export interface ClubRecruitmentListResponse {
   recruitmentDataList: RecruitmentData[];
   pageInfo: PageInfo;
+}
+export interface ClubActiceRecruitmentResponse {
+  recruitmentData: RecruitmentData;
 }

@@ -12,7 +12,9 @@ import {
 import axiosInstance from "../axiosInstance";
 import { ClubSearchCondition, Pageable } from "@/types/api";
 import {
+  ClubActiceRecruitmentResponse,
   ClubRecruitmentListResponse,
+  RecruitmentData,
   RecruitmentResponse,
 } from "@/types/recruitment";
 import { AxiosError } from "axios";
@@ -351,6 +353,19 @@ export const postRecruitment = async (clubId: string, formData: FormData) => {
         throw new Error(err.response.data.message);
       }
     }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
+
+// 동아리 활성 모집공고 조회
+export const getClubActiveRecruitment = async (clubId: string) => {
+  try {
+    const { data } = await axiosInstance.get<ClubActiceRecruitmentResponse>(
+      `${CLUBS}/${clubId}${RECRUITMENT}/active`
+    );
+    return data;
+  } catch (err) {
+    console.log("동아리 모집공고 리스트 조회 실패", err);
     throw new Error("문제가 발생했습니다.");
   }
 };

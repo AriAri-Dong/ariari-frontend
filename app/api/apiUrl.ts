@@ -99,3 +99,6 @@ export const CLUB_EVENT = "/club-events";
 
 // == CLUB EVENT ATTENDANCE
 export const ATTENDANCE = "/attendances";
+
+// == SYSTEM TERM ==
+export const SYSTEM_TERM = "/system-term";

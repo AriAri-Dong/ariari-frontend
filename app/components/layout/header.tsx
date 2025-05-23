@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -16,20 +16,27 @@ import MobileUser from "../user/mobileUser";
 import { getMemberData } from "@/api/member/api";
 import { useUserStore } from "@/providers/userStoreProvider";
 import { useAuthStore } from "@/stores/authStore";
+import Alert from "../alert/alert";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { setSearchTerm } = useContext(SearchTermContext);
-  const { setUserData } = useUserStore((state) => state);
+  const { setUserData, isSignIn } = useUserStore((state) => state);
   const { accessToken } = useAuthStore();
+
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const handleHomeClick = () => {
     router.push("/");
   };
 
   const handleButtonClick = () => {
-    router.push("/club");
+    if (!isSignIn) {
+      setAlertMessage("로그인 후 이용 가능합니다.");
+      return;
+    }
+    router.push("/user/club/create");
   };
 
   const handleSearch = (searchTerm: string) => {
@@ -97,11 +104,9 @@ const Header = () => {
           />
 
           <div className="hidden md:block">
-            <div className="flex gap-x-5">
+            <div className="flex gap-x-5 items-center">
               <User />
-              <Tooltip message="동아리 관리 버튼을 설명하는 헬프 텍스트 입니다. 000 (최대 55자)">
-                <SmallBtn title={"동아리 관리"} onClick={handleButtonClick} />
-              </Tooltip>
+              <SmallBtn title={"동아리 만들기"} onClick={handleButtonClick} />
             </div>
           </div>
         </div>
@@ -117,6 +122,9 @@ const Header = () => {
           </div>
         </div>
       </div>
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
+      )}
     </header>
   );
 };
