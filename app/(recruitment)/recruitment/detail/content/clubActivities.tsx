@@ -46,7 +46,10 @@ const ClubActivities = ({
 
   useEffect(() => {
     const list = prevRecruitmentList
-      .filter((item) => item.id !== recruitmentId)
+      .filter(
+        (item) =>
+          item.id !== recruitmentId && new Date(item.startDateTime) < new Date()
+      )
       .slice(0, prevRecruitmentListLength);
     setVisibleRecruitmentList(list);
   }, [prevRecruitmentListLength, prevRecruitmentList, recruitmentId]);
