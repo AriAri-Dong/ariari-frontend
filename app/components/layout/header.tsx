@@ -78,8 +78,8 @@ const Header = () => {
         console.log("유저 데이터 >>", res);
       } catch (error) {
         console.error("유저 데이터 불러오기 실패:", error);
-        localStorage.removeItem("ariari-auth");
-        localStorage.removeItem("ariari-storage");
+        // localStorage.removeItem("ariari-auth");
+        // localStorage.removeItem("ariari-storage");
       }
     };
 
