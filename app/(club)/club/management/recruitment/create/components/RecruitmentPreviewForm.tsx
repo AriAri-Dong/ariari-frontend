@@ -84,6 +84,7 @@ const RecruitmentPreviewForm = ({
     createdDateTime: new Date().toISOString(),
     recruitmentStatusType: "OPEN",
     isMyBookmark: false,
+    recruitmentNoteDataList: recruitmentNoteDataList,
   };
 
   return !isTapOver ? (

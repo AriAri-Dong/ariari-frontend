@@ -19,6 +19,7 @@ export interface RecruitmentData {
   // isActivated: boolean;
   recruitmentStatusType: RecruitmentStatusType;
   isMyBookmark: boolean;
+  recruitmentNoteDataList: RecruitmentNoteData[];
 }
 export interface ClubRecruitmentListResponse {
   recruitmentDataList: RecruitmentData[];
