@@ -81,10 +81,7 @@ const ClubMemberList = ({
                   setAlertMessage("관리자의 활동 상태를 변경할 수 없습니다");
                   return;
                 } else {
-                  handleStatusChange(
-                    [data.memberData.memberId],
-                    MAP_STATUS_TO_EN[value]
-                  );
+                  handleStatusChange([data.id], MAP_STATUS_TO_EN[value]);
                 }
               }}
               ImageTokenComponent={
@@ -141,10 +138,7 @@ const ClubMemberList = ({
                 setAlertMessage("관리자의 활동 상태를 변경할 수 없습니다");
                 return;
               } else {
-                handleStatusChange(
-                  [data.memberData.memberId],
-                  MAP_STATUS_TO_EN[value]
-                );
+                handleStatusChange([data.id], MAP_STATUS_TO_EN[value]);
               }
             }}
             ImageTokenComponent={

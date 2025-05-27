@@ -37,7 +37,7 @@ const Footer = () => {
             alt="instagram"
             width={28}
             height={28}
-            onClick={() => router.push("https://instagram.com")}
+            onClick={() => router.push("https://www.instagram.com/ariari.kr/")}
             className="cursor-pointer md:w-[44px] md:h-[44px]"
           />
         </div>

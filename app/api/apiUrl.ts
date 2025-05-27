@@ -96,3 +96,9 @@ export const PASS_REVIEW_DETAIL = "/pass-review/detail";
 
 // == CLUB_NOTICE ==
 export const CLUB_NOTICE = "/club-notices";
+
+// == CLUB EVENT ==
+export const CLUB_EVENT = "/club-events";
+
+// == CLUB EVENT ATTENDANCE
+export const ATTENDANCE = "/attendances";
