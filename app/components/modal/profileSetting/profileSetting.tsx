@@ -10,8 +10,10 @@ import Alert from "@/components/alert/alert";
 import { useProfileContext } from "@/context/profileConetxt";
 import { validateEmail } from "@/schema/email";
 import { formatTime } from "@/utils/timeFormatter";
-import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
-import { updateNickname, updateProfileType } from "@/api/member/api";
+import {
+  sendSignupSchoolAuthEmail,
+  validateSchoolAuthCode,
+} from "@/api/school/api";
 import { useRouter } from "next/navigation";
 import { signUpWithKey } from "@/api/login/api";
 import { useAuthStore } from "@/stores/authStore";
@@ -39,7 +41,7 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
   // 인증 번호 재전송
   const resetTimer = async () => {
     try {
-      await sendSchoolAuthEmail(profileData.email);
+      await sendSignupSchoolAuthEmail(profileData.email);
       setTimeLeft(300);
       setAlertMessage("인증번호를 전송했습니다.");
     } catch (error) {
@@ -117,7 +119,11 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
           return;
         }
         // 회원가입
-        const res = await signUpWithKey(oauthSignUpKey);
+        const res = await signUpWithKey(oauthSignUpKey, {
+          email: profileData.email,
+          schoolAuthCode: profileData.verificationCode,
+          nickName: profileData.username,
+        });
         console.log("회원가입 중....");
         setAuth({
           accessToken: res.accessToken,
@@ -157,7 +163,11 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
     }
 
     try {
-      const res = await signUpWithKey(oauthSignUpKey);
+      const res = await signUpWithKey(oauthSignUpKey, {
+        email: profileData.email,
+        schoolAuthCode: profileData.verificationCode,
+        nickName: profileData.username,
+      });
 
       setAuth({
         accessToken: res.accessToken,

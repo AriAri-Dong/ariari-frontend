@@ -12,10 +12,11 @@ import Step3 from "./step3";
 import { validateEmail } from "@/schema/email";
 import { useProfileContext } from "@/context/profileConetxt";
 import { formatTime } from "@/utils/timeFormatter";
-import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
+import {
+  sendSignupSchoolAuthEmail,
+  validateSchoolAuthCode,
+} from "@/api/school/api";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
-import { updateNickname, updateProfileType } from "@/api/member/api";
-import { useRouter } from "next/navigation";
 import { signUpWithKey } from "@/api/login/api";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -36,7 +37,6 @@ const MobileProfileSetting = ({
   onNextStep,
   onClose,
 }: ProfileSettingProps) => {
-  const router = useRouter();
   const { oauthSignUpKey, setAuth } = useAuthStore();
   const { profileData } = useProfileContext();
 
@@ -48,7 +48,7 @@ const MobileProfileSetting = ({
   // 인증 번호 재전송
   const resetTimer = async () => {
     try {
-      await sendSchoolAuthEmail(profileData.email);
+      await sendSignupSchoolAuthEmail(profileData.email);
       setTimeLeft(300);
       setAlertMessage("인증번호를 전송했습니다.");
     } catch (error) {
@@ -65,7 +65,11 @@ const MobileProfileSetting = ({
     }
 
     try {
-      const res = await signUpWithKey(oauthSignUpKey);
+      const res = await signUpWithKey(oauthSignUpKey, {
+        email: profileData.email,
+        schoolAuthCode: profileData.verificationCode,
+        nickName: profileData.username,
+      });
 
       setAuth({
         accessToken: res.accessToken,
@@ -140,7 +144,11 @@ const MobileProfileSetting = ({
           return;
         }
         // 회원가입
-        const res = await signUpWithKey(oauthSignUpKey);
+        const res = await signUpWithKey(oauthSignUpKey, {
+          email: profileData.email,
+          schoolAuthCode: profileData.verificationCode,
+          nickName: profileData.username,
+        });
         console.log("회원가입 중....");
         setAuth({
           accessToken: res.accessToken,

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RadioBtn from "@/components/button/radioBtn";
 import vector from "@/images/icon/vector.svg";
 import { useProfileContext } from "@/context/profileConetxt";
@@ -13,6 +13,7 @@ import {
   TERMS_OF_SERVICE_INFO,
 } from "@/data/policies";
 import { NoticeItem } from "@/types/components/withdrawInfo";
+import { getRandomNickname } from "@/api/login/api";
 
 const agreementContentMap: Record<ModalKey, string | NoticeItem[]> = {
   privacy: TERMS_OF_PRIVACY,
@@ -23,6 +24,21 @@ const agreementContentMap: Record<ModalKey, string | NoticeItem[]> = {
 const Step0 = () => {
   const { profileData, updateProfileData } = useProfileContext();
   const [openModal, setOpenModal] = useState<ModalKey | null>(null);
+
+  useEffect(() => {
+    const fetchNickname = async () => {
+      if (!profileData.username) {
+        try {
+          const nickname = await getRandomNickname();
+          updateProfileData({ username: nickname });
+        } catch (err) {
+          console.error("랜덤 닉네임 불러오기 실패", err);
+        }
+      }
+    };
+
+    fetchNickname();
+  }, []);
 
   const toggleAgreement = () => {
     updateProfileData({ agreements: !profileData.agreements });
@@ -66,7 +82,7 @@ const Step0 = () => {
       {openModal && (
         <AgreementDetailModal
           title={AGREEMENTS_CONTENTS[openModal].title}
-          content={agreementContentMap[openModal]} 
+          content={agreementContentMap[openModal]}
           onClose={() => setOpenModal(null)}
         />
       )}
