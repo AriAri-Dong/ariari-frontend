@@ -7,6 +7,18 @@ import { useProfileContext } from "@/context/profileConetxt";
 import RadioBtn from "@/components/button/radioBtn";
 import AgreementDetailBottomSheet from "@/components/bottomSheet/agreementsBottomSheet";
 import { AGREEMENTS_CONTENTS, ModalKey } from "@/data/agreements";
+import {
+  TERMS_OF_PRIVACY,
+  TERMS_OF_SERVICE_INFO,
+  TERMS_OF_CLUB,
+} from "@/data/policies";
+import { NoticeItem } from "@/types/components/withdrawInfo";
+
+const agreementContentMap: Record<ModalKey, string | NoticeItem[]> = {
+  privacy: TERMS_OF_PRIVACY,
+  rules: TERMS_OF_SERVICE_INFO,
+  club: TERMS_OF_CLUB,
+};
 
 const Step0 = () => {
   const { profileData, updateProfileData } = useProfileContext();
@@ -52,7 +64,7 @@ const Step0 = () => {
       {openBottomSheet && (
         <AgreementDetailBottomSheet
           title={AGREEMENTS_CONTENTS[openBottomSheet].title}
-          content={AGREEMENTS_CONTENTS[openBottomSheet].content}
+          content={agreementContentMap[openBottomSheet]}
           onClose={() => setOpenBottomSheet(null)}
         />
       )}

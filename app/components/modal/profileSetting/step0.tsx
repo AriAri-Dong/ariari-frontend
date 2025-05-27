@@ -7,6 +7,18 @@ import { useProfileContext } from "@/context/profileConetxt";
 import Image from "next/image";
 import AgreementDetailModal from "./agreementDetailModal";
 import { AGREEMENTS_CONTENTS, ModalKey } from "@/data/agreements";
+import {
+  TERMS_OF_CLUB,
+  TERMS_OF_PRIVACY,
+  TERMS_OF_SERVICE_INFO,
+} from "@/data/policies";
+import { NoticeItem } from "@/types/components/withdrawInfo";
+
+const agreementContentMap: Record<ModalKey, string | NoticeItem[]> = {
+  privacy: TERMS_OF_PRIVACY,
+  rules: TERMS_OF_SERVICE_INFO,
+  club: TERMS_OF_CLUB,
+};
 
 const Step0 = () => {
   const { profileData, updateProfileData } = useProfileContext();
@@ -54,7 +66,7 @@ const Step0 = () => {
       {openModal && (
         <AgreementDetailModal
           title={AGREEMENTS_CONTENTS[openModal].title}
-          content={AGREEMENTS_CONTENTS[openModal].content}
+          content={agreementContentMap[openModal]} 
           onClose={() => setOpenModal(null)}
         />
       )}
