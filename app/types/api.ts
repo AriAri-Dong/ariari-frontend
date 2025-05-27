@@ -12,6 +12,12 @@ export type AuthResponseType = {
   oauthSignUpKey: string;
 };
 
+export type SignUpWithKeyBody = {
+  email: string;
+  schoolAuthCode: string;
+  nickName: string;
+};
+
 export type UserDataResponseType = {
   memberData: {
     memberId: string;
