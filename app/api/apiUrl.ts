@@ -94,6 +94,9 @@ export const CLUB_REVIEW_TAG = "/club-review/tag-data";
 export const PASS_REVIEW = "/pass-review";
 export const PASS_REVIEW_DETAIL = "/pass-review/detail";
 
+// == CLUB_NOTICE ==
+export const CLUB_NOTICE = "/club-notices";
+
 // == CLUB EVENT ==
 export const CLUB_EVENT = "/club-events";
 
