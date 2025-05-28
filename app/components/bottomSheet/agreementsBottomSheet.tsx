@@ -2,10 +2,11 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import close from "@/images/icon/close.svg";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
+import { NoticeItem } from "@/types/components/withdrawInfo";
 
 type AgreementDetailBottomSheetProps = {
   title: string;
-  content: string;
+  content: string | NoticeItem[];
   onClose: () => void;
 };
 
@@ -14,6 +15,8 @@ const AgreementDetailBottomSheet = ({
   title,
   content,
 }: AgreementDetailBottomSheetProps) => {
+  const isStructured = Array.isArray(content);
+
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const handleClose = () => {
@@ -52,10 +55,24 @@ const AgreementDetailBottomSheet = ({
         </div>
         {/* 구분선 */}
         <div className="h-[1px] bg-menuborder" />
-
-        {/* 스크롤 가능한 내용 영역 */}
-        <div className="flex-1 overflow-y-auto pt-[22px] pb-5 text-subtext1">
-          {content}
+        <div className="flex-1 overflow-y-auto pt-[22px] pb-5 text-subtext1 custom-scrollbar">
+          {isStructured ? (
+            (content as NoticeItem[]).map((item, idx) => (
+              <div key={idx} className="mb-6">
+                <h2 className="text-mobile_h2 mb-2">{item.title}</h2>
+                {item.description && (
+                  <p className="text-mobile_h4 mb-2">{item.description}</p>
+                )}
+                <ul className="pl-5 space-y-1 text-mobile_body1_r text-subtext2">
+                  {item.sections.map((section, sIdx) => (
+                    <li key={sIdx}>{section}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          ) : (
+            <p className="text-sm whitespace-pre-wrap">{content}</p>
+          )}
         </div>
         {/* 고정 버튼 영역 */}
         <div className="pb-6 pt-[6px]">

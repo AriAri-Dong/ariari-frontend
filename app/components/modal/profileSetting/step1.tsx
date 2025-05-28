@@ -9,6 +9,7 @@ import { profileType } from "@/types/member";
 
 const Step1 = () => {
   const { profileData, updateProfileData } = useProfileContext();
+  console.log(profileData.username);
 
   const [inputValue, setInputValue] = useState<string>(profileData.username);
   const [selectedProfileAlias, setSelectedProfileAlias] = useState<
@@ -52,7 +53,7 @@ const Step1 = () => {
           onChange={handleChange}
         />
         <div className="absolute right-4 top-1/2 -translate-y-1/2 text-unselected text-body1_sb">
-          {inputValue.length}/8
+          {inputValue?.length ?? 0}/10
         </div>
       </div>
       <div className="grid grid-cols-4 gap-5">

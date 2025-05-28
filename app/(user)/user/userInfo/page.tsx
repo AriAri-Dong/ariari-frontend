@@ -48,6 +48,8 @@ const UserInfoPage = () => {
   const nickname = useUserStore((state) => state.memberData.nickname);
   const profileType = useUserStore((state) => state.memberData.profileType);
 
+  console.log(schoolData);
+
   const [cancelModal, setCancelModal] = useState<boolean>(false);
   const [registrationSchoolModal, setRegistrationSchoolModal] =
     useState<boolean>(false);
@@ -394,7 +396,7 @@ const UserInfoPage = () => {
         <h3 className="flex text-mobile_h3 mb-[14px] md:text-h3 md:mb-2.5">
           학교 정보
         </h3>
-        {schoolData === null ? (
+        {schoolData && !schoolData.name ? (
           <>
             {isMd ? (
               <TextInputWithBtn
@@ -491,7 +493,7 @@ const UserInfoPage = () => {
           </>
         )}
 
-        {schoolData !== null && (
+        {schoolData.name && (
           <div className="flex flex-col gap-2.5">
             <h3 className="flex text-text1 text-mobile_h3 md:text-h3">
               학교 등록 취소
