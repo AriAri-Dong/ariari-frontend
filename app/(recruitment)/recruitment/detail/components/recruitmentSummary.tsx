@@ -1,6 +1,6 @@
 "use client";
 
-import formatDateToDot from "@/utils/formatDateToDot";
+import { formatKSTTime } from "@/utils/formatKSTTime";
 
 interface RecruitmentSummaryProps {
   members: number;
@@ -23,8 +23,8 @@ const RecruitmentSummary = ({
   endDate,
   procedureType,
 }: RecruitmentSummaryProps) => {
-  const startDateTime = startDate ? formatDateToDot(startDate) : "";
-  const endDateTime = endDate ? formatDateToDot(endDate) : "";
+  const startDateTime = startDate ? formatKSTTime(startDate, "YYYY.MM.DD") : "";
+  const endDateTime = endDate ? formatKSTTime(endDate, "YYYY.MM.DD") : "";
   return (
     <div className="felx text-subtext1 space-y-[14px]">
       <div className="flex flex-row gap-[65px]">

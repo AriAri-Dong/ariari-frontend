@@ -145,9 +145,6 @@ const ApplicationFormBottomSheet = ({
     setAnswers((prev) => ({ ...prev, [index]: value }));
   };
 
-  const handleClose = () => {
-    onClose();
-  };
   // 유효성 검사 및 요청 데이터 생성
   const createApplySaveReq = (type: "APPLY" | "APPLY_TEMP"): FormData => {
     if (type == "APPLY" && !name) {
@@ -288,6 +285,16 @@ const ApplicationFormBottomSheet = ({
     });
   }, [recruitmentId]);
 
+  const handleClose = () => {
+    setIsVisible(false);
+  };
+
+  const handleTransitionEnd = () => {
+    if (!isVisible) {
+      onClose();
+    }
+  };
+
   useEffect(() => {
     setIsVisible(true);
   }, []);
@@ -307,6 +314,7 @@ const ApplicationFormBottomSheet = ({
           isVisible ? "translate-y-0" : "translate-y-full"
         } flex flex-col`}
         style={{ height: "calc(100vh - 40px)" }}
+        onTransitionEnd={handleTransitionEnd}
       >
         {/* 제목 영역 */}
         <div className="flex justify-between mt-[22px] mb-4">

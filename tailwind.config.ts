@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import { PluginAPI } from "tailwindcss/types/config";
+import typography from "@tailwindcss/typography";
 
 const config: Config = {
   darkMode: "class",
@@ -140,6 +141,7 @@ const config: Config = {
     },
   },
   plugins: [
+    typography,
     function (pluginAPI: PluginAPI) {
       pluginAPI.addUtilities({
         ".custom-scrollbar": {

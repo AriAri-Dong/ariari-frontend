@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { useUserStore } from "@/providers/userStoreProvider";
+import { useShallow } from "zustand/shallow";
 import Image from "next/image";
 import ResultBadge from "@/components/badge/resultBadge";
 import close from "@/images/icon/close.svg";
@@ -22,6 +24,9 @@ const ApplicationFormViewModal = ({
   setSelectedOption,
   setIsModalOpen,
 }: ApplicationFormViewModalProps) => {
+  const memberId = useUserStore(
+    useShallow((state) => state.memberData.memberId)
+  );
   const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
   const {
     applyData,
@@ -31,8 +36,9 @@ const ApplicationFormViewModal = ({
     portfolioUrl,
   } = applyDetail ?? {};
 
-  const handleClose = () => {
+  const handleClose = (e: React.MouseEvent) => {
     onClose();
+    e.stopPropagation();
   };
 
   const handleDownload = () => {};
@@ -54,7 +60,7 @@ const ApplicationFormViewModal = ({
       className="fixed flex-col gap-5 inset-0 z-50 flex
       items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
       onClick={(e) =>
-        (e.target as HTMLDivElement).id === "background" && handleClose()
+        (e.target as HTMLDivElement).id === "background" && handleClose(e)
       }
     >
       <div
@@ -83,11 +89,13 @@ const ApplicationFormViewModal = ({
           </span>
         </div>
         <div className="flex gap-2">
-          <UpdateApplyStatusOption
-            checkedApplications={[applyId]}
-            setSelectedStatus={setSelectedOption}
-            setIsModalOpen={setIsModalOpen}
-          />
+          {memberId !== applyData.memberData.memberId && (
+            <UpdateApplyStatusOption
+              checkedApplications={[applyId]}
+              setSelectedStatus={setSelectedOption}
+              setIsModalOpen={setIsModalOpen}
+            />
+          )}
           <ResultBadge status={APPLY_STATUS_MAP[applyData.applyStatusType]} />
         </div>
       </div>

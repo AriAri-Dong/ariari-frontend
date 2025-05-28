@@ -3,7 +3,7 @@ import { getMyApplyList, getMyApplyTmpList } from "@/api/apply/api";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 
 // 내 지원 리스트 조회
-export const useMyApplyListQuery = () => {
+export const useMyApplyListQuery = (options = {}) => {
   return useQuery({
     queryKey: [QUERY_KEYS.myApplyList],
     queryFn: getMyApplyList,
@@ -11,10 +11,12 @@ export const useMyApplyListQuery = () => {
       allApplications: data.applyDataList,
       totalCount: data.pageInfo.totalSize,
     }),
+    ...options,
   });
 };
+
 // 내 임시 지원 리스트 조회
-export const useMyApplyTmpListQuery = () => {
+export const useMyApplyTmpListQuery = (options = {}) => {
   return useQuery({
     queryKey: [QUERY_KEYS.myApplyTmpList],
     queryFn: getMyApplyTmpList,
@@ -22,5 +24,6 @@ export const useMyApplyTmpListQuery = () => {
       tempList: data.applyDataList,
       totalCount: data.pageInfo.totalSize,
     }),
+    ...options,
   });
 };
