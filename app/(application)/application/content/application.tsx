@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
 import {
@@ -10,9 +11,11 @@ import {
 
 import Image from "next/image";
 import notice from "@/images/icon/notice.svg";
+import closed from "@/images/icon/popup/closed.svg";
 
 import ListSection from "./listSection";
 import SubTap from "@/components/tab/subTap";
+import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import Alert from "@/components/alert/alert";
 import ErrorNotice from "@/components/feedback/error";
@@ -22,13 +25,16 @@ import { OptionType } from "@/types/components/pulldown";
 const ITEMS_PER_PAGE = 10;
 
 const Application = () => {
+  const router = useRouter();
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
-
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const { data: { allApplications = [], totalCount: applyCount = 0 } = {} } =
-    useMyApplyListQuery();
-  const { data: { tempList = [], totalCount: tmpApplyCount = 0 } = {} } =
-    useMyApplyTmpListQuery();
+    useMyApplyListQuery({ enabled: isSignIn });
 
+  const { data: { tempList = [], totalCount: tmpApplyCount = 0 } = {} } =
+    useMyApplyTmpListQuery({ enabled: isSignIn });
+
+  // 전형 진행중
   const inProgressApplications = useMemo(() => {
     return allApplications.filter(
       (item) =>
@@ -36,7 +42,7 @@ const Application = () => {
         item.applyStatusType === "INTERVIEW"
     );
   }, [allApplications]);
-
+  // 최종 발표 완료
   const finishedApplications = useMemo(() => {
     return allApplications.filter(
       (item) =>
@@ -45,10 +51,10 @@ const Application = () => {
   }, [allApplications]);
 
   const [options, setOptions] = useState<OptionType[]>([
-    { id: 0, label: "전체" },
-    { id: 1, label: "작성중" },
-    { id: 2, label: "전형 진행중" },
-    { id: 3, label: "최종발표 완료" },
+    { id: 0, label: "전체", number: 0 },
+    { id: 1, label: "작성중", number: 0 },
+    { id: 2, label: "전형 진행중", number: 0 },
+    { id: 3, label: "최종발표 완료", number: 0 },
   ]);
   const [selectedOption, setSelectedOption] = useState<string>(
     options[0].label
@@ -64,21 +70,22 @@ const Application = () => {
   };
 
   useEffect(() => {
-    // 전형 진행중, 최종발표 완료 업데이트
-    const inProgress = allApplications.filter(
-      (item) =>
-        item.applyStatusType === "PENDENCY" ||
-        item.applyStatusType === "INTERVIEW"
-    );
+    if (isSignIn) {
+      // 전형 진행중, 최종발표 완료 업데이트
+      const inProgress = allApplications.filter(
+        (item) =>
+          item.applyStatusType === "PENDENCY" ||
+          item.applyStatusType === "INTERVIEW"
+      );
 
-    const finished = allApplications.filter(
-      (item) =>
-        item.applyStatusType === "APPROVE" || item.applyStatusType === "REFUSAL"
-    );
+      const finished = allApplications.filter(
+        (item) =>
+          item.applyStatusType === "APPROVE" ||
+          item.applyStatusType === "REFUSAL"
+      );
 
-    // 지원서 개수 업데이트
-    setOptions(
-      [
+      // 지원서 수 계산
+      const newOptions = [
         {
           id: 0,
           label: "전체",
@@ -87,9 +94,18 @@ const Application = () => {
         { id: 1, label: "작성중", number: tempList.length },
         { id: 2, label: "전형 진행중", number: inProgress.length },
         { id: 3, label: "최종발표 완료", number: finished.length },
-      ].map(({ number, ...rest }) => (number > 0 ? { ...rest, number } : rest))
-    );
-  }, [allApplications, tempList]);
+      ];
+
+      // 변경된 경우 업데이트
+      setOptions((prevOptions) => {
+        const isSame =
+          prevOptions.length === newOptions.length &&
+          prevOptions.every((prev, i) => prev.number === newOptions[i].number);
+
+        return isSame ? prevOptions : newOptions;
+      });
+    }
+  }, [allApplications, tempList, isSignIn]);
 
   // 옵션 별 데이터
   const filteredApplications = useMemo(() => {
@@ -120,10 +136,25 @@ const Application = () => {
   }
   if (!isSignIn) {
     return (
-      <ErrorNotice
-        description="로그인 후 내 지원 내역을 확인할 수 있어요"
-        title="Please Sign In"
-      />
+      <div className="flex flex-col items-center justify-center h-[60vh] text-center px-4">
+        <div className="text-[48px] mb-4">
+          <Image
+            src={closed}
+            alt={"lock"}
+            width={30}
+            height={30}
+            className="md:w-[70px] md:h-[70px]"
+          />
+        </div>
+        <h2 className="text-text1 text-mobile_h1_contents_title mb-2 md:text-h1_contents_title">
+          로그인이 필요한 서비스입니다
+        </h2>
+        <p className="text-subtext2 text-mobile_body2_m mb-6 md:text-h4">
+          나의 동아리 지원 현황은 로그인 후 확인하실 수 있어요.
+        </p>
+
+        <SmallBtn title={"뒤로가기"} onClick={() => router.back()} />
+      </div>
     );
   }
 

@@ -81,6 +81,9 @@ const ApplicationFormPreviewModal = ({
     <div
       id="background"
       className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
+      onClick={(e) =>
+        (e.target as HTMLDivElement).id === "background" && handleClose()
+      }
     >
       <div
         className="absolute top-4 right-4 cursor-pointer bg-white p-2 border border-menuborder rounded-full"

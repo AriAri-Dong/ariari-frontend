@@ -104,7 +104,6 @@ const ClubHelpPage = () => {
       {/* 모집안내 바 : 로그인 x or 동아리 가입 x */}
       {(role == null || !isSignIn) && (
         <RecruitmentGuideFloatingBar
-          deadline={new Date("2024-12-31T23:59:59")}
           isWriteButtonVisible={type == "Q&A"}
           handleWrite={handleOpenForm}
         />

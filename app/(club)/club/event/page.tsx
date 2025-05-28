@@ -66,13 +66,12 @@ const ClubEventPage = () => {
 
       {/* ====== PC 해상도에서만 보이는 하단 버튼 ======  */}
       {/* 모집안내 바 : 로그인 x or 동아리 가입 x */}
-      {/* {(role == null || !isSignIn) && (
+      {(role == null || !isSignIn) && (
         <RecruitmentGuideFloatingBar
-          deadline={new Date("2024-12-31T23:59:59")}
           isWriteButtonVisible={false}
           handleWrite={() => {}}
         />
-      )} */}
+      )}
 
       {/* ====== 모바일 해상도에서만 보이는 하단 버튼 ======  */}
       {(role == null || !isSignIn) && (

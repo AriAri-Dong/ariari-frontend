@@ -152,9 +152,6 @@ const ApplicationFormModal = ({
     setAnswers((prev) => ({ ...prev, [index]: value }));
   };
 
-  const handleClose = () => {
-    onClose();
-  };
   // 유효성 검사 및 요청 데이터 생성
   const createApplySaveReq = (type: "APPLY" | "APPLY_TEMP"): FormData => {
     if (type == "APPLY" && !name) {
@@ -295,6 +292,11 @@ const ApplicationFormModal = ({
     });
   }, [recruitmentId]);
 
+  const handleClose = (e: React.MouseEvent) => {
+    onClose();
+    e.stopPropagation();
+  };
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -307,9 +309,9 @@ const ApplicationFormModal = ({
       id="background"
       className="fixed flex-col gap-5 inset-0 z-50 flex
           items-center justify-center backdrop-blur-sm bg-black bg-opacity-50"
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
+      onClick={(e) =>
+        (e.target as HTMLDivElement).id === "background" && handleClose(e)
+      }
     >
       <div
         className="absolute top-4 right-4 cursor-pointer bg-white p-2 border border-menuborder rounded-full"

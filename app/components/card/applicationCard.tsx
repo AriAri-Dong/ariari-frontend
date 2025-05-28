@@ -14,6 +14,8 @@ import chevron_right from "@/images/icon/chevron_right.svg";
 import deleteIcon from "@/images/icon/delete.svg";
 import DeleteBtn from "../button/iconBtn/deleteBtn";
 import NotiPopUp from "../modal/notiPopUp";
+import ApplicationFormViewModal from "../modal/club/applicationFormViewModal";
+import MobileApplicationFormViewModal from "../modal/club/mobileApplicationFormViewModal";
 
 import daysDifference from "@/utils/dayDifference";
 import formatDateToDot from "@/utils/formatDateToDot";
@@ -52,7 +54,8 @@ const ApplicationCard = ({
 }: ApplicationCardProps) => {
   const isMdUp = useResponsive("md");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
+  const [isApplicationFormOpen, setIsApplicationFormOpen] =
+    useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const deleteTmp = useDeleteTmpMutation({
@@ -113,8 +116,11 @@ const ApplicationCard = ({
 
   return (
     <div
-      tabIndex={0}
-      className="w-full flex flex-col gap-3 py-3.5 px-4 mb-2.5 bg-background rounded-[8px] cursor-pointer focus:bg-hover md:hover:bg-hover md:active:bg-pressed md:px-6 md:py-[26px] md:mb-2.5 md:gap-5 "
+      className={`w-full flex flex-col gap-3 py-3.5 px-4 mb-2.5 bg-background rounded-[8px] md:px-6 md:py-[26px] md:mb-2.5 md:gap-5
+      ${
+        !isApplicationFormOpen &&
+        "focus:bg-hover md:hover:bg-hover md:active:bg-pressed cursor-pointer"
+      }`}
       onClick={onApplicationClick}
     >
       <div className="flex justify-between items-center">
@@ -132,11 +138,15 @@ const ApplicationCard = ({
         </div>
         {canDelete && (
           <div className="md:hidden">
-            <DeleteBtn
-              onClick={() => {
+            <button
+              className="flex w-5 h-5 justify-center items-center p-0.5 rounded-full cursor-pointer hover:bg-hover focus:bg-hover"
+              onClick={(e) => {
+                e.stopPropagation();
                 setIsModalOpen(true);
               }}
-            />
+            >
+              <Image src={deleteIcon} alt={"delete"} width={16} height={16} />
+            </button>
           </div>
         )}
         <div className="hidden items-center gap-2.5 md:flex">
@@ -190,13 +200,7 @@ const ApplicationCard = ({
                 setIsModalOpen(true);
               }}
             >
-              <Image
-                src={deleteIcon}
-                alt={"delete"}
-                width={24}
-                height={24}
-                className=""
-              />
+              <Image src={deleteIcon} alt={"delete"} width={24} height={24} />
             </button>
           )}
         </div>
@@ -248,6 +252,27 @@ const ApplicationCard = ({
             onSubmit={() => {
               setAlertMessage("지원서가 제출되었습니다.");
             }}
+          />
+        ))}
+      {type === "APPLY" &&
+        isApplicationFormOpen &&
+        (isMdUp ? (
+          <ApplicationFormViewModal
+            applyId={data.id}
+            onClose={() => {
+              setIsApplicationFormOpen(false);
+            }}
+            setSelectedOption={() => {}}
+            setIsModalOpen={() => {}}
+          />
+        ) : (
+          <MobileApplicationFormViewModal
+            applyId={data.id}
+            onClose={() => {
+              setIsApplicationFormOpen(false);
+            }}
+            setSelectedOption={() => {}}
+            setIsModalOpen={() => {}}
           />
         ))}
       {/* == 알림 == */}
