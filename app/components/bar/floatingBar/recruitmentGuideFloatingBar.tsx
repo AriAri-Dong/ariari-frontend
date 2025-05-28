@@ -24,7 +24,7 @@ const RecruitmentGuideFloatingBar = ({
   const router = useRouter();
   const { data, isLoading } = useClubActiveRecruitment(clubId);
 
-  if (isLoading || !data) return null;
+  if (isLoading || !data?.recruitmentData) return null;
 
   const handleView = () => {
     router.push(`/recruitment/detail?id=${data.recruitmentData.id}`);
