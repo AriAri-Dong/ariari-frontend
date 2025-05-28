@@ -46,7 +46,7 @@ const SubTap = ({
           onClick={() => handleOption(option.label)}
         >
           <p className="text-body1_sb md:text-h4_sb">{option.label}</p>
-          {option.number && (
+          {option.number !== undefined && option.number > 0 && (
             <p
               className={`w-5 h-5 flex items-center justify-center rounded-full text-8 transition-all duration-500 md:w-6 md:h-6 md:text-10 ${
                 selectedOption === option.label

@@ -107,7 +107,6 @@ const AcceptanceReviewContent = () => {
         {/* PC 모집안내 바 :  동아리 가입 x 또는 로그인 x*/}
         {(role == null || !isSignIn) && (
           <RecruitmentGuideFloatingBar
-            deadline={new Date("2025-03-01T23:59:59")}
             isWriteButtonVisible={false}
             handleWrite={() => {}}
           />

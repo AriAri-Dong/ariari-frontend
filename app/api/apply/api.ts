@@ -43,7 +43,6 @@ export const getAppliedList = async (
       },
     });
 
-    console.log("내 임시 지원 리스트 조회 성공:", data);
     return data;
   } catch (err) {
     console.error("내 임시 지원 리스트 조회 실패:", err);
@@ -87,7 +86,6 @@ export const getApplyForm = async (clubId: string) => {
 // 내 임시 지원 리스트 조회
 export const getMyApplyTmpList = async () => {
   try {
-    console.log("내 임시 지원 리스트 조회");
     const response = await axiosInstance.get<ApplyTempListRes>(APPLY_TEMPS_MY);
     return response.data;
   } catch (err) {

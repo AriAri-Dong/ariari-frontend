@@ -7,9 +7,10 @@ import { useAuthStore } from "@/stores/authStore";
 import ClubRanking from "@/(home)/home/content/clubRanking";
 import PopularRecruitment from "@/(home)/home/content/popularRecruitment";
 import LatestRecruitment from "@/(home)/home/content/latestRecruitment";
+import MyClub from "./content/myClub";
 
 const HomePageContent = () => {
-  const { setUserData } = useUserStore((state) => state);
+  const { setUserData, isSignIn } = useUserStore((state) => state);
   const accessToken = useAuthStore((state) => state.accessToken);
 
   useEffect(() => {
@@ -33,6 +34,7 @@ const HomePageContent = () => {
 
   return (
     <div className="w-full">
+      {isSignIn && <MyClub />}
       <ClubRanking />
       <PopularRecruitment />
       <LatestRecruitment />
