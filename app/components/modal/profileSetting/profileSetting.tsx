@@ -34,11 +34,10 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
   const { oauthSignUpKey, setAuth } = useAuthStore();
   const { profileData } = useProfileContext();
 
-  const [timeLeft, setTimeLeft] = useState<number>(300); // 인증 시간 (5분)
-  const [alertMessage, setAlertMessage] = useState<string | null>(null); // Alert 메시지 상태
-  const [verificationFailed, setVerificationFailed] = useState(false); // Step3 인증 실패 상태
+  const [timeLeft, setTimeLeft] = useState<number>(300);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [verificationFailed, setVerificationFailed] = useState(false);
 
-  // 인증 번호 재전송
   const resetTimer = async () => {
     try {
       await sendSignupSchoolAuthEmail(profileData.email);
@@ -71,6 +70,38 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
     return true;
   };
 
+  const doSignup = async ({
+    skipVerification = false,
+  }: {
+    skipVerification?: boolean;
+  }) => {
+    if (!oauthSignUpKey) {
+      setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
+      return;
+    }
+
+    try {
+      const payload = {
+        email: skipVerification ? null : profileData.email,
+        profileType: profileData.selectedProfileType,
+        schoolAuthCode: skipVerification ? null : profileData.verificationCode,
+        nickName: profileData.username,
+      };
+
+      const res = await signUpWithKey(oauthSignUpKey, payload);
+
+      setAuth({
+        accessToken: res.accessToken,
+        refreshToken: res.refreshToken,
+        oauthSignUpKey: null,
+      });
+
+      onNextStep(4);
+    } catch (error) {
+      setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
   const handleNextStep = async () => {
     setAlertMessage(null);
 
@@ -79,18 +110,14 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
         setAlertMessage("모든 약관에 동의해주세요.");
         return;
       }
-    }
-
-    if (step === 1) {
-      // 1단계: 사용자 이름 유효성 검사
+      onNextStep(1);
+    } else if (step === 1) {
       if (!profileData.username || profileData.username.trim() === "") {
         setAlertMessage("사용자 이름을 입력해주세요.");
         return;
       }
-
-      onNextStep(2); // 2단계로 넘어감
+      onNextStep(2);
     } else if (step === 2) {
-      // 2단계: 이메일 유효성 검사
       if (!profileData.email || profileData.email.trim() === "") {
         setAlertMessage("이메일을 입력해주세요.");
         return;
@@ -102,7 +129,6 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
         return;
       }
 
-      // 이메일 형식 확인 + 타이머
       try {
         await resetTimer();
         onNextStep(3);
@@ -112,29 +138,7 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
     } else if (step === 3) {
       const isValid = await validateCurrentStep();
       if (!isValid) return;
-
-      try {
-        if (!oauthSignUpKey) {
-          setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
-          return;
-        }
-        // 회원가입
-        const res = await signUpWithKey(oauthSignUpKey, {
-          email: profileData.email,
-          schoolAuthCode: profileData.verificationCode,
-          nickName: profileData.username,
-        });
-        console.log("회원가입 중....");
-        setAuth({
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
-          oauthSignUpKey: null,
-        });
-
-        onNextStep(4);
-      } catch (error) {
-        setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
-      }
+      await doSignup({ skipVerification: false });
     } else {
       onNextStep(step + 1);
     }
@@ -157,28 +161,7 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
   }, [step]);
 
   const handleSkip = async () => {
-    if (!oauthSignUpKey) {
-      setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
-      return;
-    }
-
-    try {
-      const res = await signUpWithKey(oauthSignUpKey, {
-        email: profileData.email,
-        schoolAuthCode: profileData.verificationCode,
-        nickName: profileData.username,
-      });
-
-      setAuth({
-        accessToken: res.accessToken,
-        refreshToken: res.refreshToken,
-        oauthSignUpKey: null,
-      });
-
-      onNextStep(4);
-    } catch (error) {
-      setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
-    }
+    await doSignup({ skipVerification: true });
   };
 
   return (
@@ -201,15 +184,14 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
           title={step === 3 ? `학교 인증하기 ${formatTime(timeLeft)}` : "다음"}
           onClick={handleNextStep}
         />
-        {step === 2 ||
-          (step === 3 && (
-            <button
-              onClick={handleSkip}
-              className="text-primary text-body1_sb py-2.5"
-            >
-              건너뛰기
-            </button>
-          ))}
+        {(step === 2 || step === 3) && (
+          <button
+            onClick={handleSkip}
+            className="text-primary text-body1_sb py-2.5"
+          >
+            건너뛰기
+          </button>
+        )}
       </div>
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
