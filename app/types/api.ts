@@ -4,12 +4,20 @@ import {
   ClubRegionType,
   ParticipantType,
 } from "./club";
+import { profileType } from "./member";
 import { TagData } from "./review";
 
 export type AuthResponseType = {
   accessToken: string;
   refreshToken: string;
   oauthSignUpKey: string;
+};
+
+export type SignUpWithKeyBody = {
+  email: string | null;
+  profileType: profileType;
+  schoolAuthCode: string | null;
+  nickName: string;
 };
 
 export type UserDataResponseType = {

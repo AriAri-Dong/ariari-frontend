@@ -12,7 +12,7 @@ import ProfileSettingModal from "../modal/profileSetting/profileSettingModal";
 import MobileProfileSettingModal from "../modal/profileSetting/mobile/mobileProfileSettingModal";
 
 // 최대 노출 횟수
-const MAX_MODAL_COUNT_PER_SESSION = 3;
+const MAX_MODAL_COUNT_PER_SESSION = 1000;
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
@@ -45,6 +45,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
     "/club/activityHistory",
     "/club/recruitment",
     "/club/management/activity/accounting",
+    "/club/management/activity/notice",
     "/club/management/members",
     "/club/management/close",
     "/club/withdrawal",

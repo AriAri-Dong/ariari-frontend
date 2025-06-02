@@ -4,6 +4,7 @@ export const REISSUE = "/reissue/token";
 export const LOGOUT = "/auth/logout";
 export const UNREGISTER = "/unregister";
 export const SIGNUP = "/sign-up/kakao";
+export const RANDOM_NICKNAME = "/sign-up/random-nickname";
 
 // == MEMBER ==
 export const MEMBERS = "/members";
@@ -47,6 +48,7 @@ export const SCHOOLS = "/schools";
 export const SCHOOLS_VALIDATE = "/schools/auth/validate";
 export const SCHOOLS_SEND = "/schools/auth/send";
 export const SCHOOLS_CANCEL = "/schools/auth/cancel";
+export const SCHOOLS_SEND_SIGNUP = "/schools/auth/send/first-login";
 
 // == APPLY ==
 export const APPLY = "/applies";
@@ -93,6 +95,9 @@ export const CLUB_REVIEW_TAG = "/club-review/tag-data";
 // == PASS_REVIEW ==
 export const PASS_REVIEW = "/pass-review";
 export const PASS_REVIEW_DETAIL = "/pass-review/detail";
+
+// == CLUB_NOTICE ==
+export const CLUB_NOTICE = "/club-notices";
 
 // == CLUB EVENT ==
 export const CLUB_EVENT = "/club-events";

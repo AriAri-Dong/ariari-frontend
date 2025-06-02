@@ -194,6 +194,7 @@ const CreateClubPage = () => {
 
       if (createdClub) {
         setCreatedClubId(createdClub.id);
+        setSubmit(true);
       } else {
         throw new Error("생성된 동아리를 찾을 수 없습니다.");
       }
@@ -201,7 +202,6 @@ const CreateClubPage = () => {
       console.error("동아리 생성 실패:", error);
       setAlertMessage("동아리 생성에 실패했습니다.");
       setAlertVisible(true);
-      setSubmit(false);
     }
   };
 
