@@ -58,7 +58,11 @@ const MobileProfileSetting = ({
     }
   };
 
-  const handleSkip = async () => {
+  const doSignup = async ({
+    skipVerification,
+  }: {
+    skipVerification: boolean;
+  }) => {
     if (!oauthSignUpKey) {
       setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
       return;
@@ -66,8 +70,9 @@ const MobileProfileSetting = ({
 
     try {
       const res = await signUpWithKey(oauthSignUpKey, {
-        email: profileData.email,
-        schoolAuthCode: profileData.verificationCode,
+        email: skipVerification ? null : profileData.email,
+        profileType: profileData.selectedProfileType,
+        schoolAuthCode: skipVerification ? null : profileData.verificationCode,
         nickName: profileData.username,
       });
 
@@ -83,6 +88,10 @@ const MobileProfileSetting = ({
     }
   };
 
+  const handleSkip = async () => {
+    await doSignup({ skipVerification: true });
+  };
+
   const validateCurrentStep = async () => {
     if (step === 2) {
       const emailValidationError = validateEmail(profileData.email);
@@ -92,12 +101,9 @@ const MobileProfileSetting = ({
       }
     } else if (step === 3) {
       try {
-        // 학교 인증 코드 검증
         await validateSchoolAuthCode(profileData.verificationCode);
         setVerificationFailed(false);
-        // 인증 성공 후 프로필 열림 상태 변경
         setIsProfileOpen(true);
-        // onClose() 호출은 인증 완료 후 마지막에 처리
       } catch (error) {
         setVerificationFailed(true);
         setAlertMessage("인증번호가 올바르지 않습니다. 다시 확인해주세요.");
@@ -115,55 +121,30 @@ const MobileProfileSetting = ({
         setAlertMessage("모든 약관에 동의해주세요.");
         return;
       }
-    }
-
-    if (step === 1) {
-      // 사용자 이름 유효성 검사
+      onNextStep(1);
+    } else if (step === 1) {
       if (!profileData.username || profileData.username.trim() === "") {
         setAlertMessage("사용자 이름을 입력해주세요.");
         return;
       }
       onNextStep(2);
-    }
-
-    if (step === 2) {
+    } else if (step === 2) {
       if (!profileData.email || profileData.email.trim() === "") {
         setAlertMessage("이메일을 입력해주세요.");
         return;
       }
 
-      resetTimer();
+      await resetTimer();
       onNextStep(3);
     } else if (step === 3) {
       const isValid = await validateCurrentStep();
       if (!isValid) return;
-
-      try {
-        if (!oauthSignUpKey) {
-          setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
-          return;
-        }
-        // 회원가입
-        const res = await signUpWithKey(oauthSignUpKey, {
-          email: profileData.email,
-          schoolAuthCode: profileData.verificationCode,
-          nickName: profileData.username,
-        });
-        console.log("회원가입 중....");
-        setAuth({
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
-          oauthSignUpKey: null,
-        });
-
-        onNextStep(4);
-      } catch (error) {
-        setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
-      }
+      await doSignup({ skipVerification: false });
     } else {
       onNextStep(step + 1);
     }
   };
+
   const handleBack = () => {
     if (step > 1) {
       onNextStep(step - 1);
@@ -193,15 +174,12 @@ const MobileProfileSetting = ({
   }, [isProfileOpen]);
 
   return (
-    <div
-      className="fixed top-0 left-0 w-full h-full bg-background z-50 flex flex-col
-    justify-between pt-[46px] pb-5 px-4 md:hidden"
-    >
+    <div className="fixed top-0 left-0 w-full h-full bg-background z-50 flex flex-col justify-between pt-[46px] pb-5 px-4 md:hidden">
       <div className="flex flex-col items-center">
-        <div className={`w-full relative flex items-center`}>
+        <div className="w-full relative flex items-center">
           <Image
             src={backVector}
-            alt={"prev"}
+            alt="prev"
             height={24}
             width={24}
             onClick={handleBack}
@@ -225,26 +203,26 @@ const MobileProfileSetting = ({
           />
         )}
       </div>
+
       <div className="flex flex-col w-full gap-2">
         <LargeBtn
           title={step === 3 ? `학교 인증하기 ${formatTime(timeLeft)}` : "다음"}
           onClick={handleNextStep}
         />
-        {step === 2 ||
-          (step === 3 && (
-            <button
-              onClick={handleSkip}
-              className="text-primary text-mobile_body2_sb py-2.5"
-            >
-              건너뛰기
-            </button>
-          ))}
+        {(step === 2 || step === 3) && (
+          <button
+            onClick={handleSkip}
+            className="text-primary text-mobile_body2_sb py-2.5"
+          >
+            건너뛰기
+          </button>
+        )}
         {alertMessage && (
           <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
       </div>
-      {/* 프로필 인증 후 MobileSnackBar 표시 */}
-      {isProfileOpen && <MobileSnackBar text={"로그인이 완료되었습니다."} />}
+
+      {isProfileOpen && <MobileSnackBar text="로그인이 완료되었습니다." />}
     </div>
   );
 };
