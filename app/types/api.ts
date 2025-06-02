@@ -4,6 +4,7 @@ import {
   ClubRegionType,
   ParticipantType,
 } from "./club";
+import { profileType } from "./member";
 import { TagData } from "./review";
 
 export type AuthResponseType = {
@@ -13,8 +14,9 @@ export type AuthResponseType = {
 };
 
 export type SignUpWithKeyBody = {
-  email: string;
-  schoolAuthCode: string;
+  email: string | null;
+  profileType: profileType;
+  schoolAuthCode: string | null;
   nickName: string;
 };
 
