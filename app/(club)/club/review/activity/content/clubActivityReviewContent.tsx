@@ -64,9 +64,6 @@ const ClubActivityReviewContent = () => {
     return <ErrorNotice description={error} />;
   }
 
-  if (loading && review.length == 0) {
-    return <Loading />;
-  }
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
       <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
