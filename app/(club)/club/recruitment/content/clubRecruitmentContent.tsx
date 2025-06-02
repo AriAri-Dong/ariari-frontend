@@ -15,39 +15,30 @@ import LeftMenu from "../../components/menu/leftMenu";
 import RecruitmentGuideForm from "../components/RecruitmentGuideForm";
 import Alert from "@/components/alert/alert";
 
-import formatDateToDot from "@/utils/formatDateToDot";
-
 import { RecruitmentData } from "@/types/recruitment";
 
-import {
-  deleteRecruitment,
-  endRecruitment,
-  getClubRecruitment,
-} from "@/api/recruitment/api";
 import { useUserStore } from "@/providers/userStoreProvider";
 import { formatKSTTime } from "@/utils/formatKSTTime";
+import { useClubRecruitmentQuery } from "@/hooks/club/recruitment/useClubRecruitmentQuery";
 
 const ClubRecruitmentContent = () => {
   const params = useSearchParams();
-  const clubId = params.get("clubId");
+  const clubId = params.get("clubId") || "";
   const router = useRouter();
   const { role } = useClubContext();
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
 
-  const [recruitmentData, setRecruitmentData] = useState<
-    RecruitmentData[] | null
-  >(null);
-  const [selectedRecruitment, setSelectedRecruitment] = useState<string | null>(
-    null
-  );
+  const {
+    data: recruitmentData,
+    isLoading,
+    isError,
+  } = useClubRecruitmentQuery(clubId);
 
   const [isRecruitingModalOpen, setIsRecruitingModalOpen] =
     useState<boolean>(false);
   const [isRecruitementGuideOpen, setIsRecruitmentGuideOpen] =
     useState<boolean>(false);
-  const [isRecruitmentCloseModalOpen, setIsRecruitmentCloseModalOpen] =
-    useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const hasActivatedRecruitment = (recruitmentData: RecruitmentData[]) => {
@@ -64,54 +55,6 @@ const ClubRecruitmentContent = () => {
     }
   };
 
-  // 모집 삭제 핸들러
-  const handleDeleteRecruitment = async (id: string) => {
-    try {
-      await deleteRecruitment(id);
-      setRecruitmentData((prev) =>
-        prev ? prev.filter((item) => item.id !== id) : []
-      );
-      setAlertMessage("삭제되었습니다.");
-    } catch (error) {
-      console.error("모집 삭제 실패:", error);
-      setAlertMessage("문제가 발생했습니다.");
-    }
-  };
-  // 모집 종료 핸들러
-  const handleEndRecruitment = async (id: string) => {
-    try {
-      await endRecruitment(id);
-      setRecruitmentData((prev) =>
-        prev
-          ? prev.map((item) =>
-              item.id === id
-                ? { ...item, recruitmentStatusType: "CLOSED" }
-                : item
-            )
-          : []
-      );
-    } catch (error) {
-      console.error("모집 마감 실패:", error);
-      setAlertMessage("문제가 발생했습니다.");
-    }
-  };
-
-  useEffect(() => {
-    if (clubId) {
-      // 동아리 모집 정보
-      const fetchClubRecruitment = async () => {
-        try {
-          setLoading(true);
-          const data = await getClubRecruitment(clubId);
-          setRecruitmentData(data!.recruitmentDataList);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchClubRecruitment();
-    }
-  }, [clubId]);
   return (
     <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">
       <div className="w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 mt-6 md:mt-8 md:px-5">
@@ -132,13 +75,12 @@ const ClubRecruitmentContent = () => {
               <div>모집 기간</div>
             </div>
 
-            {loading ? (
-              <div className="text-center p-10 text-subtext1">로딩중...</div>
-            ) : (
+            {recruitmentData &&
               recruitmentData?.map((item, index) => (
                 <div key={index} className="mb-2.5">
                   <RecruitmentCard
                     id={item.id}
+                    clubId={clubId}
                     title={item.title}
                     onClick={() =>
                       router.push(`/recruitment/detail?id=${item.id}`)
@@ -149,15 +91,10 @@ const ClubRecruitmentContent = () => {
                     )} ~ ${formatKSTTime(item.endDateTime, "YYYY.MM.DD")}`}
                     status={item.recruitmentStatusType}
                     isManager={role === "MANAGER" || role === "ADMIN"}
-                    onDelete={handleDeleteRecruitment}
-                    onEnd={() => {
-                      setIsRecruitmentCloseModalOpen(true);
-                      setSelectedRecruitment(item.id);
-                    }}
+                    setAlertMessage={setAlertMessage}
                   />
                 </div>
-              ))
-            )}
+              ))}
           </div>
         </div>
       </div>
@@ -199,30 +136,6 @@ const ClubRecruitmentContent = () => {
           onSubmit={() =>
             router.push(`/club/management/recruitment/create?clubId=${clubId}`)
           }
-        />
-      )}
-
-      {/* 모집공고 종료 확인 모달 */}
-      {isRecruitmentCloseModalOpen && (
-        <NotiPopUp
-          onClose={() => {
-            setIsRecruitmentCloseModalOpen(false);
-          }}
-          icon={"check"}
-          title={"모집을 종료할까요?"}
-          description={
-            "동아리 모집공고 게시물을 내리고,<br/>지원서 접수를 마감할까요?"
-          }
-          modalType={"button"}
-          firstButton={() => {
-            handleEndRecruitment(selectedRecruitment || "");
-            setIsRecruitmentCloseModalOpen(false);
-          }}
-          firstButtonText={"모집 종료하기"}
-          secondButton={() => {
-            setIsRecruitmentCloseModalOpen(false);
-          }}
-          secondButtonText={"취소하기"}
         />
       )}
 

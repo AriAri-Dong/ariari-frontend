@@ -10,4 +10,5 @@ export const QUERY_KEYS = {
   ],
 
   clubActiveRecruitment: (clubId: string) => ["clubActiveRecruitment", clubId],
+  clubRecruitmentList: (clubId: string) => ["clubRecruitmentList", clubId],
 };
