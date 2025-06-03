@@ -1,26 +1,41 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useClubContext } from "@/context/ClubContext";
 import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";
 
 import useResponsive from "@/hooks/useResponsive";
-
-import LeftMenu from "../components/menu/leftMenu";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
 import Alert from "@/components/alert/alert";
 import MobileMenu from "../components/menu/mobileMenu";
-import EventCalendar from "@/components/calendar/eventCalender";
 import ClubEventModal from "@/components/modal/club/clubEventModal";
 import ClubEventBottomSheet from "@/components/bottomSheet/clubEventBottomSheet";
 
-import { ClubEventData, ClubEventSaveReq } from "@/types/clubEvent";
-import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
 import ListSection from "./content/listSection";
 import { useAutoSubmitAttendance } from "@/hooks/club/evnet/useAutoSubmitAttendance";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "일정 및 출석 | 활동 계획을 한눈에",
+  description: "활동 일정을 확인하고 출석을 간편하게 관리하세요.",
+  openGraph: {
+    title: "일정 및 출석 | 활동 계획을 한눈에",
+    description: "활동 일정을 확인하고 출석을 간편하게 관리하세요.",
+    url: "https://ariari.com/club/event",
+    siteName: "아리아리",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "아리아리",
+      },
+    ],
+    type: "website",
+  },
+};
 
 const ClubEventPage = () => {
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));

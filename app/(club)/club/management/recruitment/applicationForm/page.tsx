@@ -22,6 +22,27 @@ import { APPLICATION_DISPLAY_INFO } from "@/data/application";
 import { useClubApplyFormQuery } from "@/hooks/club/applyForm/useClubApplyFormQuery";
 import { useClubApplyFormMutation } from "@/hooks/club/applyForm/useClubApplyFormMutation";
 import { useSearchParams } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "지원서 양식 설정 | 지원 폼을 맞춤 구성",
+  description: "지원서 항목을 자유롭게 설정하고 수정할 수 있습니다.",
+  openGraph: {
+    title: "지원서 양식 설정 | 지원 폼을 맞춤 구성",
+    description: "지원서 항목을 자유롭게 설정하고 수정할 수 있습니다.",
+    url: "https://ariari.com/club/management/recruitment/applicationForm",
+    siteName: "아리아리",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "아리아리",
+      },
+    ],
+    type: "website",
+  },
+};
 
 const ApplicationFormPage = () => {
   const params = useSearchParams();

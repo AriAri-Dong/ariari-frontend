@@ -17,6 +17,28 @@ import Alert from "@/components/alert/alert";
 import { useClubContext } from "@/context/ClubContext";
 import { getClubActivities } from "@/api/club/activity/api";
 import { ClubActivity } from "@/types/clubActivity";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "활동 내역 | 함께한 시간을 기록합니다.",
+  description: "활동 사진과 후기를 통해 실제 활동 모습을 생생하게 확인하세요.",
+  openGraph: {
+    title: "활동 내역 | 함께한 시간을 기록합니다.",
+    description:
+      "활동 사진과 후기를 통해 실제 활동 모습을 생생하게 확인하세요.",
+    url: "https://ariari.com/club/activityHistory",
+    siteName: "아리아리",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "아리아리",
+      },
+    ],
+    type: "website",
+  },
+};
 
 const ActivityHistoryPage = () => {
   const router = useRouter();

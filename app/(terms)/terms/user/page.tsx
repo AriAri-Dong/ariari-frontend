@@ -4,6 +4,29 @@ import HeaderSection from "@/(club)/club/withdrawal/content/headerSection";
 import NoticeCard from "@/components/card/NoticeCard";
 import { TERMS_OF_SERVICE_INFO } from "@/data/policies";
 import useResponsive from "@/hooks/useResponsive";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "회원 약관 | 아리아리",
+  description:
+    "아리아리 서비스 이용을 위한 회원 가입 및 이용 약관을 확인하세요.",
+  openGraph: {
+    title: "회원 약관 | 아리아리",
+    description:
+      "아리아리 서비스 이용을 위한 회원 가입 및 이용 약관을 확인하세요.",
+    url: "https://ariari.com/terms/user",
+    siteName: "아리아리",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "아리아리",
+      },
+    ],
+    type: "website",
+  },
+};
 
 const TermsPage = () => {
   const isMdUp = useResponsive("md");

@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import TextInputWithCounter from "@/components/input/textInputWithCounter";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import Image from "next/image";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
@@ -37,6 +36,29 @@ import {
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import { formatTime } from "@/utils/timeFormatter";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "회원 정보 수정 | 개인정보를 안전하게 관리하세요",
+  description:
+    "회원 정보를 확인하고 비밀번호, 연락처 등 개인정보를 안전하게 수정할 수 있습니다.",
+  openGraph: {
+    title: "회원 정보 수정 | 개인정보를 안전하게 관리하세요",
+    description:
+      "회원 정보를 확인하고 비밀번호, 연락처 등 개인정보를 안전하게 수정할 수 있습니다.",
+    url: "https://ariari.com/user/userInfo",
+    siteName: "아리아리",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "아리아리",
+      },
+    ],
+    type: "website",
+  },
+};
 
 const UserInfoPage = () => {
   const router = useRouter();
@@ -243,7 +265,6 @@ const UserInfoPage = () => {
       await updateProfileType(selectedProfileType);
       const res = await getMemberData();
       setUserData(res);
-      console.log("프로필 변경 완료 ::::::", selectedProfileType);
       setProfileSection(false);
       setAlertMessage("프로필이 변경 되었습니다.");
     } catch (error) {

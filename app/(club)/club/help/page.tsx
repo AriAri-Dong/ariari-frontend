@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Metadata } from "next";
 import { useRouter } from "next/navigation";
 import useResponsive from "@/hooks/useResponsive";
 import { useClubContext } from "@/context/ClubContext";
@@ -32,6 +33,26 @@ import QnaForm from "./components/qnaForm";
 
 import FaqSection from "./content/faqSection";
 import QnaSection from "./content/qnaSection";
+
+export const metadata: Metadata = {
+  title: "Q&A | 자주 묻는 질문과 문의",
+  description: "운영에 관한 자주 묻는 질문과 직접 문의할 수 있는 공간입니다.",
+  openGraph: {
+    title: "Q&A | 자주 묻는 질문과 문의",
+    description: "운영에 관한 자주 묻는 질문과 직접 문의할 수 있는 공간입니다.",
+    url: "https://ariari.com/club/help",
+    siteName: "아리아리",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "아리아리",
+      },
+    ],
+    type: "website",
+  },
+};
 
 const ClubHelpPage = () => {
   const [type, setType] = useState<string>(QUESTION_TYPE[0].label);

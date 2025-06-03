@@ -4,6 +4,29 @@ import HeaderSection from "@/(club)/club/withdrawal/content/headerSection";
 import NoticeCard from "@/components/card/NoticeCard";
 import { TERMS_OF_PRIVACY } from "@/data/policies";
 import useResponsive from "@/hooks/useResponsive";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "개인정보처리방침 | 아리아리",
+  description:
+    "아리아리에서 수집되는 개인정보 처리 방침과 보호 정책을 확인하세요.",
+  openGraph: {
+    title: "개인정보처리방침 | 아리아리",
+    description:
+      "아리아리에서 수집되는 개인정보 처리 방침과 보호 정책을 확인하세요.",
+    url: "https://ariari.com/terms/privacy",
+    siteName: "아리아리",
+    images: [
+      {
+        url: "/logo.svg",
+        width: 1200,
+        height: 630,
+        alt: "아리아리",
+      },
+    ],
+    type: "website",
+  },
+};
 
 const PrivacyPolicyPage = () => {
   const isMdUp = useResponsive("md");
