@@ -169,3 +169,8 @@ export interface ClubNoticeDetail {
   clubMemberData: Omit<ClubMemberData, "profileType">;
   clubNoticeImageDataList: ClubNoticeImageData[];
 }
+
+export interface EnterClubRes {
+  clubId: number;
+  clubName: string;
+}

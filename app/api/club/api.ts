@@ -17,8 +17,8 @@ import {
   ClubInfoResponse,
   CreateClubData,
 } from "@/types/api";
-import axios, { AxiosError } from "axios";
-import { MyClubListRes } from "@/types/club";
+import { AxiosError } from "axios";
+import { EnterClubRes, MyClubListRes } from "@/types/club";
 
 // 동아리 수정
 export const updateClubInfo = async (clubId: number) => {
@@ -388,5 +388,31 @@ export const getMyClubList = async () => {
       }
     }
     throw new Error("문제가 발생했습니다.");
+  }
+};
+
+// 동아리 초대 키 생성
+
+export const createInviteClubKey = async (clubId: string) => {
+  try {
+    const res = await axiosInstance.post(`${CLUBS}/${clubId}/invite`);
+    return res.data;
+  } catch (error) {
+    console.error("출석 키 생성 실패", error);
+  }
+};
+
+// 동아리 초대 키로 가입 요청
+
+export const enterClubByInviteKey = async (inviteKey: string, name: string) => {
+  try {
+    const res = await axiosInstance.post<EnterClubRes>(`${CLUBS}/enter`, {
+      inviteKey,
+      name,
+    });
+    return res.data;
+  } catch (error) {
+    console.error("동아리 가입 실패", error);
+    throw error;
   }
 };
