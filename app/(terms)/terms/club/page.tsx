@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import MarkdownSection from "../content/markdownSection";
 import HeaderSection from "@/(club)/club/withdrawal/content/headerSection";
 import NoticeCard from "@/components/card/NoticeCard";
 import { TERMS_OF_CLUB } from "@/data/policies";
@@ -30,6 +33,7 @@ export const metadata: Metadata = {
 
 const ClubPolicyPage = () => {
   const isMdUp = useResponsive("md");
+
   return (
     <div className="mt-[46px] mb-20 md:mb-0">
       {!isMdUp && <HeaderSection title={"동아리 운영원칙"} />}
@@ -38,14 +42,9 @@ const ClubPolicyPage = () => {
           동아리 운영원칙
         </h1>
       </div>
-      <div className="flex flex-col gap-7 rounded-8 bg-background mt-5 mb-20 md:mb-[124px] md:mt-[22px] md:px-6 md:py-[26px] md:gap-10">
-        <div className="flex flex-col gap-10 md:gap-12">
-          {TERMS_OF_CLUB.map((info, index) => (
-            <div key={index}>
-              <NoticeCard info={info} />
-            </div>
-          ))}
-        </div>
+
+      <div className="w-full mt-5 mb-20 rounded-8 bg-background  md:mb-[124px] md:mt-[22px] md:px-6 md:py-[26px] ">
+        <MarkdownSection termType={"CLUB_RULES"} />
       </div>
     </div>
   );

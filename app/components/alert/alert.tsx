@@ -24,7 +24,7 @@ const Alert = ({ text, subText, onClose }: AlertProps) => {
       if (onClose) {
         onClose();
       }
-    }, 800);
+    }, 900);
 
     return () => clearTimeout(timeout);
   }, [onClose]);

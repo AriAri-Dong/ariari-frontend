@@ -4,36 +4,30 @@ import React from "react";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useClubActiveRecruitment } from "@/hooks/recruitment/useRecruitmentDetailQuery";
+import { formatKSTTime } from "@/utils/formatKSTTime";
 
 interface DayFloatingBarProps {
-  deadline: Date;
   isWriteButtonVisible: boolean;
   handleWrite?: () => void;
 }
 
 /**
  * 마감일을 알려주는 floatingBar 컴포넌트
- * @param deadline 마감일
- * @returns
  */
 const RecruitmentGuideFloatingBar = ({
-  deadline,
   isWriteButtonVisible,
   handleWrite = () => {},
 }: DayFloatingBarProps) => {
   const params = useSearchParams();
-  const clubId = params.get("clubId");
+  const clubId = params.get("clubId") || "";
   const router = useRouter();
+  const { data, isLoading } = useClubActiveRecruitment(clubId);
 
-  const formattedDeadline = `${
-    deadline.getMonth() + 1
-  }월 ${deadline.getDate()}일 ${deadline.getHours()}:${deadline
-    .getMinutes()
-    .toString()
-    .padStart(2, "0")} 모집 마감`;
+  if (isLoading || !data?.recruitmentData) return null;
 
   const handleView = () => {
-    router.push(`/club/recruitment?clubId=${clubId}`);
+    router.push(`/recruitment/detail?id=${data.recruitmentData.id}`);
   };
 
   return (
@@ -53,7 +47,12 @@ const RecruitmentGuideFloatingBar = ({
                 <p className="text-subtext1 text-body3_m">
                   모집 마감까지 남은 시간
                 </p>
-                <h3 className="text-h3 text-text1">{formattedDeadline}</h3>
+                <h3 className="text-h3 text-text1">
+                  {formatKSTTime(
+                    data.recruitmentData.endDateTime,
+                    "MM월 DD일 23:59분 모집 마감"
+                  )}
+                </h3>
               </div>
               <div className="w-full max-w-[390px]">
                 <LargeBtn

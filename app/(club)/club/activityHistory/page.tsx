@@ -138,7 +138,6 @@ const ActivityHistoryPage = () => {
 
       {role === null && (
         <RecruitmentGuideFloatingBar
-          deadline={new Date("2024-12-31T23:59:59")}
           isWriteButtonVisible={false}
           handleWrite={() => setIsWriteFormOpen(true)}
         />

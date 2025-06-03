@@ -63,3 +63,6 @@ export interface ClubRecruitmentListResponse {
   recruitmentDataList: RecruitmentData[];
   pageInfo: PageInfo;
 }
+export interface ClubActiceRecruitmentResponse {
+  recruitmentData: RecruitmentData;
+}

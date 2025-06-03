@@ -8,6 +8,8 @@ import defaultImg from "@/images/icon/defaultAriari.svg";
 import ApplicationFields from "@/components/list/applicationFields";
 import { getProfileImage } from "@/utils/profileImage";
 import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOption";
+import { useUserStore } from "@/providers/userStoreProvider";
+import { useShallow } from "zustand/shallow";
 
 const MobileApplicationFormViewModal = ({
   applyId,
@@ -15,6 +17,9 @@ const MobileApplicationFormViewModal = ({
   setSelectedOption,
   onClose,
 }: ApplicationFormViewModalProps) => {
+  const memberId = useUserStore(
+    useShallow((state) => state.memberData.memberId)
+  );
   const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
   const {
     applyData,
@@ -24,7 +29,8 @@ const MobileApplicationFormViewModal = ({
     portfolioUrl,
   } = applyDetail ?? {};
 
-  const handleClose = () => {
+  const handleClose = (e: React.MouseEvent) => {
+    e.stopPropagation();
     onClose();
   };
 
@@ -45,7 +51,7 @@ const MobileApplicationFormViewModal = ({
             alt={"뒤로가기"}
             width={24}
             height={24}
-            onClick={handleClose}
+            onClick={(e) => handleClose(e)}
             className="md:hidden cursor-pointer"
           />
           <h1 className="text-text1 text-mobile_h1_contents_title md:text-h1_contents_title">
@@ -70,11 +76,13 @@ const MobileApplicationFormViewModal = ({
               </p>
             </div>
           </div>
-          <UpdateApplyStatusOption
-            checkedApplications={[applyId]}
-            setIsModalOpen={setIsModalOpen}
-            setSelectedStatus={setSelectedOption}
-          />
+          {memberId !== applyData.memberData.memberId && (
+            <UpdateApplyStatusOption
+              checkedApplications={[applyId]}
+              setIsModalOpen={setIsModalOpen}
+              setSelectedStatus={setSelectedOption}
+            />
+          )}
         </div>
         <Contour className="mb-6" />
       </div>

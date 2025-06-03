@@ -8,4 +8,6 @@ export const QUERY_KEYS = {
     "recruitmentDetail",
     recruitmentId,
   ],
+
+  clubActiveRecruitment: (clubId: string) => ["clubActiveRecruitment", clubId],
 };

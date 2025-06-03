@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import test_image from "@/images/test/test_image.jpg";
 import Keyword from "@/components/button/keyword";
@@ -13,7 +13,7 @@ import ClubProfileCard from "@/components/card/clubProfileCard";
 import ReportBottomSheet from "@/components/bottomSheet/report/reportBottomSheet";
 import Alert from "@/components/alert/alert";
 import ReportModal from "@/components/modal/reportModal";
-import { ClubInfoCard } from "@/types/components/card";
+import Tooltip from "@/components/tooltip";
 import {
   fieldMap,
   participantMap,
@@ -56,6 +56,7 @@ const ClubInfo = ({
   const params = useSearchParams();
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
   const id = params.get("id") ?? "";
+  const router = useRouter();
 
   const [isClubHeart, setIsClubHeart] = useState<boolean>(
     clubData.isMyBookmark
@@ -101,6 +102,9 @@ const ClubInfo = ({
     setAlertMessage("신고가 정상적으로 접수되었습니다.");
   };
 
+  const handleClubClick = () => {
+    router.push(`/club/activityHistory?clubId=${clubData.id}`);
+  };
   return (
     <div className="flex justify-center items-center w-full">
       <div className="flex flex-col mt-2 sm_md:flex-row sm_md:gap-[27px] md:pb-10 md:pt-8 md:flex-row md:gap-14 w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5">
@@ -133,7 +137,10 @@ const ClubInfo = ({
             <div className="block md:hidden">
               <div className="flex flex-col">
                 <div className="flex justify-between items-center">
-                  <div className="flex gap-3 items-center">
+                  <div
+                    className="flex gap-3 items-center"
+                    onClick={handleClubClick}
+                  >
                     <Image
                       src={clubData.profileUri || test_image}
                       alt={"club_image"}
@@ -190,7 +197,14 @@ const ClubInfo = ({
                     )}
                   </div>
                 </div>
-                <h3 className="text-subtext1 text-h3">{clubData.name}</h3>
+                <Tooltip message="상세페이지로 이동하기">
+                  <h3
+                    className="text-subtext1 text-h3 cursor-pointer p-1"
+                    onClick={handleClubClick}
+                  >
+                    {clubData.name}
+                  </h3>
+                </Tooltip>
               </div>
               <h1 className="text-h1_contents_title md:mt-8 md:mb-12">
                 {recruitmentData.title}

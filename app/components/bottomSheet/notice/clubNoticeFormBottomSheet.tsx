@@ -1,100 +1,49 @@
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import close from "@/images/icon/close.svg";
-import Alert from "@/components/alert/alert";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import CustomInput from "@/components/input/customInput";
-import { CreateNoticeModalProps } from "@/components/modal/club/notice/createNoticeModal";
 import RoundPlusBtn from "@/components/button/iconBtn/roundPlusBtn";
 import img_delete from "@/images/icon/img_delete.svg";
 import RadioBtn from "@/components/button/radioBtn";
+import { useClubNoticeForm } from "@/hooks/club/useNoticeForm";
+import { ClubNoticeFormModalProps } from "@/components/modal/club/notice/clubNoticeFormModal";
 
 const MAX_IMAGES = 10;
 
-const CreateNoticeBottomSheet = ({
+const ClubNoticeFormBottomsheet = ({
+  modalType,
   onClose,
   onSubmit,
-}: CreateNoticeModalProps) => {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-
+  setAlertMessage,
+  initialValues,
+}: ClubNoticeFormModalProps) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>("");
-  const [details, setDetails] = useState<string>("");
-  const [pin, setPin] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+
+  const {
+    title,
+    body,
+    isFixed,
+    setTitle,
+    setBody,
+    setIsFixed,
+    fileInputRef,
+    existingImages,
+    uploadedImages,
+    handleFileChange,
+    handleImageDelete,
+    triggerFileInput,
+    handleSubmit,
+  } = useClubNoticeForm({
+    modalType,
+    onSubmit,
+    setAlertMessage,
+    initialValues,
+  });
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
-
-  const validateForm = () => {
-    if (!title.trim()) {
-      setAlertMessage("공지사항 제목을 입력해주세요.");
-      return false;
-    }
-    if (!details.trim()) {
-      setAlertMessage("공지사항 상세 내용을 입력해주세요.");
-      return false;
-    }
-    return true;
-  };
-
-  const handleImageDelete = (index: number) => {
-    setUploadedImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const triggerFileInput = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const newImages: string[] = [];
-      const maxFileSize = 100 * 1024 * 1024;
-      const allowedExtensions = ["image/png", "image/jpeg"];
-
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-
-        if (file.size > maxFileSize) {
-          setAlertMessage("파일 용량은 100MB를 초과할 수 없습니다.");
-          return;
-        }
-        if (!allowedExtensions.includes(file.type)) {
-          setAlertMessage("png, jpg 파일만 업로드 가능합니다.");
-          return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (e.target?.result) {
-            setUploadedImages((prev) => {
-              if (prev.length < MAX_IMAGES) {
-                return [...prev, e.target!.result as string];
-              }
-              return prev;
-            });
-          }
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-  };
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      onSubmit({ title, details, images: uploadedImages });
-      onClose();
-    }
-  };
-
-  const handleClose = () => {
-    onClose();
-  };
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -105,7 +54,7 @@ const CreateNoticeBottomSheet = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end bg-black/50">
-      <div className="absolute inset-0" onClick={handleClose} />
+      <div className="absolute inset-0" onClick={onClose} />
       <div
         className={`relative w-full h-4/5 bg-background px-4 rounded-t-[24px] shadow-default transition-transform duration-300 ${
           isVisible ? "translate-y-0" : "translate-y-full"
@@ -121,7 +70,7 @@ const CreateNoticeBottomSheet = ({
             alt={"닫기"}
             width={20}
             height={20}
-            onClick={handleClose}
+            onClick={onClose}
           />
         </div>
         {/* 구분선 */}
@@ -140,9 +89,9 @@ const CreateNoticeBottomSheet = ({
             className="mb-[14px]"
           />
           <RadioBtn
-            isChecked={pin}
+            isChecked={isFixed}
             label={"공지사항 상단에 고정하기"}
-            onClick={() => setPin(!pin)}
+            onClick={() => setIsFixed(!isFixed)}
             className={"py-1 px-[6px]"}
           />
           {/* 두 번째 문항 */}
@@ -153,17 +102,36 @@ const CreateNoticeBottomSheet = ({
             </p>
           </div>
           <div className="flex flex-wrap gap-2 items-center">
+            {/* 기존 이미지 */}
+            {existingImages.map((image, idx) => (
+              <div key={image.id} className="relative">
+                <Image
+                  src={image.imageUri}
+                  alt={`existing-${image.id}`}
+                  width={100}
+                  height={100}
+                  className="rounded-lg object-cover w-[100px] h-[100px]"
+                />
+                <button
+                  onClick={() => handleImageDelete(image.id, true)}
+                  className="absolute top-0 right-0 translate-x-1/5 translate-y-1/5 mr-2 mt-2"
+                >
+                  <Image src={img_delete} alt="삭제" width={20} height={20} />
+                </button>
+              </div>
+            ))}
+            {/* 새 업로드 이미지 */}
             {uploadedImages.map((image, index) => (
-              <div key={index} className="relative">
+              <div key={image} className="relative">
                 <Image
                   src={image}
-                  alt={`Uploaded ${index}`}
+                  alt={`upload-${index}`}
                   width={96}
                   height={96}
                   className="rounded-lg object-cover w-[96px] h-[96px]"
                 />
                 <button
-                  onClick={() => handleImageDelete(index)}
+                  onClick={() => handleImageDelete(index.toString())}
                   className="absolute top-0 right-0 translate-x-1/5 translate-y-1/5 mr-2 mt-2"
                 >
                   <Image src={img_delete} alt="삭제" width={16} height={16} />
@@ -199,8 +167,8 @@ const CreateNoticeBottomSheet = ({
           <div className="p-1">
             <textarea
               placeholder="동아리원들에게 공지하실 내용을 작성해 주세요."
-              value={details}
-              onChange={(e) => setDetails(e.target.value)}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
               maxLength={3000}
               className="w-full p-2 border-0 rounded-md resize-none text-mobile_body1_r 
                   text-subtext1 focus:outline-none focus:ring-[1px] 
@@ -211,15 +179,12 @@ const CreateNoticeBottomSheet = ({
         </div>
         {/* 고정 버튼 영역 */}
         <div className="flex items-center justify-end pb-6 pt-[6px] gap-6">
-          <p className="text-unselected text-h4">{details.length}/3000</p>
+          <p className="text-unselected text-h4">{body.length}/3000</p>
           <LargeBtn title={"등록하기"} onClick={handleSubmit} />
         </div>
       </div>
-      {alertMessage && (
-        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
-      )}
     </div>
   );
 };
 
-export default CreateNoticeBottomSheet;
+export default ClubNoticeFormBottomsheet;

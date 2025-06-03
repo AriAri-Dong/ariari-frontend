@@ -31,3 +31,10 @@ export interface SystemNoticeListResponse {
 export interface SystemNoticeDetailResponse {
   systemNoticeData: SystemNoticeDetailType;
 }
+
+export type TermType = "PRIVACY_POLICY" | "CLUB_RULES" | "PLATFORM_RULES";
+export interface TermsOfServiceResponse {
+  id: string;
+  termType: TermType;
+  body: string;
+}

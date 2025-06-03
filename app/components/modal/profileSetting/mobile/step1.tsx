@@ -1,21 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { PROFILE_SETTING } from "@/data/profileSetting";
 import check from "@/images/icon/check.svg";
 import { useProfileContext } from "@/context/profileConetxt";
 import useScreenHeight from "@/hooks/useScreenHeight";
 import { profileType } from "@/types/member";
+import { getRandomNickname } from "@/api/login/api";
 
 const Step1 = () => {
-  const { updateProfileData } = useProfileContext();
+  const { profileData, updateProfileData } = useProfileContext();
+
   const isSmallScreen = useScreenHeight(740);
 
   const [selectedProfileAlias, setSelectedProfileAlias] = useState<
     string | null
   >(null);
-  const [userName, setUserName] = useState<string>("");
+  const [userName, setUserName] = useState<string>(profileData.username);
 
   const handleProfileClick = (alias: string | null) => {
     setSelectedProfileAlias(alias);
@@ -32,6 +34,20 @@ const Step1 = () => {
   const selectedProfileData =
     PROFILE_SETTING.find((item) => item.alias === selectedProfileAlias) ||
     PROFILE_SETTING[0];
+
+  useEffect(() => {
+    const fetchNickname = async () => {
+      try {
+        const nickname = await getRandomNickname();
+        setUserName(nickname);
+        updateProfileData({ username: nickname });
+      } catch (err) {
+        console.error("랜덤 닉네임 요청 실패", err);
+      }
+    };
+
+    fetchNickname();
+  }, []);
 
   return (
     <>
@@ -53,7 +69,7 @@ const Step1 = () => {
           onChange={handleChange}
         />
         <div className="absolute right-4 top-1/2 -translate-y-1/2 text-unselected text-mobile_body1_r">
-          {userName.length}/10
+          {userName?.length ?? 0}/10
         </div>
       </div>
       <div

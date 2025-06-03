@@ -25,6 +25,7 @@ import {
   getClubRecruitment,
 } from "@/api/recruitment/api";
 import { useUserStore } from "@/providers/userStoreProvider";
+import { formatKSTTime } from "@/utils/formatKSTTime";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -163,11 +164,10 @@ const ClubRecruitmentContent = () => {
                     onClick={() =>
                       router.push(`/recruitment/detail?id=${item.id}`)
                     }
-                    date={`${formatDateToDot(
+                    date={`${formatKSTTime(
                       item.startDateTime,
-                      false,
-                      true
-                    )} ~ ${formatDateToDot(item.endDateTime, false, true)}`}
+                      "YYYY.MM.DD"
+                    )} ~ ${formatKSTTime(item.endDateTime, "YYYY.MM.DD")}`}
                     status={item.recruitmentStatusType}
                     isManager={role === "MANAGER" || role === "ADMIN"}
                     onDelete={handleDeleteRecruitment}
@@ -185,7 +185,6 @@ const ClubRecruitmentContent = () => {
       {/* PC 모집안내 바 :  동아리 가입 x */}
       {role == null && isSignIn && (
         <RecruitmentGuideFloatingBar
-          deadline={new Date("2025-03-01T23:59:59")}
           isWriteButtonVisible={false}
           handleWrite={() => {}}
         />
