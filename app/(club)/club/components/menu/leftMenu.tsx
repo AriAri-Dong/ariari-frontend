@@ -281,7 +281,7 @@ const LeftMenu = () => {
 
         {/* 동아리 알림 */}
         {activeTab === "notification" && (
-          <div className="max-h-[556px] mt-[14px] overflow-y-auto no-scrollbar">
+          <div className="max-h-[556px] mt-[14px] overflow-y-auto">
             <NotificationList
               notificationList={clubNotifications}
               onClickNotification={handleNotificationClick}
