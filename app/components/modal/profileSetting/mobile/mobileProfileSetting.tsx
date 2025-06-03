@@ -14,7 +14,6 @@ import { useProfileContext } from "@/context/profileConetxt";
 import { formatTime } from "@/utils/timeFormatter";
 import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
-import { updateNickname, updateProfileType } from "@/api/member/api";
 import { useRouter } from "next/navigation";
 import { signUpWithKey } from "@/api/login/api";
 import { useAuthStore } from "@/stores/authStore";
@@ -31,11 +30,7 @@ interface ProfileSettingProps {
  * @param onNextStep 특정 step으로 넘어가는 함수
  * @returns
  */
-const MobileProfileSetting = ({
-  step,
-  onNextStep,
-  onClose,
-}: ProfileSettingProps) => {
+const MobileProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
   const router = useRouter();
   const { oauthSignUpKey, setAuth } = useAuthStore();
   const { profileData } = useProfileContext();
