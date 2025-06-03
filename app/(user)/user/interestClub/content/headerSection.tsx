@@ -1,9 +1,6 @@
-"use client";
-
 import Image from "next/image";
 import trash from "@/images/icon/delete.svg";
 import vector from "@/images/icon/backVector.svg";
-import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import NotiPopUp from "@/components/modal/notiPopUp";
