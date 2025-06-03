@@ -15,10 +15,7 @@ import LeftMenu from "../../components/menu/leftMenu";
 import RecruitmentGuideForm from "../components/RecruitmentGuideForm";
 import Alert from "@/components/alert/alert";
 
-import formatDateToDot from "@/utils/formatDateToDot";
-
 import { RecruitmentData } from "@/types/recruitment";
-
 import {
   deleteRecruitment,
   endRecruitment,

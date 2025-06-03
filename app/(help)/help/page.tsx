@@ -5,7 +5,6 @@ import ClubNoticeHeader from "@/(club)/club/management/activity/notice/component
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MobileHeaderSection from "./components/mobileHeaderSection";
 import FaqDropdown from "./components/faqDropdown";
-import { NOTICE_DETAIL, NOTICE_LIST, FAQ_DATA } from "@/data/service";
 import {
   SystemNoticeType,
   SystemNoticeDetailType,
@@ -45,11 +44,6 @@ const HelpPage = () => {
     fetchNotices();
   }, []);
 
-  // 공지사항 리스트 테스트용
-  // useEffect(() => {
-  //   setNoticeList(NOTICE_LIST);
-  // }, []);
-
   // FAQ API
   useEffect(() => {
     const fetchFaqs = async () => {
@@ -63,11 +57,6 @@ const HelpPage = () => {
     fetchFaqs();
   }, []);
 
-  // FAQ 테스트용
-  // useEffect(() => {
-  //   setFaqList(FAQ_DATA);
-  // }, []);
-
   const handleDropdownToggle = async (id: number) => {
     const isOpen = openDropdownId === id;
 
@@ -75,14 +64,6 @@ const HelpPage = () => {
       setOpenDropdownId(null);
     } else {
       setOpenDropdownId(id);
-
-      // 테스트용
-      // if (!noticeDetails[id]) {
-      //   setNoticeDetails((prev) => ({
-      //     ...prev,
-      //     [id]: NOTICE_DETAIL[id],
-      //   }));
-      // }
 
       // 동아리 상세 API
       if (!noticeDetails[id]) {

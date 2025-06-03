@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import TextInputWithCounter from "@/components/input/textInputWithCounter";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import Image from "next/image";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";

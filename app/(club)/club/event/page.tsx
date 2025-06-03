@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useClubContext } from "@/context/ClubContext";
 import { useUserStore } from "@/providers/userStoreProvider";
 import { useShallow } from "zustand/shallow";

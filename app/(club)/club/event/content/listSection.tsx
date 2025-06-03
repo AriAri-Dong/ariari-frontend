@@ -3,14 +3,10 @@ import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import EventCalendar from "@/components/calendar/eventCalender";
 import ClubEventDropdown from "@/components/dropdown/clubEventDropdown";
 import { useClubContext } from "@/context/ClubContext";
-import {
-  useDeleteClubEventMutation,
-  useUpdateClubEventMutation,
-} from "@/hooks/club/evnet/useClubEventMutation";
+import { useDeleteClubEventMutation } from "@/hooks/club/evnet/useClubEventMutation";
 import { useClubEventQuery } from "@/hooks/club/evnet/useClubEventQuery";
-import { ClubEventData, ClubEventSaveReq } from "@/types/clubEvent";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import LeftMenu from "../../components/menu/leftMenu";
 
 interface ListSectionProps {

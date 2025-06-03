@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/providers/userStoreProvider";
@@ -27,7 +25,7 @@ const ITEMS_PER_PAGE = 10;
 const Application = () => {
   const router = useRouter();
   const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+
   const { data: { allApplications = [], totalCount: applyCount = 0 } = {} } =
     useMyApplyListQuery({ enabled: isSignIn });
 

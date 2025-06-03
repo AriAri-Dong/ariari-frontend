@@ -29,16 +29,9 @@ const AccountingPage = () => {
   const [openWrite, setOpenWrite] = useState<boolean>(false);
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const { balance, isLoadingBalance, isBalanceError } =
-    useFinanceBalanceQuery(clubId);
-  const {
-    financialRecords,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-    isRecordsError,
-    isLoadingRecords,
-  } = useFinancialRecordsQuery(clubId);
+  const { balance } = useFinanceBalanceQuery(clubId);
+  const { financialRecords, hasNextPage, fetchNextPage } =
+    useFinancialRecordsQuery(clubId);
   const { addFinancialRecord } = useAddFinancialRecordMutation({ clubId });
 
   const handleClose = () => {
