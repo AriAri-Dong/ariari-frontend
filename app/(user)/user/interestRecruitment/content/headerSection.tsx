@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import trash from "@/images/icon/delete.svg";
 import vector from "@/images/icon/backVector.svg";

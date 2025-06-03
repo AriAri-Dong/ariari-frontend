@@ -14,8 +14,19 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Ariari",
-  description: "Ariari",
+  title: "아리아리 | 동아리 모집 및 관리 플랫폼",
+  description:
+    "전국 대학생과 직장인을 위한 동아리 정보를 한눈에! 간편한 모집부터 지원, 운영까지 아리아리에서 시작하세요.",
+  keywords: [
+    "동아리",
+    "모임",
+    "커뮤니티",
+    "대학생 동아리",
+    "직장인 동아리",
+    "동아리 모집",
+    "동아리 관리",
+    "ariari",
+  ],
   icons: {
     icon: "/ariari_logo.svg",
   },

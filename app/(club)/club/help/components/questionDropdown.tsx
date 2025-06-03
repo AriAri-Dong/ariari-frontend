@@ -10,10 +10,9 @@ import report from "@/images/icon/report.svg";
 import Q from "@/images/icon/Q.svg";
 import A from "@/images/icon/A.svg";
 
-import { profileImageMap } from "@/utils/mappingProfile";
 import { tokenColorMapping } from "../../../../utils/colorMapping";
 import { ClubFaqData, ClubQuestionData } from "@/types/club";
-import { clubMemberRoleType, profileType } from "@/types/member";
+import { clubMemberRoleType } from "@/types/member";
 
 import ReportBottomSheet from "@/components/bottomSheet/report/reportBottomSheet";
 import ReportModal from "@/components/modal/reportModal";
