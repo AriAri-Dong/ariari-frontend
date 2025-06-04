@@ -171,6 +171,6 @@ export interface ClubNoticeDetail {
 }
 
 export interface EnterClubRes {
-  clubId: number;
+  clubId: string;
   clubName: string;
 }

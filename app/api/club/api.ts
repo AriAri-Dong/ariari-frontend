@@ -397,8 +397,13 @@ export const createInviteClubKey = async (clubId: string) => {
   try {
     const res = await axiosInstance.post(`${CLUBS}/${clubId}/invite`);
     return res.data;
-  } catch (error) {
-    console.error("출석 키 생성 실패", error);
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
   }
 };
 
@@ -411,8 +416,12 @@ export const enterClubByInviteKey = async (inviteKey: string, name: string) => {
       name,
     });
     return res.data;
-  } catch (error) {
-    console.error("동아리 가입 실패", error);
-    throw error;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
   }
 };

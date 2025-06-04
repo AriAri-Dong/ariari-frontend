@@ -24,8 +24,8 @@ const InvitaionForm = ({ onClose, onSubmit }: FaqFormProps) => {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [shareType, setShareType] = useState<ShareType>("ariAriJoin");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [clubLink, setClubLink] = useState<string>("http://club");
-  const [ariariLink, setAriariLink] = useState<string>("http://ariari");
+  const [clubLink, setClubLink] = useState<string>("");
+  const [ariariLink, setAriariLink] = useState<string>("https://ariari.kr");
 
   const [isClosing, setIsClosing] = useState<boolean>(false);
   const startY = useRef(0);
@@ -93,6 +93,7 @@ const InvitaionForm = ({ onClose, onSubmit }: FaqFormProps) => {
           shareType={shareType}
           setShareType={setShareType}
           clubLink={clubLink}
+          setClubLink={setClubLink}
           ariariLink={ariariLink}
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}
@@ -115,6 +116,7 @@ const InvitaionForm = ({ onClose, onSubmit }: FaqFormProps) => {
           shareType={shareType}
           setShareType={setShareType}
           clubLink={clubLink}
+          setClubLink={setClubLink}
           ariariLink={ariariLink}
           errorMessage={errorMessage}
           setErrorMessage={setErrorMessage}

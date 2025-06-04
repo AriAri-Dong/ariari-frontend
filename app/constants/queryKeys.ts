@@ -1,6 +1,7 @@
 export const QUERY_KEYS = {
   myApplyList: "myApplyList",
   myApplyTmpList: "myApplyTmpList",
+  myClubList: "myClubList",
 
   clubEventList: (clubId: string) => ["clubEventList", clubId],
 
