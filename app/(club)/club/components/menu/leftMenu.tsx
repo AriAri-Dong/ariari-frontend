@@ -52,10 +52,6 @@ const LeftMenu = () => {
 
   const { markClubNotificationAsRead } = useClubNotificationMutation();
 
-  console.log(role);
-  console.log(clubData);
-
-  const nickname = useUserStore((state) => state.memberData.nickname);
   const profileType = useUserStore((state) => state.memberData.profileType);
 
   // 권한에 따른 메뉴 데이터
