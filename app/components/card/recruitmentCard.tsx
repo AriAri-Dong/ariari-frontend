@@ -6,41 +6,72 @@ import Badge from "../badge/badge";
 import DeleteBtn from "../button/iconBtn/deleteBtn";
 import EndBtn from "../button/iconBtn/endBtn";
 import { RecruitmentStatusType } from "@/types/recruitment";
-
-type ManagerActionsProps = {
-  isManager: true;
-  onDelete: (id: string) => void;
-  onEnd: (id: string) => void;
-};
-
-type GeneralUserProps = {
-  isManager?: false;
-};
+import {
+  useDeleteRecruitmentMutation,
+  useEndRecruitmentMutation,
+} from "@/hooks/club/recruitment/useClubRecruitmentMutation";
+import { useState } from "react";
+import NotiPopUp from "../modal/notiPopUp";
 
 type RecruitmentCardProps = {
   id: string;
+  clubId: string;
   title: string;
   date: string;
   status: RecruitmentStatusType;
-  className?: string;
+  isManager: boolean;
   onClick: () => void;
-} & (ManagerActionsProps | GeneralUserProps);
+  setAlertMessage?: (msg: string) => void;
+  className?: string;
+};
 
-const RecruitmentCard = (props: RecruitmentCardProps) => {
-  const { id, title, date, status, className, isManager, onClick } = props;
+const RecruitmentCard = ({
+  id,
+  clubId,
+  title,
+  date,
+  status,
+  isManager,
+  className,
+  onClick,
+  setAlertMessage,
+}: RecruitmentCardProps) => {
   const isMdUp = useResponsive("md");
 
-  const handleDelete = (event: React.MouseEvent | React.TouchEvent) => {
+  const [isRecruitmentCloseModalOpen, setIsRecruitmentCloseModalOpen] =
+    useState<boolean>(false);
+  const [isRecruitmentDeleteModalOpen, setIsRecruitmentDeleteModalOpen] =
+    useState<boolean>(false);
+
+  // 삭제 핸들러
+  const { mutate: deleteRecruitment } = useDeleteRecruitmentMutation({
+    clubId,
+    onSuccess: () => setAlertMessage?.("삭제되었습니다."),
+    onError: () => setAlertMessage?.("삭제에 실패했습니다."),
+  });
+
+  // 종료 핸들러
+  const { mutate: endRecruitment } = useEndRecruitmentMutation({
+    clubId,
+    onSuccess: () => {
+      setAlertMessage?.("모집이 종료되었습니다.");
+      setIsRecruitmentCloseModalOpen(false);
+    },
+    onError: () => {
+      setAlertMessage?.("모집 종료 실패");
+      setIsRecruitmentCloseModalOpen(false);
+    },
+  });
+
+  const handleDelete = () => {
     if (isManager) {
-      event.stopPropagation();
-      props.onDelete(id);
+      deleteRecruitment(id);
     }
   };
 
-  const handleEnd = (event: React.MouseEvent | React.TouchEvent) => {
+  const handleEnd = () => {
     if (isManager) {
-      event.stopPropagation();
-      props.onEnd(id);
+      endRecruitment(id);
     }
   };
 
@@ -54,14 +85,22 @@ const RecruitmentCard = (props: RecruitmentCardProps) => {
           <div className="w-full flex justify-between md:w-fit">
             <Badge status={status} />
             {!isMdUp && isManager && status !== "OPEN" && (
-              <div onClick={(e) => handleDelete(e)}>
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsRecruitmentDeleteModalOpen(true);
+                }}
+              >
                 <DeleteBtn onClick={() => {}} />
               </div>
             )}
             {!isMdUp && isManager && status === "OPEN" && (
               <div
                 className="flex items-center gap-1 px-1.5 py-1 text-mobile_body3_m text-subtext2"
-                onClick={handleEnd}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsRecruitmentCloseModalOpen(true);
+                }}
               >
                 <EndBtn onClick={() => {}} />
                 <p>모집 종료</p>
@@ -75,17 +114,73 @@ const RecruitmentCard = (props: RecruitmentCardProps) => {
             {date}
           </p>
           {isMdUp && isManager && status !== "OPEN" && (
-            <div onClick={(e) => handleDelete(e)}>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsRecruitmentDeleteModalOpen(true);
+              }}
+            >
               <DeleteBtn onClick={() => {}} />
             </div>
           )}
           {isMdUp && isManager && status === "OPEN" && (
-            <div onClick={(e) => handleEnd(e)}>
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsRecruitmentCloseModalOpen(true);
+              }}
+            >
               <EndBtn onClick={() => {}} />
             </div>
           )}
         </div>
       </div>
+      {/* 모집공고 종료 확인 모달 */}
+
+      {isRecruitmentCloseModalOpen && (
+        <NotiPopUp
+          onClose={() => {
+            setIsRecruitmentCloseModalOpen(false);
+          }}
+          icon={"check"}
+          title={"모집을 종료할까요?"}
+          description={
+            "동아리 모집공고 게시물을 내리고,<br/>지원서 접수를 마감할까요?"
+          }
+          modalType={"button"}
+          firstButton={() => {
+            handleEnd();
+            setIsRecruitmentCloseModalOpen(false);
+          }}
+          firstButtonText={"모집 종료하기"}
+          secondButton={() => {
+            setIsRecruitmentCloseModalOpen(false);
+          }}
+          secondButtonText={"취소하기"}
+        />
+      )}
+      {/* 모집공고 삭제 확인 모달 */}
+
+      {isRecruitmentDeleteModalOpen && (
+        <NotiPopUp
+          onClose={() => {
+            setIsRecruitmentDeleteModalOpen(false);
+          }}
+          icon={"delete"}
+          title={"모집을 삭제할까요?"}
+          description={"동아리 모집공고를 삭제할까요?"}
+          modalType={"button"}
+          firstButton={() => {
+            handleDelete();
+            setIsRecruitmentDeleteModalOpen(false);
+          }}
+          firstButtonText={"모집 삭제하기"}
+          secondButton={() => {
+            setIsRecruitmentDeleteModalOpen(false);
+          }}
+          secondButtonText={"취소하기"}
+        />
+      )}
     </div>
   );
 };
