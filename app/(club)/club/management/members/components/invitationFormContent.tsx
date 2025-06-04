@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { createInviteClubKey } from "@/api/club/api";
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
@@ -11,6 +13,7 @@ import copy from "@/images/icon/copy.svg";
 import { ShareType } from "./invitationForm";
 import Alert from "@/components/alert/alert";
 import MemberSearch from "@/components/input/memberSearch";
+
 interface InvitationFormContentProps {
   nickname: string;
   setNickname: (value: string) => void;
@@ -19,6 +22,7 @@ interface InvitationFormContentProps {
   shareType: ShareType;
   setShareType: (value: ShareType) => void;
   clubLink: string;
+  setClubLink: (link: string) => void;
   ariariLink: string;
   errorMessage: string | null;
   setErrorMessage: (value: string | null) => void;
@@ -38,11 +42,15 @@ const InvitationFormContent = ({
   shareType,
   setShareType,
   clubLink,
+  setClubLink,
   ariariLink,
   errorMessage,
   setErrorMessage,
   onClose,
 }: InvitationFormContentProps) => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") || "";
+  // 링크 복사
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(
@@ -55,6 +63,18 @@ const InvitationFormContent = ({
       return;
     }
   };
+  // 동아리 초대 링크 생성
+  const onClickCreateInviteKey = async (clubId: string) => {
+    if (clubLink) return;
+    try {
+      const data = await createInviteClubKey(clubId);
+      setClubLink(
+        `${process.env.NEXT_PUBLIC_CLIENT_BASE_URL}?inviteCode=${data}`
+      );
+    } catch (error) {
+      setAlertMessage("초대링크 생성에 실패했습니다.");
+    }
+  };
   return (
     <div className="h-full flex flex-col justify-between">
       <div>
@@ -64,7 +84,7 @@ const InvitationFormContent = ({
           </h2>
           <button
             onClick={onClose}
-            className="md:w-5 md:h-5 flex justify-center items-center md:w-7 md:h-7"
+            className="flex justify-center items-center md:w-6 md:h-6"
           >
             <Image
               src={close}
@@ -144,7 +164,10 @@ const InvitationFormContent = ({
               />
               <p
                 className="text-subtext1 text-mobile_body1_m md:text-body1_m "
-                onClick={() => setShareType("clubJoin")}
+                onClick={() => {
+                  setShareType("clubJoin");
+                  onClickCreateInviteKey(clubId);
+                }}
               >
                 동아리 초대 링크
               </p>

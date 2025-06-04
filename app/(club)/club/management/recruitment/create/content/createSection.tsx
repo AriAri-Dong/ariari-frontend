@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import useResponsive from "@/hooks/useResponsive";
+import { usePostRecruitmentMutation } from "@/hooks/club/recruitment/useClubRecruitmentMutation";
 
 import GuideBox from "@/components/card/guideBox";
 import TextInputWithCounter from "@/components/input/textInputWithCounter";
@@ -62,6 +63,17 @@ const CreateSection = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isNoticeModalOpen, setIsNoticeModalOpen] = useState<boolean>(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
+
+  const { mutate: postRecruitment } = usePostRecruitmentMutation({
+    clubId,
+    onSuccess: () => {
+      setAlertMessage("정상 등록되었습니다.");
+      router.replace(`/club/recruitment?clubId=${clubId}`);
+    },
+    onError: () => {
+      setAlertMessage("문제가 발생했습니다.");
+    },
+  });
 
   // 추가 항목 추가 함수
   const addInterviewQuestion = () => {
@@ -144,14 +156,7 @@ const CreateSection = () => {
   const handleSubmit = () => {
     setIsModalOpen(false);
     const data = createFormData();
-    postRecruitment(clubId, data)
-      .then(() => {
-        setAlertMessage("정상 등록되었습니다.");
-        router.replace(`/club/recruitment?clubId=${clubId}`);
-      })
-      .catch((err) => {
-        setAlertMessage(err.message);
-      });
+    postRecruitment(data);
   };
   const checkValidity = () => {
     const emptyItem = items.find(

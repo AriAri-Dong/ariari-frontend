@@ -36,7 +36,7 @@ const FilterSection = ({
             총 {dataCount}개의 관심 모집공고가 있어요.
           </p>
           <div className="flex gap-4 items-center">
-            <RadioBtn
+            {/* <RadioBtn
               isChecked={isDeadlineChecked}
               label={"마감공고 제외"}
               onClick={toggleDeadlineCheck}
@@ -45,7 +45,7 @@ const FilterSection = ({
               isChecked={isRecruitmentChecked}
               label={"지원공고 제외"}
               onClick={toggleRecruitmentCheck}
-            />
+            /> */}
             <SubPullDown
               optionData={POPULARITY_SORT_TYPE.slice(1)}
               selectedOption={sortType}

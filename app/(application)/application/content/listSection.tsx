@@ -1,7 +1,5 @@
 import Alert from "@/components/alert/alert";
-import ApplicationCard, {
-  ApplicationCardProps,
-} from "@/components/card/applicationCard";
+import ApplicationCard from "@/components/card/applicationCard";
 import { ApplyData, ApplyTempData } from "@/types/application";
 import { useState } from "react";
 

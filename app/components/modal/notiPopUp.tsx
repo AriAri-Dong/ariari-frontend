@@ -108,7 +108,7 @@ const NotiPopUp = (props: NotiPopUpProps) => {
             </button>
             <button
               onClick={props.secondButton}
-              className="block mx-auto px-4 py-2.5 text-mobile_body2_sb text-primary 
+              className="w-full py-2.5 text-mobile_body2_sb text-primary 
               md:text-body1_sb"
             >
               {props.secondButtonText}

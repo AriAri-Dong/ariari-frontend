@@ -105,7 +105,7 @@ const config: Config = {
         h4_sb: ["16px", { fontWeight: 600, lineHeight: "24px" }],
         body1_r: ["15px", { fontWeight: 400, lineHeight: "150%" }],
         body1_m: ["15px", { fontWeight: 500, lineHeight: "22.5px" }],
-        body1_sb: ["14px", { fontWeight: 600, lineHeight: "21px" }],
+        body1_sb: ["15px", { fontWeight: 600, lineHeight: "21px" }],
         body2_r: ["14px", { fontWeight: 400, lineHeight: "21px" }],
         body2_m: ["14px", { fontWeight: 500, lineHeight: "21px" }],
         body3_r: ["13px", { fontWeight: 400, lineHeight: "18px" }],

@@ -1,5 +1,12 @@
-import { REISSUE, LOGOUT, UNREGISTER, LOGIN, SIGNUP } from "../apiUrl";
-import { AuthResponseType } from "@/types/api";
+import {
+  REISSUE,
+  LOGOUT,
+  UNREGISTER,
+  LOGIN,
+  SIGNUP,
+  RANDOM_NICKNAME,
+} from "../apiUrl";
+import { AuthResponseType, SignUpWithKeyBody } from "@/types/api";
 import axiosInstance from "../axiosInstance";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -78,11 +85,11 @@ export const getTokenWithCode = async (code: string) => {
 };
 
 // 카카오 회원가입
-export const signUpWithKey = async (key: string) => {
+export const signUpWithKey = async (key: string, body: SignUpWithKeyBody) => {
   const url = `${SIGNUP}?key=${key}`;
 
   try {
-    const { data } = await axiosInstance.post<AuthResponseType>(url);
+    const { data } = await axiosInstance.post<AuthResponseType>(url, body);
     return data;
   } catch (err) {
     console.error(err);
@@ -95,7 +102,6 @@ export const signUpWithKey = async (key: string) => {
     };
   }
 };
-
 // 로그아웃
 export const logout = async (signOutUser?: () => void) => {
   const {
@@ -128,5 +134,17 @@ export const unregister = async () => {
     sessionStorage.removeItem("profileModalCount");
   } catch (err) {
     console.error("회원탈퇴 실패:", err);
+    throw err;
+  }
+};
+
+// 랜덤 닉네임 발급
+export const getRandomNickname = async (): Promise<string> => {
+  try {
+    const { data } = await axiosInstance.get(RANDOM_NICKNAME);
+    return data;
+  } catch (error) {
+    console.error("랜덤 닉네임 요청 실패:", error);
+    throw new Error("랜덤 닉네임을 불러오지 못했습니다.");
   }
 };
