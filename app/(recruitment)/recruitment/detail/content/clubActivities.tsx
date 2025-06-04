@@ -48,7 +48,7 @@ const ClubActivities = ({
     const list = prevRecruitmentList
       .filter(
         (item) =>
-          item.id !== recruitmentId && new Date(item.endDateTime) < new Date()
+          item.id !== recruitmentId && new Date(item.startDateTime) < new Date()
       )
       .slice(0, prevRecruitmentListLength);
     setVisibleRecruitmentList(list);
@@ -128,8 +128,6 @@ const ClubActivities = ({
                   )} ~ ${formatDateToDot(item.endDateTime, false, true)}`}
                   onClick={() => {}}
                   status={item.recruitmentStatusType}
-                  clubId={item.clubId}
-                  isManager={false}
                 />
               ))}
             </div>

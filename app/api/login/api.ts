@@ -134,7 +134,6 @@ export const unregister = async () => {
     sessionStorage.removeItem("profileModalCount");
   } catch (err) {
     console.error("회원탈퇴 실패:", err);
-    throw err;
   }
 };
 

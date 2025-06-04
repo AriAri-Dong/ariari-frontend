@@ -42,15 +42,8 @@ const WithDrawal = () => {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const confirmWithdrawal = async () => {
-    try {
-      await unregister();
-      await logout();
-      setCurrentStep(currentStep + 1);
-    } catch (error) {
-      setIsModalOpen(false);
-      setCurrentStep(1);
-      setAlertMessage("문제가 발생했습니다.");
-    }
+    await unregister();
+    await logout();
   };
 
   // currentStep이 4인 경우 2초뒤 홈으로 이동
@@ -119,7 +112,9 @@ const WithDrawal = () => {
     } else if (currentStep === 2) {
       setCurrentStep(currentStep + 1);
     } else if (currentStep === 3) {
-      confirmWithdrawal();
+      confirmWithdrawal().then(() => {
+        setCurrentStep(currentStep + 1);
+      });
     } else if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
     }
