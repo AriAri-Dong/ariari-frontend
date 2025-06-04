@@ -52,10 +52,6 @@ const LeftMenu = () => {
 
   const { markClubNotificationAsRead } = useClubNotificationMutation();
 
-  console.log(role);
-  console.log(clubData);
-
-  const nickname = useUserStore((state) => state.memberData.nickname);
   const profileType = useUserStore((state) => state.memberData.profileType);
 
   // 권한에 따른 메뉴 데이터
@@ -281,7 +277,7 @@ const LeftMenu = () => {
 
         {/* 동아리 알림 */}
         {activeTab === "notification" && (
-          <div className="max-h-[556px] mt-[14px] overflow-y-auto no-scrollbar">
+          <div className="max-h-[556px] mt-[14px] overflow-y-auto">
             <NotificationList
               notificationList={clubNotifications}
               onClickNotification={handleNotificationClick}
