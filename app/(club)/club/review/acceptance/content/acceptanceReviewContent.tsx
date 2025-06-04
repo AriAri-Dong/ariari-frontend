@@ -60,10 +60,6 @@ const AcceptanceReviewContent = () => {
     return <ErrorNotice description={error} />;
   }
 
-  if (loading && review.length == 0) {
-    return <Loading />;
-  }
-
   return (
     <>
       <div className="bg-sub_bg flex justify-center items-center w-full pb-20 md:pb-[124px]">

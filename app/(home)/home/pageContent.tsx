@@ -8,6 +8,7 @@ import ClubRanking from "@/(home)/home/content/clubRanking";
 import PopularRecruitment from "@/(home)/home/content/popularRecruitment";
 import LatestRecruitment from "@/(home)/home/content/latestRecruitment";
 import MyClub from "./content/myClub";
+import ClubInviteHandler from "./content/clubInviteHandler";
 
 const HomePageContent = () => {
   const { setUserData, isSignIn } = useUserStore((state) => state);
@@ -34,6 +35,7 @@ const HomePageContent = () => {
 
   return (
     <div className="w-full">
+      <ClubInviteHandler />
       {isSignIn && <MyClub />}
       <ClubRanking />
       <PopularRecruitment />

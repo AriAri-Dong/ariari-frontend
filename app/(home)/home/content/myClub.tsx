@@ -5,8 +5,7 @@ import useResponsive from "@/hooks/useResponsive";
 import RoundVectorBtn from "@/components/button/iconBtn/roundVectorBtn";
 import RoundPlusBtn from "@/components/button/iconBtn/roundPlusBtn";
 import MyClubCard from "@/components/card/myClubCard";
-import { getMyClubList } from "@/api/club/api";
-import { MyClubData } from "@/types/club";
+import { useMyClubListQuery } from "@/hooks/club/my/useMyClubListQuery";
 
 const MyClub = () => {
   const router = useRouter();
@@ -16,8 +15,9 @@ const MyClub = () => {
   const [isFirstSlide, setIsFirstSlide] = useState(true);
   const [isLastSlide, setIsLastSlide] = useState(false);
 
-  const [myClub, setMyClub] = useState<MyClubData[]>([]);
   const [updateTime, setUpdateTime] = useState<string>("");
+
+  const { data: myClubs, isLoading } = useMyClubListQuery();
 
   const checkScrollPosition = throttle(() => {
     const el = scrollRef.current;
@@ -48,26 +48,20 @@ const MyClub = () => {
       el.removeEventListener("scroll", checkScrollPosition);
       window.removeEventListener("resize", checkScrollPosition);
     };
-  }, [checkScrollPosition, myClub]);
+  }, [checkScrollPosition, myClubs]);
 
   useEffect(() => {
-    getMyClubList()
-      .then((res) => {
-        setMyClub(res.myClubDataList);
+    if (myClubs) {
+      const now = new Date();
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+      const hh = String(now.getHours()).padStart(2, "0");
+      const min = String(now.getMinutes()).padStart(2, "0");
+      const formatted = `${mm}.${dd} ${hh}:${min}`;
 
-        const now = new Date();
-        const mm = String(now.getMonth() + 1).padStart(2, "0");
-        const dd = String(now.getDate()).padStart(2, "0");
-        const hh = String(now.getHours()).padStart(2, "0");
-        const min = String(now.getMinutes()).padStart(2, "0");
-        const formatted = `${mm}.${dd} ${hh}:${min}`;
-
-        setUpdateTime(formatted);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+      setUpdateTime(formatted);
+    }
+  }, [myClubs]);
 
   return (
     <section className="mt-5 mb-[30px] md:mt-8 md:mb-[68px]">
@@ -107,7 +101,7 @@ const MyClub = () => {
                 className="shrink-0 w-[60px] h-[60px]"
                 onClick={() => router.push("/user/club/create")}
               />
-              {myClub.map((club) => (
+              {myClubs?.myClubDataList.map((club) => (
                 <div key={club.id}>
                   <MyClubCard club={club} />
                 </div>
@@ -130,7 +124,7 @@ const MyClub = () => {
         </div>
       ) : (
         <div className="flex gap-4 w-full items-center overflow-x-auto no-scrollbar">
-          {myClub.map((club) => (
+          {myClubs?.myClubDataList.map((club) => (
             <div key={club.id}>
               <MyClubCard club={club} />
             </div>

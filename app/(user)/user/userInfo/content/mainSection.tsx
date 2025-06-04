@@ -63,7 +63,6 @@ const MainSection = () => {
   const [email, setEmail] = useState<string>("");
   const [number, setNumber] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [alert, setAlert] = useState<boolean>(false);
   const [verificationFailed, setVerificationFailed] = useState<boolean>(false);
   const [duplicateCheck, setDuplicateCheck] = useState<boolean>(false);
   const [selectedProfileType, setSelectedProfileType] = useState<string | null>(
@@ -153,20 +152,9 @@ const MainSection = () => {
     }
   };
 
-  // 회원 탈퇴 처리
+  // 회원 탈퇴 페이지 이동
   const handleUserWithdrawal = () => {
-    setAlert(true);
-  };
-
-  const confirmWithdrawal = async () => {
-    try {
-      await unregister();
-      setAlertMessage("회원 탈퇴가 완료되었습니다.");
-    } catch (error) {
-      setAlertMessage("회원 탈퇴에 실패했습니다. 다시 시도해주세요.");
-    } finally {
-      setAlert(false);
-    }
+    router.push("/withdrawal");
   };
 
   const handleRegistrationSchool = () => {
@@ -567,16 +555,7 @@ const MainSection = () => {
           }}
         />
       )}
-      {alert && (
-        <AlertWithMessage
-          text="정말 회원 탈퇴를 진행하시겠습니까?"
-          description="회원 탈퇴 시 모든 데이터가 삭제되며 복구할 수 없습니다."
-          leftBtnText="취소"
-          rightBtnText="탈퇴하기"
-          onLeftBtnClick={() => setAlert(false)}
-          onRightBtnClick={confirmWithdrawal}
-        />
-      )}
+
       {alertMessage && <Alert text={alertMessage} onClose={closeAlert} />}
       {snackbar && <MobileSnackBar text={"학교 등록이 완료되었습니다."} />}
     </div>
