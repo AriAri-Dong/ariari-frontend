@@ -1,3 +1,5 @@
+"use client";
+
 import SignInPageContent from "@/(auth)/auth/kakao/content/pageContent";
 import { Suspense } from "react";
 import LoginLoading from "./content/loginLoading";
