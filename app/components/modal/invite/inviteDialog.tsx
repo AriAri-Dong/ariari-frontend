@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import NotiPopUp from "../notiPopUp";
 import Step2 from "./step2";
 import { useEnterClubMutation } from "@/hooks/club/my/useMyClubMutation";
@@ -11,6 +12,8 @@ interface InviteDialogProps {
   onClose: () => void;
 }
 const InviteDialog = ({ inviteCode, onClose }: InviteDialogProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [step, setStep] = useState<number>(1);
   const [nickname, setNickname] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -29,6 +32,12 @@ const InviteDialog = ({ inviteCode, onClose }: InviteDialogProps) => {
 
   const handleSubmit = () => {
     enterClub({ inviteKey: inviteCode, name: nickname });
+  };
+  const handleClose = () => {
+    if (data) {
+      router.replace(pathname, { scroll: false });
+    }
+    onClose();
   };
 
   return (
@@ -64,7 +73,7 @@ const InviteDialog = ({ inviteCode, onClose }: InviteDialogProps) => {
           icon="celebration"
           title="동아리 가입 완료"
           description={`${data?.clubName} 동아리 가입이 완료되었어요.\n새로운 회원이 되신 것을 환영해요!`}
-          onClose={onClose}
+          onClose={handleClose}
         />
       )}
       {alertMessage && (
