@@ -196,6 +196,10 @@ const MainSection = () => {
                       description={item.body}
                       deadline={calculateRemainingDays(item.endDateTime)}
                       isBookmarked={item.isMyBookmark}
+                      clubAffiliationType={item.clubAffiliationType}
+                      clubCategoryType={item.clubCategoryType}
+                      clubRegionType={item.clubRegionType}
+                      participantType={item.participantType}
                     />
                   ))}
                 </motion.div>
@@ -248,6 +252,10 @@ const MainSection = () => {
                                 item.endDateTime
                               )}
                               isBookmarked={item.isMyBookmark}
+                              clubAffiliationType={item.clubAffiliationType}
+                              clubCategoryType={item.clubCategoryType}
+                              clubRegionType={item.clubRegionType}
+                              participantType={item.participantType}
                             />
                           ))}
                         </div>

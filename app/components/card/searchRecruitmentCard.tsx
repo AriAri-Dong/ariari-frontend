@@ -9,6 +9,13 @@ import {
   removeRecruitmentBookmark,
 } from "@/api/recruitment/api";
 import Alert from "../alert/alert";
+import {
+  ClubAffiliationType,
+  ClubFieldType,
+  ClubRegionType,
+  ParticipantType,
+} from "@/types/club";
+import { getClubOptions } from "@/utils/convertToServerFormat";
 
 interface RecruitmentCardProps {
   id: string;
@@ -17,6 +24,10 @@ interface RecruitmentCardProps {
   description?: string;
   deadline: string;
   isBookmarked: boolean;
+  clubAffiliationType?: ClubAffiliationType;
+  clubCategoryType?: ClubFieldType;
+  clubRegionType?: ClubRegionType;
+  participantType?: ParticipantType;
 }
 
 const SearchRecruitmentCard = ({
@@ -26,6 +37,10 @@ const SearchRecruitmentCard = ({
   description,
   deadline,
   isBookmarked,
+  clubAffiliationType,
+  clubCategoryType,
+  clubRegionType,
+  participantType,
 }: RecruitmentCardProps) => {
   const router = useRouter();
   const isMdUp = useResponsive("md");
@@ -33,6 +48,13 @@ const SearchRecruitmentCard = ({
   const [bookmarked, setBookmarked] = useState<boolean>(isBookmarked);
   const [loading, setLoading] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const clubOptions = getClubOptions({
+    schoolData: clubAffiliationType === "INTERNAL" ? {} : null,
+    clubCategoryType,
+    clubRegionType,
+    participantType,
+  });
 
   const handleRouter = () => {
     router.push(`/recruitment/detail?id=${id}`);
@@ -107,7 +129,7 @@ const SearchRecruitmentCard = ({
             {clubName}
           </p>
           <p className="text-mobile_body3_m md:text-body2_m text-subtext2">
-            서버에 | 데이터를 | 요청해야 | 합니다.
+            {clubOptions.map((opt) => opt.value).join(" | ")}
           </p>
         </div>
       </div>

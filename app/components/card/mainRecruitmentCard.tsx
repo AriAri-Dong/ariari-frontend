@@ -15,6 +15,7 @@ import LoginModal from "../modal/login/loginModal";
 import MobileLoginModal from "../modal/login/mobileLoginModal";
 import {} from "zustand/shallow";
 import { useUserStore } from "@/stores/userStore";
+import { getClubOptions } from "@/utils/convertToServerFormat";
 
 interface CardProps {
   data: RecruitmentData[];
@@ -78,6 +79,14 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
     <>
       {cardData.map((item, index) => {
         const isExpired = calculateRemainingDays(item.endDateTime) === "마감";
+        const clubData = {
+          schoolData: item.clubAffiliationType === "INTERNAL" ? {} : null,
+          clubCategoryType: item.clubCategoryType,
+          clubRegionType: item.clubRegionType,
+          participantType: item.participantType,
+        };
+        const options = getClubOptions(clubData);
+
         return (
           <div
             key={index}
@@ -118,9 +127,8 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
               <h3 className="line-clamp-2 overflow-hidden text-ellipsis max-w-[166px] text-text1 text-mobile_body1_sb mb-5 md:text-h3 md:h-[54px]">
                 {item.body}
               </h3>
-
               <p className="text-subtext2 text-mobile_body3_m md:text-body2_m">
-                서버에 | 데이터를 | 요청 | 해야합니다.
+                {options.map((opt) => opt.value).join(" | ")}
               </p>
             </div>
           </div>

@@ -20,10 +20,12 @@ export const profileImageMap: Record<string, string> = {
   ARIARI_SNAKE: snake,
   ARIARI_HORSE: horse,
   ARIARI_SHEEP: sheep,
-  ARIARI_MONKEY: ariari,
   ARIARI_CHICKEN: chicken,
   ARIARI_DOG: dog,
   ARIARI_PIG: pig,
+  // ARIARI_MONKEY intentionally omitted
 };
 
-// 원숭이 x
+export const getProfileImage = (type?: string | null): string => {
+  return profileImageMap[type ?? ""] || ariari;
+};
