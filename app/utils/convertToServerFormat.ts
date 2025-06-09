@@ -103,24 +103,33 @@ export const convertToServerFormat = (
   };
 };
 
-export const getClubOptions = (clubData: ClubData) => {
+export const getClubOptions = (clubData: Partial<ClubData>) => {
   if (!clubData) return [];
 
   const isSchoolClub = clubData.schoolData ? "교내" : "연합";
 
-  return [
-    { label: "동아리 소속", value: isSchoolClub },
-    {
+  const result = [{ label: "동아리 소속", value: isSchoolClub }];
+
+  if (clubData.clubCategoryType) {
+    result.push({
       label: "활동 분야",
       value: CLUB_FIELD[clubData.clubCategoryType] || "기타",
-    },
-    {
+    });
+  }
+
+  if (clubData.clubRegionType) {
+    result.push({
       label: "활동 지역",
       value: CLUB_REGION[clubData.clubRegionType] || "지역 정보 없음",
-    },
-    {
+    });
+  }
+
+  if (clubData.participantType) {
+    result.push({
       label: "활동 대상",
       value: CLUB_PARTICIPANT[clubData.participantType] || "정보 없음",
-    },
-  ];
+    });
+  }
+
+  return result;
 };
