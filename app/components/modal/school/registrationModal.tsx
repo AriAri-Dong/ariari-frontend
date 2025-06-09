@@ -8,6 +8,7 @@ import { formatTime } from "@/utils/timeFormatter";
 import Step1 from "./setp1";
 import Step2 from "./step2";
 import { sendSchoolAuthEmail, validateSchoolAuthCode } from "@/api/school/api";
+import { getUser } from "@/utils/getUser";
 
 interface RegistrationModalProps {
   onClose: () => void;
@@ -78,9 +79,11 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
         );
       }
     } else if (step === 2) {
-      onComplete("학교 인증이 완료되었습니다.");
-      onClose();
-      window.location.reload();
+      await getUser();
+      setTimeout(() => {
+        onComplete("학교 인증이 완료되었습니다.");
+        onClose();
+      }, 0);
     }
   };
 
