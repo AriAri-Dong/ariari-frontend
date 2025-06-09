@@ -26,10 +26,10 @@ export interface RecruitmentData {
   recruitmentStatusType: RecruitmentStatusType;
   isMyBookmark: boolean;
   recruitmentNoteDataList: RecruitmentNoteData[];
-  clubAffiliationType: ClubAffiliationType;
-  clubCategoryType: ClubFieldType;
-  clubRegionType: ClubRegionType;
-  participantType: ParticipantType;
+  clubAffiliationType?: ClubAffiliationType;
+  clubCategoryType?: ClubFieldType;
+  clubRegionType?: ClubRegionType;
+  participantType?: ParticipantType;
 }
 export interface ClubRecruitmentListResponse {
   recruitmentDataList: RecruitmentData[];
