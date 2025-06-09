@@ -134,11 +134,19 @@ const ClubInfoSection = () => {
   return (
     <>
       <div className="relative">
-        <Image
+        {/* <Image
           src={bannerUri || defaultImgBg}
           alt={"Test Image"}
           className="rounded-20 w-full h-full object-cover"
-        />
+        /> */}
+        <div className="relative w-full h-[200px] md:h-[312px]">
+          <Image
+            src={bannerUri || defaultImgBg}
+            alt="Test Image"
+            fill
+            className="rounded-20 object-cover"
+          />
+        </div>
         <div
           className="bg-white p-2 border-[1px] rounded-full border-menuborder
         absolute bottom-5 right-5 cursor-pointer hidden md:block"

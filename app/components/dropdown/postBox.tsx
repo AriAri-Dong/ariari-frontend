@@ -30,7 +30,7 @@ import {
   getClubActivityDetail,
   toggleClubActivityLike,
 } from "@/api/club/activity/api";
-import { profileImageMap } from "@/utils/mappingProfile";
+import { getProfileImage, profileImageMap } from "@/utils/mappingProfile";
 
 interface PostBoxProps {
   data: ClubActivity;
@@ -211,9 +211,13 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
         <div className="flex items-center gap-[14px]">
           {/* 프로필 이미지 (필요시 profileImageMap 사용) */}
           <Image
-            src={profileImageMap[post.clubMember.profileType]}
+            src={getProfileImage(post.clubMember.profileType)}
             alt={"프로필이미지"}
+            width={44}
+            height={44}
+            className="rounded-full"
           />
+
           <div>
             <p className="text-mobile_body1_m text-subtext2 md:text-h4">
               {post.clubMember.name}
