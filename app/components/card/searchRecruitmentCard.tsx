@@ -24,10 +24,10 @@ interface RecruitmentCardProps {
   description?: string;
   deadline: string;
   isBookmarked: boolean;
-  clubAffiliationType: ClubAffiliationType;
-  clubCategoryType: ClubFieldType;
-  clubRegionType: ClubRegionType;
-  participantType: ParticipantType;
+  clubAffiliationType?: ClubAffiliationType;
+  clubCategoryType?: ClubFieldType;
+  clubRegionType?: ClubRegionType;
+  participantType?: ParticipantType;
 }
 
 const SearchRecruitmentCard = ({
