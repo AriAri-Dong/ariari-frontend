@@ -9,6 +9,7 @@ import {
 import { AuthResponseType, SignUpWithKeyBody } from "@/types/api";
 import axiosInstance from "../axiosInstance";
 import { useAuthStore } from "@/stores/authStore";
+import { useUserStore } from "@/stores/userStore";
 
 // 토큰 갱신
 export const refreshToken = async (): Promise<string | null> => {
@@ -73,14 +74,10 @@ export const getTokenWithCode = async (code: string) => {
     const { data } = await axiosInstance.get<AuthResponseType>(url);
     return data;
   } catch (err) {
-    console.error(err);
-    window.location.href = "/";
+    console.error("카카오 로그인 실패:", err);
     alert("로그인에 실패했습니다.\n다시 시도해주세요.");
-    return {
-      accessToken: "",
-      refreshToken: "",
-      oauthSignUpKey: "",
-    };
+    window.location.href = "/";
+    return null;
   }
 };
 
@@ -92,36 +89,34 @@ export const signUpWithKey = async (key: string, body: SignUpWithKeyBody) => {
     const { data } = await axiosInstance.post<AuthResponseType>(url, body);
     return data;
   } catch (err) {
-    console.error(err);
-    window.location.href = "/";
+    console.error("카카오 회원가입 실패:", err);
     alert("회원가입에 실패했습니다.\n다시 시도해주세요.");
-    return {
-      accessToken: "",
-      refreshToken: "",
-      oauthSignUpKey: "",
-    };
+    window.location.href = "/";
+    return null;
   }
 };
+
 // 로그아웃
-export const logout = async (signOutUser?: () => void) => {
+export const logout = async () => {
   const {
     accessToken,
     refreshToken,
-    logout: signOutAuth,
+    logout: clearAuth,
   } = useAuthStore.getState();
-  console.log(accessToken);
-  console.log(refreshToken);
 
   try {
+    // 백엔드에 로그아웃 요청
     await axiosInstance.post(LOGOUT, { accessToken, refreshToken });
 
-    window.location.reload();
-
-    signOutAuth(); // authStore 초기화
-    signOutUser?.(); // userStore 초기화
+    // 클라이언트 상태 초기화
+    clearAuth(); // accessToken, refreshToken 제거
+    useUserStore.getState().clearUser(); // user 정보 제거
 
     localStorage.removeItem("ariari-auth");
-    localStorage.removeItem("ariari-storage");
+    localStorage.removeItem("ariari-user-store");
+
+    // 새로고침
+    window.location.reload();
   } catch (err) {
     console.error("로그아웃 실패:", err);
   }

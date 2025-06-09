@@ -74,9 +74,7 @@ const MainSection = () => {
     applicationsList,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage,
     totalSize,
-    isError,
   } = useApplicationQuery(clubId, {
     isPendent: selectedFilter === "대기중",
     query: debounceSearchQuery,

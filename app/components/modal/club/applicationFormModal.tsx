@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useUserStore } from "@/providers/userStoreProvider";
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
 import ApplicationFieldForm from "@/components/form/application/applicationFieldForm";
@@ -15,7 +14,6 @@ import TransparentSmallBtn from "@/components/button/basicBtn/transparentSmallBt
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import { getApplicationTemp } from "@/api/apply/api";
 import Alert from "@/components/alert/alert";
-import { usePathname, useRouter } from "next/navigation";
 import { RecruitmentResponse } from "@/types/recruitment";
 import { getRecruitmentDetail } from "@/api/recruitment/api";
 import Loading from "@/components/feedback/loading";
@@ -25,6 +23,7 @@ import {
   usePutTempApplicationMutation,
   useSubmitApplicationMutation,
 } from "@/hooks/apply/useApplyMutation";
+import { useUserStore } from "@/stores/userStore";
 
 export interface ApplicationFormModalProps {
   recruitmentId: string;
@@ -39,8 +38,11 @@ const ApplicationFormModal = ({
   onClose,
   onSubmit,
 }: ApplicationFormModalProps) => {
-  const nickname = useUserStore((state) => state.memberData.nickname);
-  const profileType = useUserStore((state) => state.memberData.profileType);
+  const user = useUserStore((state) => state.user);
+
+  const nickname = user?.memberData.nickname ?? "";
+  const profileType = user?.memberData?.profileType ?? null;
+
   const deleteTmp = useDeleteTmpMutation({
     recruitmentId,
     onSuccess: () => {},

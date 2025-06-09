@@ -12,9 +12,8 @@ import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import { getExternalClubRanking, getInternalClubRanking } from "@/api/club/api";
 import { ClubData } from "@/types/api";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/stores/userStore";
 
 const ClubRanking = () => {
   const router = useRouter();
@@ -35,17 +34,16 @@ const ClubRanking = () => {
   const [isSchoolNotiPopUpOpen, setIsSchoolNotiPopUpOpen] =
     useState<boolean>(false);
 
-  const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn));
-  const schoolCertification = useUserStore(
-    useShallow((state) => state.schoolData)
-  );
+  const { user } = useUserStore();
+  const isSignIn = !!user;
+  const schoolCertification = user?.schoolData;
 
   const handleFieldOption = (value: string[]) => {
     setFieldType(value[0]);
   };
 
   const handleAffiliationOption = (value: string) => {
-    if (!isAuthenticated) {
+    if (!isSignIn) {
       setIsLoginNotiPopUpOpen(true);
     } else if (!schoolCertification && value === "교내") {
       setIsSchoolNotiPopUpOpen(true);

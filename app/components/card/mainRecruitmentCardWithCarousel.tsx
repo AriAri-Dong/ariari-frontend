@@ -20,8 +20,7 @@ import {
 } from "@/api/recruitment/api";
 import LoginModal from "../modal/login/loginModal";
 import MobileLoginModal from "../modal/login/mobileLoginModal";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
+import { useUserStore } from "@/stores/userStore";
 
 interface CardProps {
   data: RecruitmentData[];
@@ -30,6 +29,8 @@ interface CardProps {
 const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
   const router = useRouter();
   const isXlUp = useResponsive("lx");
+  const isSignIn = useUserStore((state) => !!state.user);
+
   const [cardData, setCardData] = useState<RecruitmentData[]>(data);
   const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
@@ -37,8 +38,6 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
   const [isFirstSlide, setIsFirstSlide] = useState<boolean>(true);
   const [isLastSlide, setIsLastSlide] = useState<boolean>(false);
   const slickRef = useRef<Slider>(null);
-
-  const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn));
 
   useEffect(() => {
     setCardData(data);
@@ -91,7 +90,7 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
     const updatedCardData = [...cardData];
     const targetItem = updatedCardData[index];
 
-    if (!isAuthenticated) {
+    if (!isSignIn) {
       setIsNotiPopUpOpen(true);
       return;
     }

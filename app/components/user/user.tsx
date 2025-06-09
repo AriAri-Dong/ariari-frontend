@@ -9,27 +9,21 @@ import LoginBtn from "../button/basicBtn/loginBtn";
 import Notification from "../button/iconBtn/notification";
 import NotificationModal from "../modal/notification/notificationModal";
 import LoginModal from "../modal/login/loginModal";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 import { getProfileImage } from "@/utils/profileImage";
+import { useUserStore } from "@/stores/userStore";
 
 const User = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const user = useUserStore((state) => state.user);
 
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
-  const nickname = useUserStore(
-    useShallow((state) => state.memberData.nickname)
-  );
-  const profileType = useUserStore(
-    useShallow((state) => state.memberData.profileType)
-  );
+  const nickname = user?.memberData.nickname ?? "";
+  const profileType = user?.memberData?.profileType ?? null;
+  const isLoggedIn = !!user && nickname !== "";
 
   const profileImageSrc = getProfileImage(profileType);
-
-  const isLoggedIn = isSignIn && nickname !== "";
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);

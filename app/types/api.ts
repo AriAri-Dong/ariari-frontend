@@ -24,7 +24,7 @@ export type UserDataResponseType = {
   memberData: {
     memberId: string;
     nickname: string;
-    profileType: string;
+    profileType: profileType;
   };
   schoolData: {
     name: string;

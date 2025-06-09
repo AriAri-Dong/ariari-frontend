@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useUserStore } from "@/providers/userStoreProvider";
-
 import Image from "next/image";
 import defaultImg from "@/images/icon/defaultAriari.svg";
 import MemberSearch from "../input/memberSearch";
@@ -13,6 +11,7 @@ import { ClubData } from "@/types/club";
 import { ClubMemberData, MemberData } from "@/types/member";
 
 import { entrustAdmin } from "@/api/member/api";
+import { useUserStore } from "@/stores/userStore";
 
 interface SelectAdministratorProps {
   club: ClubData;
@@ -25,7 +24,7 @@ const SelectAdministrator = ({
   selectedUser,
   setSelectedUser,
 }: SelectAdministratorProps) => {
-  const { memberData } = useUserStore((state) => state);
+  const memberId = useUserStore((state) => state.user?.memberData.memberId);
 
   const [nickname, setNickname] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -41,7 +40,7 @@ const SelectAdministrator = ({
       return;
     }
 
-    if (member.memberData.memberId === memberData.memberId) {
+    if (member.memberData.memberId === memberId) {
       setAlertMessage("본인에게 위임할 수 없습니다.");
       return;
     }

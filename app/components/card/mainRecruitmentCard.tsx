@@ -13,9 +13,8 @@ import {
 import NotiPopUp from "../modal/notiPopUp";
 import LoginModal from "../modal/login/loginModal";
 import MobileLoginModal from "../modal/login/mobileLoginModal";
-import { authStore } from "@/stores/userStore";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
+import {} from "zustand/shallow";
+import { useUserStore } from "@/stores/userStore";
 
 interface CardProps {
   data: RecruitmentData[];
@@ -28,12 +27,11 @@ interface CardProps {
  */
 const MainRecruitmentCard = ({ data }: CardProps) => {
   const router = useRouter();
+  const isSignIn = useUserStore((state) => !!state.user);
+
   const [cardData, setCardData] = useState<RecruitmentData[]>(data);
   const [isNotiPopUpOpen, setIsNotiPopUpOpen] = useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
-
-  const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn));
-  console.log(isAuthenticated);
 
   useEffect(() => {
     setCardData(data);
@@ -47,7 +45,7 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
     const updatedCardData = [...cardData];
     const targetItem = updatedCardData[index];
 
-    if (!isAuthenticated) {
+    if (!isSignIn) {
       setIsNotiPopUpOpen(true);
       return;
     }
