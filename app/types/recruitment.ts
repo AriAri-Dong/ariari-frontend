@@ -1,4 +1,10 @@
-import { ClubData } from "@/types/club";
+import {
+  ClubAffiliationType,
+  ClubData,
+  ClubFieldType,
+  ClubRegionType,
+  ParticipantType,
+} from "@/types/club";
 import { PageInfo } from "@/types/pageInfo";
 import { ApplyFormData } from "./application";
 
@@ -20,6 +26,10 @@ export interface RecruitmentData {
   recruitmentStatusType: RecruitmentStatusType;
   isMyBookmark: boolean;
   recruitmentNoteDataList: RecruitmentNoteData[];
+  clubAffiliationType: ClubAffiliationType;
+  clubCategoryType: ClubFieldType;
+  clubRegionType: ClubRegionType;
+  participantType: ParticipantType;
 }
 export interface ClubRecruitmentListResponse {
   recruitmentDataList: RecruitmentData[];
