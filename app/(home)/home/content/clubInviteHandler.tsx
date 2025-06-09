@@ -4,15 +4,15 @@ import InviteDialog from "@/components/modal/invite/inviteDialog";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import NotiPopUp from "@/components/modal/notiPopUp";
-import { useUserStore } from "@/providers/userStoreProvider";
-import {  useSearchParams } from "next/navigation";
+import { useUserStore } from "@/stores/userStore";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useShallow } from "zustand/shallow";
 
 export default function ClubInviteHandler() {
   const searchParams = useSearchParams();
   const inviteCode = searchParams.get("inviteCode");
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const { user } = useUserStore();
+  const isSignIn = !!user;
 
   const [showModal, setShowModal] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);

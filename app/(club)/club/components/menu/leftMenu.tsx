@@ -14,9 +14,7 @@ import { useClubNotificationQuery } from "@/hooks/notification/useNotificationQu
 import ModifyClubInfoModal from "@/components/modal/club/modifyClubInfoModal";
 import Alert from "@/components/alert/alert";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
-import { useUserStore } from "@/providers/userStoreProvider";
 import defaultImg from "@/images/icon/defaultAriari.svg";
-import { getProfileImage } from "@/utils/profileImage";
 import NotificationList from "@/components/list/notificationList";
 import WhiteButton from "@/components/button/basicBtn/whiteBtn";
 import { useClubNotificationMutation } from "@/hooks/notification/useNotificationMutation";
@@ -52,15 +50,8 @@ const LeftMenu = () => {
 
   const { markClubNotificationAsRead } = useClubNotificationMutation();
 
-  console.log(role);
-  console.log(clubData);
-
-  const nickname = useUserStore((state) => state.memberData.nickname);
-  const profileType = useUserStore((state) => state.memberData.profileType);
-
   // 권한에 따른 메뉴 데이터
   const CLUB_LEFT_MENU = CLUB_MENU_MAP[role || "USER"];
-  const profileImageSrc = getProfileImage(profileType);
 
   const isActive = (url: string) => pathname === url;
 
@@ -281,7 +272,7 @@ const LeftMenu = () => {
 
         {/* 동아리 알림 */}
         {activeTab === "notification" && (
-          <div className="max-h-[556px] mt-[14px] overflow-y-auto no-scrollbar">
+          <div className="max-h-[556px] mt-[14px] overflow-y-auto">
             <NotificationList
               notificationList={clubNotifications}
               onClickNotification={handleNotificationClick}

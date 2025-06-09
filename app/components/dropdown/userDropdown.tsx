@@ -4,7 +4,6 @@ import { logout } from "@/api/login/api";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AlertWithMessage from "@/components/alert/alertWithMessage";
-import { useUserStore } from "@/providers/userStoreProvider";
 
 interface MenuProps {
   optionData: { id: number; label: string; path: string | null }[];
@@ -17,14 +16,11 @@ interface MenuProps {
  */
 const UserDropdown = ({ optionData, onClose }: MenuProps) => {
   const router = useRouter();
-  const signOutUser = useUserStore((state) => state.signOut);
-
-  const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
+  const [showLogoutAlert, setShowLogoutAlert] = useState(false);
 
   const handleLogout = async () => {
-    console.log("로그아웃 버튼 클릭");
     try {
-      await logout(signOutUser);
+      await logout();
     } catch (error) {
       console.error("로그아웃 오류:", error);
     }
@@ -32,13 +28,10 @@ const UserDropdown = ({ optionData, onClose }: MenuProps) => {
 
   const handleMenuClick = (item: { label: string; path: string | null }) => {
     if (item.label === "로그아웃") {
-      console.log("로그아웃 버튼 클릭됨");
       setShowLogoutAlert(true);
       return;
     } else if (item.path) {
       router.push(item.path);
-    } else {
-      console.log("No path available for:", item.label);
     }
     onClose();
   };
@@ -60,7 +53,6 @@ const UserDropdown = ({ optionData, onClose }: MenuProps) => {
           </span>
         </div>
       ))}
-      {/* 로그아웃 확인 알림 */}
       {showLogoutAlert && (
         <AlertWithMessage
           text="로그아웃 하시겠습니까?"

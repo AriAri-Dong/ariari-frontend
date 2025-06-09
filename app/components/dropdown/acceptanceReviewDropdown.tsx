@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 import useResponsive from "@/hooks/useResponsive";
 import TransparentSmallBtn from "../button/basicBtn/transparentSmallBtn";
 import IconBadge from "../badge/iconBadge";
@@ -20,6 +18,7 @@ import {
   getInterviewTypeLabel,
   getProcedureTypeLabel,
 } from "@/utils/reviewMapping";
+import { useUserStore } from "@/stores/userStore";
 
 interface AcceptanceReviewDropdownProps {
   onClick: () => void;
@@ -33,9 +32,7 @@ const AcceptanceReviewDropdown = ({
   isOpenReview,
 }: AcceptanceReviewDropdownProps) => {
   const isMdUp = useResponsive("md");
-  const memberId = useUserStore(
-    useShallow((state) => state.memberData.memberId)
-  );
+  const memberId = useUserStore((state) => state.user?.memberData.memberId);
 
   const [reviewDetail, setReviewDetail] = useState<PassReviewDetail | null>(
     null

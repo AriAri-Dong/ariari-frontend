@@ -10,8 +10,6 @@ import SahreBtn from "@/components/button/iconBtn/shareBtn";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import { calculateRemainingDays } from "@/utils/dateFormatter";
 import Alert from "@/components/alert/alert";
-import { useShallow } from "zustand/shallow";
-import { useUserStore } from "@/providers/userStoreProvider";
 import ApplicationFormModal from "@/components/modal/club/applicationFormModal";
 import { RecruitmentData } from "@/types/recruitment";
 import ApplicationFormBottomSheet from "@/components/bottomSheet/applicationFormBottomSheet";
@@ -20,6 +18,7 @@ import {
   deleteRecruitmentBookmark,
   postRecruitmentBookmark,
 } from "@/api/recruitment/api";
+import { useUserStore } from "@/stores/userStore";
 
 interface RecruitmentBottomBar {
   recruitmentData: RecruitmentData;
@@ -40,7 +39,8 @@ const RecruitmentBottomBar = ({
   const params = useSearchParams();
   const id = params.get("id");
   const isMdUp = useResponsive("md");
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const isSignIn = useUserStore((state) => !!state.user);
+
   const [isApplicationFormOpen, setIsApplicationFormOpen] =
     useState<boolean>(false);
 

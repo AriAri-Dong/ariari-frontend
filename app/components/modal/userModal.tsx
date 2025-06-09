@@ -1,7 +1,6 @@
 "use client";
 
 import { USER_MENU } from "@/data/header";
-import { useUserStore } from "@/providers/userStoreProvider";
 import { useRouter } from "next/navigation";
 import { logout } from "@/api/login/api";
 import { useState } from "react";
@@ -9,6 +8,7 @@ import AlertWithMessage from "@/components/alert/alertWithMessage";
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
 import { getProfileImage } from "@/utils/profileImage";
+import { useUserStore } from "@/stores/userStore";
 
 interface UserModalProps {
   onClose: () => void;
@@ -19,9 +19,10 @@ interface UserModalProps {
  */
 const UserModal = ({ onClose }: UserModalProps) => {
   const router = useRouter();
-  const username = useUserStore((state) => state.memberData.nickname);
-  const profileType = useUserStore((state) => state.memberData.profileType);
-  const signOutUser = useUserStore((state) => state.signOut);
+  const user = useUserStore((state) => state.user);
+
+  const username = user?.memberData.nickname ?? "";
+  const profileType = user?.memberData?.profileType ?? null;
 
   const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
 
@@ -29,12 +30,11 @@ const UserModal = ({ onClose }: UserModalProps) => {
 
   const handleLogout = async () => {
     try {
-      await logout(signOutUser);
+      await logout();
     } catch (error) {
       console.error("로그아웃 오류:", error);
     }
   };
-
   const handleMenuClick = (path: string, label: string) => {
     if (label === "로그아웃") {
       setShowLogoutAlert(true);

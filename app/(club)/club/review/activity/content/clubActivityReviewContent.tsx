@@ -4,8 +4,6 @@ import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useClubReviews } from "@/hooks/club/useClubReviews";
 import { useClubContext } from "@/context/ClubContext";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
@@ -18,10 +16,10 @@ import ReviewPercentList from "@/components/list/reviewPercentList";
 import MobileReviewPercentList from "@/components/list/mobileReviewPercentList";
 import ActivityReviewBottomSheet from "@/components/bottomSheet/review/activityReviewBottomSheet";
 import ErrorNotice from "@/components/feedback/error";
-import Loading from "@/components/feedback/loading";
 import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
+import { useUserStore } from "@/stores/userStore";
 
 const CONTENT_SIZE = 10;
 const SORT = "createdDateTime,desc";
@@ -33,7 +31,8 @@ const ClubActivityReviewContent = () => {
   const clubId = params.get("clubId") ?? "";
 
   const { role } = useClubContext();
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const { user } = useUserStore();
+  const isSignIn = !!user;
 
   const {
     review,

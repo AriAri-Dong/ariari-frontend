@@ -145,6 +145,7 @@ const MainSection = () => {
                 value={name}
                 placeholder={"이름"}
                 onChange={handleNameChange}
+                disable
               />
               {nameError && (
                 <p className="text-noti text-mobile_body3_r ml-4 mt-1">

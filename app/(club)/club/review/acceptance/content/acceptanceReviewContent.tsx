@@ -3,8 +3,6 @@
 import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useClubContext } from "@/context/ClubContext";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 import { useAcceptanceReviews } from "@/hooks/club/useAcceptanceReviews";
 import useResponsive from "@/hooks/useResponsive";
 
@@ -16,10 +14,10 @@ import Alert from "@/components/alert/alert";
 import AcceptanceReviewModal from "@/components/modal/review/acceptanceReviewModal";
 import AcceptanceReviewBottomSheet from "@/components/bottomSheet/review/acceptanceReviewBottomSheet";
 import ErrorNotice from "@/components/feedback/error";
-import Loading from "@/components/feedback/loading";
 import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import LeftMenu from "@/(club)/club/components/menu/leftMenu";
+import { useUserStore } from "@/stores/userStore";
 
 const CONTENT_SIZE = 10;
 const SORT = "createdDateTime,desc";
@@ -31,12 +29,12 @@ const AcceptanceReviewContent = () => {
   const isMdUp = useResponsive("md");
 
   const { role } = useClubContext();
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const { user } = useUserStore();
+  const isSignIn = !!user;
 
   const {
     review,
     pageInfo,
-    loading,
     error,
     openReview,
     isReviewModalOpen,

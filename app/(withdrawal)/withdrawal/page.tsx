@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 
 import HeaderSection from "./content/headerSection";
 import NoticeCard from "@/components/card/NoticeCard";
@@ -19,10 +17,11 @@ import { Delegator } from "@/types/components/delegate";
 import { ClubData } from "@/types/club";
 import { getMyAdminClubs } from "@/api/club/api";
 import { logout, unregister } from "@/api/login/api";
+import { useUserStore } from "@/stores/userStore";
 
 const WithDrawal = () => {
   const router = useRouter();
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const isSignIn = useUserStore((state) => !!state.user);
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 

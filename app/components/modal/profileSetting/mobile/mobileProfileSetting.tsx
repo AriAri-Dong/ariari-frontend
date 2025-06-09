@@ -59,9 +59,9 @@ const MobileProfileSetting = ({
   };
 
   const doSignup = async ({
-    skipVerification,
+    skipVerification = false,
   }: {
-    skipVerification: boolean;
+    skipVerification?: boolean;
   }) => {
     if (!oauthSignUpKey) {
       setAlertMessage("인증 키가 유효하지 않습니다. 다시 로그인해주세요.");
@@ -69,12 +69,19 @@ const MobileProfileSetting = ({
     }
 
     try {
-      const res = await signUpWithKey(oauthSignUpKey, {
+      const payload = {
         email: skipVerification ? null : profileData.email,
         profileType: profileData.selectedProfileType,
         schoolAuthCode: skipVerification ? null : profileData.verificationCode,
         nickName: profileData.username,
-      });
+      };
+
+      const res = await signUpWithKey(oauthSignUpKey, payload);
+
+      if (!res) {
+        setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
+        return;
+      }
 
       setAuth({
         accessToken: res.accessToken,

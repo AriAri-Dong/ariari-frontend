@@ -4,21 +4,24 @@ import LargeBtn from "../../button/basicBtn/largeBtn";
 import Alert from "@/components/alert/alert";
 import { PROFILE_SETTING } from "@/data/profileSetting";
 import check from "@/images/icon/check.svg";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { getMemberData, updateProfileType } from "@/api/member/api";
+import { updateProfileType } from "@/api/member/api";
+import { useUserStore } from "@/stores/userStore";
+import { getUser } from "@/utils/getUser";
 
 interface ProfileModalProps {
   onClose: () => void;
 }
 
 const ModifyProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
-  const { setUserData } = useUserStore((state) => state);
-  const profileType = useUserStore((state) => state.memberData.profileType);
+  const profileType = useUserStore(
+    (state) => state.user?.memberData.profileType
+  );
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [selectedProfileType, setSelectedProfileType] = useState<string | null>(
-    profileType
+    profileType ?? null
   );
+
   const [selectedProfileData, setSelectedProfileData] = useState(
     PROFILE_SETTING.find((item) => item.alias === profileType) ||
       PROFILE_SETTING[0]
@@ -49,9 +52,7 @@ const ModifyProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
     try {
       const profileToUpdate = selectedProfileType || PROFILE_SETTING[0].alias!;
       await updateProfileType(profileToUpdate);
-      const res = await getMemberData();
-      setUserData(res);
-      console.log("프로필 변경 완료 ::::::", profileToUpdate);
+      await getUser();
       onClose();
     } catch (error) {
       setAlertMessage("프로필 변경에 실패했습니다. 다시 시도해주세요.");

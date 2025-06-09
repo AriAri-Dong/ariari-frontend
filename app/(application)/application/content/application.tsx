@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 import {
   useMyApplyListQuery,
   useMyApplyTmpListQuery,
@@ -19,6 +17,7 @@ import ErrorNotice from "@/components/feedback/error";
 
 import { OptionType } from "@/types/components/pulldown";
 import { Metadata } from "next";
+import { useUserStore } from "@/stores/userStore";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -46,7 +45,8 @@ export const metadata: Metadata = {
 
 const Application = () => {
   const router = useRouter();
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const { user } = useUserStore();
+  const isSignIn = !!user;
 
   const { data: { allApplications = [], totalCount: applyCount = 0 } = {} } =
     useMyApplyListQuery({ enabled: isSignIn });

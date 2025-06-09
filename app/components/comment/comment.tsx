@@ -24,8 +24,8 @@ import {
   toggleClubActivityCommentLike,
   updateClubActivityComment,
 } from "@/api/club/activity/api";
-import { authStore } from "@/stores/userStore";
 import AlertWithMessage from "../alert/alertWithMessage";
+import { useUserStore } from "@/stores/userStore";
 
 type CommentBaseProps = {
   isReply: boolean;
@@ -49,8 +49,7 @@ type CommentBaseProps = {
 const Comment = (props: CommentBaseProps) => {
   const { isReplying, isReply } = props;
   const comment = props.comment;
-  const { memberData } = authStore.getState();
-  const myId = memberData?.memberId;
+  const myId = useUserStore((state) => state.user?.memberData.memberId);
 
   const menuRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
