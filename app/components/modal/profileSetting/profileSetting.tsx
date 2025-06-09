@@ -90,6 +90,11 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
 
       const res = await signUpWithKey(oauthSignUpKey, payload);
 
+      if (!res) {
+        setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
+        return;
+      }
+
       setAuth({
         accessToken: res.accessToken,
         refreshToken: res.refreshToken,

@@ -8,15 +8,17 @@ import NotiPopUp from "@/components/modal/notiPopUp";
 import SubTap from "@/components/tab/subTap";
 import { AFFILIATION_TYPE } from "@/data/pulldown";
 import { RecruitmentData } from "@/types/recruitment";
-import { authStore } from "@/stores/userStore";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/stores/userStore";
 
 const PopularRecruitment = () => {
   const router = useRouter();
+  const { user } = useUserStore();
+  const isSignIn = !!user;
+  const schoolCertification = user?.schoolData;
+
   const [popularRecruitmentData, setPopularRecruitmentData] = useState<
     RecruitmentData[]
   >([]);
@@ -29,26 +31,17 @@ const PopularRecruitment = () => {
   const [isSchoolNotiPopUpOpen, setIsSchoolNotiPopUpOpen] =
     useState<boolean>(false); // 학교 인증 팝업 상태
 
-  const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn)); // 로그인 상태 확인
-  const schoolCertification = useUserStore(
-    useShallow((state) => state.schoolData)
-  ); // 학교 인증 여부 확인
-
   useEffect(() => {
-    if (
-      isAuthenticated &&
-      schoolCertification &&
-      affiliationType[0] === "교내"
-    ) {
+    if (isSignIn && schoolCertification && affiliationType[0] === "교내") {
       // 학교 인증이 완료되었고 교내를 선택한 경우
       fetchInternal(); // 교내 동아리 데이터를 호출
     } else {
       fetchExternal();
     }
-  }, [isAuthenticated, schoolCertification, affiliationType]);
+  }, [isSignIn, schoolCertification, affiliationType]);
 
   const handleOption = (value: string) => {
-    if (!isAuthenticated) {
+    if (!isSignIn) {
       // 로그인되지 않으면 로그인 팝업 띄우기
       setIsLoginNotiPopUpOpen(true);
     } else if (!schoolCertification && value === "교내") {

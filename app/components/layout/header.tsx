@@ -1,29 +1,34 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
 import logo from "@/images/logo/logo.svg";
 import SearchInput from "../input/searchInput";
 import SearchTermContext from "@/context/searchTermContext";
-import Tooltip from "../tooltip";
 import User from "../user/user";
 import HeaderTab from "../tab/headerTab";
 import SmallBtn from "../button/basicBtn/smallBtn";
 import MobileUser from "../user/mobileUser";
 
-import { getMemberData } from "@/api/member/api";
-import { useUserStore } from "@/providers/userStoreProvider";
 import { useAuthStore } from "@/stores/authStore";
+import { useUserStore } from "@/stores/userStore";
 import Alert from "../alert/alert";
+import { getUser } from "@/utils/getUser";
 
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { setSearchTerm } = useContext(SearchTermContext);
-  const { setUserData, isSignIn } = useUserStore((state) => state);
-  const { accessToken } = useAuthStore();
+  const hasFetchedRef = useRef(false);
+
+  const user = useUserStore((state) => state.user);
+  const hasHydrated = useUserStore((state) => state.hasHydrated);
+  const clearUser = useUserStore((state) => state.clearUser);
+
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const logout = useAuthStore((state) => state.logout);
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
@@ -32,7 +37,7 @@ const Header = () => {
   };
 
   const handleButtonClick = () => {
-    if (!isSignIn) {
+    if (!user) {
       setAlertMessage("로그인 후 이용 가능합니다.");
       return;
     }
@@ -41,10 +46,8 @@ const Header = () => {
 
   const handleSearch = (searchTerm: string) => {
     setSearchTerm(searchTerm);
-    console.log("검색어 :", searchTerm);
   };
 
-  // 모바일에서 헤더 숨김 처리
   const isHiddenPath = [
     "/user/myPoint",
     "/user/interestClub",
@@ -64,27 +67,25 @@ const Header = () => {
   ].includes(pathname);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (!accessToken || accessToken.trim() === "") {
-        console.log("비로그인 상태 → 사용자 정보 요청 생략");
-        localStorage.removeItem("ariari-auth");
-        localStorage.removeItem("ariari-storage");
-        return;
-      }
+    if (!hasHydrated) return;
 
-      try {
-        const res = await getMemberData();
-        setUserData(res);
-        console.log("유저 데이터 >>", res);
-      } catch (error) {
-        console.error("유저 데이터 불러오기 실패:", error);
-        // localStorage.removeItem("ariari-auth");
-        // localStorage.removeItem("ariari-storage");
-      }
-    };
+    const isLoggedIn = !!accessToken && accessToken.trim() !== "";
 
-    fetchUserData();
-  }, [accessToken, setUserData]);
+    if (!isLoggedIn && user) {
+      clearUser();
+      logout();
+      localStorage.removeItem("ariari-auth");
+      localStorage.removeItem("ariari-user-store");
+      return;
+    }
+
+    if (isLoggedIn && !user && !hasFetchedRef.current) {
+      hasFetchedRef.current = true;
+      getUser();
+    }
+  }, [hasHydrated, accessToken, user, clearUser, logout]);
+
+  if (!hasHydrated) return null;
 
   return (
     <header
@@ -102,11 +103,10 @@ const Header = () => {
             onClick={handleHomeClick}
             className="hidden md:cursor-pointer md:block"
           />
-
           <div className="hidden md:block">
             <div className="flex gap-x-5 items-center">
               <User />
-              <SmallBtn title={"동아리 만들기"} onClick={handleButtonClick} />
+              <SmallBtn title="동아리 만들기" onClick={handleButtonClick} />
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@ const Header = () => {
           <HeaderTab />
           <div className="flex w-full items-center justify-between gap-4">
             <div className="flex-1 sm:w-auto md:place-items-end">
-              <SearchInput onSearch={handleSearch} showRecentSearches={true} />
+              <SearchInput onSearch={handleSearch} showRecentSearches />
             </div>
             <div className="md:hidden">
               <MobileUser />

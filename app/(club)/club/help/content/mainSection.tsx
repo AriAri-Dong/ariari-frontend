@@ -4,9 +4,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import useResponsive from "@/hooks/useResponsive";
 import { useClubContext } from "@/context/ClubContext";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
-
 import { QUESTION_TYPE } from "@/data/pulldown";
 
 import SubTap from "@/components/tab/subTap";
@@ -30,6 +27,7 @@ import MobileMenu from "../../components/menu/mobileMenu";
 import LeftMenu from "../../components/menu/leftMenu";
 import QnaForm from "../components/qnaForm";
 import FaqForm from "../components/faqForm";
+import { useUserStore } from "@/stores/userStore";
 
 const MainSection = () => {
   const [type, setType] = useState<string>(QUESTION_TYPE[0].label);
@@ -42,7 +40,9 @@ const MainSection = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
 
   const { role } = useClubContext();
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const { user } = useUserStore();
+  const isSignIn = !!user;
+
   const isTapOver = useResponsive("md");
 
   const router = useRouter();

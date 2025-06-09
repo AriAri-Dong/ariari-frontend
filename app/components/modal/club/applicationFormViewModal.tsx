@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 import Image from "next/image";
 import ResultBadge from "@/components/badge/resultBadge";
 import close from "@/images/icon/close.svg";
@@ -10,6 +8,7 @@ import { APPLY_STATUS_MAP } from "@/constants/application";
 import ApplicationFields from "@/components/list/applicationFields";
 import { getProfileImage } from "@/utils/profileImage";
 import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOption";
+import { useUserStore } from "@/stores/userStore";
 
 export interface ApplicationFormViewModalProps {
   applyId: string;
@@ -24,9 +23,8 @@ const ApplicationFormViewModal = ({
   setSelectedOption,
   setIsModalOpen,
 }: ApplicationFormViewModalProps) => {
-  const memberId = useUserStore(
-    useShallow((state) => state.memberData.memberId)
-  );
+  const memberId = useUserStore((state) => state.user?.memberData.memberId);
+
   const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
   const {
     applyData,

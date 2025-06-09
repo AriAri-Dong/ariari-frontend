@@ -20,12 +20,11 @@ import {
   regionMap,
 } from "@/utils/clubCategoryMapping";
 import { deleteClubBookmark, postClubBookmark } from "@/api/club/api";
-import { useShallow } from "zustand/shallow";
 import useResponsive from "@/hooks/useResponsive";
-import { useUserStore } from "@/providers/userStoreProvider";
 import { ClubData } from "@/types/club";
 import { RecruitmentData } from "@/types/recruitment";
 import { ApplyFormData } from "@/types/application";
+import { useUserStore } from "@/stores/userStore";
 
 interface ClubInfoProps {
   recruitmentData: RecruitmentData;
@@ -54,7 +53,9 @@ const ClubInfo = ({
 }: ClubInfoProps) => {
   const isMdUp = useResponsive("md");
   const params = useSearchParams();
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const { user } = useUserStore();
+  const isSignIn = !!user;
+
   const id = params.get("id") ?? "";
   const router = useRouter();
 

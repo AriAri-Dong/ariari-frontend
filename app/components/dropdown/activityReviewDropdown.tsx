@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 import useResponsive from "@/hooks/useResponsive";
 
 import TransparentSmallBtn from "../button/basicBtn/transparentSmallBtn";
@@ -16,6 +14,7 @@ import ReportBottomSheet from "../bottomSheet/report/reportBottomSheet";
 import formatDateToDot from "@/utils/formatDateToDot";
 import { getClubReviewDetail } from "@/api/review/api";
 import { ClubReviewData, ClubReviewDetail } from "@/types/review";
+import { useUserStore } from "@/stores/userStore";
 
 interface ActivityReviewDropdownProps {
   onClick: () => void;
@@ -28,10 +27,7 @@ const ActivityReviewDropdown = ({
   review,
   isOpenReview,
 }: ActivityReviewDropdownProps) => {
-  // 추후 memberId로 수정
-  const memberId = useUserStore(
-    useShallow((state) => state.memberData.memberId)
-  );
+  const memberId = useUserStore((state) => state.user?.memberData.memberId);
   const isMdUp = useResponsive("md");
 
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);

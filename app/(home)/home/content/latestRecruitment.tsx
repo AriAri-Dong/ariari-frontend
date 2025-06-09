@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import useResponsive from "@/hooks/useResponsive";
 import MainRecruitmentCardWithCarousel from "@/components/card/mainRecruitmentCardWithCarousel";
 import NotiPopUp from "@/components/modal/notiPopUp";
-import { authStore } from "@/stores/userStore";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import {
@@ -15,9 +14,8 @@ import {
   getExternalRecruitments,
 } from "@/api/recruitment/api";
 import { RecruitmentData } from "@/types/recruitment";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/stores/userStore";
 
 const LatestRecruitment = () => {
   const isMdUp = useResponsive("md");
@@ -35,13 +33,13 @@ const LatestRecruitment = () => {
   const [isSchoolNotiPopUpOpen, setIsSchoolNotiPopUpOpen] =
     useState<boolean>(false);
 
-  const isAuthenticated = useUserStore(useShallow((state) => state.isSignIn)); // 로그인 상태 확인
-  const schoolCertification = useUserStore(
-    useShallow((state) => state.schoolData)
-  ); // 학교 인증 여부 확인
+  const { user } = useUserStore();
+  const isSignIn = !!user;
+
+  const schoolCertification = user?.schoolData;
 
   const handleOption = (value: string) => {
-    if (!isAuthenticated) {
+    if (!isSignIn) {
       // 로그인되지 않으면 로그인 팝업 띄우기
       setIsLoginNotiPopUpOpen(true);
     } else if (!schoolCertification && value === "교내") {
