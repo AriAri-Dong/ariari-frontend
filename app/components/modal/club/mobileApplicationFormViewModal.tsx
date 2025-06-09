@@ -8,8 +8,7 @@ import defaultImg from "@/images/icon/defaultAriari.svg";
 import ApplicationFields from "@/components/list/applicationFields";
 import { getProfileImage } from "@/utils/profileImage";
 import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOption";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
+import { useUserStore } from "@/stores/userStore";
 
 const MobileApplicationFormViewModal = ({
   applyId,
@@ -17,10 +16,9 @@ const MobileApplicationFormViewModal = ({
   setSelectedOption,
   onClose,
 }: ApplicationFormViewModalProps) => {
-  const memberId = useUserStore(
-    useShallow((state) => state.memberData.memberId)
-  );
-  const { applyDetail, isError, isLoading } = useApplyDetailQuery(applyId);
+  const memberId = useUserStore((state) => state.user?.memberData.memberId);
+
+  const { applyDetail } = useApplyDetailQuery(applyId);
   const {
     applyData,
     applyAnswerDataList,

@@ -29,6 +29,11 @@ export const useAuthStore = create<AuthState>()(
       storage: createJSONStorage(() =>
         typeof window !== "undefined" ? localStorage : undefined!
       ),
+      partialize: (state) => ({
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
+        oauthSignUpKey: state.oauthSignUpKey,
+      }),
     }
   )
 );

@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useClubContext } from "@/context/ClubContext";
-import { useShallow } from "zustand/shallow";
 
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
@@ -16,23 +15,19 @@ import RecruitmentGuideForm from "../components/RecruitmentGuideForm";
 import Alert from "@/components/alert/alert";
 
 import { RecruitmentData } from "@/types/recruitment";
-
-import { useUserStore } from "@/providers/userStoreProvider";
 import { formatKSTTime } from "@/utils/formatKSTTime";
 import { useClubRecruitmentQuery } from "@/hooks/club/recruitment/useClubRecruitmentQuery";
+import { useUserStore } from "@/stores/userStore";
 
 const ClubRecruitmentContent = () => {
   const params = useSearchParams();
   const clubId = params.get("clubId") || "";
   const router = useRouter();
   const { role } = useClubContext();
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const { user } = useUserStore();
+  const isSignIn = !!user;
 
-  const {
-    data: recruitmentData,
-    isLoading,
-    isError,
-  } = useClubRecruitmentQuery(clubId);
+  const { data: recruitmentData } = useClubRecruitmentQuery(clubId);
 
   const [isRecruitingModalOpen, setIsRecruitingModalOpen] =
     useState<boolean>(false);

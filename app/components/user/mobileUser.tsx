@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 import Image from "next/image";
 import notification_default from "@/images/icon/notification_default.svg";
 import notification_pressed from "@/images/icon/notification_pressed.svg";
@@ -14,12 +12,15 @@ import MobileLoginModal from "../modal/login/mobileLoginModal";
 import AlertWithMessage from "../alert/alertWithMessage";
 import { logout } from "@/api/login/api";
 import { getProfileImage } from "@/utils/profileImage";
+import { useUserStore } from "@/stores/userStore";
 
 const MobileUser = () => {
-  const profileType = useUserStore((state) => state.memberData.profileType);
-  const signOutUser = useUserStore((state) => state.signOut);
+  const user = useUserStore((state) => state.user);
 
+  const profileType = user?.memberData?.profileType ?? null;
   const profileImageSrc = getProfileImage(profileType);
+
+  const isLoggedIn = !!user;
 
   const [isUserModalOpen, setIsUserModalOpen] = useState<boolean>(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
@@ -30,12 +31,10 @@ const MobileUser = () => {
     "default" | "pressed" | "unconfirmed"
   >("unconfirmed");
 
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
-
   // 로그아웃 실행 함수
   const handleLogout = async () => {
     try {
-      await logout(signOutUser);
+      await logout();
     } catch (error) {
       console.error("로그아웃 오류:", error);
     }
@@ -53,7 +52,6 @@ const MobileUser = () => {
     }
   };
 
-  // 알림 아이콘 클릭 시 동작
   const handleNotificationClick = () => {
     if (notificationStatus === "unconfirmed") {
       setIsNotificationModalOpen(true);
@@ -74,7 +72,7 @@ const MobileUser = () => {
         />
 
         {/* 로그인 상태 여부 */}
-        {isSignIn ? (
+        {isLoggedIn ? (
           <Image
             src={profileImageSrc}
             alt="profile"

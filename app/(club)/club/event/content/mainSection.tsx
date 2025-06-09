@@ -2,8 +2,6 @@
 
 import React, { useState } from "react";
 import { useClubContext } from "@/context/ClubContext";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
 
 import useResponsive from "@/hooks/useResponsive";
 
@@ -17,9 +15,12 @@ import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmen
 import { useAutoSubmitAttendance } from "@/hooks/club/evnet/useAutoSubmitAttendance";
 import ListSection from "./listSection";
 import MobileMenu from "../../components/menu/mobileMenu";
+import { useUserStore } from '@/stores/userStore';
 
 const MainSection = () => {
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const { user } = useUserStore();
+  const isSignIn = !!user;
+
   const isMdUp = useResponsive("md");
   const { role } = useClubContext();
 

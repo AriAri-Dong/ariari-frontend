@@ -9,15 +9,12 @@ import vector from "@/images/icon/backVector.svg";
 import Alert from "@/components/alert/alert";
 import NotiPopUp from "@/components/modal/notiPopUp";
 import TextInputWithBtn from "@/components/input/textInputWithBtn";
-import { useUserStore } from "@/providers/userStoreProvider";
 import CustomInput from "@/components/input/customInput";
 import TransparentSmallBtn from "@/components/button/basicBtn/transparentSmallBtn";
 import Contour from "@/components/bar/contour";
 import RegistrationModal from "@/components/modal/school/registrationModal";
 import ModifyProfileModal from "@/components/modal/profileSetting/modifyProfileModal";
 import { PROFILE_SETTING } from "@/data/profileSetting";
-import { unregister } from "@/api/login/api";
-import AlertWithMessage from "@/components/alert/alertWithMessage";
 import useResponsive from "@/hooks/useResponsive";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import {
@@ -36,18 +33,18 @@ import {
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import { formatTime } from "@/utils/timeFormatter";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
+import { useUserStore } from "@/stores/userStore";
+import { getUser } from "@/utils/getUser";
 
 const MainSection = () => {
   const router = useRouter();
   const isMd = useResponsive("md");
   const isSmallScreen = useScreenHeight(740);
+  const user = useUserStore((state) => state.user);
 
-  const { setUserData } = useUserStore((state) => state);
-  const schoolData = useUserStore((state) => state.schoolData);
-  const nickname = useUserStore((state) => state.memberData.nickname);
-  const profileType = useUserStore((state) => state.memberData.profileType);
-
-  console.log(schoolData);
+  const nickname = user?.memberData.nickname ?? "";
+  const profileType = user?.memberData?.profileType ?? null;
+  const schoolData = user?.schoolData ?? { name: "" };
 
   const [cancelModal, setCancelModal] = useState<boolean>(false);
   const [registrationSchoolModal, setRegistrationSchoolModal] =
@@ -214,8 +211,7 @@ const MainSection = () => {
       await validateSchoolAuthCode(number);
       setVerificationFailed(false);
       setSnackbar(true);
-      const res = await getMemberData();
-      setUserData(res);
+      await getUser();
     } catch (error) {
       setVerificationFailed(true);
       return false;
@@ -230,9 +226,8 @@ const MainSection = () => {
 
     try {
       await updateProfileType(selectedProfileType);
-      const res = await getMemberData();
-      setUserData(res);
-      console.log("프로필 변경 완료 ::::::", selectedProfileType);
+      await getUser();
+
       setProfileSection(false);
       setAlertMessage("프로필이 변경 되었습니다.");
     } catch (error) {
@@ -247,8 +242,8 @@ const MainSection = () => {
     } else {
       try {
         await updateNickname(userName);
-        const res = await getMemberData();
-        setUserData(res);
+        await getUser();
+
         setAlertMessage("닉네임이 변경 되었습니다.");
         setDuplicateCheck(false);
       } catch (error) {

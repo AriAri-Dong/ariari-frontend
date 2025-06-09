@@ -10,8 +10,7 @@ import SmallBtn from "../button/basicBtn/smallBtn";
 import Alert from "../alert/alert";
 import { ReportTargetType, ReportType } from "@/types/report";
 import { reportItem } from "@/api/report/api";
-import { useUserStore } from "@/providers/userStoreProvider";
-import { useShallow } from "zustand/shallow";
+import { useUserStore } from "@/stores/userStore";
 
 interface ReportBottomSheetProps {
   id?: string;
@@ -35,7 +34,7 @@ const ReportModal = ({
   onClose,
   onSubmit,
 }: ReportBottomSheetProps) => {
-  const isSignIn = useUserStore(useShallow((state) => state.isSignIn));
+  const isSignIn = useUserStore((state) => !!state.user);
 
   const [selectedReason, setSelectedReason] = useState<ReportType | null>(null);
   const [details, setDetails] = useState<string>("");
