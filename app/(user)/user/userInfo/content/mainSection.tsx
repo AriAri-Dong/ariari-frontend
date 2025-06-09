@@ -25,11 +25,7 @@ import {
 import { validateEmail } from "@/schema/email";
 import useScreenHeight from "@/hooks/useScreenHeight";
 import check from "@/images/icon/check.svg";
-import {
-  getMemberData,
-  updateNickname,
-  updateProfileType,
-} from "@/api/member/api";
+import { updateNickname, updateProfileType } from "@/api/member/api";
 import IconBtn from "@/components/button/withIconBtn/IconBtn";
 import { formatTime } from "@/utils/timeFormatter";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
@@ -140,9 +136,7 @@ const MainSection = () => {
       await cancelSchoolAuth();
       showAlert("학교 등록이 취소되었습니다.");
       setCancelModal(false);
-
-      // 화면 새로고침
-      window.location.reload();
+      await getUser();
     } catch (error) {
       console.error("학교 등록 취소 실패:", error);
       showAlert("학교 등록 취소 중 오류가 발생했습니다.");
