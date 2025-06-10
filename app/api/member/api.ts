@@ -168,6 +168,7 @@ export const getMemberList = async (
     return data;
   } catch (err) {
     console.log("회원 검색 실패", err);
+    throw err;
   }
 };
 
@@ -181,5 +182,6 @@ export const withdrawalClub = async (clubMemberId: string) => {
     return response.status;
   } catch (err) {
     console.log("동아리 회원 탈퇴 실패", err);
+    throw err;
   }
 };

@@ -2,6 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import useResponsive from "@/hooks/useResponsive";
+import { useClubContext } from "@/context/ClubContext";
+import {
+  useDeleteClubMutation,
+  useWithdrawClubMutation,
+} from "@/hooks/club/my/useMyClubMutation";
+import { getClubMembers } from "@/api/member/api";
 
 import Image from "next/image";
 import checkIcon from "@/images/icon/radio_button_checked.svg";
@@ -11,16 +18,12 @@ import NoticeCard from "@/components/card/NoticeCard";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
-import useResponsive from "@/hooks/useResponsive";
 import NotiPopUp from "@/components/modal/notiPopUp";
 import Alert from "@/components/alert/alert";
 import {
   CLUB_WITHDRAWAL_INFO_GENERAL,
   CLUB_WITHDRAWAL_INFO_MANAGER,
 } from "@/data/withdrawal";
-import { getClubMembers, withdrawalClub } from "@/api/member/api";
-import { useClubContext } from "@/context/ClubContext";
-import { deleteClub } from "@/api/club/api";
 
 interface ClubWithdrawalCardProps {
   isWithdrawal: boolean;
@@ -31,6 +34,8 @@ const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
   const params = useSearchParams();
   const clubId = params.get("clubId") ?? "";
   const { role, clubInfo } = useClubContext();
+  const { mutate: withdrawClub } = useWithdrawClubMutation();
+  const { mutate: deleteClub } = useDeleteClubMutation();
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
@@ -77,7 +82,7 @@ const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
       if (isWithdrawal) {
         // 탈퇴하기
         if (clubInfo?.clubMemberData.id) {
-          withdrawalClub(clubInfo?.clubMemberData.id);
+          withdrawClub(clubInfo?.clubMemberData.id);
         }
       } else {
         // 폐쇄하기
@@ -130,8 +135,8 @@ const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
           />
           <p className="text-mobile_body3_r md:text-body1_r text-primary ">
             {isWithdrawal
-              ? "아리아리 동아리 운영 원칙 제 3조 : 동아리 탈퇴 관련 조항의 내용을 모두 확인하였으며 동의합니다."
-              : "아리아리 동아리 운영 원칙 제 8조 : 동아리 폐쇄 관련 조항의 내용을 모두 확인하였으며 동의합니다."}
+              ? "아리아리 동아리 운영 원칙 : 동아리 탈퇴 관련 조항의 내용을 모두 확인하였으며 동의합니다."
+              : "아리아리 동아리 운영 원칙 : 동아리 폐쇄 관련 조항의 내용을 모두 확인하였으며 동의합니다."}
           </p>
         </div>
         {isMdUp ? (
