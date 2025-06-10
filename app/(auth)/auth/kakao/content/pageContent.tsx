@@ -38,7 +38,6 @@ export default function SignInPageContent() {
     (async () => {
       try {
         const res = await getTokenWithCode(kakaoCode);
-        if (!res) throw new Error("토큰 발급 실패");
 
         setAuth({
           accessToken: res.accessToken,
@@ -46,11 +45,12 @@ export default function SignInPageContent() {
           oauthSignUpKey: res.oauthSignUpKey,
         });
 
-        const userData = await getMemberData();
-        if (!userData) throw new Error("유저 데이터 없음");
-
-        setUser(userData);
-        router.replace("/");
+        if (res.accessToken) {
+          const userData = await getMemberData();
+          if (!userData) throw new Error("유저 데이터 없음");
+          setUser(userData);
+          router.replace("/");
+        }
       } catch (error) {
         console.error("로그인 실패:", error);
         logout();
