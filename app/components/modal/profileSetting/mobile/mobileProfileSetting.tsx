@@ -16,7 +16,6 @@ import {
   sendSignupSchoolAuthEmail,
   validateSchoolAuthCode,
 } from "@/api/school/api";
-import MobileSnackBar from "@/components/bar/mobileSnackBar";
 import { signUpWithKey } from "@/api/login/api";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -24,18 +23,21 @@ interface ProfileSettingProps {
   step: number;
   onNextStep: (nextStep: number) => void;
   onClose: () => void;
+  onSignupSuccess: () => void; // 새로 추가
 }
 
 /**
  *
  * @param step 단계 (0-4)
  * @param onNextStep 특정 step으로 넘어가는 함수
+ * @param onSignupSuccess 회원가입 성공 콜백
  * @returns
  */
 const MobileProfileSetting = ({
   step,
   onNextStep,
   onClose,
+  onSignupSuccess,
 }: ProfileSettingProps) => {
   const { oauthSignUpKey, setAuth } = useAuthStore();
   const { profileData } = useProfileContext();
@@ -43,7 +45,6 @@ const MobileProfileSetting = ({
   const [timeLeft, setTimeLeft] = useState<number>(300);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [verificationFailed, setVerificationFailed] = useState<boolean>(false);
-  const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
 
   // 인증 번호 재전송
   const resetTimer = async () => {
@@ -89,13 +90,8 @@ const MobileProfileSetting = ({
         oauthSignUpKey: null,
       });
 
-      // 여기서만 SnackBar 표시
-      setIsProfileOpen(true);
-
-      // step 2/3 건너뛰는 경우에는 다음 단계로 가지 않음
-      if (!skipVerification) {
-        onNextStep(4);
-      }
+      // 성공 시 부모 컴포넌트에 알림
+      onSignupSuccess();
     } catch (error) {
       setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
     }
@@ -116,7 +112,6 @@ const MobileProfileSetting = ({
       try {
         await validateSchoolAuthCode(profileData.verificationCode);
         setVerificationFailed(false);
-        setIsProfileOpen(true);
       } catch (error) {
         setVerificationFailed(true);
         setAlertMessage("인증번호가 올바르지 않습니다. 다시 확인해주세요.");
@@ -180,12 +175,6 @@ const MobileProfileSetting = ({
     }
   }, [step]);
 
-  useEffect(() => {
-    if (isProfileOpen) {
-      setIsProfileOpen(false);
-    }
-  }, [isProfileOpen]);
-
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-background z-50 flex flex-col justify-between pt-[46px] pb-5 px-4 md:hidden">
       <div className="flex flex-col items-center">
@@ -234,8 +223,6 @@ const MobileProfileSetting = ({
           <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
       </div>
-
-      {isProfileOpen && <MobileSnackBar text="회원가입이 완료되었습니다." />}
     </div>
   );
 };
