@@ -65,7 +65,7 @@ const FilterSection = ({
               handleOption={setSortType}
             />
           </div>
-          <div className="flex gap-3">
+          {/* <div className="flex gap-3">
             <RadioBtn
               isChecked={isDeadlineChecked}
               label={"마감공고 제외"}
@@ -76,7 +76,7 @@ const FilterSection = ({
               label={"지원공고 제외"}
               onClick={toggleRecruitmentCheck}
             />
-          </div>
+          </div> */}
         </div>
       )}
     </div>
