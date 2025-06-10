@@ -39,33 +39,25 @@ export default function SignInPageContent() {
       try {
         const res = await getTokenWithCode(kakaoCode);
 
-        // 기존 회원 로그인 성공
-        if (res.accessToken && res.refreshToken) {
-          setAuth({
-            accessToken: res.accessToken,
-            refreshToken: res.refreshToken,
-            oauthSignUpKey: res.oauthSignUpKey,
-          });
+        setAuth({
+          accessToken: res.accessToken,
+          refreshToken: res.refreshToken,
+          oauthSignUpKey: res.oauthSignUpKey,
+        });
 
+        if (res.accessToken) {
           const userData = await getMemberData();
           if (!userData) throw new Error("유저 데이터 없음");
-
           setUser(userData);
           router.replace("/");
-        }
-        // 신규 회원가입 필요
-        else if (res.oauthSignUpKey) {
-          router.replace(`/signup?key=${res.oauthSignUpKey}`);
-        } else {
-          throw new Error("유효하지 않은 응답");
         }
       } catch (error) {
         console.error("로그인 실패:", error);
         logout();
         clearUser();
+        alert("로그인에 실패했습니다.\n다시 시도해주세요.");
         localStorage.removeItem("ariari-auth");
         localStorage.removeItem("ariari-user-store");
-        alert("로그인에 실패했습니다.\n다시 시도해주세요.");
         router.replace("/");
       }
     })();
