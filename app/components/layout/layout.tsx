@@ -10,6 +10,7 @@ import Header from "./header";
 import { useAuthStore } from "@/stores/authStore";
 import ProfileSettingModal from "../modal/profileSetting/profileSettingModal";
 import MobileProfileSettingModal from "../modal/profileSetting/mobile/mobileProfileSettingModal";
+import MobileSnackBar from "../bar/mobileSnackBar";
 
 // 최대 노출 횟수
 const MAX_MODAL_COUNT_PER_SESSION = 1000;
@@ -20,7 +21,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
 
   const { accessToken, oauthSignUpKey } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
-  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
+  const [showSignupSuccess, setShowSignupSuccess] = useState<boolean>(false);
 
   useEffect(() => {
     const rawCount = sessionStorage.getItem("profileModalCount");
@@ -35,6 +37,22 @@ const Layout = ({ children }: { children: ReactNode }) => {
       sessionStorage.setItem("profileModalCount", String(shownCount + 1));
     }
   }, [accessToken, oauthSignUpKey]);
+
+  const handleModalClose = () => {
+    setShowProfileModal(false);
+  };
+
+  const handleSignupSuccess = () => {
+    setShowProfileModal(false);
+    // 모달이 닫힌 후 성공 메시지 표시
+    setTimeout(() => {
+      setShowSignupSuccess(true);
+      // 3초 후 성공 메시지 숨김
+      setTimeout(() => {
+        setShowSignupSuccess(false);
+      }, 3000);
+    }, 100);
+  };
 
   const specialPaths = [
     "/recruitment/detail",
@@ -95,9 +113,13 @@ const Layout = ({ children }: { children: ReactNode }) => {
             <ProfileSettingModal onClose={() => setShowProfileModal(false)} />
           ) : (
             <MobileProfileSettingModal
-              onClose={() => setShowProfileModal(false)}
+              onClose={handleModalClose}
+              onSignupSuccess={handleSignupSuccess}
             />
           ))}
+        {showSignupSuccess && (
+          <MobileSnackBar text="회원가입이 완료되었습니다." />
+        )}
       </div>
     </SearchTermContext.Provider>
   );
