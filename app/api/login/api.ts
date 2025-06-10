@@ -75,12 +75,7 @@ export const getTokenWithCode = async (code: string) => {
     return data;
   } catch (err) {
     console.error("카카오 로그인 실패:", err);
-    localStorage.removeItem("ariari-auth");
-    localStorage.removeItem("ariari-user-store");
-    alert("로그인에 실패했습니다.\n다시 시도해주세요.");
-    window.location.href = "/";
-
-    return null;
+    throw err;
   }
 };
 
