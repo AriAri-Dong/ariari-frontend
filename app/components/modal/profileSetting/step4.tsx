@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 
 import logo from "@/images/profile/logo.svg";
+import { useRouter } from "next/navigation";
 
 const Step4 = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push("/");
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="relative justify-center place-items-center items-center w-[430px] px-5 pb-9 pt-[72px] bg-background rounded-2xl">
       <Image

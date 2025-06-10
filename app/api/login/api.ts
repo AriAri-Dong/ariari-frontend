@@ -126,6 +126,12 @@ export const unregister = async () => {
   try {
     await axiosInstance.post(UNREGISTER);
     sessionStorage.removeItem("profileModalCount");
+    useUserStore.getState().clearUser(); // user 정보 제거
+
+    localStorage.removeItem("ariari-auth");
+    localStorage.removeItem("ariari-user-store");
+
+    window.location.reload();
   } catch (err) {
     console.error("회원탈퇴 실패:", err);
     throw err;
