@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getClubEventList } from "@/api/club/event/api";
 import { ClubEventListRes } from "@/types/clubEvent";
-import { formatKSTTime } from "@/utils/formatKSTTime";
+import { formatTime } from "@/utils/formatKSTTime";
 // 일정 리스트 조회
 export const useClubEventQuery = (clubId: string) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
@@ -22,7 +22,7 @@ export const useClubEventQuery = (clubId: string) => {
           ...page,
           clubEventDataList: page.clubEventDataList.map((event) => ({
             ...event,
-            eventDateTime: formatKSTTime(event.eventDateTime),
+            eventDateTime: formatTime(event.eventDateTime),
           })),
         })),
       }),

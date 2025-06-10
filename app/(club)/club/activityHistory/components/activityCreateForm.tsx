@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import useResponsive from "@/hooks/useResponsive";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/constants/queryKeys";
 import ActivityCreateContent from "./activityCreateContent";
 import Alert from "@/components/alert/alert";
 import {
@@ -38,6 +40,7 @@ const ActivityCreateForm = ({
   initialData,
 }: ActivityCreateFormProps) => {
   const isTapOver = useResponsive("md");
+  const queryClient = useQueryClient();
 
   console.log("123123123", clubId);
 
@@ -127,6 +130,8 @@ const ActivityCreateForm = ({
         "업로드 중 오류가 발생했습니다.</br> 잠시 후 다시 시도해 주세요."
       );
       return false;
+    } finally {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.myClubList] });
     }
   };
 

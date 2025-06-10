@@ -3,6 +3,7 @@ import {
   updateClubNotice,
   deleteClubNotice,
 } from "@/api/club/notice/api";
+import { QUERY_KEYS } from "@/constants/queryKeys";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useClubNoticeMutation = ({ clubId }: { clubId: string }) => {
@@ -20,6 +21,7 @@ export const useClubNoticeMutation = ({ clubId }: { clubId: string }) => {
     mutationFn: addClubNotice,
     onSuccess: () => {
       invalidateNoticeQueries(clubId);
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.myClubList] });
     },
     onError: (error) => {
       console.log("add new club notice error", error);

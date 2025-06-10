@@ -5,7 +5,7 @@ import LargeBtn from "@/components/button/basicBtn/largeBtn";
 import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useClubActiveRecruitment } from "@/hooks/recruitment/useRecruitmentDetailQuery";
-import { formatKSTTime } from "@/utils/formatKSTTime";
+import { formatTime } from "@/utils/formatKSTTime";
 
 interface DayFloatingBarProps {
   isWriteButtonVisible: boolean;
@@ -48,7 +48,7 @@ const RecruitmentGuideFloatingBar = ({
                   모집 마감까지 남은 시간
                 </p>
                 <h3 className="text-h3 text-text1">
-                  {formatKSTTime(
+                  {formatTime(
                     data.recruitmentData.endDateTime,
                     "MM월 DD일 23:59분 모집 마감"
                   )}
