@@ -66,7 +66,8 @@ const ClubInfo = ({
   const [isBottomModalOpen, setIsBottomModalOpen] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const onClubHeartClick = () => {
+  const onClubHeartClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     if (!isSignIn) {
       setAlertMessage("로그인 후 이용 가능합니다.");
       return;
@@ -186,6 +187,7 @@ const ClubInfo = ({
                     width={60}
                     height={60}
                     className="relative w-[60px] h-[60px] rounded-full overflow-hidden"
+                    onClick={handleClubClick}
                   />
                   <div
                     className="absolute bottom-0 right-0 cursor-pointer"

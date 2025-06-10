@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { enterClubByInviteKey } from "@/api/club/api";
+import { deleteClub, enterClubByInviteKey } from "@/api/club/api";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 import { EnterClubRes } from "@/types/club";
+import { withdrawalClub } from "@/api/member/api";
 
 interface EnterClubMutationParams {
   inviteKey: string;
@@ -12,7 +13,7 @@ type MyClubMutationProps = {
   onSuccess?: (data: EnterClubRes) => void;
   onError?: (error: Error) => void;
 };
-
+// 동아리 가입
 export const useEnterClubMutation = ({
   onSuccess,
   onError,
@@ -28,6 +29,36 @@ export const useEnterClubMutation = ({
     },
     onError: (error: Error) => {
       onError?.(error);
+    },
+  });
+};
+// 동아리 탈퇴
+export const useWithdrawClubMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: withdrawalClub,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.myClubList] });
+    },
+    onError: (error: Error) => {
+      console.error("동아리 탈퇴 실패:", error);
+      throw error;
+    },
+  });
+};
+// 동아리 폐쇄
+export const useDeleteClubMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteClub,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.myClubList] });
+    },
+    onError: (error: Error) => {
+      console.error("동아리 폐쇄 실패:", error);
+      throw error;
     },
   });
 };

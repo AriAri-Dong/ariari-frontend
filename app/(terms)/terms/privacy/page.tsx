@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
 };
 const PrivacyPolicyPage = () => {
-  <MainSection />;
+  return <MainSection />;
 };
 
 export default PrivacyPolicyPage;

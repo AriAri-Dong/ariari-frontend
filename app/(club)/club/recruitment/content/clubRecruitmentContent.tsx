@@ -15,7 +15,7 @@ import RecruitmentGuideForm from "../components/RecruitmentGuideForm";
 import Alert from "@/components/alert/alert";
 
 import { RecruitmentData } from "@/types/recruitment";
-import { formatKSTTime } from "@/utils/formatKSTTime";
+import { formatTime } from "@/utils/formatKSTTime";
 import { useClubRecruitmentQuery } from "@/hooks/club/recruitment/useClubRecruitmentQuery";
 import { useUserStore } from "@/stores/userStore";
 
@@ -80,10 +80,10 @@ const ClubRecruitmentContent = () => {
                     onClick={() =>
                       router.push(`/recruitment/detail?id=${item.id}`)
                     }
-                    date={`${formatKSTTime(
+                    date={`${formatTime(
                       item.startDateTime,
                       "YYYY.MM.DD"
-                    )} ~ ${formatKSTTime(item.endDateTime, "YYYY.MM.DD")}`}
+                    )} ~ ${formatTime(item.endDateTime, "YYYY.MM.DD")}`}
                     status={item.recruitmentStatusType}
                     isManager={role === "MANAGER" || role === "ADMIN"}
                     setAlertMessage={setAlertMessage}

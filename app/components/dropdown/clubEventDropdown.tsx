@@ -25,7 +25,7 @@ import AttendanceBottomSheet from "../bottomSheet/attendanceBottomSheet";
 import CommonBottomSheet from "../bottomSheet/commonBottomSheet";
 import { clubMemberRoleType } from "@/types/member";
 import { ClubEventData } from "@/types/clubEvent";
-import { formatKSTTime, formatTime } from "@/utils/formatKSTTime";
+import { formatTime } from "@/utils/formatKSTTime";
 
 const OPTION = [
   { id: 1, label: "수정하기" },
