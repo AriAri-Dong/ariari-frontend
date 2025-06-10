@@ -6,9 +6,13 @@ import MobileProfileSetting from "./mobileProfileSetting";
 
 interface ProfileSettingProps {
   onClose: () => void;
+  onSignupSuccess: () => void;
 }
 
-const MobileProfileSettingModal = ({ onClose }: ProfileSettingProps) => {
+const MobileProfileSettingModal = ({
+  onClose,
+  onSignupSuccess,
+}: ProfileSettingProps) => {
   const [step, setStep] = useState<number>(0);
 
   const handleNextStep = (nextStep: number) => {
@@ -21,6 +25,7 @@ const MobileProfileSettingModal = ({ onClose }: ProfileSettingProps) => {
         step={step}
         onNextStep={handleNextStep}
         onClose={onClose}
+        onSignupSuccess={onSignupSuccess}
       />
     </ProfileProvider>
   );
