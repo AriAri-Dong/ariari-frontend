@@ -49,8 +49,8 @@ export default function SignInPageContent() {
           const userData = await getMemberData();
           if (!userData) throw new Error("유저 데이터 없음");
           setUser(userData);
-          router.replace("/");
         }
+        router.replace("/");
       } catch (error) {
         console.error("로그인 실패:", error);
         logout();
