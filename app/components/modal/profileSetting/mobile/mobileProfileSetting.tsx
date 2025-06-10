@@ -88,8 +88,14 @@ const MobileProfileSetting = ({
         refreshToken: res.refreshToken,
         oauthSignUpKey: null,
       });
+
+      // 여기서만 SnackBar 표시
       setIsProfileOpen(true);
-      onNextStep(4);
+
+      // step 2/3 건너뛰는 경우에는 다음 단계로 가지 않음
+      if (!skipVerification) {
+        onNextStep(4);
+      }
     } catch (error) {
       setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
     }
