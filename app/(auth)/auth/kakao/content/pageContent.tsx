@@ -61,7 +61,8 @@ export default function SignInPageContent() {
         router.replace("/");
       }
     })();
-  }, [kakaoCode, router, setUser, setAuth, logout, clearUser]);
+    // }, [kakaoCode, router, setUser, setAuth, logout, clearUser]);
+  }, [kakaoCode]);
 
   return <LoginLoading />;
 }
