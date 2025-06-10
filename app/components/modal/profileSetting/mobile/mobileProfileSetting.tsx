@@ -88,7 +88,7 @@ const MobileProfileSetting = ({
         refreshToken: res.refreshToken,
         oauthSignUpKey: null,
       });
-
+      setIsProfileOpen(true);
       onNextStep(4);
     } catch (error) {
       setAlertMessage("회원가입에 실패했습니다. 다시 시도해주세요.");
@@ -229,7 +229,7 @@ const MobileProfileSetting = ({
         )}
       </div>
 
-      {isProfileOpen && <MobileSnackBar text="로그인이 완료되었습니다." />}
+      {isProfileOpen && <MobileSnackBar text="회원가입이 완료되었습니다." />}
     </div>
   );
 };
