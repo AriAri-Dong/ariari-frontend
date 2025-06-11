@@ -40,8 +40,6 @@ const MainSection = () => {
     return null;
   }
 
-  console.log("role", role);
-
   const handleRouter = () => {
     router.push(`/club/recruitment/clubId=${clubInfo?.clubData.id}`);
   };
@@ -98,7 +96,8 @@ const MainSection = () => {
                   //     ? "동아리 대표"
                   //     : clubInfo?.clubMemberData.memberData.nickname || ""
                   // }
-                  nickname={"동아리 대표"}
+                  // nickname={"동아리 대표"}
+                  nickname={clubInfo?.clubMemberData.name || ""}
                 />
               ))}
             </div>

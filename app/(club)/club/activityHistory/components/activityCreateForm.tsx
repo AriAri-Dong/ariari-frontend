@@ -42,8 +42,6 @@ const ActivityCreateForm = ({
   const isTapOver = useResponsive("md");
   const queryClient = useQueryClient();
 
-  console.log("123123123", clubId);
-
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   const [existingImages, setExistingImages] = useState<
     { id: number; imageUri: string }[]
@@ -112,7 +110,7 @@ const ActivityCreateForm = ({
           accessType,
           body: detail,
           newImages: uploadedImages,
-          deletedImageIds,
+          deletedImageIds: deletedImageIds?.length ? deletedImageIds : [],
         });
       } else {
         await createClubActivity({
@@ -154,9 +152,9 @@ const ActivityCreateForm = ({
     <div
       id="background"
       className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-50 backdrop-blur-sm"
-      onClick={(e) =>
-        (e.target as HTMLDivElement).id === "background" && onClose()
-      }
+      // onClick={(e) =>
+      //   (e.target as HTMLDivElement).id === "background" && onClose()
+      // }
       style={{ zIndex: 1000 }}
     >
       <div

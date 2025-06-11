@@ -19,6 +19,7 @@ import { useUserStore } from "@/stores/userStore";
 
 const LatestRecruitment = () => {
   const isMdUp = useResponsive("md");
+  const isLxUp = useResponsive("lx");
   const router = useRouter();
 
   const [latestRecruitmentData, setLatestRecruitmentData] = useState<
@@ -103,18 +104,41 @@ const LatestRecruitment = () => {
           handleOption={handleOption}
         />
       </div>
-      {isMdUp ? (
-        <div className="w-full">
-          <MainRecruitmentCardWithCarousel data={latestRecruitmentData} />
-        </div>
+      {isLxUp ? (
+        latestRecruitmentData.length >= 4 ? (
+          <div className="w-full">
+            <MainRecruitmentCardWithCarousel data={latestRecruitmentData} />
+          </div>
+        ) : (
+          <div
+            className="flex flex-col gap-5 md:gap-x-4 md:gap-y-7 md:flex-row md:flex-wrap
+      md:grid md:grid-cols-3 lx:grid-cols-4"
+          >
+            <MainRecruitmentCard data={latestRecruitmentData} />
+          </div>
+        )
+      ) : isMdUp ? (
+        latestRecruitmentData.length >= 3 ? (
+          <div className="w-full">
+            <MainRecruitmentCardWithCarousel data={latestRecruitmentData} />
+          </div>
+        ) : (
+          <div
+            className="flex flex-col gap-5 md:gap-x-4 md:gap-y-7 md:flex-row md:flex-wrap
+      md:grid md:grid-cols-3 lx:grid-cols-4"
+          >
+            <MainRecruitmentCard data={latestRecruitmentData} />
+          </div>
+        )
       ) : (
         <div
           className="flex flex-col gap-5 md:gap-x-4 md:gap-y-7 md:flex-row md:flex-wrap
-        md:grid md:grid-cols-3 lx:grid-cols-4"
+    md:grid md:grid-cols-3 lx:grid-cols-4"
         >
           <MainRecruitmentCard data={latestRecruitmentData} />
         </div>
       )}
+
       {/* 로그인 팝업 */}
       {isLoginModalOpen && (
         <>
