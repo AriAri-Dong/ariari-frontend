@@ -13,8 +13,13 @@ import { getBookmarkRecruitment } from "@/api/recruitment/api";
 import { Pageable } from "@/types/api";
 import HeaderSection from "./headerSection";
 import FilterSection from "./filterSection";
+import RequiredLogin from "@/components/feedback/requiredLogin";
+import { useUserStore } from "@/stores/userStore";
 
 const MainSection = () => {
+  const user = useUserStore((state) => state.user);
+  const isSignIn = !!user;
+
   const [recruitmentData, setRecruitmentData] = useState<RecruitmentData[]>([]);
   const [page, setPage] = useState<number>(0);
   const [more, setMore] = useState<boolean>(true);
@@ -65,6 +70,10 @@ const MainSection = () => {
   useEffect(() => {
     fetchRecruitments(0, true);
   }, []);
+
+  if (!isSignIn) {
+    <RequiredLogin />;
+  }
 
   return (
     <div>

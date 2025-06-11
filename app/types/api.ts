@@ -135,6 +135,7 @@ export type PageInfo = {
 export interface CreateClubData {
   name: string;
   body: string;
+  clubMemberName: string;
   affiliationType: ClubAffiliationType;
   categoryType: ClubFieldType;
   regionType: ClubRegionType;

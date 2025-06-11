@@ -11,13 +11,16 @@ import NotificationModal from "../modal/notification/notificationModal";
 import LoginModal from "../modal/login/loginModal";
 import { getProfileImage } from "@/utils/profileImage";
 import { useUserStore } from "@/stores/userStore";
+import { logout } from "@/api/login/api";
+import AlertWithMessage from "../alert/alertWithMessage";
 
 const User = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const user = useUserStore((state) => state.user);
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const user = useUserStore((state) => state.user);
+  const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
 
   const nickname = user?.memberData.nickname ?? "";
   const profileType = user?.memberData?.profileType ?? null;
@@ -35,6 +38,15 @@ const User = () => {
 
   const handleLoginClick = () => {
     setIsLoginModalOpen(true);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("로그아웃 오류:", error);
+    }
+    setShowLogoutAlert(false);
   };
 
   useEffect(() => {
@@ -79,6 +91,7 @@ const User = () => {
               <UserDropdown
                 optionData={USER_MENU}
                 onClose={() => setIsDropdownOpen(false)}
+                onClickLogout={() => setShowLogoutAlert(true)}
               />
             </div>
           )}
@@ -91,6 +104,16 @@ const User = () => {
           {/* 로그인 모달 (활성화 시 표시) */}
           {isLoginModalOpen && <LoginModal onClose={handleCloseModal} />}
         </>
+      )}
+      {showLogoutAlert && (
+        <AlertWithMessage
+          text="로그아웃 하시겠습니까?"
+          description="계정을 로그아웃하면 다시 로그인해야 합니다."
+          leftBtnText="취소"
+          rightBtnText="확인"
+          onLeftBtnClick={() => setShowLogoutAlert(false)}
+          onRightBtnClick={handleLogout}
+        />
       )}
     </>
   );

@@ -31,12 +31,14 @@ import { formatTime } from "@/utils/timeFormatter";
 import MobileSnackBar from "@/components/bar/mobileSnackBar";
 import { useUserStore } from "@/stores/userStore";
 import { getUser } from "@/utils/getUser";
+import RequiredLogin from "@/components/feedback/requiredLogin";
 
 const MainSection = () => {
   const router = useRouter();
   const isMd = useResponsive("md");
   const isSmallScreen = useScreenHeight(740);
   const user = useUserStore((state) => state.user);
+  const isSignIn = !!user;
 
   const nickname = user?.memberData.nickname ?? "";
   const profileType = user?.memberData?.profileType ?? null;
@@ -246,6 +248,10 @@ const MainSection = () => {
       }
     }
   };
+
+  if (!isSignIn) {
+    <RequiredLogin />;
+  }
 
   return (
     <div className="flex flex-col">

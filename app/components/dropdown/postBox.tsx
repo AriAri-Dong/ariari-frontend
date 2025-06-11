@@ -31,6 +31,8 @@ import {
   toggleClubActivityLike,
 } from "@/api/club/activity/api";
 import { getProfileImage, profileImageMap } from "@/utils/mappingProfile";
+import { useClubContext } from "@/context/ClubContext";
+import CommonBottomSheet from "../bottomSheet/commonBottomSheet";
 
 interface PostBoxProps {
   data: ClubActivity;
@@ -38,10 +40,11 @@ interface PostBoxProps {
   nickname: string;
 }
 
-const PostBox = ({ data, role, nickname }: PostBoxProps) => {
+const PostBox = ({ data, nickname }: PostBoxProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
+  const { role, clubInfo } = useClubContext();
 
   const [post, setPost] = useState<ClubActivity>(data);
   const [comments, setComments] = useState<ClubActivityComment[]>(
@@ -63,8 +66,6 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
 
   const isManager = role === "ADMIN" || role === "MANAGER";
   const optionData = isManager ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE;
-
-  console.log("post >>", post);
 
   // 좋아요
   const handleLike = async () => {
@@ -209,15 +210,13 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
     <div className="bg-background p-[14px] pb-4 rounded-12 md:p-6 md:pb-[26px]">
       <div className="flex justify-between">
         <div className="flex items-center gap-[14px]">
-          {/* 프로필 이미지 (필요시 profileImageMap 사용) */}
           <Image
-            src={getProfileImage(post.clubMember.profileType)}
+            src={clubInfo?.clubData.profileUri || ""}
             alt={"프로필이미지"}
             width={44}
             height={44}
-            className="rounded-full"
+            className="md:w-[44px] md:h-[44px] rounded-full cursor-pointer object-cover"
           />
-
           <div>
             <p className="text-mobile_body1_m text-subtext2 md:text-h4">
               {post.clubMember.name}
@@ -243,30 +242,40 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
             </div>
           </div>
         </div>
-        {isManager && (
-          <div ref={menuRef} className="relative">
-            <Image
-              src={dotMenu}
-              alt="menu"
-              width={24}
-              height={24}
-              className="cursor-pointer"
-              onClick={handleMenuClick}
-            />
-            {isMdUp && isOptionOpen && (
-              <SingleSelectOptions
-                selectedOption=""
-                optionData={EDIT_ACTION_TYPE}
-                size="small"
-                position="end"
-                handleMenuClick={(label) => {
-                  handleOptionClick(label);
-                  setIsOptionOpen(false);
-                }}
-              />
-            )}
-          </div>
-        )}
+        <div ref={menuRef} className="relative">
+          <Image
+            src={dotMenu}
+            alt="menu"
+            width={24}
+            height={24}
+            className="cursor-pointer"
+            onClick={handleMenuClick}
+          />
+          {isOptionOpen && (
+            <>
+              {isMdUp ? (
+                <SingleSelectOptions
+                  selectedOption=""
+                  optionData={optionData}
+                  size="small"
+                  position="end"
+                  handleMenuClick={(label) => {
+                    handleOptionClick(label);
+                  }}
+                />
+              ) : (
+                <CommonBottomSheet
+                  optionData={optionData}
+                  onClose={() => setIsOptionOpen(false)}
+                  handleMenuClick={(label) => {
+                    handleOptionClick(label);
+                  }}
+                  selectedOption={""}
+                />
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       <div className="mt-4 md:mt-6">
@@ -374,7 +383,9 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
                 isReplying={false}
                 clubActivityId={post.clubActivityId}
                 role={role}
-                nickname={nickname}
+                // nickname={nickname}
+                nickname={comment.clubMember.name}
+                profileType={comment.clubMember.profileType}
                 onEditSuccess={refreshPostDetail}
                 onDeleteSuccess={refreshPostDetail}
                 onPostSuccess={refreshPostDetail}
@@ -386,16 +397,6 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
             </p>
           )}
         </div>
-      )}
-
-      {/* 모바일 옵션 */}
-      {!isMdUp && isOptionOpen && (
-        <BottomSheet
-          optionData={optionData}
-          selectedOptions=""
-          onClose={() => setIsOptionOpen(false)}
-          handleMenuClick={handleOptionClick}
-        />
       )}
 
       {/* 팝업 및 모달 */}
@@ -437,7 +438,8 @@ const PostBox = ({ data, role, nickname }: PostBoxProps) => {
             try {
               setAlertMessage("활동 내역 수정이 완료되었습니다.");
               setIsEditFormOpen(false);
-              window.location.reload();
+              await refreshPostDetail();
+              // window.location.reload();
               return true;
             } catch (error) {
               setAlertMessage("수정 처리 중 오류가 발생했어요.");
