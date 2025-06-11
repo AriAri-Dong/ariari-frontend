@@ -186,10 +186,14 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
       )}
       <div className="flex flex-col w-full gap-4 mt-8">
         <LargeBtn
-          title={step === 3 ? `학교 인증하기 ${formatTime(timeLeft)}` : "다음"}
+          title={
+            step === 3
+              ? `학교 인증 후 회원가입 ${formatTime(timeLeft)}`
+              : "다음"
+          }
           onClick={handleNextStep}
         />
-        {(step === 2 || step === 3) && (
+        {step === 2 && (
           <button
             onClick={handleSkip}
             className="text-primary text-body1_sb py-2.5"
