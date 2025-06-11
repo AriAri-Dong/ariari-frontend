@@ -9,7 +9,7 @@ import pig from "@/images/profile/pig.svg";
 import rabbit from "@/images/profile/rabbit.svg";
 import sheep from "@/images/profile/sheep.svg";
 import tiger from "@/images/profile/tiger.svg";
-import turtle from "@/images/profile/turtle.svg";
+import snake from "@/images/profile/snake.svg";
 // import monkey from "@/images/profile/monkey.svg";
 
 export const PROFILE_SETTING = [
@@ -24,5 +24,5 @@ export const PROFILE_SETTING = [
   { id: 9, imageUrl: horse, alias: "ARIARI_HORSE" },
   { id: 10, imageUrl: sheep, alias: "ARIARI_SHEEP" },
   { id: 11, imageUrl: dog, alias: "ARIARI_DOG" },
-  { id: 12, imageUrl: turtle, alias: "ARIARI_MONKEY" },
+  { id: 12, imageUrl: snake, alias: "ARIARI_SNAKE" },
 ];
