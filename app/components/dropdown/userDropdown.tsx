@@ -1,34 +1,23 @@
 "use client";
 
-import { logout } from "@/api/login/api";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import AlertWithMessage from "@/components/alert/alertWithMessage";
 
 interface MenuProps {
   optionData: { id: number; label: string; path: string | null }[];
   onClose: () => void;
+  onClickLogout: () => void;
 }
 
 /**
  * @param optionData 드롭다운 목록 데이터
  * @param onClose 드롭다운 닫기 핸들러
  */
-const UserDropdown = ({ optionData, onClose }: MenuProps) => {
+const UserDropdown = ({ optionData, onClose, onClickLogout }: MenuProps) => {
   const router = useRouter();
-  const [showLogoutAlert, setShowLogoutAlert] = useState(false);
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error("로그아웃 오류:", error);
-    }
-  };
 
   const handleMenuClick = (item: { label: string; path: string | null }) => {
     if (item.label === "로그아웃") {
-      setShowLogoutAlert(true);
+      onClickLogout();
       return;
     } else if (item.path) {
       router.push(item.path);
@@ -53,16 +42,6 @@ const UserDropdown = ({ optionData, onClose }: MenuProps) => {
           </span>
         </div>
       ))}
-      {showLogoutAlert && (
-        <AlertWithMessage
-          text="로그아웃 하시겠습니까?"
-          description="계정을 로그아웃하면 다시 로그인해야 합니다."
-          leftBtnText="취소"
-          rightBtnText="확인"
-          onLeftBtnClick={() => setShowLogoutAlert(false)}
-          onRightBtnClick={handleLogout}
-        />
-      )}
     </div>
   );
 };
