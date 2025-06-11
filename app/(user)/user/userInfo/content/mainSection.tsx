@@ -32,6 +32,8 @@ import MobileSnackBar from "@/components/bar/mobileSnackBar";
 import { useUserStore } from "@/stores/userStore";
 import { getUser } from "@/utils/getUser";
 import RequiredLogin from "@/components/feedback/requiredLogin";
+import { getMyAdminClubs } from "@/api/club/api";
+import AlertWithMessage from "@/components/alert/alertWithMessage";
 
 const MainSection = () => {
   const router = useRouter();
@@ -58,6 +60,10 @@ const MainSection = () => {
   const [email, setEmail] = useState<string>("");
   const [number, setNumber] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [showAdminAlert, setShowAdminAlert] = useState(false);
+  const [adminClubId, setAdminClubId] = useState<string | null>(null);
+  const [adminClubName, setAdminClubName] = useState<string>("");
+
   const [verificationFailed, setVerificationFailed] = useState<boolean>(false);
   const [duplicateCheck, setDuplicateCheck] = useState<boolean>(false);
   const [selectedProfileType, setSelectedProfileType] = useState<string | null>(
@@ -123,8 +129,21 @@ const MainSection = () => {
     }
   };
 
-  const handleCancelRegistration = () => {
-    setCancelModal(true);
+  const handleCancelRegistration = async () => {
+    try {
+      const adminClubs = await getMyAdminClubs();
+      if (adminClubs.clubDataList.length > 0) {
+        const firstClub = adminClubs.clubDataList[0];
+        setAdminClubId(firstClub.id);
+        setAdminClubName(firstClub.name);
+        setShowAdminAlert(true);
+        return;
+      }
+      setCancelModal(true);
+    } catch (error) {
+      console.error("어드민 동아리 확인 실패:", error);
+      showAlert("동아리장 여부 확인 중 오류가 발생했습니다.");
+    }
   };
 
   const handleRegistrationComplete = (message: string) => {
@@ -553,6 +572,18 @@ const MainSection = () => {
 
       {alertMessage && <Alert text={alertMessage} onClose={closeAlert} />}
       {snackbar && <MobileSnackBar text={"학교 등록이 완료되었습니다."} />}
+      {showAdminAlert && adminClubId && (
+        <AlertWithMessage
+          text="학교 등록 취소가 불가합니다."
+          description={`현재 "${adminClubName}"의 동아리장입니다.\n학교 인증을 취소하려면 동아리장 위임이 먼저 필요합니다.`}
+          leftBtnText="동아리장 위임하기"
+          rightBtnText="취소"
+          onLeftBtnClick={() => {
+            router.push(`/club/management/members?clubId=${adminClubId}`);
+          }}
+          onRightBtnClick={() => setShowAdminAlert(false)}
+        />
+      )}
     </div>
   );
 };
