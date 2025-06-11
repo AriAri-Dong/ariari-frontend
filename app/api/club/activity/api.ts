@@ -69,9 +69,14 @@ export const updateClubActivity = async ({
     formData.append("newImages", image);
   });
 
-  deletedImageIds?.forEach((id) => {
-    formData.append("deletedImageIds", id.toString());
-  });
+  const ids = deletedImageIds ?? [];
+  if (ids.length === 0) {
+    formData.append("deletedImageIds", "");
+  } else {
+    ids.forEach((id) => {
+      formData.append("deletedImageIds", id.toString());
+    });
+  }
 
   await axiosInstance.put(
     `${CLUB_ACTIVITY}/detail/${clubActivityId}`,
