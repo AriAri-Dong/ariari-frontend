@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
 import Alert from "../../../../components/alert/alert";
@@ -50,9 +50,8 @@ const ActivityCreateContent = ({
   const isMdUp = useResponsive("md");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  console.log("existingImages", existingImages);
-
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
   const triggerFileInput = () => {
     if (fileInputRef.current) {
@@ -63,6 +62,16 @@ const ActivityCreateContent = ({
   const handleSubmit = () => {
     onSubmit();
   };
+
+  useEffect(() => {
+    const urls = uploadedImages.map((file) => URL.createObjectURL(file));
+    setPreviewUrls(urls);
+
+    // 메모리 누수 방지: 컴포넌트 unmount 혹은 업데이트 시 revoke
+    return () => {
+      urls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [uploadedImages]);
 
   return (
     <div className="h-full flex flex-col justify-between max-h-[90vh]">

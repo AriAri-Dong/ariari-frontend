@@ -26,6 +26,9 @@ import {
 } from "@/api/club/activity/api";
 import AlertWithMessage from "../alert/alertWithMessage";
 import { useUserStore } from "@/stores/userStore";
+import { getProfileImage } from "@/utils/mappingProfile";
+import { profileType } from "@/types/member";
+import CommonBottomSheet from "../bottomSheet/commonBottomSheet";
 
 type CommentBaseProps = {
   isReply: boolean;
@@ -39,6 +42,7 @@ type CommentBaseProps = {
   clubActivityId: string;
   role?: null | "GENERAL" | "MANAGER" | "ADMIN";
   nickname?: string;
+  profileType: profileType;
   isReplying: boolean;
   comment?: ClubActivityComment;
   onDeleteSuccess?: () => void;
@@ -110,11 +114,10 @@ const Comment = (props: CommentBaseProps) => {
       setConfirmAction("block");
     } else if (label === "수정하기") {
       setIsEditing(true);
-      setIsOptionOpen(false);
     } else if (label === "신고하기") {
       setIsReportOpen(true);
-      setIsOptionOpen(false);
     }
+    setIsOptionOpen(false);
   };
 
   const handleConfirmedAction = async () => {
@@ -180,15 +183,24 @@ const Comment = (props: CommentBaseProps) => {
       <div className="w-full">
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-2.5 mb-3">
-            <div className="flex flex-col gap-[2px] md:gap-[18px] md:items-center md:flex-row">
-              <span className="text-subtext2 text-mobile_body1_m md:text-body1_m">
-                {isReplying ? props.nickname : comment?.clubMember.name}
-              </span>
-              <span className="flex gap-1.5 text-mobile_body4_r md:text-body4_r text-subtext2">
-                <p>{date}</p>
-                {!isReplying && <p>|</p>}
-                {!isReplying && <p>{time}</p>}
-              </span>
+            <div className="flex flex-row items-center gap-2.5">
+              <Image
+                src={getProfileImage(props.profileType)}
+                alt="프로필 이미지"
+                width={28}
+                height={28}
+                className="rounded-full object-cover w-9 h-9"
+              />
+              <div className="flex flex-col md:flex-row gap-[2px] md:gap-[18px] items-start md:items-center">
+                <span className="text-subtext2 text-mobile_body1_m md:text-body1_m">
+                  {isReplying ? props.nickname : comment?.clubMember.name}
+                </span>
+                <span className="flex gap-1.5 text-mobile_body4_r md:text-body4_r text-subtext2">
+                  <p>{date}</p>
+                  {!isReplying && <p>|</p>}
+                  {!isReplying && <p>{time}</p>}
+                </span>
+              </div>
             </div>
           </div>
           {!isReplying && comment && (
@@ -221,15 +233,28 @@ const Comment = (props: CommentBaseProps) => {
                   className="cursor-pointer"
                   onClick={handleMenuClick}
                 />
-                {isOptionOpen && isMdUp && (
-                  <SingleSelectOptions
-                    selectedOption=""
-                    optionData={menuOptions}
-                    size="small"
-                    position="end"
-                    handleMenuClick={handleOptionClick}
-                  />
+                {isOptionOpen && (
+                  <>
+                    {isMdUp ? (
+                      <SingleSelectOptions
+                        selectedOption=""
+                        optionData={menuOptions}
+                        size="small"
+                        position="end"
+                        handleMenuClick={handleOptionClick}
+                      />
+                    ) : (
+                      <CommonBottomSheet
+                        optionData={menuOptions}
+                        onClose={() => setIsOptionOpen(false)}
+                        handleMenuClick={handleOptionClick}
+                        selectedOption={""}
+                      />
+                    )}
+                  </>
                 )}
+
+                {/* {!isMdUp && !isReplying && comment && isOptionOpen && ( */}
               </div>
             </div>
           )}
@@ -297,6 +322,7 @@ const Comment = (props: CommentBaseProps) => {
                   nickname={props.nickname}
                   onEditSuccess={props.onEditSuccess}
                   onDeleteSuccess={props.onDeleteSuccess}
+                  profileType={props.profileType}
                 />
               ))}
               {isReplyFormOpen && (
@@ -306,6 +332,7 @@ const Comment = (props: CommentBaseProps) => {
                   clubActivityId={props.clubActivityId}
                   role={props.role}
                   nickname={props.nickname}
+                  profileType={props.profileType}
                   comment={comment}
                   onEditSuccess={props.onEditSuccess}
                   onDeleteSuccess={props.onDeleteSuccess}
@@ -316,14 +343,6 @@ const Comment = (props: CommentBaseProps) => {
           )}
       </div>
 
-      {!isMdUp && !isReplying && comment && isOptionOpen && (
-        <BottomSheet
-          optionData={menuOptions}
-          selectedOptions=""
-          onClose={() => setIsOptionOpen(false)}
-          handleMenuClick={handleOptionClick}
-        />
-      )}
       {isReportOpen &&
         (isMdUp ? (
           <ReportModal

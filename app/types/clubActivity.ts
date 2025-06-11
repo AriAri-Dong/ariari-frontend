@@ -1,3 +1,5 @@
+import { profileType } from "./member";
+
 // 백엔드 응답 타입
 export interface ClubActivityApi {
   id: number;
@@ -41,6 +43,7 @@ export interface ClubActivityComment {
   clubMember: ClubMemberData;
   clubActivityId: string;
   body: string;
+  creatorProfileType: profileType;
   createdDateTime: string;
   likes: number;
   myLike: boolean;
@@ -52,7 +55,7 @@ export interface ClubActivityComment {
 export interface ClubMemberData {
   id: string;
   name: string;
-  profileType: string;
+  profileType: profileType | null;
   clubMemberRoleType: "ADMIN" | "MANAGER" | "GENERAL";
   clubMemberStatusType: string;
   memberData: any;
@@ -73,8 +76,8 @@ export const mapActivityFromApi = (api: ClubActivityApi): ClubActivity => ({
   clubActivityId: String(api.id),
   clubMember: {
     id: String(api.creatorId),
-    name: api.creatorName,
-    profileType: "",
+    name: api.creatorName || "(알수없음)",
+    profileType: null,
     clubMemberRoleType: "GENERAL",
     clubMemberStatusType: "ACTIVE",
     memberData: null,
@@ -103,8 +106,8 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
     clubActivityId: String(activity.id),
     clubMember: {
       id: String(activity.creatorId),
-      name: activity.creatorName,
-      profileType: "",
+      name: activity.creatorName || "(알수없음)",
+      profileType: activity.profileType,
       clubMemberRoleType: "GENERAL",
       clubMemberStatusType: "ACTIVE",
       memberData: null,
@@ -132,8 +135,8 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
         isMine: false,
         clubMember: {
           id: String(parent.creatorId),
-          name: parent.creatorName,
-          profileType: "",
+          name: parent.creatorName || "(알수없음)",
+          profileType: parent.creatorProfileType,
           clubMemberRoleType: "GENERAL",
           clubMemberStatusType: "ACTIVE",
           memberData: null,
@@ -149,8 +152,8 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
             isMine: false,
             clubMember: {
               id: String(child.creatorId),
-              name: child.creatorName,
-              profileType: "",
+              name: child.creatorName || "(알수없음)",
+              profileType: parent.creatorProfileType,
               clubMemberRoleType: "GENERAL",
               clubMemberStatusType: "ACTIVE",
               memberData: null,
