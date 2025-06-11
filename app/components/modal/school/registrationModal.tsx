@@ -27,9 +27,16 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
   const [verificationCode, setVerificationCode] = useState<string>("");
 
   // 인증 번호 재전송
-  const resetTimer = () => {
-    setTimeLeft(300);
-    setAlertMessage("인증번호를 전송했습니다.");
+  const resetTimer = async () => {
+    try {
+      await sendSchoolAuthEmail(email);
+      setTimeLeft(300);
+      setAlertMessage("인증번호를 전송했습니다.");
+    } catch (error) {
+      setAlertMessage(
+        "학교 인증 이메일 발송에 실패했습니다. 다시 시도해주세요."
+      );
+    }
   };
 
   // 현재 단계 검증
