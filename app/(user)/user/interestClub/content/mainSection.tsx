@@ -9,8 +9,13 @@ import { ClubData, ClubResponse, Pageable } from "@/types/api";
 import { getBookmarkClubsInfo } from "@/api/club/api";
 import HeaderSection from "./headerSection";
 import FilterSection from "./filterSection";
+import RequiredLogin from "@/components/feedback/requiredLogin";
+import { useUserStore } from "@/stores/userStore";
 
 const MainSection = () => {
+  const user = useUserStore((state) => state.user);
+  const isSignIn = !!user;
+
   const [clubData, setClubData] = useState<ClubData[]>([]);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [more, setMore] = useState<boolean>(true);
@@ -58,6 +63,10 @@ const MainSection = () => {
   useEffect(() => {
     fetchClubs(0, true);
   }, [isChecked]);
+
+  if (!isSignIn) {
+    <RequiredLogin />;
+  }
 
   return (
     <div>

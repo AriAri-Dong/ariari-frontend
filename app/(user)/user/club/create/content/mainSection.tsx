@@ -24,6 +24,7 @@ import { ClubResponse, CreateClubData } from "@/types/api";
 import useResponsive from "@/hooks/useResponsive";
 import { useUserStore } from "@/stores/userStore";
 import AlertWithMessage from "@/components/alert/alertWithMessage";
+import RequiredLogin from "@/components/feedback/requiredLogin";
 
 const OPTIONS = [
   {
@@ -58,6 +59,7 @@ const MainSection = () => {
 
   const user = useUserStore((state) => state.user);
   const schoolData = user?.schoolData;
+  const isSignIn = !!user;
 
   const isMd = useResponsive("md");
 
@@ -255,6 +257,10 @@ const MainSection = () => {
     // 임시 경로
     router.push("/exploration");
   };
+
+  if (!isSignIn) {
+    <RequiredLogin />;
+  }
 
   return (
     <div className="flex flex-col">
