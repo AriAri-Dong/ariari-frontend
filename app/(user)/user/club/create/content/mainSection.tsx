@@ -21,6 +21,9 @@ import NotiPopUp from "@/components/modal/notiPopUp";
 import { createClubWithFile, getAllClubsInfo } from "@/api/club/api";
 import { convertToServerFormat } from "@/utils/convertToServerFormat";
 import { ClubResponse, CreateClubData } from "@/types/api";
+import useResponsive from "@/hooks/useResponsive";
+import { useUserStore } from "@/stores/userStore";
+import AlertWithMessage from "@/components/alert/alertWithMessage";
 
 const OPTIONS = [
   {
@@ -52,13 +55,22 @@ const OPTIONS = [
 const MainSection = () => {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const user = useUserStore((state) => state.user);
+  const schoolData = user?.schoolData;
+
+  const isMd = useResponsive("md");
+
   const [submit, setSubmit] = useState<boolean>(false);
   const [createdClubId, setCreatedClubId] = useState<string | null>(null);
   const [alertVisible, setAlertVisible] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [clubName, setClubName] = useState<string>("");
   const [clubIntroduction, setClubIntroduction] = useState<string>("");
+  const [clubMemberName, setClubMemberName] = useState<string>("");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [showSchoolAuthAlert, setShowSchoolAuthAlert] =
+    useState<boolean>(false);
   const [selections, setSelections] = useState({
     affiliationType: [] as string[],
     fieldType: [] as string[],
@@ -79,6 +91,12 @@ const MainSection = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setClubIntroduction(event.target.value);
+  };
+
+  const handleClubMemberNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setClubMemberName(event.target.value);
   };
 
   const handleSelectionChange =
@@ -117,30 +135,43 @@ const MainSection = () => {
     }
   };
 
-  const validateForm = () => {
-    if (
-      !clubName.trim() ||
-      selections.affiliationType.length === 0 ||
-      selections.fieldType.length === 0 ||
-      selections.areaType.length === 0 ||
-      selections.targetType.length === 0
-    ) {
-      return false;
-    }
-    return true;
+  const validateForm = (): string | null => {
+    if (!clubName.trim()) return "동아리 이름을 입력해주세요.";
+    if (!clubMemberName.trim()) return "동아리 활동명을 입력해주세요.";
+    if (selections.affiliationType.length === 0) return "소속을 선택해주세요.";
+    if (selections.fieldType.length === 0) return "분야를 선택해주세요.";
+    if (selections.areaType.length === 0) return "지역을 선택해주세요.";
+    if (selections.targetType.length === 0) return "대상을 선택해주세요.";
+    return null;
   };
 
   const handleSubmit = async () => {
-    if (!validateForm()) {
+    const errorMessage = validateForm();
+
+    if (errorMessage) {
       setAlertVisible(false);
       setTimeout(() => {
         setAlertVisible(true);
-        setAlertMessage("미입력한 항목이 있습니다.");
+        setAlertMessage(errorMessage);
       }, 0);
       return;
     }
 
-    setSubmit(true);
+    // 학교 미인증 상태에서 교내 선택 시 알림 띄우기
+    const isInternal = selections.affiliationType[0] === "교내";
+    const isUnauthenticated =
+      schoolData == null || schoolData.name.trim() === "";
+
+    console.log("selections.affiliationType[0]", selections.affiliationType[0]);
+    console.log("isInternal", isInternal);
+    console.log("isUnauthenticated", isUnauthenticated);
+    console.log("schoolData", schoolData);
+
+    if (isInternal && isUnauthenticated) {
+      setShowSchoolAuthAlert(true);
+      return;
+    }
+
     setAlertVisible(false);
 
     const convertedData = convertToServerFormat(
@@ -153,6 +184,7 @@ const MainSection = () => {
     const clubData: CreateClubData = {
       name: clubName,
       body: clubIntroduction,
+      clubMemberName,
       ...convertedData,
     };
 
@@ -200,6 +232,7 @@ const MainSection = () => {
       }
     } catch (error) {
       console.error("동아리 생성 실패:", error);
+      setSubmit(false);
       setAlertMessage("동아리 생성에 실패했습니다.");
       setAlertVisible(true);
     }
@@ -265,7 +298,7 @@ const MainSection = () => {
               alt="Uploaded or Default"
               width={95}
               height={95}
-              className="md:w-[152px] md:h-[152px] rounded-full border border-menuborder p-1 cursor-pointer"
+              className="md:w-[152px] md:h-[152px] rounded-full border border-menuborder p-1 cursor-pointer object-cover"
             />
           </label>
           <div className="absolute bottom-0 right-0 translate-x-1/5 translate-y-1/5">
@@ -294,6 +327,17 @@ const MainSection = () => {
           maxLength={30}
           className="mb-[30px] md:mb-7 max-w-[770px]"
         />
+        <h3 className="flex text-mobile_h3 mb-[14px] md:text-h3 md:mb-2.5">
+          동아리 활동명
+          <span className="text-noti text-mobile_body3_m pl-1">*</span>
+        </h3>
+        <TextInputWithCounter
+          value={clubMemberName}
+          onChange={handleClubMemberNameChange}
+          placeholder="동아리 활동명"
+          maxLength={10}
+          className="mb-[30px] md:mb-7 max-w-[770px]"
+        />
         {OPTIONS.map(({ label, key, data, placeholder }) => (
           <div className="flex flex-col mb-[30px] md:mb-7" key={key}>
             <h3 className="flex text-mobile_h3 mb-[14px] md:text-h3 md:mb-[18px]">
@@ -313,16 +357,15 @@ const MainSection = () => {
             </div>
           </div>
         ))}
-        <SmallBtn
-          title={"동아리 만들기"}
-          onClick={handleSubmit}
-          className="hidden md:block"
-        />
-        <LargeBtn
-          title={"동아리 만들기"}
-          onClick={handleSubmit}
-          className="block md:hidden mb-20"
-        />
+        {isMd ? (
+          <SmallBtn title={"동아리 만들기"} onClick={handleSubmit} />
+        ) : (
+          <LargeBtn
+            title={"동아리 만들기"}
+            onClick={handleSubmit}
+            className="mb-20"
+          />
+        )}
       </div>
       {alertVisible && <Alert text={alertMessage} />}
       {submit && (
@@ -340,6 +383,20 @@ const MainSection = () => {
           firstButtonText={"모집공고 작성하기"}
           secondButton={handleTakeALook}
           secondButtonText={"새 동아리 둘러보기"}
+        />
+      )}
+      {showSchoolAuthAlert && (
+        <AlertWithMessage
+          text="학교 미인증으로 교내 동아리를 개설할 수 없습니다."
+          description="학교 인증 후 교내 동아리 개설이 가능합니다."
+          leftBtnText="학교 인증하기"
+          rightBtnText="취소"
+          onLeftBtnClick={() => {
+            router.push("/user/userInfo");
+          }}
+          onRightBtnClick={() => {
+            setShowSchoolAuthAlert(false);
+          }}
         />
       )}
     </div>
