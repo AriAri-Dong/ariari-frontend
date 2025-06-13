@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import useResponsive from "@/hooks/useResponsive";
 import InvitationFormContent from "./invitationFormContent";
+import { MemberSchoolData } from "@/types/member";
 
 export type ShareType = "clubJoin" | "ariAriJoin";
 
@@ -21,6 +22,9 @@ const InvitaionForm = ({ onClose, onSubmit }: FaqFormProps) => {
   const isTapOver = useResponsive("md");
 
   const [nickName, setNickname] = useState<string>("");
+  const [selectedUser, setSelectedUser] = useState<MemberSchoolData | null>(
+    null
+  );
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [shareType, setShareType] = useState<ShareType>("ariAriJoin");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -89,6 +93,8 @@ const InvitaionForm = ({ onClose, onSubmit }: FaqFormProps) => {
         <InvitationFormContent
           nickname={nickName}
           setNickname={setNickname}
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
           onClose={onClose}
           shareType={shareType}
           setShareType={setShareType}
@@ -112,6 +118,8 @@ const InvitaionForm = ({ onClose, onSubmit }: FaqFormProps) => {
         <InvitationFormContent
           nickname={nickName}
           setNickname={setNickname}
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
           onClose={onClose}
           shareType={shareType}
           setShareType={setShareType}

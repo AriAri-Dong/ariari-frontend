@@ -13,7 +13,7 @@ interface Step2ContentProps {
   setNickname: (value: string) => void;
   errorMessage: string | null;
   setErrorMessage: (value: string | null) => void;
-  handleSubmit: () => void;
+  handleSubmit: (nickname: string) => void;
   onClose: () => void;
 }
 
@@ -77,8 +77,7 @@ const Step2Content = ({
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  // 엔터 키가 눌렸을 때 실행할 로직
-                  handleSubmit();
+                  handleSubmit(nickname);
                 }
               }}
               placeholder="예 : 홍길동"
@@ -90,7 +89,7 @@ const Step2Content = ({
               </p>
             )}
           </div>
-          <LargeBtn title={"작성완료"} onClick={handleSubmit} />
+          <LargeBtn title={"작성완료"} onClick={() => handleSubmit(nickname)} />
         </div>
       </div>
     </div>

@@ -216,7 +216,13 @@ export const APPLICATION_DISPLAY_INFO: Record<ApplicationKeys, ApplyField> = {
     type: "radio",
     options: ["남자", "여자"],
   },
-  birthday: { key: "birthday", name: "생년월일", type: "date" },
+  birthday: {
+    key: "birthday",
+    name: "생년월일",
+    type: "text",
+    maxLength: 12,
+    placeholder: "생년월일을 입력해주세요",
+  },
   phone: {
     key: "phone",
     name: "연락처",

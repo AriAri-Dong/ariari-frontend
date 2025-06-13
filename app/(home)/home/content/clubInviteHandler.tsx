@@ -1,31 +1,83 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import InviteDialog from "@/components/modal/invite/inviteDialog";
 import LoginModal from "@/components/modal/login/loginModal";
 import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
 import NotiPopUp from "@/components/modal/notiPopUp";
+import {
+  useEnterClubAlarmMutation,
+  useEnterClubMutation,
+} from "@/hooks/club/my/useMyClubMutation";
 import { useUserStore } from "@/stores/userStore";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import Alert from "@/components/alert/alert";
 
 export default function ClubInviteHandler() {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const inviteCode = searchParams.get("inviteCode");
+  const inviteAlarmCode = searchParams.get("inviteAlarmCode");
+
   const { user } = useUserStore();
   const isSignIn = !!user;
 
   const [showModal, setShowModal] = useState(false);
+  const [step, setStep] = useState<number>(1);
+  const [data, setData] = useState<string | null>(null);
+
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const [isLoginNotiPopUpOpen, setIsLoginNotiPopUpOpen] = useState(true);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  useEffect(() => {
+  const { mutate: enterClub } = useEnterClubMutation({
+    onSuccess: (data) => {
+      setData(data);
+      setStep(3);
+    },
+    onError: (error) => {
+      setAlertMessage(error.message);
+    },
+  });
+  const { mutate: enterClubAlarm } = useEnterClubAlarmMutation({
+    onSuccess: (data) => {
+      setData(data);
+      setStep(3);
+    },
+    onError: (error) => {
+      setAlertMessage(error.message);
+    },
+  });
+
+  // 초대
+  const handleSubmit = (nickname: string) => {
     if (inviteCode) {
+      // 링크 초대
+      enterClub({ inviteKey: inviteCode, name: nickname });
+    } else if (inviteAlarmCode) {
+      //회원 개별 초대 (알림)
+      const decoded = decodeURIComponent(inviteAlarmCode ?? "");
+      const [code, clubId] = decoded.split(/\|(?=[^|]*$)/).map((s) => s.trim());
+
+      enterClubAlarm({
+        inviteAlarmCode: code,
+        name: nickname,
+        clubId: clubId,
+      });
+    }
+  };
+
+  // 초대코드가 있으면 모달 open
+  useEffect(() => {
+    if (inviteCode || inviteAlarmCode) {
       setShowModal(true);
     } else {
       setShowModal(false);
     }
-  }, [inviteCode]);
+  }, [inviteCode, inviteAlarmCode]);
 
+  // 로그인 관련 로직
   const handleLoginRedirect = () => {
     setIsLoginModalOpen(true);
     setIsLoginNotiPopUpOpen(false);
@@ -33,6 +85,16 @@ export default function ClubInviteHandler() {
 
   const handleLoginModalClose = () => {
     setIsLoginModalOpen(false);
+  };
+  const handleNextStep = () => {
+    setStep((prev) => prev + 1);
+  };
+
+  const handleClose = () => {
+    if (data) {
+      router.replace(pathname, { scroll: false });
+    }
+    setShowModal(false);
   };
 
   if (!isSignIn && showModal) {
@@ -63,11 +125,17 @@ export default function ClubInviteHandler() {
 
   return (
     <>
-      {showModal && inviteCode && (
+      {showModal && (inviteCode || inviteAlarmCode) && (
         <InviteDialog
-          onClose={() => setShowModal(false)}
-          inviteCode={inviteCode}
+          clubName={data}
+          step={step}
+          onClose={handleClose}
+          handleSubmit={handleSubmit}
+          handleNextStep={handleNextStep}
         />
+      )}
+      {alertMessage && (
+        <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
     </>
   );

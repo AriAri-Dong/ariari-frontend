@@ -16,6 +16,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useUserStore } from "@/stores/userStore";
 import Alert from "../alert/alert";
 import { getUser } from "@/utils/getUser";
+import ClubInviteHandler from "@/(home)/home/content/clubInviteHandler";
 
 const Header = () => {
   const router = useRouter();
@@ -125,6 +126,7 @@ const Header = () => {
       {alertMessage && (
         <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
+      <ClubInviteHandler />
     </header>
   );
 };

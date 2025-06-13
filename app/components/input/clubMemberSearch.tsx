@@ -32,7 +32,7 @@ const ClubMemberSearch = ({
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const debouncedSearchTerm = useDebounce(searchTerm, 400);
 
   useEffect(() => {
     if (debouncedSearchTerm.trim() === "") {

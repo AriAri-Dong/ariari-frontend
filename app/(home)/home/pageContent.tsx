@@ -12,7 +12,6 @@ const HomePageContent = () => {
 
   return (
     <div className="w-full">
-      <ClubInviteHandler />
       {isSignIn && <MyClub />}
       <ClubRanking />
       <PopularRecruitment />
