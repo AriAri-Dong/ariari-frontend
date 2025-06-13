@@ -3,7 +3,7 @@ import Image from "next/image";
 import tooltip from "@/images/icon/triangle.svg";
 import { useMyNotificationQuery } from "@/hooks/notification/useNotificationQuery";
 import NotificationList from "@/components/list/notificationList";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useNotificationMutations } from "@/hooks/notification/useNotificationMutation";
 import WhiteButton from "@/components/button/basicBtn/whiteBtn";
 
@@ -19,6 +19,7 @@ interface TooltipProps {
 const NotificationModal = ({ children }: TooltipProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const {
     myNotifications,
     isFetchingNextPage,
@@ -50,7 +51,16 @@ const NotificationModal = ({ children }: TooltipProps) => {
         onSettled: () => {
           setIsOpen(false);
           if (uri) {
-            router.push(uri);
+            const cleanUri = uri.split("|")[0].trim();
+            // 동아리 초대인 경우 예외
+            if (cleanUri.startsWith("/club/invite")) {
+              const queryString = uri.split("?")[1];
+              if (queryString) {
+                router.push(`${pathname}?${queryString}`);
+              }
+            } else {
+              router.push(uri);
+            }
           }
         },
       }

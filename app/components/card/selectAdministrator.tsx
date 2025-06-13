@@ -12,6 +12,7 @@ import { ClubMemberData, MemberData } from "@/types/member";
 
 import { entrustAdmin } from "@/api/member/api";
 import { useUserStore } from "@/stores/userStore";
+import ClubMemberSearch from "../input/clubMemberSearch";
 
 interface SelectAdministratorProps {
   club: ClubData;
@@ -58,6 +59,8 @@ const SelectAdministrator = ({
       <Image
         src={club.profileUri || defaultImg}
         alt={"club_image"}
+        width={48}
+        height={48}
         className="rounded-full object-cover w-12 h-12 md:w-[68px] md:h-[68px]"
       />
       <div className="justify-start items-start flex flex-col">
@@ -73,13 +76,12 @@ const SelectAdministrator = ({
               {selectedUser.name}
             </div>
           ) : (
-            <MemberSearch
-              nickname={nickname}
-              setNickname={setNickname}
+            <ClubMemberSearch
+              clubId={club.id}
+              searchTerm={nickname}
+              setSearchTerm={setNickname}
               setErrorMessage={setErrorMessage}
               placeholder={"멤버 검색"}
-              type="CLUB_MEMBER"
-              clubId={club.id}
               handleMemberClick={handleMemberClick}
             />
           )}

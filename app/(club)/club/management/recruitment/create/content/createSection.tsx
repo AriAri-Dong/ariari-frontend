@@ -26,6 +26,7 @@ import {
 } from "@/data/guideBox";
 import RecruitmentPreviewForm from "../components/RecruitmentPreviewForm";
 import { getClubRecruitmentList, postRecruitment } from "@/api/recruitment/api";
+import { formatKSTTime } from "@/utils/formatKSTTime";
 
 const CreateSection = () => {
   const isMdUp = useResponsive("md");
@@ -137,8 +138,12 @@ const CreateSection = () => {
         body: body,
         procedureType: procedureType,
         limits: limits,
-        startDateTime: date[0] ? date[0].toISOString() : "",
-        endDateTime: date[1] ? date[1].toISOString() : "",
+        startDateTime: date[0]
+          ? formatKSTTime(date[0].toISOString(), "YYYY-MM-DDT00:00:00.000")
+          : "",
+        endDateTime: date[1]
+          ? formatKSTTime(date[1].toISOString(), "YYYY-MM-DDT00:00:00.000")
+          : "",
         recruitmentNotes: items.map((item) => ({
           question: item.question,
           answer: item.answer,
