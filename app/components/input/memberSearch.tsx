@@ -4,6 +4,7 @@ import { ClubMemberData, MemberData, MemberSchoolData } from "@/types/member";
 import { entrustAdmin, getClubMembers, getMemberList } from "@/api/member/api";
 import noimage from "@/images/test/test.svg";
 import { getProfileImage, profileImageMap } from "@/utils/mappingProfile";
+import useDebounce from "@/hooks/useDebounce";
 
 const CONTENT_SIZE = 10;
 
@@ -29,9 +30,10 @@ const MemberSearch = ({
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const debouncedSearchTerm = useDebounce(searchTerm, 400);
 
   useEffect(() => {
-    if (searchTerm.trim() === "") {
+    if (debouncedSearchTerm.trim() === "") {
       setMembers([]);
       setPage(0);
       setHasMore(true);
@@ -40,7 +42,7 @@ const MemberSearch = ({
 
     setLoading(true);
 
-    getMemberList(searchTerm, page, CONTENT_SIZE)
+    getMemberList(debouncedSearchTerm, page, CONTENT_SIZE)
       .then((response) => {
         const newMembers = response!.memberDataList;
         setMembers((prev) =>
@@ -53,7 +55,7 @@ const MemberSearch = ({
         setHasMore(false);
       })
       .finally(() => setLoading(false));
-  }, [searchTerm, page]);
+  }, [debouncedSearchTerm, page]);
 
   // 멤버 목록 무한 스크롤
   useEffect(() => {
