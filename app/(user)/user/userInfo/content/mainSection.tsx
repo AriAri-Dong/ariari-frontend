@@ -32,7 +32,7 @@ import MobileSnackBar from "@/components/bar/mobileSnackBar";
 import { useUserStore } from "@/stores/userStore";
 import { getUser } from "@/utils/getUser";
 import RequiredLogin from "@/components/feedback/requiredLogin";
-import { getMyAdminClubs } from "@/api/club/api";
+import { getMyAdminInteralClubs } from "@/api/club/api";
 import AlertWithMessage from "@/components/alert/alertWithMessage";
 
 const MainSection = () => {
@@ -131,7 +131,7 @@ const MainSection = () => {
 
   const handleCancelRegistration = async () => {
     try {
-      const adminClubs = await getMyAdminClubs();
+      const adminClubs = await getMyAdminInteralClubs();
       if (adminClubs.clubDataList.length > 0) {
         const firstClub = adminClubs.clubDataList[0];
         setAdminClubId(firstClub.id);
