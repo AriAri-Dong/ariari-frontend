@@ -5,7 +5,7 @@ import Image from "next/image";
 import keyboardArrowDown from "@/images/icon/keyboardArrowDown.svg";
 import keyboardArrowUp from "@/images/icon/keyboardArrowUp.svg";
 import polygon from "@/images/icon/polygon_4.svg";
-import { profileImageMap } from "@/utils/mappingProfile";
+import { getProfileImage, profileImageMap } from "@/utils/mappingProfile";
 import Alert from "@/components/alert/alert";
 import { SystemFaqData } from "@/types/service";
 
@@ -50,7 +50,7 @@ const FaqDropdown = ({ data, isOpen, setSelected }: FaqDropdownProps) => {
         <div className="w-full flex-col justify-start items-start gap-8 flex">
           <div className="w-full items-start gap-8 flex md:pl-1">
             <Image
-              src={profileImageMap["ARIARI_MONKEY"]}
+              src={getProfileImage(null)}
               alt="club_img"
               width={56}
               height={56}

@@ -3,7 +3,7 @@ import Image from "next/image";
 import close from "@/images/icon/close.svg";
 import ApplicationFieldForm from "@/components/form/application/applicationFieldForm";
 import ClubInfo from "@/(recruitment)/recruitment/detail/content/clubInfo";
-import { profileImageMap } from "@/utils/mappingProfile";
+import { getProfileImage, profileImageMap } from "@/utils/mappingProfile";
 import {
   ApplicationKeys,
   ApplyAnswerReq,
@@ -328,7 +328,7 @@ const ApplicationFormModal = ({
       >
         <div className="flex gap-3 items-center">
           <Image
-            src={profileImageMap[profileType ?? "ARIARI_MONKEY"]}
+            src={getProfileImage(profileType)}
             alt={"프로필"}
             width={32}
             height={32}
