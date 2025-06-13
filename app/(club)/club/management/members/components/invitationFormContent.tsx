@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useSearchParams } from "next/navigation";
-import { createInviteClubKey } from "@/api/club/api";
+import { useClubContext } from "@/context/ClubContext";
+import { createInviteClubAlarm, createInviteClubKey } from "@/api/club/api";
 import Image from "next/image";
 import close from "@/images/icon/close.svg";
 import SmallBtn from "@/components/button/basicBtn/smallBtn";
@@ -13,10 +14,13 @@ import copy from "@/images/icon/copy.svg";
 import { ShareType } from "./invitationForm";
 import Alert from "@/components/alert/alert";
 import MemberSearch from "@/components/input/memberSearch";
+import { MemberSchoolData } from "@/types/member";
 
 interface InvitationFormContentProps {
   nickname: string;
   setNickname: (value: string) => void;
+  selectedUser: MemberSchoolData | null;
+  setSelectedUser: (value: MemberSchoolData | null) => void;
   alertMessage: string | null;
   setAlertMessage: (value: string | null) => void;
   shareType: ShareType;
@@ -37,6 +41,8 @@ interface InvitationFormContentProps {
 const InvitationFormContent = ({
   nickname,
   setNickname,
+  selectedUser,
+  setSelectedUser,
   alertMessage,
   setAlertMessage,
   shareType,
@@ -50,6 +56,7 @@ const InvitationFormContent = ({
 }: InvitationFormContentProps) => {
   const params = useSearchParams();
   const clubId = params.get("clubId") || "";
+  const { clubInfo } = useClubContext();
   // 링크 복사
   const handleCopy = async () => {
     try {
@@ -108,12 +115,32 @@ const InvitationFormContent = ({
               nickname={nickname}
               setNickname={setNickname}
               setErrorMessage={setErrorMessage}
-              type="TOTAL_MEMBER"
+              handleMemberClick={(member) => {
+                // 교내 동아리인 경우 학교 정보 검증
+                if (clubInfo?.clubData.schoolData !== null) {
+                  // 다른 학교인 경우 초대 불가
+                  if (
+                    clubInfo?.clubData.schoolData.name !== member.schoolName
+                  ) {
+                    setErrorMessage(
+                      "동아리와 동일한 학교에 소속된 회원만 초대할 수 있습니다."
+                    );
+                    setNickname("");
+                    setSelectedUser(null);
+                  }
+                } else {
+                  setSelectedUser(member);
+                }
+              }}
             />
             <SmallBtn
               title={"초대하기"}
               onClick={() => {
-                if (nickname) {
+                if (selectedUser && clubInfo) {
+                  createInviteClubAlarm(
+                    selectedUser?.memberId,
+                    clubInfo?.clubData.id
+                  );
                   setAlertMessage("초대장을 전송했습니다.");
                 } else {
                   setAlertMessage("초대할 회원을 선택해주세요.");

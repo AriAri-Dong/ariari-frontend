@@ -191,7 +191,7 @@ const MainSection = () => {
     };
 
     try {
-      let fileToSend: File;
+      let fileToSend: File | null = null;
       if (uploadedImage) {
         const base64Image = uploadedImage.split(",")[1];
         const byteArray = new Uint8Array(

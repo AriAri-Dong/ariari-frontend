@@ -27,6 +27,7 @@ export const CLUBS = "/clubs";
 export const CLUBS_SEARCH = "/clubs/search";
 export const CLUBS_MY = "/clubs/my";
 export const CLUBS_MY_ADMIN = "/clubs/my/admin";
+export const CLUBS_MY_ADMIN_INTERNAL = "/clubs/my/admin/school";
 export const CLUBS_MY_BOOKMARKS = "/clubs/my-bookmarks";
 export const CLUBS_INTERNAL = "/clubs/internal";
 export const CLUBS_INTERNAL_RANKING = "/clubs/internal/ranking";

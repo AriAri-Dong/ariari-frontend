@@ -12,10 +12,7 @@ import Step3 from "./step3";
 import { validateEmail } from "@/schema/email";
 import { useProfileContext } from "@/context/profileConetxt";
 import { formatTime } from "@/utils/timeFormatter";
-import {
-  sendSignupSchoolAuthEmail,
-  validateSchoolAuthCode,
-} from "@/api/school/api";
+import { sendSignupSchoolAuthEmail } from "@/api/school/api";
 import { signUpWithKey } from "@/api/login/api";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -36,7 +33,6 @@ interface ProfileSettingProps {
 const MobileProfileSetting = ({
   step,
   onNextStep,
-  onClose,
   onSignupSuccess,
 }: ProfileSettingProps) => {
   const { oauthSignUpKey, setAuth } = useAuthStore();
@@ -102,22 +98,12 @@ const MobileProfileSetting = ({
   };
 
   const validateCurrentStep = async () => {
-    if (step === 2) {
-      const emailValidationError = validateEmail(profileData.email);
-      if (emailValidationError) {
-        setAlertMessage(emailValidationError);
-        return false;
-      }
-    } else if (step === 3) {
-      try {
-        await validateSchoolAuthCode(profileData.verificationCode);
-        setVerificationFailed(false);
-      } catch (error) {
-        setVerificationFailed(true);
-        setAlertMessage("인증번호가 올바르지 않습니다. 다시 확인해주세요.");
-        return false;
-      }
+    const emailValidationError = validateEmail(profileData.email);
+    if (emailValidationError) {
+      setAlertMessage(emailValidationError);
+      return false;
     }
+
     return true;
   };
 
@@ -137,6 +123,9 @@ const MobileProfileSetting = ({
       }
       onNextStep(2);
     } else if (step === 2) {
+      const isValid = await validateCurrentStep();
+      if (!isValid) return;
+
       if (!profileData.email || profileData.email.trim() === "") {
         setAlertMessage("이메일을 입력해주세요.");
         return;
@@ -147,6 +136,7 @@ const MobileProfileSetting = ({
     } else if (step === 3) {
       const isValid = await validateCurrentStep();
       if (!isValid) return;
+
       await doSignup({ skipVerification: false });
     } else {
       onNextStep(step + 1);
@@ -208,10 +198,14 @@ const MobileProfileSetting = ({
 
       <div className="flex flex-col w-full gap-2">
         <LargeBtn
-          title={step === 3 ? `학교 인증하기 ${formatTime(timeLeft)}` : "다음"}
+          title={
+            step === 3
+              ? `학교 인증 후 회원가입 ${formatTime(timeLeft)}`
+              : "다음"
+          }
           onClick={handleNextStep}
         />
-        {(step === 2 || step === 3) && (
+        {step === 2 && (
           <button
             onClick={handleSkip}
             className="text-primary text-mobile_body2_sb py-2.5"
