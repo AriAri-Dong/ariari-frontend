@@ -11,7 +11,6 @@ import NotiPopUp from "../modal/notiPopUp";
 import Alert from "../alert/alert";
 import ReportModal from "../modal/reportModal";
 import ReportBottomSheet from "../bottomSheet/report/reportBottomSheet";
-import BottomSheet from "../pulldown/bottomSheet";
 import SingleSelectOptions from "../pulldown/singleSelectOptions";
 import CommentInput from "../comment/commentInput";
 import Comment from "../comment/comment";
@@ -30,7 +29,6 @@ import {
   getClubActivityDetail,
   toggleClubActivityLike,
 } from "@/api/club/activity/api";
-import { getProfileImage, profileImageMap } from "@/utils/mappingProfile";
 import { useClubContext } from "@/context/ClubContext";
 import CommonBottomSheet from "../bottomSheet/commonBottomSheet";
 

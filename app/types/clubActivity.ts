@@ -48,6 +48,7 @@ export interface ClubActivityComment {
   likes: number;
   myLike: boolean;
   isMine: boolean;
+  blocked: boolean;
   comments: ClubActivityComment[];
 }
 
@@ -133,6 +134,7 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
         likes: parent.likeCount,
         myLike: parent.myLiked,
         isMine: false,
+        blocked: parent.blocked,
         clubMember: {
           id: String(parent.creatorId),
           name: parent.creatorName || "(알수없음)",
@@ -150,6 +152,7 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
             likes: child.likeCount,
             myLike: child.myLiked,
             isMine: false,
+            blocked: child.blocked,
             clubMember: {
               id: String(child.creatorId),
               name: child.creatorName || "(알수없음)",
