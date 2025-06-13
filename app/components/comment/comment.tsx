@@ -8,7 +8,6 @@ import replyArrow from "@/images/icon/reply_arrow.svg";
 import CommentInput from "./commentInput";
 import { EDIT_ACTION_TYPE, REPORT_ACTION_TYPE } from "@/data/pulldown";
 import SingleSelectOptions from "../pulldown/singleSelectOptions";
-import BottomSheet from "../pulldown/bottomSheet";
 import ReportModal from "../modal/reportModal";
 import ReportBottomSheet from "../bottomSheet/report/reportBottomSheet";
 import Alert from "../alert/alert";
@@ -65,6 +64,8 @@ const Comment = (props: CommentBaseProps) => {
   const [confirmAction, setConfirmAction] = useState<null | "delete" | "block">(
     null
   );
+
+  const [blocked, setBlocked] = useState<boolean>(!!comment?.blocked);
 
   const [likes, setLikes] = useState<number>(
     !isReplying && comment ? comment.likes : 0
@@ -141,6 +142,10 @@ const Comment = (props: CommentBaseProps) => {
           commentId: comment.clubActivityCommentId,
         });
         setAlertMessage("해당 사용자가 차단되었습니다.");
+
+        setTimeout(() => {
+          props.onDeleteSuccess?.();
+        }, 1000);
       }
     } catch (error) {
       console.error("요청 실패:", error);
@@ -181,85 +186,92 @@ const Comment = (props: CommentBaseProps) => {
         </div>
       )}
       <div className="w-full">
-        <div className="flex justify-between items-start">
-          <div className="flex items-center gap-2.5 mb-3">
-            <div className="flex flex-row items-center gap-2.5">
-              <Image
-                src={getProfileImage(props.profileType)}
-                alt="프로필 이미지"
-                width={28}
-                height={28}
-                className="rounded-full object-cover w-9 h-9"
-              />
-              <div className="flex flex-col md:flex-row gap-[2px] md:gap-[18px] items-start md:items-center">
-                <span className="text-subtext2 text-mobile_body1_m md:text-body1_m">
-                  {isReplying ? props.nickname : comment?.clubMember.name}
-                </span>
-                <span className="flex gap-1.5 text-mobile_body4_r md:text-body4_r text-subtext2">
-                  <p>{date}</p>
-                  {!isReplying && <p>|</p>}
-                  {!isReplying && <p>{time}</p>}
-                </span>
-              </div>
-            </div>
+        {blocked ? (
+          <div className="px-4 py-2 bg-hover rounded-16 md:px-[18px] md:py-3.5 md:ml-[42px]">
+            <p className="text-subtext2 text-mobile_body2_r md:text-body1_r">
+              차단된 유저의 댓글입니다.
+            </p>
           </div>
-          {!isReplying && comment && (
-            <div className="flex gap-0.5 md:gap-2 items-center">
-              {/* 댓글에만 답글 버튼 표시 (대댓글에는 X) */}
-              {!isReply && (
-                <IconBtn
-                  type="reply"
-                  size="large"
-                  title={isMdUp ? "답글" : ""}
-                  onClick={() => setIsReplyFormOpen((prev) => !prev)}
-                />
-              )}
-
-              {/* 좋아요 버튼 (댓글/대댓글 모두 표시) */}
-              <IconBtn
-                type={myLike ? "like_active" : "like_inactive"}
-                size="large"
-                title={likes.toString()}
-                onClick={handleLike}
-              />
-
-              {/* 도트 메뉴 (댓글/대댓글 모두 표시) */}
-              <div ref={menuRef} className="relative inline-block">
-                <Image
-                  src={dotMenu}
-                  alt="menu"
-                  width={24}
-                  height={24}
-                  className="cursor-pointer"
-                  onClick={handleMenuClick}
-                />
-                {isOptionOpen && (
-                  <>
-                    {isMdUp ? (
-                      <SingleSelectOptions
-                        selectedOption=""
-                        optionData={menuOptions}
-                        size="small"
-                        position="end"
-                        handleMenuClick={handleOptionClick}
-                      />
-                    ) : (
-                      <CommonBottomSheet
-                        optionData={menuOptions}
-                        onClose={() => setIsOptionOpen(false)}
-                        handleMenuClick={handleOptionClick}
-                        selectedOption={""}
-                      />
-                    )}
-                  </>
-                )}
-
-                {/* {!isMdUp && !isReplying && comment && isOptionOpen && ( */}
+        ) : (
+          <>
+            <div className="flex justify-between items-start">
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="flex flex-row items-center gap-2.5">
+                  <Image
+                    src={getProfileImage(props.profileType)}
+                    alt="프로필 이미지"
+                    width={28}
+                    height={28}
+                    className="rounded-full object-cover w-9 h-9"
+                  />
+                  <div className="flex flex-col md:flex-row gap-[2px] md:gap-[18px] items-start md:items-center">
+                    <span className="text-subtext2 text-mobile_body1_m md:text-body1_m">
+                      {isReplying ? props.nickname : comment?.clubMember.name}
+                    </span>
+                    <span className="flex gap-1.5 text-mobile_body4_r md:text-body4_r text-subtext2">
+                      <p>{date}</p>
+                      {!isReplying && <p>|</p>}
+                      {!isReplying && <p>{time}</p>}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+              {!isReplying && comment && (
+                <div className="flex gap-0.5 md:gap-2 items-center">
+                  {/* 댓글에만 답글 버튼 표시 (대댓글에는 X) */}
+                  {!isReply && (
+                    <IconBtn
+                      type="reply"
+                      size="large"
+                      title={isMdUp ? "답글" : ""}
+                      onClick={() => setIsReplyFormOpen((prev) => !prev)}
+                    />
+                  )}
 
+                  {/* 좋아요 버튼 (댓글/대댓글 모두 표시) */}
+                  <IconBtn
+                    type={myLike ? "like_active" : "like_inactive"}
+                    size="large"
+                    title={likes.toString()}
+                    onClick={handleLike}
+                  />
+
+                  {/* 도트 메뉴 (댓글/대댓글 모두 표시) */}
+                  <div ref={menuRef} className="relative inline-block">
+                    <Image
+                      src={dotMenu}
+                      alt="menu"
+                      width={24}
+                      height={24}
+                      className="cursor-pointer"
+                      onClick={handleMenuClick}
+                    />
+                    {isOptionOpen && (
+                      <>
+                        {isMdUp ? (
+                          <SingleSelectOptions
+                            selectedOption=""
+                            optionData={menuOptions}
+                            size="small"
+                            position="end"
+                            handleMenuClick={handleOptionClick}
+                          />
+                        ) : (
+                          <CommonBottomSheet
+                            optionData={menuOptions}
+                            onClose={() => setIsOptionOpen(false)}
+                            handleMenuClick={handleOptionClick}
+                            selectedOption={""}
+                          />
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </>
+        )}
         {isEditing || isReplying ? (
           <CommentInput
             initialText={!isReplying && comment ? comment.body : ""}
@@ -308,6 +320,7 @@ const Comment = (props: CommentBaseProps) => {
         )}
 
         {!isReplying &&
+          !blocked &&
           comment?.comments?.length !== undefined &&
           (comment.comments.length > 0 || isReplyFormOpen) && (
             <div className="flex flex-col mt-[18px] md:mt-[22px] gap-[18px] md:gap-[22px] ml-6 md:ml-[42px]">

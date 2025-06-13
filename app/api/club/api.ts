@@ -7,6 +7,7 @@ import {
   CLUBS_INTERNAL_RANKING,
   CLUBS_MY,
   CLUBS_MY_ADMIN,
+  CLUBS_MY_ADMIN_INTERNAL,
   CLUBS_MY_BOOKMARKS,
   CLUBS_SEARCH,
 } from "../apiUrl";
@@ -274,20 +275,17 @@ export const getBookmarkClubsInfo = async (
 // 동아리 등록
 export const createClubWithFile = async (
   clubData: CreateClubData,
-  file: File
+  file?: File | null
 ) => {
   try {
     const formData = new FormData();
     formData.append("saveReq", JSON.stringify(clubData));
-    formData.append("file", file);
 
-    const response = await axiosInstance.post(CLUBS, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+    if (file) formData.append("file", file);
+
+    return axiosInstance.post(CLUBS, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
     });
-
-    return response.data;
   } catch (error) {
     console.error("Error creating club with file:", error);
     throw error;
@@ -366,6 +364,24 @@ export const getMyAdminClubs = async () => {
     throw new Error("문제가 발생했습니다.");
   }
 };
+
+// 내가 ADMIN인 교내 동아리 조회
+export const getMyAdminInteralClubs = async () => {
+  try {
+    const response = await axiosInstance.get<ClubResponse>(
+      CLUBS_MY_ADMIN_INTERNAL
+    );
+    return response.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      }
+    }
+    throw new Error("문제가 발생했습니다.");
+  }
+};
+
 // 동아리 폐쇄
 export const deleteClub = async (clubId: string) => {
   try {

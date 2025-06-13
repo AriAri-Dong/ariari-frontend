@@ -10,10 +10,7 @@ import Alert from "@/components/alert/alert";
 import { useProfileContext } from "@/context/profileConetxt";
 import { validateEmail } from "@/schema/email";
 import { formatTime } from "@/utils/timeFormatter";
-import {
-  sendSignupSchoolAuthEmail,
-  validateSchoolAuthCode,
-} from "@/api/school/api";
+import { sendSignupSchoolAuthEmail } from "@/api/school/api";
 import { useRouter } from "next/navigation";
 import { signUpWithKey } from "@/api/login/api";
 import { useAuthStore } from "@/stores/authStore";
@@ -51,22 +48,12 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
   };
 
   const validateCurrentStep = async () => {
-    if (step === 2) {
-      const emailValidationError = validateEmail(profileData.email);
-      if (emailValidationError) {
-        setAlertMessage(emailValidationError);
-        return false;
-      }
-    } else if (step === 3) {
-      try {
-        await validateSchoolAuthCode(profileData.verificationCode);
-        setVerificationFailed(false);
-      } catch (error) {
-        setVerificationFailed(true);
-        setAlertMessage("인증번호가 올바르지 않습니다. 다시 확인해주세요.");
-        return false;
-      }
+    const emailValidationError = validateEmail(profileData.email);
+    if (emailValidationError) {
+      setAlertMessage(emailValidationError);
+      return false;
     }
+
     return true;
   };
 
@@ -123,26 +110,20 @@ const ProfileSetting = ({ step, onNextStep }: ProfileSettingProps) => {
       }
       onNextStep(2);
     } else if (step === 2) {
+      const isValid = await validateCurrentStep();
+      if (!isValid) return;
+
       if (!profileData.email || profileData.email.trim() === "") {
         setAlertMessage("이메일을 입력해주세요.");
         return;
       }
 
-      const emailValidationError = validateEmail(profileData.email);
-      if (emailValidationError) {
-        setAlertMessage(emailValidationError);
-        return;
-      }
-
-      try {
-        await resetTimer();
-        onNextStep(3);
-      } catch (error) {
-        setAlertMessage("인증 메일 발송에 실패했습니다. 다시 시도해주세요.");
-      }
+      await resetTimer();
+      onNextStep(3);
     } else if (step === 3) {
       const isValid = await validateCurrentStep();
       if (!isValid) return;
+
       await doSignup({ skipVerification: false });
     } else {
       onNextStep(step + 1);
