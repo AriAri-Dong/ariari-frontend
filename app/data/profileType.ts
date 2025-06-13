@@ -13,4 +13,5 @@ export const PROFILE_TYPES: profileType[] = [
   "ARIARI_CHICKEN",
   "ARIARI_DOG",
   "ARIARI_PIG",
+  null,
 ];

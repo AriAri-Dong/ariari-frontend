@@ -9,7 +9,7 @@ import horse from "../images/profile/horse.svg";
 import sheep from "../images/profile/sheep.svg";
 import dog from "../images/profile/dog.svg";
 import dragon from "../images/profile/deer.svg";
-import snake from "../images/profile/turtle.svg";
+import snake from "../images/profile/snake.svg";
 
 export const profileImageMap: Record<string, string> = {
   ARIARI_MOUSE: mouse,
