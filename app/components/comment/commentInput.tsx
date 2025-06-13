@@ -39,7 +39,7 @@ const CommentInput = ({
         onChange={(e) => setComment(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={placeholder ?? "댓글을 입력해주세요."}
-        className="w-full py-1.5 bg-searchbar text-subtext1 placeholder:text-subtext2 text-mobile_body1_r md:py-1.5 md:text-body1_r focus:outline-none placeholder:text-subtext1"
+        className="w-full py-1.5 bg-searchbar text-subtext1 placeholder:text-subtext2 text-mobile_body1_r md:py-1.5 md:text-body1_r focus:outline-none"
       />
       <div className="flex items-center gap-4">
         {isMdUp && (
