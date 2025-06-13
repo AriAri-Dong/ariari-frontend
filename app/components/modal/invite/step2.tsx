@@ -12,7 +12,7 @@ interface Step2Props {
   errorMessage: string | null;
   setErrorMessage: (value: string | null) => void;
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (nickName: string) => void;
 }
 
 /**

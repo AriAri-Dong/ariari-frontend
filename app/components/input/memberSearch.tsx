@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { ClubMemberData, MemberData } from "@/types/member";
+import { ClubMemberData, MemberData, MemberSchoolData } from "@/types/member";
 import { entrustAdmin, getClubMembers, getMemberList } from "@/api/member/api";
 import noimage from "@/images/test/test.svg";
-import { profileImageMap } from "@/utils/mappingProfile";
+import { getProfileImage, profileImageMap } from "@/utils/mappingProfile";
 
 const CONTENT_SIZE = 10;
 
@@ -13,42 +13,22 @@ interface BaseMemberSearchProps {
   setNickname: (value: string) => void;
   setErrorMessage: (value: string | null) => void;
   placeholder?: string;
-  handleMemberClick?: (member: MemberData | ClubMemberData) => void;
+  handleMemberClick?: (member: MemberSchoolData) => void;
 }
 
-// TOTAL_MEMBER용
-interface TotalMemberSearchProps extends BaseMemberSearchProps {
-  type: "TOTAL_MEMBER";
-}
-
-// CLUB_MEMBER용
-interface ClubMemberSearchProps extends BaseMemberSearchProps {
-  type: "CLUB_MEMBER";
-  clubId: string;
-}
-
-const MemberSearch = (
-  props: TotalMemberSearchProps | ClubMemberSearchProps
-) => {
+const MemberSearch = ({
+  nickname,
+  setNickname,
+  setErrorMessage,
+  placeholder,
+  handleMemberClick,
+}: BaseMemberSearchProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [members, setMembers] = useState<(MemberData | ClubMemberData)[]>([]);
+  const [members, setMembers] = useState<MemberSchoolData[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-
-  const {
-    nickname,
-    setNickname,
-    setErrorMessage,
-    placeholder,
-    type,
-    handleMemberClick,
-  } = props;
-
-  const isClubMemberData = (
-    member: MemberData | ClubMemberData
-  ): member is ClubMemberData => "clubMemberRoleType" in member;
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
@@ -59,37 +39,21 @@ const MemberSearch = (
     }
 
     setLoading(true);
-    // 동아리 회원 검색
-    if (type === "CLUB_MEMBER") {
-      getClubMembers(props.clubId, undefined, searchTerm, page, CONTENT_SIZE)
-        .then((res) => {
-          if (res) {
-            const newMembers = res.clubMemberDataList;
-            setMembers((prev) =>
-              page === 0 ? newMembers : [...prev, ...newMembers]
-            );
-            setHasMore(newMembers.length === CONTENT_SIZE);
-            console.log(newMembers.length === CONTENT_SIZE);
-          }
-        })
-        .finally(() => setLoading(false));
-      // 통합 회원검색
-    } else if (type === "TOTAL_MEMBER") {
-      getMemberList(searchTerm, page, CONTENT_SIZE)
-        .then((response) => {
-          const newMembers = response!.memberDataList;
-          setMembers((prev) =>
-            page === 0 ? newMembers : [...prev, ...newMembers]
-          );
-          setHasMore(newMembers.length === CONTENT_SIZE);
-        })
-        .catch(() => {
-          setMembers([]);
-          setHasMore(false);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [props, searchTerm, page, type]);
+
+    getMemberList(searchTerm, page, CONTENT_SIZE)
+      .then((response) => {
+        const newMembers = response!.memberDataList;
+        setMembers((prev) =>
+          page === 0 ? newMembers : [...prev, ...newMembers]
+        );
+        setHasMore(newMembers.length === CONTENT_SIZE);
+      })
+      .catch(() => {
+        setMembers([]);
+        setHasMore(false);
+      })
+      .finally(() => setLoading(false));
+  }, [searchTerm, page]);
 
   // 멤버 목록 무한 스크롤
   useEffect(() => {
@@ -156,12 +120,8 @@ const MemberSearch = (
             <p className="p-3 text-center">Loading...</p>
           ) : members.length > 0 ? (
             members.map((member, idx) => {
-              const name = isClubMemberData(member)
-                ? member.name
-                : member.nickname;
-              const profileImg = isClubMemberData(member)
-                ? member.memberData.profileType
-                : member.profileType;
+              const name = member.nickname;
+              const profileImg = member.profileType;
               return (
                 <div
                   key={idx}
@@ -175,7 +135,7 @@ const MemberSearch = (
                   }}
                 >
                   <Image
-                    src={profileImg ? profileImageMap[profileImg] : noimage}
+                    src={getProfileImage(profileImg)}
                     alt={"profile_img"}
                     width={40}
                     height={40}

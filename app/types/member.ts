@@ -38,5 +38,15 @@ export interface ClubMemberListRes {
 }
 
 export interface MemberListRes {
-  memberDataList: MemberData[];
+  memberDataList: MemberSchoolData[];
+}
+export interface MemberSchoolData {
+  memberId: string;
+  nickname: string;
+  profileType?: profileType;
+  schoolName: string;
+}
+export interface InviteMemberReq {
+  memberId: string;
+  clubId: string;
 }
