@@ -11,6 +11,7 @@ import SingleDateCalendar from "@/components/calendar/singleDateCalendar";
 import close from "@/images/icon/close.svg";
 import { useSearchParams } from "next/navigation";
 import { ClubEventSaveReq } from "@/types/clubEvent";
+import { formatKSTTime } from "@/utils/formatKSTTime";
 
 export interface ClubEventModalProps {
   onClose: () => void;
@@ -77,7 +78,10 @@ const ClubEventModal = ({
       title: title,
       body: body,
       location: location,
-      eventDateTime: date.toISOString(),
+      eventDateTime: formatKSTTime(
+        date.toISOString(),
+        "YYYY-MM-DDT00:00:00.000"
+      ),
     };
 
     addClubEvent({ clubId, data: payload });
