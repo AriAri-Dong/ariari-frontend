@@ -192,6 +192,7 @@ const MainSection = () => {
 
     try {
       let fileToSend: File | null = null;
+
       if (uploadedImage) {
         const base64Image = uploadedImage.split(",")[1];
         const byteArray = new Uint8Array(
@@ -202,8 +203,6 @@ const MainSection = () => {
         fileToSend = new File([byteArray], "club_image", {
           type: "image/jpeg",
         });
-      } else {
-        fileToSend = new File([], "");
       }
 
       await createClubWithFile(clubData, fileToSend);
