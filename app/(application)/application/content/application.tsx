@@ -22,11 +22,11 @@ import { useUserStore } from "@/stores/userStore";
 const ITEMS_PER_PAGE = 10;
 
 export const metadata: Metadata = {
-  title: "내 지원 내역 | 지원 현황을 확인하세요",
+  title: "동아리 지원 | 아리아리",
   description:
     "지원한 동아리 목록과 합격 여부, 진행 상황을 확인할 수 있는 공간입니다.",
   openGraph: {
-    title: "내 지원 내역 | 지원 현황을 확인하세요",
+    title: "동아리 지원 | 아리아리",
     description:
       "지원한 동아리 목록과 합격 여부, 진행 상황을 확인할 수 있는 공간입니다.",
     url: "https://ariari.com/application",

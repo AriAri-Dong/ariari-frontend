@@ -2,11 +2,11 @@ import { Metadata } from "next";
 import MainSection from "./content/mainSection";
 
 export const metadata: Metadata = {
-  title: "동아리 목록 탐색 | 관심 있는 동아리를 찾아보세요",
+  title: "동아리 탐색 | 아리아리",
   description:
     "다양한 분야와 성격의 동아리를 탐색하고 원하는 동아리를 쉽게 찾을 수 있습니다.",
   openGraph: {
-    title: "동아리 목록 탐색 | 관심 있는 동아리를 찾아보세요",
+    title: "동아리 탐색 | 아리아리",
     description:
       "다양한 분야와 성격의 동아리를 탐색하고 원하는 동아리를 쉽게 찾을 수 있습니다.",
     url: "https://ariari.com/exploration",
