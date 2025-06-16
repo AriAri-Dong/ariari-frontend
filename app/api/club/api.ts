@@ -276,7 +276,7 @@ export const getBookmarkClubsInfo = async (
 // 동아리 등록
 export const createClubWithFile = async (
   clubData: CreateClubData,
-  file?: File | null
+  file: File | null
 ) => {
   try {
     const formData = new FormData();
