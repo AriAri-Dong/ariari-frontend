@@ -10,7 +10,7 @@ import { RecruitmentData } from "@/types/recruitment";
 type RecruitmentMutationProps = {
   clubId: string;
   onSuccess?: () => void;
-  onError?: () => void;
+  onError?: (error: Error) => void;
 };
 export const usePostRecruitmentMutation = ({
   clubId,
@@ -33,7 +33,7 @@ export const usePostRecruitmentMutation = ({
     },
     onError: (error: Error) => {
       console.error("모집 등록 실패:", error);
-      onError?.();
+      onError?.(error);
     },
   });
 };
@@ -57,7 +57,7 @@ export const useDeleteRecruitmentMutation = ({
     },
     onError: (error) => {
       console.error("모집 삭제 실패:", error);
-      onError?.();
+      onError?.(error);
     },
   });
 };
@@ -84,7 +84,7 @@ export const useEndRecruitmentMutation = ({
     },
     onError: (error) => {
       console.error("모집 마감 실패:", error);
-      onError?.();
+      onError?.(error);
     },
   });
 };

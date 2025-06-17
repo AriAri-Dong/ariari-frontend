@@ -67,7 +67,7 @@ const RecruitmentGuideForm = ({
             }
           />
           <h2 className="text-mobile_h2 mt-4 mb-3.5">
-            아리아리 동아리 운영원칙 제 4조
+            아리아리 동아리 운영원칙
             <br />
             :모집관련 조항
           </h2>
@@ -91,7 +91,7 @@ const RecruitmentGuideForm = ({
         <h4 className="mb-8 text-h4_r text-subtext1 text-center">
           모집공고 작성을 원하신다면
           <br />
-          아리아리 운영원칙 제 4조 : 모집관련 조항에 동의해주세요.
+          아리아리 운영원칙: 모집관련 조항에 동의해주세요.
         </h4>
         <div className="h-[260px] bg-searchbar rounded-12 p-5 pr-2.5 mb-8">
           <RecruitmentGuideBox />
