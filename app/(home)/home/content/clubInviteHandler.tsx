@@ -91,8 +91,16 @@ export default function ClubInviteHandler() {
   };
 
   const handleClose = () => {
-    if (data) {
-      router.replace(pathname, { scroll: false });
+    if (inviteCode || inviteAlarmCode) {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // inviteCode와 inviteAlarmCode 파라미터 제거
+      if (inviteCode) urlParams.delete("inviteCode");
+      if (inviteAlarmCode) urlParams.delete("inviteAlarmCode");
+
+      router.replace(`${pathname}?${urlParams.toString()}`, {
+        scroll: false,
+      });
     }
     setShowModal(false);
   };

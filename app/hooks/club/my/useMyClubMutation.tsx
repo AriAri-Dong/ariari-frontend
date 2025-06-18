@@ -20,6 +20,11 @@ type MyClubMutationProps = {
   onSuccess?: (data: string) => void;
   onError?: (error: Error) => void;
 };
+type MutationCallbacks = {
+  onSuccess?: () => void;
+  onError?: () => void;
+};
+
 // 동아리 가입 - 링크
 export const useEnterClubMutation = ({
   onSuccess,
@@ -63,31 +68,41 @@ export const useEnterClubAlarmMutation = ({
   });
 };
 // 동아리 탈퇴
-export const useWithdrawClubMutation = () => {
+export const useWithdrawClubMutation = ({
+  onSuccess,
+  onError,
+}: MutationCallbacks) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: withdrawalClub,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.myClubList] });
+      onSuccess?.();
     },
     onError: (error: Error) => {
       console.error("동아리 탈퇴 실패:", error);
+      onError?.();
       throw error;
     },
   });
 };
 // 동아리 폐쇄
-export const useDeleteClubMutation = () => {
+export const useDeleteClubMutation = ({
+  onSuccess,
+  onError,
+}: MutationCallbacks) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: deleteClub,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.myClubList] });
+      onSuccess?.();
     },
     onError: (error: Error) => {
       console.error("동아리 폐쇄 실패:", error);
+      onError?.();
       throw error;
     },
   });

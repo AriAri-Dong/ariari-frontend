@@ -1,6 +1,6 @@
 import PullDown from "@/components/pulldown/pullDown";
 import SubTap from "@/components/tab/subTap";
-import ClubRankingCard from "@/components/card/clubRankingCard";
+import ClubRackingCard from "@/components/card/clubRankingCard";
 import ClubRankingList from "@/components/card/clubRankingList";
 
 import { AFFILIATION_TYPE, FIELD_TYPE } from "@/data/pulldown";
@@ -133,7 +133,11 @@ const ClubRanking = () => {
       )}
 
       <div>
-        <ClubRankingCard clubs={data.slice(0, isDesktop ? 3 : isTab ? 2 : 1)} />
+        <div className="grid grid-cols-1 mt-5 mb-[18px] md:grid-cols-2 md:gap-[18px] lg:grid-cols-3 lg:gap-4 lg:mb-[32px]">
+          {data.slice(0, isDesktop ? 3 : isTab ? 2 : 1).map((club, index) => (
+            <ClubRackingCard club={club} rank={index + 1} key={club.id} />
+          ))}
+        </div>
         <ClubRankingList
           clubs={data.slice(
             isDesktop ? 3 : isTab ? 2 : 1,

@@ -29,25 +29,13 @@ const ClubRecruitmentContent = () => {
 
   const { data: recruitmentData } = useClubRecruitmentQuery(clubId);
 
-  const [isRecruitingModalOpen, setIsRecruitingModalOpen] =
-    useState<boolean>(false);
   const [isRecruitementGuideOpen, setIsRecruitmentGuideOpen] =
     useState<boolean>(false);
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const hasActivatedRecruitment = (recruitmentData: RecruitmentData[]) => {
-    return recruitmentData.some(
-      (item) => item.recruitmentStatusType === "OPEN"
-    );
-  };
-
   const handleWrite = () => {
-    if (recruitmentData && hasActivatedRecruitment(recruitmentData)) {
-      setIsRecruitingModalOpen(true);
-    } else {
-      setIsRecruitmentGuideOpen(true);
-    }
+    setIsRecruitmentGuideOpen(true);
   };
 
   return (
@@ -114,16 +102,7 @@ const ClubRecruitmentContent = () => {
           <WriteBtn onClick={handleWrite} />
         </div>
       )}
-      {/* 작성 불가 모달 - 모집중인 공고 O */}
-      {isRecruitingModalOpen && (
-        <NotiPopUp
-          modalType="x-button"
-          icon="not"
-          title="모집중인 공고가 있어요"
-          description={`모집중인 공고가 있을때는\n새로운 모집공고를 작성할 수 없어요.`}
-          onClose={() => setIsRecruitingModalOpen(false)}
-        />
-      )}
+
       {/* 모집안내 가이드 */}
       {isRecruitementGuideOpen && (
         <RecruitmentGuideForm
