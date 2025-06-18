@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import test_image from "@/images/test/test_image.jpg";
+import defaultImg from "@/images/icon/defaultAriari.svg";
+import defaultImgBg from "@/images/defaultAriariBg.svg";
 import Keyword from "@/components/button/keyword";
 import { MdFavorite } from "react-icons/md";
 import RecruitmentBottomBar from "@/components/bar/floatingBar/recruitmentBottomBar";
@@ -112,7 +113,7 @@ const ClubInfo = ({
       <div className="flex flex-col mt-2 sm_md:flex-row sm_md:gap-[27px] md:pb-10 md:pt-8 md:flex-row md:gap-14 w-full max-w-screen-sm sm:max-w-screen-md md:max-w-screen-lg lg:max-w-screen-lx px-4 md:px-5">
         <div className="w-full max-w-[792px]">
           <Image
-            src={recruitmentData.posterUri || test_image}
+            src={recruitmentData.posterUri || defaultImgBg}
             alt={"main_image"}
             width={792}
             height={792}
@@ -144,7 +145,7 @@ const ClubInfo = ({
                     onClick={handleClubClick}
                   >
                     <Image
-                      src={clubData.profileUri || test_image}
+                      src={clubData.profileUri || defaultImgBg}
                       alt={"club_image"}
                       width={68}
                       height={68}
@@ -182,7 +183,7 @@ const ClubInfo = ({
               <div className="flex items-center md:gap-5">
                 <div className="relative w-[60px] h-[60px]">
                   <Image
-                    src={clubData.profileUri || test_image}
+                    src={clubData.profileUri || defaultImg}
                     alt={"club_image"}
                     width={60}
                     height={60}

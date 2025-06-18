@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import backVector from "@/images/icon/backVector.svg";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import NotificationList from "@/components/list/notificationList";
 import WhiteButton from "@/components/button/basicBtn/whiteBtn";
 import {
@@ -22,6 +22,7 @@ interface ModalProps {
  * @returns
  */
 const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
+  const pathname = usePathname();
   const router = useRouter();
   const params = useSearchParams();
   const clubId = params.get("clubId") || "";
@@ -68,7 +69,24 @@ const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
         onSettled: () => {
           onclose();
           if (uri) {
-            router.push(uri);
+            const cleanUri = uri.split("|")[0].trim();
+            // 동아리 초대인 경우 예외
+            if (cleanUri.startsWith("/club/invite")) {
+              const queryString = uri.split("?")[1];
+              if (queryString) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const newParams = new URLSearchParams(queryString);
+
+                // 기존 쿼리 문자열에 추가
+                newParams.forEach((value, key) => {
+                  urlParams.set(key, value);
+                });
+
+                router.push(`${pathname}?${urlParams.toString()}`);
+              }
+            } else {
+              router.push(uri);
+            }
           }
         },
       }

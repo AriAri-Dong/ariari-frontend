@@ -508,7 +508,7 @@ export const CLUB_LEFT_MENU_ADMIN = [
   },
   {
     id: 9,
-    label: "동아리 폐쇠",
+    label: "동아리 폐쇄",
     icon: "close_club",
     url: "/club/management/close",
     subUrl: [],

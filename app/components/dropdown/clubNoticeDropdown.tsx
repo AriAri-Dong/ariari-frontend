@@ -321,7 +321,7 @@ const ClubNoticeDropdown = ({
                   }
                   alt={`notice-image-${currentImageIndex + 1}`}
                   layout="fill"
-                  objectFit="cover"
+                  objectFit="contain"
                   className="absolute top-0 left-0 w-full h-full rounded-lg"
                 />
               </div>
