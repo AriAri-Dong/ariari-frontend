@@ -56,7 +56,15 @@ const NotificationModal = ({ children }: TooltipProps) => {
             if (cleanUri.startsWith("/club/invite")) {
               const queryString = uri.split("?")[1];
               if (queryString) {
-                router.push(`${pathname}?${queryString}`);
+                const urlParams = new URLSearchParams(window.location.search);
+                const newParams = new URLSearchParams(queryString);
+
+                // 기존 쿼리 문자열에 추가
+                newParams.forEach((value, key) => {
+                  urlParams.set(key, value);
+                });
+
+                router.push(`${pathname}?${urlParams.toString()}`);
               }
             } else {
               router.push(uri);
