@@ -34,8 +34,28 @@ const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
   const params = useSearchParams();
   const clubId = params.get("clubId") ?? "";
   const { role, clubInfo } = useClubContext();
-  const { mutate: withdrawClub } = useWithdrawClubMutation();
-  const { mutate: deleteClub } = useDeleteClubMutation();
+  const { mutate: withdrawClub } = useWithdrawClubMutation({
+    onError: () => {
+      setAlertMessage("문제가 발생했습니다.<br />잠시 후 다시 시도해주세요.");
+    },
+    onSuccess: () => {
+      setShowSuccessModal(true);
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    },
+  });
+  const { mutate: deleteClub } = useDeleteClubMutation({
+    onError: () => {
+      setAlertMessage("문제가 발생했습니다.<br />잠시 후 다시 시도해주세요.");
+    },
+    onSuccess: () => {
+      setShowSuccessModal(true);
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    },
+  });
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
@@ -77,27 +97,18 @@ const ClubWithdrawalCard = ({ isWithdrawal }: ClubWithdrawalCardProps) => {
 
   // 모달에서 탈퇴하기 버튼 클릭
   const handleWithdrawal = () => {
-    try {
-      setShowConfirmModal(false);
-      if (isWithdrawal) {
-        // 탈퇴하기
-        if (clubInfo?.clubMemberData.id) {
-          withdrawClub(clubInfo?.clubMemberData.id);
-        }
-      } else {
-        // 폐쇄하기
-        deleteClub(clubId);
+    setShowConfirmModal(false);
+    if (isWithdrawal) {
+      // 탈퇴하기
+      if (clubInfo?.clubMemberData.id) {
+        withdrawClub(clubInfo?.clubMemberData.id);
       }
-    } catch (error) {
-      setAlertMessage("문제가 발생했습니다.<br />잠시 후 다시 시도해주세요.");
-    } finally {
-      setShowSuccessModal(true);
-      // 3초 뒤 메인 페이지로 이동
-      setTimeout(() => {
-        router.push("/");
-      }, 3000);
+    } else {
+      // 폐쇄하기
+      deleteClub(clubId);
     }
   };
+
   useEffect(() => {
     getClubMembers(clubId).then((data) => {
       setClubLimits(data?.pageInfo.totalSize || 0);

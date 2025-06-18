@@ -16,7 +16,7 @@ const EndBtn = ({ onClick, className }: ButtonProps) => {
         alt={"end"}
         width={16}
         height={16}
-        className="md:w-5 md:h-5"
+        className="md:w-6 md:h-6"
       />
     </button>
   );

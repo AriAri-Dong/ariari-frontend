@@ -62,7 +62,6 @@ const CreateSection = () => {
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isNoticeModalOpen, setIsNoticeModalOpen] = useState<boolean>(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
 
   const { mutate: postRecruitment } = usePostRecruitmentMutation({
@@ -71,8 +70,8 @@ const CreateSection = () => {
       setAlertMessage("정상 등록되었습니다.");
       router.replace(`/club/recruitment?clubId=${clubId}`);
     },
-    onError: () => {
-      setAlertMessage("문제가 발생했습니다.");
+    onError: (error) => {
+      setAlertMessage(error.message);
     },
   });
 
@@ -96,20 +95,6 @@ const CreateSection = () => {
     updatedQuestions[index][field] = value;
     setItems(updatedQuestions);
   };
-
-  // 날짜 겹치는 모집공고 확인
-  const isOverlapping = (
-    recruitment: RecruitmentData,
-    [newStartDate, newEndDate]: [Date | null, Date | null]
-  ): boolean => {
-    if (!newStartDate || !newEndDate) return false;
-    const startDate = new Date(recruitment.startDateTime);
-    const endDate = new Date(recruitment.endDateTime);
-    return newStartDate <= endDate && newEndDate >= startDate;
-  };
-  const overlappingRecruitments = previousRecruitmentList.filter(
-    (recruitment) => isOverlapping(recruitment, date)
-  );
 
   // 이미지 url 파일로 변환
   const fetchImageAsFile = async (url: string) => {
@@ -170,15 +155,10 @@ const CreateSection = () => {
 
     if (!title.trim()) {
       setAlertMessage("제목을 입력해주세요");
-    } else if (!imageFile) {
-      setAlertMessage("이미지를 추가해주세요");
     } else if (!date[0] || !date[1]) {
       setAlertMessage("모집 기간를 설정해주세요");
     } else if (date[1] && date[1] < new Date()) {
       setAlertMessage("모집 마감일은 현재 날짜 이후여야 합니다.");
-    } else if (overlappingRecruitments.length > 0) {
-      // 이전 모집공고와 겹치는 날짜 확인
-      setIsNoticeModalOpen(true);
     } else if (limits === null || limits <= 0) {
       setAlertMessage("모집 인원을 1명 이상 입력해주세요");
     } else if (!body.trim()) {
@@ -197,7 +177,9 @@ const CreateSection = () => {
     if (selectedRecruitment) {
       setTitle(selectedRecruitment.title);
       setImageUrl(selectedRecruitment.posterUri);
-      fetchImageAsFile(selectedRecruitment.posterUri);
+      if (selectedRecruitment.posterUri) {
+        fetchImageAsFile(selectedRecruitment.posterUri);
+      }
       setProcedureType(selectedRecruitment.procedureType);
       setLimits(selectedRecruitment.limits);
       setBody(selectedRecruitment.body);
@@ -267,7 +249,6 @@ const CreateSection = () => {
         <div>
           <h3 className="flex mb-[14px] text-mobile_h3 md:mb-2.5 md:text-h3">
             모집공고 이미지
-            <span className="pl-1 text-noti text-mobile_body3_m ">*</span>
           </h3>
           {isMdUp && (
             <p className="md:mb-[18px] text-subtext2 md:text-body1_r">
@@ -470,17 +451,6 @@ const CreateSection = () => {
             setIsPreviewOpen(false);
           }}
           onSubmit={checkValidity}
-        />
-      )}
-      {isNoticeModalOpen && (
-        <NotiPopUp
-          onClose={() => setIsNoticeModalOpen(false)}
-          title="모집 기간을 변경해 주세요."
-          description={
-            "새 모집 공고는 이전 공고 기간과\n겹치지 않도록 설정해주세요."
-          }
-          icon="warning"
-          modalType="x-button"
         />
       )}
     </section>

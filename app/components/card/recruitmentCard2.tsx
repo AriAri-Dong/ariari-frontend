@@ -3,7 +3,7 @@
 import Image from "next/image";
 import RadioBtn from "../button/radioBtn";
 import formatDateToDot from "@/utils/formatDateToDot";
-import noimage from "@/images/test/test.svg";
+import defaultImgBg from "@/images/defaultAriariBg.svg";
 
 interface RecruitmentCard2Props {
   title: string;
@@ -44,7 +44,7 @@ const RecruitmentCard2 = ({
     >
       <RadioBtn isChecked={isSelected} label={""} onClick={onClick} />
       <Image
-        src={image || noimage}
+        src={image || defaultImgBg}
         alt={"recruitment_img"}
         width={80}
         height={80}
