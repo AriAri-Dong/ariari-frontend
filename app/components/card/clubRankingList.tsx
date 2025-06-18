@@ -36,7 +36,7 @@ const ClubRankingList = ({ clubs }: ClubRankingListProps) => {
                   alt={club.name}
                   width={56}
                   height={56}
-                  className="md:w-[98px] md:h-[98px] rounded-full object-cover"
+                  className="md:w-[98px] md:h-[98px] rounded-full object-cover aspect-[1/1]"
                 />
 
                 <div className="text-base font-semibold md:text-2xl">
