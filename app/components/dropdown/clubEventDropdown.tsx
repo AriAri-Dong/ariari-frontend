@@ -177,31 +177,31 @@ const ClubEventDropdown = ({
                 </p>
               </div>
               <div className="flex gap-4 items-center">
-                {isMdUp && (
-                  <TransparentSmallBtn
-                    title="출석 관리"
-                    onClick={() => {
-                      setAttendanceModalOpen(true);
-                    }}
-                    round={true}
-                  />
-                )}
                 {(role === "ADMIN" || role === "MANAGER") && (
                   <>
                     {isMdUp && (
-                      <div ref={menuRef} className="relative inline-block">
-                        <Image
-                          src={dotMenu}
-                          alt="menu"
-                          width={24}
-                          height={24}
-                          className="cursor-pointer"
-                          onClick={handleMenuClick}
+                      <>
+                        <TransparentSmallBtn
+                          title="출석 관리"
+                          onClick={() => {
+                            setAttendanceModalOpen(true);
+                          }}
+                          round={true}
                         />
-                        {isOpenOption && (
-                          <DotMenuDropDown onClick={handleOptionClick} />
-                        )}
-                      </div>
+                        <div ref={menuRef} className="relative inline-block">
+                          <Image
+                            src={dotMenu}
+                            alt="menu"
+                            width={24}
+                            height={24}
+                            className="cursor-pointer"
+                            onClick={handleMenuClick}
+                          />
+                          {isOpenOption && (
+                            <DotMenuDropDown onClick={handleOptionClick} />
+                          )}
+                        </div>
+                      </>
                     )}
                   </>
                 )}
@@ -261,7 +261,7 @@ const ClubEventDropdown = ({
               ))}
             </div>
           </div>
-          {!isMdUp && (
+          {!isMdUp && (role === "ADMIN" || role === "MANAGER") && (
             <TransparentLargeBtn
               title="출석 관리"
               onClick={() => {
