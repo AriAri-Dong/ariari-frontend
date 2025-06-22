@@ -90,11 +90,13 @@ const MobileMenu = () => {
     <>
       <div className="flex flex-col">
         <div className="flex mb-4 mt-6 md:mt-0 lg:hidden">
-          <div className="w-10 h-10">
-            <NotificationRoundBtn
-              onClick={() => setIsOpenNotification((prev) => !prev)}
-            />
-          </div>
+          {(role === "ADMIN" || role === "MANAGER") && (
+            <div className="w-10 h-10">
+              <NotificationRoundBtn
+                onClick={() => setIsOpenNotification((prev) => !prev)}
+              />
+            </div>
+          )}
           <div className="flex overflow-x-auto no-scrollbar ml-2 relative">
             <div className="flex whitespace-nowrap">
               <SubTap
