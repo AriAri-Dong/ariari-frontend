@@ -18,7 +18,10 @@ import LeftMenu from "@/(club)/club/components/menu/leftMenu";
 import ApplicationFormPeviewBottomSheet from "@/components/bottomSheet/preview/applicationPreviewBottomSheet";
 import MobileMenu from "@/(club)/club/components/menu/mobileMenu";
 import { ApplicationKeys, ApplyQuestionData } from "@/types/application";
-import { APPLICATION_DISPLAY_INFO } from "@/data/application";
+import {
+  APPLICATION_DISPLAY_INFO,
+  APPLICATION_FIELD_ORDER,
+} from "@/data/application";
 import { useClubApplyFormQuery } from "@/hooks/club/applyForm/useClubApplyFormQuery";
 import { useClubApplyFormMutation } from "@/hooks/club/applyForm/useClubApplyFormMutation";
 import { useSearchParams } from "next/navigation";
@@ -31,13 +34,16 @@ const MainSection = () => {
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [name, setName] = useState<string>("");
   const [nameError, setNameError] = useState<string | null>(null);
-  const [selectedBadges, setSelectedBadges] = useState<ApplicationKeys[]>([]);
+  const [selectedBadges, setSelectedBadges] = useState<
+    Record<ApplicationKeys, boolean>
+  >({} as Record<ApplicationKeys, boolean>);
   const [documentQuestions, setDocumentQuestions] = useState<
     ApplyQuestionData[]
   >([]);
   const [isPortfolioCollected, setIsPortfolioCollected] =
     useState<boolean>(true);
   const [openPreview, setOpenPreview] = useState<boolean>(false);
+
   const { specialQuestions, applyQuestionDataList, isLoading, portfolio } =
     useClubApplyFormQuery(clubId);
   const { updateApplicationForm } = useClubApplyFormMutation({
@@ -58,12 +64,11 @@ const MainSection = () => {
     }
   };
 
-  const handleBadgeClick = (text: ApplicationKeys) => {
-    setSelectedBadges((prev) =>
-      prev.includes(text)
-        ? prev.filter((item) => item !== text)
-        : [...prev, text]
-    );
+  const handleBadgeClick = (key: ApplicationKeys) => {
+    setSelectedBadges((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
   };
 
   const addDocumentQuestion = () => {
@@ -97,11 +102,14 @@ const MainSection = () => {
     setOpenPreview(true);
   };
   const handleSubmitForm = () => {
+    const selectedKeys = APPLICATION_FIELD_ORDER.filter(
+      (key) => selectedBadges[key]
+    );
     updateApplicationForm.mutate({
       data: {
         requiresPortfolio: isPortfolioCollected,
         applyQuestionList: [
-          ...selectedBadges,
+          ...selectedKeys,
           ...documentQuestions.map((item) => item.body),
         ],
       },
@@ -115,11 +123,17 @@ const MainSection = () => {
       setDocumentQuestions(applyQuestionDataList);
     }
     if (specialQuestions) {
-      const filteredBadges = Object.entries(specialQuestions)
-        .filter(([_, val]) => val !== null)
-        .map(([key]) => key) as ApplicationKeys[];
-      setSelectedBadges(filteredBadges);
+      const initialState: Record<ApplicationKeys, boolean> = {} as Record<
+        ApplicationKeys,
+        boolean
+      >;
+      for (const key in specialQuestions) {
+        initialState[key as ApplicationKeys] =
+          specialQuestions[key as ApplicationKeys] !== null;
+      }
+      setSelectedBadges(initialState);
     }
+
     if (typeof portfolio === "boolean") {
       setIsPortfolioCollected(portfolio);
     }
@@ -163,7 +177,7 @@ const MainSection = () => {
                   onClick={() => {
                     setName("");
                     setNameError(null);
-                    setSelectedBadges([]);
+                    setSelectedBadges({} as Record<ApplicationKeys, boolean>);
                     setDocumentQuestions([{ id: "", body: "" }]);
                   }}
                 />
@@ -174,7 +188,7 @@ const MainSection = () => {
                   <ToggleBadge
                     key={item.key}
                     text={item.name}
-                    isSelected={selectedBadges.includes(item.key)}
+                    isSelected={selectedBadges[item.key] ?? false}
                     onClick={() => handleBadgeClick(item.key)}
                   />
                 ))}
@@ -267,7 +281,9 @@ const MainSection = () => {
               <ApplicationFromPreviewModal
                 onClose={() => setOpenPreview(false)}
                 portfolioCollected={isPortfolioCollected}
-                selectedFields={selectedBadges}
+                selectedFields={APPLICATION_FIELD_ORDER.filter(
+                  (key) => selectedBadges[key]
+                )}
                 documentQuestions={documentQuestions}
               />
             )
@@ -275,7 +291,9 @@ const MainSection = () => {
               <ApplicationFormPeviewBottomSheet
                 onClose={() => setOpenPreview(false)}
                 portfolioCollected={isPortfolioCollected}
-                selectedFields={selectedBadges}
+                selectedFields={APPLICATION_FIELD_ORDER.filter(
+                  (key) => selectedBadges[key]
+                )}
                 documentQuestions={documentQuestions}
               />
             )}
