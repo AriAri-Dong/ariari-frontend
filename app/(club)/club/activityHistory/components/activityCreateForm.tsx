@@ -59,6 +59,7 @@ const ActivityCreateForm = ({
       setUploadedImages((prev) => prev.filter((_, i) => i !== index));
     }
   };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files) return;
@@ -98,19 +99,19 @@ const ActivityCreateForm = ({
       return false;
     }
 
+    const deletedImageIds =
+      initialData?.existingImages
+        .filter((img) => !existingImages.find((e) => e.id === img.id))
+        .map((img) => img.id) ?? [];
+
     try {
       if (mode === "edit" && initialData) {
-        const deletedImageIds =
-          initialData.existingImages
-            .filter((img) => !existingImages.find((e) => e.id === img.id))
-            .map((img) => img.id) ?? [];
-
         await updateClubActivity({
           clubActivityId: initialData.clubActivityId,
           accessType,
           body: detail,
           newImages: uploadedImages,
-          deletedImageIds: deletedImageIds?.length ? deletedImageIds : [],
+          deletedImageIds,
         });
       } else {
         await createClubActivity({
@@ -152,9 +153,6 @@ const ActivityCreateForm = ({
     <div
       id="background"
       className="fixed inset-0 z-50 flex items-end justify-center bg-black bg-opacity-50 backdrop-blur-sm"
-      // onClick={(e) =>
-      //   (e.target as HTMLDivElement).id === "background" && onClose()
-      // }
       style={{ zIndex: 1000 }}
     >
       <div
