@@ -97,7 +97,7 @@ const MainSection = () => {
                   //     : clubInfo?.clubMemberData.memberData.nickname || ""
                   // }
                   // nickname={"동아리 대표"}
-                  nickname={clubInfo?.clubMemberData.name || ""}
+                  nickname={clubInfo?.clubMemberData?.name || "동아리 대표"}
                 />
               ))}
             </div>
