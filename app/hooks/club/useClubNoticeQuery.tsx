@@ -12,6 +12,7 @@ export const useClubPinnedNoticeQuery = (clubId: string) => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["club", clubId, "notices", "fixed"],
     queryFn: () => getClubFixedNoticeList(clubId),
+    staleTime: 0,
   });
 
   return {
