@@ -331,3 +331,7 @@ export const APPLICATION_DISPLAY_INFO: Record<ApplicationKeys, ApplyField> = {
     placeholder: "활동경력을 입력해주세요.",
   },
 };
+
+export const APPLICATION_FIELD_ORDER = Object.keys(
+  APPLICATION_DISPLAY_INFO
+) as ApplicationKeys[];
