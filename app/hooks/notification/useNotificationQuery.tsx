@@ -26,6 +26,7 @@ export const useClubNotificationQuery = (
     queryFn: ({ pageParam = 0 }) =>
       getClubNotifications(clubId, pageParam as number),
     enabled: options?.enabled ?? true,
+    staleTime: 0,
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = allPages.length;
