@@ -10,6 +10,7 @@ import { AuthResponseType, SignUpWithKeyBody } from "@/types/api";
 import axiosInstance from "../axiosInstance";
 import { useAuthStore } from "@/stores/authStore";
 import { useUserStore } from "@/stores/userStore";
+import axios from "axios";
 
 // 토큰 갱신
 export const refreshToken = async (): Promise<string | null> => {
@@ -17,9 +18,15 @@ export const refreshToken = async (): Promise<string | null> => {
   if (!refreshToken) return null;
 
   try {
-    const response = await axiosInstance.post(REISSUE, {
-      refreshToken,
-    });
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}${REISSUE}`,
+      { refreshToken },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     return response.data.accessToken;
   } catch (error) {
