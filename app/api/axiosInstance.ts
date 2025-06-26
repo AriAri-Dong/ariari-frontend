@@ -2,6 +2,20 @@ import axios from "axios";
 import { refreshToken } from "./login/api";
 import { useAuthStore } from "@/stores/authStore";
 
+let isRefreshing = false;
+let failedQueue: {
+  resolve: (token: string) => void;
+  reject: (error: unknown) => void;
+}[] = [];
+
+const processQueue = (token: string | null, error: unknown) => {
+  failedQueue.forEach((prom) => {
+    if (token) prom.resolve(token);
+    else prom.reject(error);
+  });
+  failedQueue = [];
+};
+
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   timeout: 30000,
@@ -28,6 +42,7 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // 조건: 401 + 중복 재요청 방지 + 토큰 재발급 URL 제외
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
@@ -35,29 +50,47 @@ axiosInstance.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
+      if (isRefreshing) {
+        // 이미 리프레시 중이면 큐에 추가
+        return new Promise((resolve, reject) => {
+          failedQueue.push({
+            resolve: (token: string) => {
+              originalRequest.headers.Authorization = `${token}`;
+              resolve(axiosInstance(originalRequest));
+            },
+            reject,
+          });
+        });
+      }
+
+      isRefreshing = true;
+
       try {
         const newToken = await refreshToken();
 
-        if (newToken) {
-          useAuthStore.getState().setAuth({
-            accessToken: newToken,
-            refreshToken: useAuthStore.getState().refreshToken!,
-            oauthSignUpKey: null,
-          });
+        if (!newToken) throw new Error("refreshToken expired or invalid");
 
-          originalRequest.headers.Authorization = `${newToken}`;
-          return axiosInstance(originalRequest);
-        } else {
-          // newToken이 null일 경우도 처리
-          throw new Error("refreshToken expired or invalid");
-        }
+        // 토큰 저장
+        useAuthStore.getState().setAuth({
+          accessToken: newToken,
+          refreshToken: useAuthStore.getState().refreshToken!,
+          oauthSignUpKey: null,
+        });
+
+        processQueue(newToken, null);
+
+        originalRequest.headers.Authorization = `${newToken}`;
+        return axiosInstance(originalRequest);
       } catch (err) {
-        console.error("토큰 갱신 실패", err);
+        processQueue(null, err); 
         useAuthStore.getState().logout();
         localStorage.removeItem("ariari-auth");
         localStorage.removeItem("ariari-storage");
         alert("로그인 세션이 만료되었습니다.\n다시 로그인해주세요.");
         window.location.reload();
+        return Promise.reject(err);
+      } finally {
+        isRefreshing = false;
       }
     }
 
