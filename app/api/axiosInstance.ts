@@ -30,12 +30,14 @@ axiosInstance.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
-      !originalRequest._retry // 무한루프 방지
+      !originalRequest._retry &&
+      !originalRequest.url?.includes("/reissue/token")
     ) {
       originalRequest._retry = true;
 
       try {
         const newToken = await refreshToken();
+
         if (newToken) {
           useAuthStore.getState().setAuth({
             accessToken: newToken,
@@ -43,19 +45,19 @@ axiosInstance.interceptors.response.use(
             oauthSignUpKey: null,
           });
 
-          // 새 토큰으로 Authorization 갱신 후 재요청
           originalRequest.headers.Authorization = `${newToken}`;
           return axiosInstance(originalRequest);
+        } else {
+          // newToken이 null일 경우도 처리
+          throw new Error("refreshToken expired or invalid");
         }
       } catch (err) {
         console.error("토큰 갱신 실패", err);
         useAuthStore.getState().logout();
         localStorage.removeItem("ariari-auth");
         localStorage.removeItem("ariari-storage");
-
+        alert("로그인 세션이 만료되었습니다.\n다시 로그인해주세요.");
         window.location.reload();
-
-        alert("로그인 세션이 만료되었습니다. \n 다시 로그인해주세요.");
       }
     }
 
