@@ -8,37 +8,38 @@ import notification_unconfirmed from "@/images/icon/notification_unconfirmed.svg
 import { ButtonProps } from "@/types/components/button";
 import { useMyNotificationQuery } from "@/hooks/notification/useNotificationQuery";
 
-type NotificationStatus = "default" | "pressed" | "unconfirmed";
-
 interface NotificationProps extends ButtonProps {
   size: "large" | "small";
 }
 
 const Notification = ({ size, onClick }: NotificationProps) => {
-  const [notificationStatus, setNotificationStatus] =
-    useState<NotificationStatus>("default");
+  const [isPressed, setIsPressed] = useState<boolean>(false);
+  const [hasUnreadNotification, setHasUnreadNotification] =
+    useState<boolean>(false);
 
   const { myNotifications } = useMyNotificationQuery();
 
   const getNotificationImage = () => {
-    switch (notificationStatus) {
-      case "pressed":
-        return notification_pressed;
-      case "unconfirmed":
-        return notification_unconfirmed;
-      default:
-        return notification_default;
+    if (isPressed) {
+      return notification_pressed;
     }
-  };
-
-  // 읽지 않은 알림 있는 경우 unconfirm 표시 알림 아이콘 표시
-  useEffect(() => {
-    const hasUnreadNotification = myNotifications.some(
-      (notification) => !notification.isChecked
-    );
 
     if (hasUnreadNotification) {
-      setNotificationStatus("unconfirmed");
+      return notification_unconfirmed;
+    }
+
+    return notification_default;
+  };
+
+  // 읽지 않은 알림 존재여부 체크
+  useEffect(() => {
+    if (myNotifications && myNotifications.length > 0) {
+      const hasUnread = myNotifications.some(
+        (notification) => !notification.isChecked
+      );
+      setHasUnreadNotification(hasUnread);
+    } else {
+      setHasUnreadNotification(false);
     }
   }, [myNotifications]);
 
@@ -47,8 +48,8 @@ const Notification = ({ size, onClick }: NotificationProps) => {
       <Image
         src={getNotificationImage()}
         alt="notification"
-        onMouseDown={() => setNotificationStatus("pressed")}
-        onMouseUp={() => setNotificationStatus("default")}
+        onMouseDown={() => setIsPressed(true)}
+        onMouseUp={() => setIsPressed(false)}
         className="cursor-pointer"
         height={`${size === "large" ? 24 : 20}`}
         width={`${size === "large" ? 24 : 20}`}

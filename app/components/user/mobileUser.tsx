@@ -2,9 +2,6 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import notification_default from "@/images/icon/notification_default.svg";
-import notification_pressed from "@/images/icon/notification_pressed.svg";
-import notification_unconfirmed from "@/images/icon/notification_unconfirmed.svg";
 import login from "@/images/icon/mobile_login.svg";
 import UserModal from "../modal/userModal";
 import MobileNotificationModal from "../modal/notification/mobileNotificationModal";
@@ -28,9 +25,6 @@ const MobileUser = () => {
   const [isNotificationModalOpen, setIsNotificationModalOpen] =
     useState<boolean>(false);
   const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
-  const [notificationStatus, setNotificationStatus] = useState<
-    "default" | "pressed" | "unconfirmed"
-  >("unconfirmed");
 
   // 로그아웃 실행 함수
   const handleLogout = async () => {
@@ -41,29 +35,14 @@ const MobileUser = () => {
     }
   };
 
-  // 알림 아이콘 이미지 가져오기
-  const getNotificationImage = () => {
-    switch (notificationStatus) {
-      case "pressed":
-        return notification_pressed;
-      case "unconfirmed":
-        return notification_unconfirmed;
-      default:
-        return notification_default;
-    }
-  };
-
-  const handleNotificationClick = () => {
-    if (notificationStatus === "unconfirmed") {
-      setIsNotificationModalOpen(true);
-    }
-  };
-
   return (
     <>
       <div className="flex items-center gap-4">
         {/* 알림 아이콘 */}
-        <Notification onClick={handleNotificationClick} size="large" />
+        <Notification
+          onClick={() => setIsNotificationModalOpen(true)}
+          size="large"
+        />
         {/* 로그인 상태 여부 */}
         {isLoggedIn ? (
           <Image
