@@ -11,6 +11,7 @@ export const useClubInfoQuery = (clubId: string) => {
   } = useQuery({
     queryKey: ["club", clubId],
     queryFn: () => fetchClubInfo(clubId),
+    staleTime: 0,
   });
 
   return {

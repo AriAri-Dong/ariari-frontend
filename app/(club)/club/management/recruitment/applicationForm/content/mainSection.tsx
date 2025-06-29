@@ -77,9 +77,7 @@ const MainSection = () => {
   };
 
   const removeDocumentQuestion = (index: string) => {
-    if (documentQuestions.length > 1) {
-      setDocumentQuestions((prev) => prev.filter((item) => item.id !== index));
-    }
+    setDocumentQuestions((prev) => prev.filter((item) => item.id !== index));
   };
 
   const handleDocumentQuestionChange = (
@@ -211,13 +209,11 @@ const MainSection = () => {
                     <h3 className="text-text1 text-mobile_h4_sb md:text-h4_sb">{`문항 - ${
                       index + 1
                     }`}</h3>
-                    {index !== 0 && (
-                      <DeleteBtn
-                        onClick={() =>
-                          removeDocumentQuestion(docQuestion.id.toString())
-                        }
-                      />
-                    )}
+                    <DeleteBtn
+                      onClick={() =>
+                        removeDocumentQuestion(docQuestion.id.toString())
+                      }
+                    />
                   </div>
                   <div className="flex flex-col gap-3">
                     <CustomInput

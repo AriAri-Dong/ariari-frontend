@@ -62,6 +62,7 @@ export const useMyNotificationQuery = (options?: { enabled: boolean }) => {
     queryFn: ({ pageParam = 0 }) => getMyNotifications(pageParam as number),
     enabled: options?.enabled ?? true,
     initialPageParam: 0,
+    staleTime: 0,
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = allPages.length;
       const totalPages = lastPage.alarmPageInfo.totalPages;
