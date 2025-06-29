@@ -13,6 +13,7 @@ import AlertWithMessage from "../alert/alertWithMessage";
 import { logout } from "@/api/login/api";
 import { getProfileImage } from "@/utils/profileImage";
 import { useUserStore } from "@/stores/userStore";
+import Notification from "../button/iconBtn/notification";
 
 const MobileUser = () => {
   const user = useUserStore((state) => state.user);
@@ -62,15 +63,7 @@ const MobileUser = () => {
     <>
       <div className="flex items-center gap-4">
         {/* 알림 아이콘 */}
-        <Image
-          src={getNotificationImage()}
-          alt="notification"
-          onClick={handleNotificationClick}
-          className="cursor-pointer"
-          height={24}
-          width={24}
-        />
-
+        <Notification onClick={handleNotificationClick} size="large" />
         {/* 로그인 상태 여부 */}
         {isLoggedIn ? (
           <Image
