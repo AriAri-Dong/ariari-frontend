@@ -52,6 +52,10 @@ export default function ClubInviteHandler() {
 
   // 초대
   const handleSubmit = (nickname: string) => {
+    if (!nickname) {
+      setAlertMessage("닉네임을 입력하세요");
+    }
+
     if (inviteCode) {
       // 링크 초대
       enterClub({ inviteKey: inviteCode, name: nickname });
