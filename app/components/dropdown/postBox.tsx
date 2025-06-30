@@ -18,6 +18,7 @@ import Comment from "../comment/comment";
 import dotMenu from "@/images/icon/dotMenu.svg";
 import lock from "@/images/icon/lock.svg";
 import lock_open from "@/images/icon/lock_open.svg";
+import defaultImg from "@/images/icon/defaultAriari.svg";
 
 import formatDateToDot from "@/utils/formatDateToDot";
 import { EDIT_ACTION_TYPE, REPORT_ACTION_TYPE } from "@/data/pulldown";
@@ -209,7 +210,7 @@ const PostBox = ({ data, nickname }: PostBoxProps) => {
       <div className="flex justify-between">
         <div className="flex items-center gap-[14px]">
           <Image
-            src={clubInfo?.clubData.profileUri || ""}
+            src={clubInfo?.clubData.profileUri || defaultImg}
             alt={"프로필이미지"}
             width={44}
             height={44}
