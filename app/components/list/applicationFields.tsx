@@ -15,6 +15,12 @@ const ApplicationFields = ({
   fileUri,
   portfolioUrl,
 }: ApplicationFieldsProps) => {
+  //_apply_기준 파일 이름 split
+  const extractFileName = (uri: string) => {
+    const parts = uri.split("_apply_");
+    if (parts.length < 2) return uri;
+    return parts[1];
+  };
   return (
     <div className="flex flex-col gap-[30px] md:gap-10">
       {/* 뱃지 항목에 대한 답변 */}
@@ -56,10 +62,10 @@ const ApplicationFields = ({
         <div className="flex flex-col gap-3">
           {fileUri && (
             <div className="flex gap-2 ">
-              <FileBadge fileName={fileUri} />
+              <FileBadge fileName={extractFileName(fileUri)} />
               <PDFDownloadBtn
                 file={fileUri}
-                fileName={`${fileUri}_Portfolio`}
+                fileName={extractFileName(fileUri)}
               />
             </div>
           )}
