@@ -71,7 +71,7 @@ const User = () => {
         <div className="relative flex items-center space-x-5" ref={dropdownRef}>
           {/* 알림 버튼 (모달 포함) */}
           <NotificationModal>
-            <Notification size={"small"} onClick={() => {}} />
+            <Notification size={"large"} onClick={() => {}} />
           </NotificationModal>
 
           {/* 프로필 및 닉네임 표시 (드롭다운 토글 버튼) */}
