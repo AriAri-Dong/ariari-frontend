@@ -2,10 +2,10 @@ import MainSection from "./content/mainSection";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "활동 내역 | 함께한 시간을 기록합니다",
+  title: "활동 내역 | 아리아리",
   description: "활동 사진과 후기를 통해 실제 활동 모습을 생생하게 확인하세요.",
   openGraph: {
-    title: "활동 내역 | 함께한 시간을 기록합니다",
+    title: "활동 내역 | 아리아리",
     description:
       "활동 사진과 후기를 통해 실제 활동 모습을 생생하게 확인하세요.",
     url: "https://ariari.com/club/activityHistory",
