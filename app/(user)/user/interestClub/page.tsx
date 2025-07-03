@@ -2,10 +2,10 @@ import MainSection from "./content/mainSection";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "관심 동아리 | 찜한 동아리를 확인하세요",
+  title: "관심 동아리 | 아리아리",
   description: "관심 있는 동아리를 찜해두고 언제든지 다시 확인할 수 있습니다.",
   openGraph: {
-    title: "관심 동아리 | 찜한 동아리를 확인하세요",
+    title: "관심 동아리 | 아리아리",
     description:
       "관심 있는 동아리를 찜해두고 언제든지 다시 확인할 수 있습니다.",
     url: "https://ariari.com/user/interestClub",
