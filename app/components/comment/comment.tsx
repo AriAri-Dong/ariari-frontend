@@ -312,6 +312,7 @@ const Comment = (props: CommentBaseProps) => {
             }}
           />
         ) : (
+          !blocked &&
           comment && (
             <p className="px-4 py-2 text-subtext1 text-mobile_body2_r bg-hover rounded-16 md:px-[18px] md:py-3.5 md:ml-[42px] md:text-body1_r">
               {comment.body}
