@@ -10,7 +10,8 @@ import { AxiosError } from "axios";
 // 동아리 상세 지원 현황 리스트 조회
 export const useApplicationQuery = (
   clubId: string,
-  condition: ApplicationListConditionReq
+  condition: ApplicationListConditionReq,
+  options?: { enabled: boolean }
 ) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
     useInfiniteQuery<ApplyListRes, AxiosError>({
@@ -25,6 +26,7 @@ export const useApplicationQuery = (
         // 마지막 페이지 판단 기준 - 전체 페이지 수, 현재 불러진 페이지 수
         return totalPages > nextPage ? nextPage : undefined;
       },
+      ...options,
     });
 
   // 전체/대기중 탭에 표기되는 항목 개수
@@ -44,6 +46,7 @@ export const useApplicationQuery = (
       };
     },
     staleTime: Infinity,
+    ...options,
   });
 
   return {

@@ -27,6 +27,7 @@ import UpdateApplyStatusOption from "@/components/dropdown/updateApplyStatusOpti
 import StatelessRangeCalendar from "@/components/calendar/statelessRangeCalendar";
 import useDebounce from "@/hooks/useDebounce";
 import ApplicationFormViewModal from "@/components/modal/club/applicationFormViewModal";
+import { useUserStore } from "@/stores/userStore";
 
 // 상단 필터링 탭
 const FILTER_TABS = [
@@ -38,6 +39,8 @@ const MOBILE_FILTER_TABS = [{ id: 0, label: "지원 상태" }, ...FILTER_TABS];
 const MainSection = () => {
   const params = useSearchParams();
   const clubId = params.get("clubId") ?? "";
+  const { user } = useUserStore();
+  const isSignIn = !!user;
 
   const isMdUp = useResponsive("md");
 
@@ -75,12 +78,18 @@ const MainSection = () => {
     fetchNextPage,
     hasNextPage,
     totalSize,
-  } = useApplicationQuery(clubId, {
-    isPendent: selectedFilter === "대기중",
-    query: debounceSearchQuery,
-    startDateTime: dateRange[0] ? formatLocalDateTime(dateRange[0]) : undefined,
-    endDateTime: dateRange[1] ? formatLocalDateTime(dateRange[1]) : undefined,
-  });
+  } = useApplicationQuery(
+    clubId,
+    {
+      isPendent: selectedFilter === "대기중",
+      query: debounceSearchQuery,
+      startDateTime: dateRange[0]
+        ? formatLocalDateTime(dateRange[0])
+        : undefined,
+      endDateTime: dateRange[1] ? formatLocalDateTime(dateRange[1]) : undefined,
+    },
+    { enabled: isSignIn }
+  );
 
   // 지원 상태 변경 mutation 훅
   const { updateApplicationStatus } = useUpdateStatusMutation({
