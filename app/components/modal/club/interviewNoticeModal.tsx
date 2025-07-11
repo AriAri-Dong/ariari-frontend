@@ -7,7 +7,7 @@ import SmallBtn from "@/components/button/basicBtn/smallBtn";
 import Contour from "@/components/bar/contour";
 import NotiPopUp from "../notiPopUp";
 
-const noticeDefaultValue = `안녕하세요.
+export const noticeDefaultValue = `안녕하세요.
 동아리 면접 대상자로 선정되신 것을 축하드리며, 면접 일정을 안내 드립니다.
 부득이한 사정으로 참석이 어려우시거나 면접 일시 변경이 필요하신 경우, 담당자에게 사전에 연락 부탁드립니다.
     • 면접 일자 : 

@@ -6,6 +6,7 @@ import NotificationList from "@/components/list/notificationList";
 import { useRouter, usePathname } from "next/navigation";
 import { useNotificationMutations } from "@/hooks/notification/useNotificationMutation";
 import WhiteButton from "@/components/button/basicBtn/whiteBtn";
+import InterviewMessageModal from "../club/interviewMessageModal";
 
 interface TooltipProps {
   children: React.ReactNode;
@@ -18,6 +19,8 @@ interface TooltipProps {
  */
 const NotificationModal = ({ children }: TooltipProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showMessage, setShowMessage] = useState<string | null>(null); // 알림 데이터 내 uri null인 경우(면접 메세지 확인) modal/bottomsheet open
+
   const router = useRouter();
   const pathname = usePathname();
   const {
@@ -43,7 +46,8 @@ const NotificationModal = ({ children }: TooltipProps) => {
 
   const handleNotificationClick = (
     notificationId: string,
-    uri: string | null
+    uri: string | null,
+    text: string | null
   ) => {
     markMemberNotificationAsRead.mutate(
       { alarmId: notificationId },
@@ -69,6 +73,10 @@ const NotificationModal = ({ children }: TooltipProps) => {
             } else {
               router.push(uri);
             }
+          } else {
+            // uri null인 경우(면접 확인 메세지)
+            const message = text?.split(" / ")[1] || "";
+            setShowMessage(message);
           }
         },
       }
@@ -116,6 +124,12 @@ const NotificationModal = ({ children }: TooltipProps) => {
             </div>
           </div>
         </>
+      )}
+      {showMessage && (
+        <InterviewMessageModal
+          message={showMessage}
+          onClose={() => setShowMessage(null)}
+        />
       )}
     </div>
   );
