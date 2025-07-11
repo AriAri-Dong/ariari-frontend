@@ -148,7 +148,9 @@ const MainSection = () => {
       return;
     }
     updateApplicationStatus.mutate({
-      applications: checkedApplications,
+      applications: openApplicationId
+        ? [openApplicationId]
+        : checkedApplications,
       type: APPLY_STATUS_VALUE_MAP["면접중"],
       interviewMessage: message,
     });

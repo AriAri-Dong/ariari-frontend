@@ -38,11 +38,10 @@ const InterviewNoticeModal = ({
   };
 
   const handleSubmit = () => {
-    console.log("datails", details);
-    // if (validateForm()) {
-    //   onSubmit(details);
-    //   onClose();
-    // }
+    if (validateForm()) {
+      onSubmit(details);
+      onClose();
+    }
   };
 
   const handleClose = () => {
