@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import backVector from "@/images/icon/backVector.svg";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -9,6 +9,7 @@ import {
   useMyNotificationQuery,
 } from "@/hooks/notification/useNotificationQuery";
 import { useNotificationMutations } from "@/hooks/notification/useNotificationMutation";
+import InterviewMessageBottomSheet from "@/components/bottomSheet/interviewMessageBottomSheet";
 
 interface ModalProps {
   onclose: () => void;
@@ -27,6 +28,7 @@ const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
   const params = useSearchParams();
   const clubId = params.get("clubId") || "";
 
+  const [showMessage, setShowMessage] = useState<string | null>(null); // 알림 데이터 내 uri null인 경우(면접 메세지 확인) modal/bottomsheet open
   const clubNotiQuery = useClubNotificationQuery(clubId || "", {
     enabled: target === "club" && !!clubId,
   });
@@ -56,7 +58,8 @@ const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
 
   const handleNotificationClick = (
     notificationId: string,
-    uri: string | null
+    uri: string | null,
+    text: string | null
   ) => {
     const mutation =
       target === "club"
@@ -67,8 +70,8 @@ const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
       { alarmId: notificationId },
       {
         onSettled: () => {
-          onclose();
           if (uri) {
+            onclose();
             const cleanUri = uri.split("|")[0].trim();
             // 동아리 초대인 경우 예외
             if (cleanUri.startsWith("/club/invite")) {
@@ -87,6 +90,10 @@ const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
             } else {
               router.push(uri);
             }
+          } else {
+            // uri null인 경우(면접 확인 메세지)
+            const message = text?.split(" / ")[1] || "";
+            setShowMessage(message);
           }
         },
       }
@@ -134,6 +141,12 @@ const MobileNotificationModal = ({ onclose, target }: ModalProps) => {
           </div>
         )}
       </div>
+      {showMessage && (
+        <InterviewMessageBottomSheet
+          message={showMessage || ""}
+          onClose={() => setShowMessage(null)}
+        />
+      )}
     </div>
   );
 };

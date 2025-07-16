@@ -110,7 +110,7 @@ const MainSection = () => {
     const file = event.target.files?.[0];
     if (file) {
       // 파일 용량 및 확장자 확인
-      const maxFileSize = 100 * 1024 * 1024; // 100MB
+      const maxFileSize = 15 * 1024 * 1024; // 15MB
       const allowedExtensions = ["image/png", "image/jpeg", "image/svg+xml"];
       if (file.size > maxFileSize) {
         setAlertMessage("파일 용량은 100MB를 초과할 수 없습니다.");
@@ -286,7 +286,7 @@ const MainSection = () => {
         </h3>
         <p className="hidden md:block text-subtext1 text-body3_r mb-[18px] ">
           유해한 내용이 포함된 사진일 경우, 별도의 안내 없이 사진이 삭제
-          처리되며 서비스 이용에 제한이 있을 수 있습니다. <br /> ( 100MB 이하의
+          처리되며 서비스 이용에 제한이 있을 수 있습니다. <br /> ( 15MB 이하의
           png, jpg, svg를 올려주세요 )
         </p>
         <div className="relative inline-block mb-[30px] md:mb-7">

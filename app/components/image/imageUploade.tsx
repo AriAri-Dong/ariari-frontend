@@ -25,10 +25,10 @@ const ImageUpload = ({
     const file = event.target.files?.[0];
     if (file) {
       // 파일 용량 및 확장자 확인
-      const maxFileSize = 100 * 1024 * 1024;
+      const maxFileSize = 15 * 1024 * 1024;
       const allowedExtensions = ["image/png", "image/jpeg", "image/svg+xml"];
       if (file.size > maxFileSize) {
-        setAlertMessage("파일 용량은 100MB 를 초과할 수 없습니다.");
+        setAlertMessage("파일 용량은 15MB 를 초과할 수 없습니다.");
         return;
       }
       if (!allowedExtensions.includes(file.type)) {

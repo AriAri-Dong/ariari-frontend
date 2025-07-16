@@ -96,7 +96,7 @@ const QuestionDropdown = ({
     <div className="flex flex-col gap-4 justify-start items-start pt-4 pb-2.5 pl-4 pr-3 md:px-6 md:py-[26px] bg-background rounded-[8px] md:gap-8 ">
       <div className="w-full justify-between items-center md:flex">
         <div
-          className={`w-[62px] h-[24px] flex items-center justify-center mr-10 rounded-[4px] text-mobile_body3_m text-center mb-2.5 md:mb-0 md:w-[66px] md:h-[28px] md:text-body3_m  ${bg} ${text} shrink-0`}
+          className={`w-[62px] h-[24px] flex items-center justify-center mr-7 rounded-[4px] text-mobile_body3_m text-center mb-2.5 md:mb-0 md:w-[66px] md:h-[28px] md:text-body3_m  ${bg} ${text} shrink-0`}
         >
           {label}
         </div>
