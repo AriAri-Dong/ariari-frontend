@@ -50,8 +50,10 @@ const RecruitmentBottomBar = ({
 
   const dDay = calculateRemainingDays(recruitmentData.endDateTime);
   const dDayContent =
-    dDay === "마감"
-      ? "마감"
+    recruitmentData.recruitmentStatusType === "SCHEDULED"
+      ? "모집 예정"
+      : recruitmentData.recruitmentStatusType === "CLOSED"
+      ? "모집 마감"
       : isMyClub
       ? "가입 완료"
       : isMyApply
