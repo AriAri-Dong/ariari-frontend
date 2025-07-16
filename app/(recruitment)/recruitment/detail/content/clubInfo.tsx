@@ -145,7 +145,7 @@ const ClubInfo = ({
                     onClick={handleClubClick}
                   >
                     <Image
-                      src={clubData.profileUri || defaultImgBg}
+                      src={clubData.profileUri || defaultImg}
                       alt={"club_image"}
                       width={68}
                       height={68}
