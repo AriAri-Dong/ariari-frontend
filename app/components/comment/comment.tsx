@@ -53,6 +53,9 @@ const Comment = (props: CommentBaseProps) => {
   const { isReplying, isReply } = props;
   const comment = props.comment;
   const myId = useUserStore((state) => state.user?.memberData.memberId);
+  const user = useUserStore((state) => state.user);
+
+  const profileType = user?.memberData?.profileType ?? null;
 
   const menuRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
@@ -346,7 +349,7 @@ const Comment = (props: CommentBaseProps) => {
                   clubActivityId={props.clubActivityId}
                   role={props.role}
                   nickname={props.nickname}
-                  profileType={props.profileType}
+                  profileType={profileType}
                   comment={comment}
                   onEditSuccess={props.onEditSuccess}
                   onDeleteSuccess={props.onDeleteSuccess}
