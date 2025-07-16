@@ -28,6 +28,8 @@ import { useUserStore } from "@/stores/userStore";
 import { getProfileImage } from "@/utils/mappingProfile";
 import { profileType } from "@/types/member";
 import CommonBottomSheet from "../bottomSheet/commonBottomSheet";
+import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
+import { useSearchParams } from "next/navigation";
 
 type CommentBaseProps = {
   isReply: boolean;
@@ -47,12 +49,23 @@ type CommentBaseProps = {
   onDeleteSuccess?: () => void;
   onEditSuccess?: () => void;
   onPostSuccess?: () => void;
+  disabled?: boolean;
 };
 
 const Comment = (props: CommentBaseProps) => {
+  const params = useSearchParams();
+  const clubId = params.get("clubId") ?? "";
+  const isSignIn = useUserStore((state) => !!state.user);
+
   const { isReplying, isReply } = props;
+  const { clubInfo } = useClubInfoQuery(clubId);
+  const isClubMember = clubInfo?.clubMemberData;
+
   const comment = props.comment;
   const myId = useUserStore((state) => state.user?.memberData.memberId);
+  const user = useUserStore((state) => state.user);
+
+  const profileType = user?.memberData?.profileType ?? null;
 
   const menuRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
@@ -108,6 +121,11 @@ const Comment = (props: CommentBaseProps) => {
     setIsOptionOpen(!isOptionOpen);
   };
 
+  const handleReportSubmit = () => {
+    setIsReportOpen(false);
+    setAlertMessage("신고가 정상적으로 접수되었습니다.");
+  };
+
   const handleOptionClick = async (label: string) => {
     if (label === "삭제하기") {
       setConfirmAction("delete");
@@ -116,6 +134,10 @@ const Comment = (props: CommentBaseProps) => {
     } else if (label === "수정하기") {
       setIsEditing(true);
     } else if (label === "신고하기") {
+      if (!user && !isMdUp) {
+        setAlertMessage("로그인 후 이용해주세요.");
+        return;
+      }
       setIsReportOpen(true);
     }
     setIsOptionOpen(false);
@@ -219,7 +241,7 @@ const Comment = (props: CommentBaseProps) => {
               {!isReplying && comment && (
                 <div className="flex gap-0.5 md:gap-2 items-center">
                   {/* 댓글에만 답글 버튼 표시 (대댓글에는 X) */}
-                  {!isReply && (
+                  {!isReply && isClubMember && (
                     <IconBtn
                       type="reply"
                       size="large"
@@ -274,6 +296,7 @@ const Comment = (props: CommentBaseProps) => {
         )}
         {isEditing || isReplying ? (
           <CommentInput
+            disabled={props.disabled}
             initialText={!isReplying && comment ? comment.body : ""}
             onSend={async (text) => {
               if (isReplying && comment) {
@@ -312,6 +335,7 @@ const Comment = (props: CommentBaseProps) => {
             }}
           />
         ) : (
+          !blocked &&
           comment && (
             <p className="px-4 py-2 text-subtext1 text-mobile_body2_r bg-hover rounded-16 md:px-[18px] md:py-3.5 md:ml-[42px] md:text-body1_r">
               {comment.body}
@@ -345,11 +369,12 @@ const Comment = (props: CommentBaseProps) => {
                   clubActivityId={props.clubActivityId}
                   role={props.role}
                   nickname={props.nickname}
-                  profileType={props.profileType}
+                  profileType={profileType}
                   comment={comment}
                   onEditSuccess={props.onEditSuccess}
                   onDeleteSuccess={props.onDeleteSuccess}
                   onPostSuccess={props.onPostSuccess}
+                  disabled={!isClubMember}
                 />
               )}
             </div>
@@ -362,20 +387,14 @@ const Comment = (props: CommentBaseProps) => {
             id={comment?.clubActivityCommentId}
             reportTargetType="CLUB_ACTIVITY_COMMENT"
             onClose={() => setIsReportOpen(false)}
-            onSubmit={() => {
-              setIsReportOpen(false);
-              setAlertMessage("신고가 정상적으로 접수되었습니다.");
-            }}
+            onSubmit={handleReportSubmit}
           />
         ) : (
           <ReportBottomSheet
             id={comment?.clubActivityCommentId}
             reportTargetType="CLUB_ACTIVITY_COMMENT"
             onClose={() => setIsReportOpen(false)}
-            onSubmit={() => {
-              setIsReportOpen(false);
-              setAlertMessage("신고가 정상적으로 접수되었습니다.");
-            }}
+            onSubmit={handleReportSubmit}
           />
         ))}
       {alertMessage && (

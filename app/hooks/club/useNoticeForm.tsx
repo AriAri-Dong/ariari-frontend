@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 export const MAX_IMAGES = 10;
-const MAX_FILE_SIZE = 100 * 1024 * 1024;
+const MAX_FILE_SIZE = 15 * 1024 * 1024;
 
 interface useClubNoticeFormProps {
   modalType: "create" | "modify";

@@ -64,7 +64,7 @@ const ActivityCreateForm = ({
     const files = event.target.files;
     if (!files) return;
 
-    const maxFileSize = 100 * 1024 * 1024;
+    const maxFileSize = 15 * 1024 * 1024;
     const allowedExtensions = ["image/png", "image/jpeg"];
 
     const newFiles: File[] = [];

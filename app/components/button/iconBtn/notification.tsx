@@ -7,6 +7,7 @@ import notification_pressed from "@/images/icon/notification_pressed.svg";
 import notification_unconfirmed from "@/images/icon/notification_unconfirmed.svg";
 import { ButtonProps } from "@/types/components/button";
 import { useMyNotificationQuery } from "@/hooks/notification/useNotificationQuery";
+import { useUserStore } from "@/stores/userStore";
 
 interface NotificationProps extends ButtonProps {
   size: "large" | "small";
@@ -17,7 +18,10 @@ const Notification = ({ size, onClick }: NotificationProps) => {
   const [hasUnreadNotification, setHasUnreadNotification] =
     useState<boolean>(false);
 
-  const { myNotifications } = useMyNotificationQuery();
+  const { user } = useUserStore();
+  const isSignIn = !!user;
+
+  const { myNotifications } = useMyNotificationQuery({ enabled: isSignIn });
 
   const getNotificationImage = () => {
     if (isPressed) {

@@ -154,9 +154,13 @@ const MainSection = () => {
             </div>
           </div>
         </div>
-        <div className="fixed bottom-[77px] right-5 md:hidden">
-          <WriteBtn onClick={handleWrite} />
-        </div>
+
+        {(role === "ADMIN" || role === "MANAGER") && (
+          <div className="fixed w-full bottom-5 max-md:right-5 flex justify-end md:bottom-9 md:max-w-[1248px] md:px-5">
+            <WriteBtn onClick={handleWrite} />
+          </div>
+        )}
+
         {isMdUp
           ? openNotice && (
               <ClubNoticeFormModal
@@ -177,7 +181,6 @@ const MainSection = () => {
         {alertMessage && (
           <Alert text={alertMessage} onClose={() => setAlertMessage(null)} />
         )}
-        {!openNotice && <ReviewFloatingBtn onClick={handleWrite} />}
       </div>
     </>
   );

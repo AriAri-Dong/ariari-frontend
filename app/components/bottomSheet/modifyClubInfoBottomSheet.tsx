@@ -62,10 +62,10 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
   ) => {
     const file = event.target.files?.[0];
     if (file) {
-      const maxFileSize = 100 * 1024 * 1024;
+      const maxFileSize = 15 * 1024 * 1024;
       const allowedExtensions = ["image/png", "image/jpeg", "image/svg+xml"];
       if (file.size > maxFileSize) {
-        setAlertMsg("파일 용량은 100MB 를 초과할 수 없습니다.");
+        setAlertMsg("파일 용량은 15MB 를 초과할 수 없습니다.");
         setAlertVisible(true);
         return;
       }
@@ -89,10 +89,10 @@ const ModifyClubInfoBottomSheet = ({ onClose, onSubmit }: ModalProps) => {
   ) => {
     const file = event.target.files?.[0];
     if (file) {
-      const maxFileSize = 100 * 1024 * 1024;
+      const maxFileSize = 15 * 1024 * 1024;
       const allowedExtensions = ["image/png", "image/jpeg", "image/svg+xml"];
       if (file.size > maxFileSize) {
-        setAlertMsg("파일 용량은 100MB 를 초과할 수 없습니다.");
+        setAlertMsg("파일 용량은 15MB 를 초과할 수 없습니다.");
         setAlertVisible(true);
         return;
       }
