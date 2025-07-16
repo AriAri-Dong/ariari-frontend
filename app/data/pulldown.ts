@@ -36,7 +36,7 @@ export const TARGET_TYPE = [
   { id: 2, label: "대학생", value: "UNIVERSITY_STUDENT" },
   { id: 3, label: "대학원생", value: "GRADUATE_STUDENT" },
   { id: 4, label: "직장인", value: "OFFICE_WORKER" },
-  { id: 5, label: "기타", value: "ETC" },
+  // { id: 5, label: "기타", value: "ETC" },
 ];
 
 export const DATE_SORT_TYPE = [
