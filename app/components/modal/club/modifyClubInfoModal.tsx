@@ -17,7 +17,6 @@ import { useSearchParams } from "next/navigation";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import { getClubOptions } from "@/utils/convertToServerFormat";
 import { Extensions } from "@/types/file";
-import heic2any from "heic2any";
 
 /**
  * 동아리 정보 수정 모달
@@ -99,6 +98,7 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
       setAlertVisible(true);
       return;
     }
+    const heic2any = (await import("heic2any")).default;
 
     // HEIC 처리
     if (
