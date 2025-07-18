@@ -26,7 +26,6 @@ import { useUserStore } from "@/stores/userStore";
 import AlertWithMessage from "@/components/alert/alertWithMessage";
 import RequiredLogin from "@/components/feedback/requiredLogin";
 import { Extensions } from "@/types/file";
-import heic2any from "heic2any";
 
 const OPTIONS = [
   {
@@ -121,7 +120,7 @@ const MainSection = () => {
       setAlertVisible(true);
       return;
     }
-
+    const heic2any = (await import("heic2any")).default;
     if (
       file.type === "image/heic" ||
       file.name.toLowerCase().endsWith(".heic")
