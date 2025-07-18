@@ -1,5 +1,5 @@
 import SubPullDown from "@/components/pulldown/subPullDown";
-import { POPULARITY_SORT_TYPE } from "@/data/pulldown";
+import { SORT_OPTIONS } from "@/data/pulldown";
 import useResponsive from "@/hooks/useResponsive";
 
 interface FilterSectionProps {
@@ -27,7 +27,7 @@ const FilterSection = ({
             총 {dataCount}개의 모집공고가 있어요.
           </p>
           <SubPullDown
-            optionData={POPULARITY_SORT_TYPE.slice(1)}
+            optionData={SORT_OPTIONS.slice(1)}
             selectedOption={sortType}
             handleOption={setSortType}
           />
@@ -39,7 +39,7 @@ const FilterSection = ({
               총 {dataCount}개의 모집공고가 있어요.
             </p>
             <SubPullDown
-              optionData={POPULARITY_SORT_TYPE.slice(1)}
+              optionData={SORT_OPTIONS.slice(1)}
               selectedOption={sortType}
               handleOption={setSortType}
             />
