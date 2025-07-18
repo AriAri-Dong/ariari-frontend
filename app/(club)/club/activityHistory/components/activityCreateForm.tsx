@@ -10,6 +10,8 @@ import {
   createClubActivity,
   updateClubActivity,
 } from "@/api/club/activity/api";
+import heic2any from "heic2any";
+import { Extensions } from "@/types/file";
 
 const MAX_IMAGES = 10;
 
@@ -60,27 +62,56 @@ const ActivityCreateForm = ({
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = event.target.files;
     if (!files) return;
 
     const maxFileSize = 15 * 1024 * 1024;
-    const allowedExtensions = ["image/png", "image/jpeg"];
 
     const newFiles: File[] = [];
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
+
       if (file.size > maxFileSize) {
-        setAlertMessage("파일 용량은 100MB를 초과할 수 없습니다.");
-        return;
-      }
-      if (!allowedExtensions.includes(file.type)) {
-        setAlertMessage("png, jpg 파일만 업로드 가능합니다.");
+        setAlertMessage("파일 용량은 15MB를 초과할 수 없습니다.");
         return;
       }
 
-      newFiles.push(file);
+      if (
+        file.type === "image/heic" ||
+        file.name.toLowerCase().endsWith(".heic")
+      ) {
+        try {
+          const convertedBlob = await heic2any({
+            blob: file,
+            toType: "image/png",
+          });
+
+          const convertedFile = new File(
+            [convertedBlob as BlobPart],
+            file.name.replace(/\.heic$/, ".png"),
+            {
+              type: "image/png",
+            }
+          );
+
+          newFiles.push(convertedFile);
+        } catch (error) {
+          console.error("HEIC 변환 실패:", error);
+          setAlertMessage("HEIC 파일을 변환하는 데 실패했습니다.");
+          return;
+        }
+      } else if (!Extensions.includes(file.type)) {
+        setAlertMessage(
+          "pdf, png, jpg, gif, webp, bmp 파일만 업로드 가능합니다."
+        );
+        return;
+      } else {
+        newFiles.push(file);
+      }
     }
 
     setUploadedImages((prev) => {

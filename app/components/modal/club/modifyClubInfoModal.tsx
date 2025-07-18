@@ -16,6 +16,7 @@ import { updateClubWithFiles } from "@/api/club/api";
 import { useSearchParams } from "next/navigation";
 import { useClubInfoQuery } from "@/hooks/club/useClubInfoQuery";
 import { getClubOptions } from "@/utils/convertToServerFormat";
+import { Extensions } from "@/types/file";
 
 /**
  * 동아리 정보 수정 모달
@@ -84,31 +85,63 @@ const ModifyClubInfoModal = ({ onClose, onSubmit }: ModalProps) => {
     }
   };
 
-  const handleBannerFileChange = (
+  const handleBannerFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
     setBannerImage: React.Dispatch<React.SetStateAction<string | null>>
   ) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const maxFileSize = 15 * 1024 * 1024;
-      const allowedExtensions = ["image/png", "image/jpeg", "image/svg+xml"];
-      if (file.size > maxFileSize) {
-        setAlertMsg("파일 용량은 15MB 를 초과할 수 없습니다.");
-        setAlertVisible(true);
-        return;
-      }
-      if (!allowedExtensions.includes(file.type)) {
-        setAlertMsg("png, jpg, svg 파일만 업로드 가능합니다.");
-        setAlertVisible(true);
-        return;
-      }
+    if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        setBannerImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    const maxFileSize = 15 * 1024 * 1024;
+    if (file.size > maxFileSize) {
+      setAlertMsg("파일 용량은 15MB를 초과할 수 없습니다.");
+      setAlertVisible(true);
+      return;
     }
+    const heic2any = (await import("heic2any")).default;
+
+    // HEIC 처리
+    if (
+      file.type === "image/heic" ||
+      file.name.toLowerCase().endsWith(".heic")
+    ) {
+      try {
+        const convertedBlob = await heic2any({
+          blob: file,
+          toType: "image/png",
+        });
+
+        const convertedFile = new File(
+          [convertedBlob as BlobPart],
+          file.name.replace(/\.heic$/i, ".png"),
+          { type: "image/png" }
+        );
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          setBannerImage(reader.result as string);
+        };
+        reader.readAsDataURL(convertedFile);
+        return;
+      } catch (error) {
+        console.error("HEIC 변환 실패:", error);
+        setAlertMsg("HEIC 파일을 변환하는 데 실패했습니다.");
+        setAlertVisible(true);
+        return;
+      }
+    }
+
+    if (!Extensions.includes(file.type)) {
+      setAlertMsg("pdf, jpg, png, gif, webp, bmp 파일만 업로드 가능합니다.");
+      setAlertVisible(true);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setBannerImage(reader.result as string);
+    };
+    reader.readAsDataURL(file);
   };
 
   // 동아리 배너 이미지

@@ -1,9 +1,10 @@
 import { ClubNoticeImageData } from "@/types/club";
 import { useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Extensions } from "@/types/file";
+import heic2any from "heic2any";
 
 export const MAX_IMAGES = 10;
-const MAX_FILE_SIZE = 15 * 1024 * 1024;
 
 interface useClubNoticeFormProps {
   modalType: "create" | "modify";
@@ -63,36 +64,82 @@ export const useClubNoticeForm = ({
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const MAX_FILE_SIZE = 15 * 1024 * 1024; // 15MB
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = event.target.files;
-    if (files) {
-      const allowedExtensions = ["image/png", "image/jpeg"];
+    if (!files) return;
 
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
+    const updatedImages: string[] = [];
 
-        if (file.size > MAX_FILE_SIZE) {
-          setAlertMessage("파일 용량은 100MB를 초과할 수 없습니다.");
-          return;
-        }
-        if (!allowedExtensions.includes(file.type)) {
-          setAlertMessage("png, jpg 파일만 업로드 가능합니다.");
-          return;
-        }
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (e.target?.result) {
-            setUploadedImages((prev) => {
-              if (prev.length < MAX_IMAGES) {
-                return [...prev, e.target!.result as string];
-              }
-              return prev;
-            });
-          }
-        };
-        reader.readAsDataURL(file);
+      // 용량 제한
+      if (file.size > MAX_FILE_SIZE) {
+        setAlertMessage("파일 용량은 15MB를 초과할 수 없습니다.");
+        return;
       }
+
+      // HEIC 변환 처리
+      if (
+        file.type === "image/heic" ||
+        file.name.toLowerCase().endsWith(".heic")
+      ) {
+        try {
+          const convertedBlob = await heic2any({
+            blob: file,
+            toType: "image/png",
+          });
+
+          const convertedFile = new File(
+            [convertedBlob as BlobPart],
+            file.name.replace(/\.heic$/i, ".png"),
+            { type: "image/png" }
+          );
+
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            if (e.target?.result) {
+              setUploadedImages((prev) => {
+                if (prev.length + updatedImages.length < MAX_IMAGES) {
+                  return [...prev, e.target!.result as string];
+                }
+                return prev;
+              });
+            }
+          };
+          reader.readAsDataURL(convertedFile);
+          continue;
+        } catch (error) {
+          console.error("HEIC 변환 실패:", error);
+          setAlertMessage("HEIC 파일을 변환하는 데 실패했습니다.");
+          return;
+        }
+      }
+
+      // 허용 확장자 확인
+      if (!Extensions.includes(file.type)) {
+        setAlertMessage(
+          "pdf, jpg, png, gif, webp, bmp 파일만 업로드 가능합니다."
+        );
+        return;
+      }
+
+      // 일반 이미지 처리
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          setUploadedImages((prev) => {
+            if (prev.length + updatedImages.length < MAX_IMAGES) {
+              return [...prev, e.target!.result as string];
+            }
+            return prev;
+          });
+        }
+      };
+      reader.readAsDataURL(file);
     }
   };
 
