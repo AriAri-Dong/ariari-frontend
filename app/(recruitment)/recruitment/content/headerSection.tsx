@@ -12,6 +12,11 @@ import {
   FIELD_TYPE,
   TARGET_TYPE,
 } from "@/data/pulldown";
+import { useUserStore } from "@/stores/userStore";
+import NotiPopUp from "@/components/modal/notiPopUp";
+import LoginModal from "@/components/modal/login/loginModal";
+import MobileLoginModal from "@/components/modal/login/mobileLoginModal";
+import router from "next/router";
 
 const HeaderSection = ({
   setAffiliationFilter,
@@ -20,11 +25,21 @@ const HeaderSection = ({
   setTargetFilter,
   setSortType,
 }: any) => {
+  const { user } = useUserStore();
+  const isSignIn = !!user;
+  const schoolCertification = user?.schoolData;
+
   const [filter, setFilter] = useState<boolean>(false);
   const [affiliationType, setAffiliationType] = useState<string | null>(null);
   const [areaType, setAreaType] = useState<string | null>(null);
   const [fieldType, setFieldType] = useState<string | null>(null);
   const [targetType, setTargetType] = useState<string | null>(null);
+
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const [isLoginNotiPopUpOpen, setIsLoginNotiPopUpOpen] =
+    useState<boolean>(false);
+  const [isSchoolNotiPopUpOpen, setIsSchoolNotiPopUpOpen] =
+    useState<boolean>(false);
 
   const handleRefresh = () => {
     setAffiliationType(null);
@@ -37,17 +52,31 @@ const HeaderSection = ({
     setTargetFilter(null);
   };
 
+  const handleLoginRedirect = () => {
+    setIsLoginModalOpen(true);
+    setIsLoginNotiPopUpOpen(false);
+  };
+
+  const handleLoginModalClose = () => {
+    setIsLoginModalOpen(false);
+  };
+
   const handleAffiliationOption = (selectedOptions: string[]) => {
     const label = selectedOptions[0] || null;
+    const option = AFFILIATION_TYPE.find((opt) => opt.label === label);
     setAffiliationType(label);
-
-    if (label) {
-      const option = AFFILIATION_TYPE.find((opt) => opt.label === label);
-      setAffiliationFilter(option ? option.value : null);
-      console.log(`선택된 소속: ${label}, 값: ${option?.value}`);
+    if (!isSignIn) {
+      setIsLoginNotiPopUpOpen(true);
+    } else if (!schoolCertification && option?.value === "교내") {
+      setIsSchoolNotiPopUpOpen(true);
     } else {
-      setAffiliationFilter(null);
-      console.log("소속 필터 해제");
+      if (label) {
+        setAffiliationFilter(option ? option.value : null);
+        console.log(`선택된 소속: ${label}, 값: ${option?.value}`);
+      } else {
+        setAffiliationFilter(null);
+        console.log("소속 필터 해제");
+      }
     }
   };
 
@@ -156,6 +185,44 @@ const HeaderSection = ({
           />
         </div>
       </div>
+
+      {/* 로그인 팝업 */}
+      {isLoginModalOpen && (
+        <>
+          <LoginModal onClose={handleLoginModalClose} />
+          <MobileLoginModal onClose={handleLoginModalClose} />
+        </>
+      )}
+
+      {isLoginNotiPopUpOpen && (
+        <NotiPopUp
+          onClose={() => setIsLoginNotiPopUpOpen(false)}
+          icon="login"
+          title="로그인이 필요한 서비스입니다."
+          description={`교내 인기 동아리를 확인하기 위해서는\n로그인이 필요합니다.`}
+          firstButton={handleLoginRedirect}
+          firstButtonText="로그인 후 이용하기"
+          secondButton={() => setIsLoginNotiPopUpOpen(false)}
+          secondButtonText="다음에 할게요"
+          modalType="button"
+        />
+      )}
+
+      {isSchoolNotiPopUpOpen && (
+        <NotiPopUp
+          onClose={() => setIsSchoolNotiPopUpOpen(false)}
+          icon="school"
+          title="학교 등록이 필요한 서비스입니다."
+          description={`교내 인기 동아리를 확인하기 위해서는\n학교 등록이 필요합니다.`}
+          firstButton={() => {
+            router.push("/user/userInfo");
+          }}
+          firstButtonText="학교 등록하기"
+          secondButton={() => setIsSchoolNotiPopUpOpen(false)}
+          secondButtonText="다음에 할게요"
+          modalType="button"
+        />
+      )}
     </div>
   );
 };
