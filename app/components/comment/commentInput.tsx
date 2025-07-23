@@ -44,7 +44,7 @@ const CommentInput = ({
   return (
     <div
       className={`w-full flex justify-between items-center p-1 pl-4 md:p-1.5 md:pl-[22px] bg-hover rounded-24 md:rounded-28 gap-3 md:gap-5 ${
-        isDisabled ? "opacity-50 cursor-not-allowed" : ""
+        isDisabled ? "opacity-50 cursor-default" : ""
       }`}
     >
       <input
