@@ -182,6 +182,13 @@ const Comment = (props: CommentBaseProps) => {
   };
 
   useEffect(() => {
+    if (comment && !isReplying) {
+      setLikes(comment.likes);
+      setMyLike(comment.myLike);
+    }
+  }, [comment?.likes, comment?.myLike]);
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOptionOpen(false);
