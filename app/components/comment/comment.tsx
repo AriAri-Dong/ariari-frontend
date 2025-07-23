@@ -87,12 +87,13 @@ const Comment = (props: CommentBaseProps) => {
     !isReplying && comment ? comment.myLike : false
   );
 
-  const date = formatKoreanDateOnly(
-    isReplying ? new Date().toISOString() : comment?.createdDateTime || ""
-  );
-  const time = formatKoreanTimeOnly(
-    isReplying ? new Date().toISOString() : comment?.createdDateTime || ""
-  );
+  const rawDateTime = isReplying
+    ? new Date().toISOString()
+    : comment?.createdDateTime || "";
+
+  const [datePart, timePart] = rawDateTime.split("T");
+  const date = datePart.replace(/-/g, "."); //  2025.07.22
+  const time = timePart?.slice(0, 5); // 21:49
 
   const menuOptions =
     comment?.clubMember?.id === myId ? EDIT_ACTION_TYPE : REPORT_ACTION_TYPE;
@@ -240,55 +241,63 @@ const Comment = (props: CommentBaseProps) => {
               </div>
               {!isReplying && comment && (
                 <div className="flex gap-0.5 md:gap-2 items-center">
-                  {/* 댓글에만 답글 버튼 표시 (대댓글에는 X) */}
-                  {!isReply && isClubMember && (
+                  {/* 답글 버튼 (로그인 + 멤버만 활성화) */}
+                  {!isReply && (
                     <IconBtn
                       type="reply"
                       size="large"
                       title={isMdUp ? "답글" : ""}
-                      onClick={() => setIsReplyFormOpen((prev) => !prev)}
+                      onClick={() =>
+                        isSignIn &&
+                        isClubMember &&
+                        setIsReplyFormOpen((prev) => !prev)
+                      }
+                      disabled={!isSignIn || !isClubMember}
                     />
                   )}
 
-                  {/* 좋아요 버튼 (댓글/대댓글 모두 표시) */}
+                  {/* 좋아요 버튼 */}
                   <IconBtn
                     type={myLike ? "like_active" : "like_inactive"}
                     size="large"
                     title={likes.toString()}
                     onClick={handleLike}
+                    disabled={!isSignIn || !isClubMember}
                   />
 
-                  {/* 도트 메뉴 (댓글/대댓글 모두 표시) */}
-                  <div ref={menuRef} className="relative inline-block">
-                    <Image
-                      src={dotMenu}
-                      alt="menu"
-                      width={24}
-                      height={24}
-                      className="cursor-pointer"
-                      onClick={handleMenuClick}
-                    />
-                    {isOptionOpen && (
-                      <>
-                        {isMdUp ? (
-                          <SingleSelectOptions
-                            selectedOption=""
-                            optionData={menuOptions}
-                            size="small"
-                            position="end"
-                            handleMenuClick={handleOptionClick}
-                          />
-                        ) : (
-                          <CommonBottomSheet
-                            optionData={menuOptions}
-                            onClose={() => setIsOptionOpen(false)}
-                            handleMenuClick={handleOptionClick}
-                            selectedOption={""}
-                          />
-                        )}
-                      </>
-                    )}
-                  </div>
+                  {/* 도트 메뉴는 로그인 + 멤버일 때만 보이게 */}
+                  {isSignIn && isClubMember && (
+                    <div ref={menuRef} className="relative inline-block">
+                      <Image
+                        src={dotMenu}
+                        alt="menu"
+                        width={24}
+                        height={24}
+                        className="cursor-pointer"
+                        onClick={handleMenuClick}
+                      />
+                      {isOptionOpen && (
+                        <>
+                          {isMdUp ? (
+                            <SingleSelectOptions
+                              selectedOption=""
+                              optionData={menuOptions}
+                              size="small"
+                              position="end"
+                              handleMenuClick={handleOptionClick}
+                            />
+                          ) : (
+                            <CommonBottomSheet
+                              optionData={menuOptions}
+                              onClose={() => setIsOptionOpen(false)}
+                              handleMenuClick={handleOptionClick}
+                              selectedOption={""}
+                            />
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -296,7 +305,6 @@ const Comment = (props: CommentBaseProps) => {
         )}
         {isEditing || isReplying ? (
           <CommentInput
-            disabled={props.disabled}
             initialText={!isReplying && comment ? comment.body : ""}
             onSend={async (text) => {
               if (isReplying && comment) {

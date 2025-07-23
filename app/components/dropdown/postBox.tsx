@@ -44,7 +44,6 @@ const PostBox = ({ data, nickname }: PostBoxProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const isMdUp = useResponsive("md");
   const { role, clubInfo } = useClubContext();
-  const isClubMember = clubInfo?.clubMemberData;
 
   const [post, setPost] = useState<ClubActivity>(data);
   const [comments, setComments] = useState<ClubActivityComment[]>(
@@ -389,7 +388,6 @@ const PostBox = ({ data, nickname }: PostBoxProps) => {
                 onEditSuccess={refreshPostDetail}
                 onDeleteSuccess={refreshPostDetail}
                 onPostSuccess={refreshPostDetail}
-                disabled={!isClubMember}
               />
             ))
           ) : (
