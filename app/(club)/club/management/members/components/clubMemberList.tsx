@@ -99,10 +99,10 @@ const ClubMemberList = ({
         </div>
         <div className="w-full ml-2.5 pb-2.5 border-b border-menuborder md:border-none md:m-0 md:p-0">
           <p className="mb-0.5 text-mobile_body1_sb text-text1 md:text-body1_sb">
-            {data.memberData.nickname}
+            {data.name}
           </p>
           <p className="text-body2_m text-subtext2 md:text-body3_r">
-            {data.name}
+            {data.memberData.nickname}
           </p>
         </div>
       </div>

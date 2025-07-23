@@ -105,7 +105,8 @@ const ClubNoticeFormModal = ({
           <div className="flex flex-col gap-2.5 mt-7 mb-[18px]">
             <h3 className="flex text-text1 text-h3">이미지 첨부</h3>
             <p className="text-subtext2 whitespce-pre text-body1_r">
-              이미지는 최대 10장까지 첨부할 수 있어요. (JPEG / PNG)
+              이미지는 최대 10장까지 첨부할 수 있어요. (JPG / PNG / GIF / WEBP /
+              BMP / SVG)
               <br />이 이미지에서는 가로 이미지가 더 적합합니다. 가로 비율에
               맞춰 업로드해주세요.
             </p>

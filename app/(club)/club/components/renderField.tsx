@@ -56,11 +56,13 @@ const RenderField: React.FC<RenderFieldProps> = ({
               onChange={(e) => handleInputChange(field.key, e.target.value)}
               maxLength={field.maxLength || 100}
             />
-            {field.maxLength && (
-              <p className="text-noti text-mobile_body3_r mt-[-14px] ml-4 md:hidden">
-                최대 {field.maxLength}자까지 작성 가능합니다.
-              </p>
-            )}
+            {field.maxLength &&
+              inputValues[keyName] &&
+              inputValues[keyName].length === field.maxLength && (
+                <p className="text-noti text-mobile_body3_r mt-[-14px] ml-4 md:hidden">
+                  최대 {field.maxLength}자까지 작성 가능합니다.
+                </p>
+              )}
           </div>
         );
       }
@@ -107,11 +109,13 @@ const RenderField: React.FC<RenderFieldProps> = ({
               maxLength={field.maxLength || 50}
             />
           )}
-          {field.maxLength && (
-            <p className="text-noti text-mobile_body3_r mt-[-14px] ml-4 md:hidden">
-              최대 {field.maxLength}자까지 작성 가능합니다.
-            </p>
-          )}
+          {field.maxLength &&
+            inputValues[keyName] &&
+            inputValues[keyName].length === field.maxLength && (
+              <p className="text-noti text-mobile_body3_r mt-[-14px] ml-4 md:hidden">
+                최대 {field.maxLength}자까지 작성 가능합니다.
+              </p>
+            )}
         </div>
       );
 
