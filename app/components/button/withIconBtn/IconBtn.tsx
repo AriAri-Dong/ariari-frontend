@@ -20,6 +20,7 @@ interface BtnType extends ButtonWithTextProps {
     | "comment"
     | "reply";
   size: "large" | "small";
+  disabled?: boolean;
 }
 
 /**
@@ -29,9 +30,17 @@ interface BtnType extends ButtonWithTextProps {
  * @param type 아이콘 타입
  * @param size 버튼 사이즈
  * @param className 추가 className
+ * @param disabled 비활성화 여부
  * @returns
  */
-const IconBtn = ({ title, onClick, type, size, className }: BtnType) => {
+const IconBtn = ({
+  title,
+  onClick,
+  type,
+  size,
+  className,
+  disabled = false,
+}: BtnType) => {
   const getIcon = () => {
     switch (type) {
       case "reset":
@@ -53,30 +62,42 @@ const IconBtn = ({ title, onClick, type, size, className }: BtnType) => {
     }
   };
 
+  const handleClick = () => {
+    if (!disabled && onClick) {
+      onClick();
+    }
+  };
+
   return (
     <button
+      type="button"
+      onClick={handleClick}
+      disabled={disabled}
       className={`py-1 px-1.5 text-icon rounded-lg 
-      active:bg-hover md:hover:bg-hover md:active:bg-pressed ${className}`}
-      onClick={onClick}
+        ${
+          !disabled
+            ? "active:bg-hover md:hover:bg-hover md:active:bg-pressed"
+            : ""
+        }
+        ${disabled ? "opacity-50 cursor-default" : ""}
+        ${className}`}
     >
       <div
         className={`flex items-center text-subtext2 font-medium gap-1 md:gap-[6px] 
           ${
             size === "large"
-              ? `${"text-mobile_body2_m md:text-body1_m"}`
-              : `${"text-mobile_body3_m md:text-body3_m"}`
+              ? "text-mobile_body2_m md:text-body1_m"
+              : "text-mobile_body3_m md:text-body3_m"
           }`}
       >
         {getIcon() && (
           <Image
             src={getIcon()}
             alt={type}
-            width={`${size === "large" ? 20 : 16}`}
-            height={`${size === "large" ? 20 : 16}`}
+            width={size === "large" ? 20 : 16}
+            height={size === "large" ? 20 : 16}
             className={`${
-              size === "large"
-                ? `${"md:w-5 md:h-5"}`
-                : `${"md:w-[18px] md:h-[18px]"}`
+              size === "large" ? "md:w-5 md:h-5" : "md:w-[18px] md:h-[18px]"
             }`}
           />
         )}
