@@ -46,7 +46,7 @@ export const DATE_SORT_TYPE = [
 ];
 
 export const POPULARITY_SORT_TYPE = [
-  { id: 0, label: "" },
+  { id: 0, label: "정렬 기준" },
   { id: 1, label: "최신순" },
   { id: 2, label: "조회수순" },
 ];

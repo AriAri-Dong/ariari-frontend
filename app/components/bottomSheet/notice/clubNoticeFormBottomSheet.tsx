@@ -98,7 +98,8 @@ const ClubNoticeFormBottomsheet = ({
           <div className="flex flex-col gap-2.5 mt-[30px] mb-[14px]">
             <h3 className="flex text-text1 text-mobile_h2">이미지 첨부</h3>
             <p className="text-subtext2 text-mobile_body3_r">
-              이미지는 최대 10장까지 첨부할 수 있어요. (JPEG / PNG)
+              이미지는 최대 10장까지 첨부할 수 있어요. (JPG / PNG / GIF / WEBP /
+              BMP / SVG)
               <br />이 이미지에서는 가로 이미지가 더 적합합니다.
             </p>
           </div>
