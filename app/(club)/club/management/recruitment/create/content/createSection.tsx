@@ -255,7 +255,7 @@ const CreateSection = () => {
               유해한 내용이 포함된 사진일 경우, 별도의 안내 없이 사진이 삭제
               처리되며 서비스 이용에 제한이 있을 수 있습니다.
               <br />
-              이미지 파일 업로드(JPG, JPEG, PNG 지원)
+              이미지 파일 업로드(JPG, PNG, GIF, WEBP, BMP, SVG 지원)
             </p>
           )}
           <ImageUpload
