@@ -40,7 +40,8 @@ const ClubInfoSection = () => {
     useState<boolean>(false);
   const { toggleClubBookmark } = useToggleClubBookmark();
 
-  const { clubInfo } = useClubContext();
+  const { clubInfo, role } = useClubContext();
+  const isClubMember = clubInfo?.clubMemberData;
 
   const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
 
@@ -215,9 +216,15 @@ const ClubInfoSection = () => {
           </p>
         </div>
         {/* === api 연동 과정에서 따로 분리할 가능성 있음 === */}
-        <div className="block mt-4 mb-4 md:hidden">
-          <LargeBtn title={"동아리 정보 수정"} onClick={handleModifyClubInfo} />
-        </div>
+        {(role === "ADMIN" || role === "MANAGER") && (
+          <div className="block mt-4 mb-4 md:hidden">
+            <LargeBtn
+              title={"동아리 정보 수정"}
+              onClick={handleModifyClubInfo}
+            />
+          </div>
+        )}
+
         {/* === === */}
         <div className="md:flex flex-row w-full md:justify-between md:max-w-[642px] hidden">
           {CLUB_CATEGORY.map((item) => {
@@ -257,7 +264,9 @@ const ClubInfoSection = () => {
       {/* <RecruitmentGuideFloatingBar deadline={new Date("2024-12-31T23:59:59")} /> */}
       {isBottomSheetOpen && (
         <CommonBottomSheet
-          optionData={MENU_DATA}
+          optionData={
+            isClubMember ? MENU_DATA : MENU_DATA.filter((item) => item.id !== 2)
+          }
           selectedOption=""
           handleMenuClick={handleMenuClick}
           onClose={() => setIsBottomSheetOpen(false)}
