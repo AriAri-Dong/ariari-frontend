@@ -67,8 +67,11 @@ const ClubActivities = ({
                 <h3 className="mb-2.5 text-text1 text-mobile_h3 md:text-h3">
                   {"활동 내용"}
                 </h3>
-                <p className="text-mobile_body1_r text-subtext1">{body}</p>
+                <div className="text-mobile_body1_r text-subtext1 whitespace-pre-line">
+                  {body}
+                </div>
               </div>
+
               {recruitmentNoteDataList?.map((item, index) => (
                 <div key={index}>
                   <h3 className="mb-2.5 text-text1 text-mobile_h3 md:text-h3">

@@ -14,6 +14,7 @@ export type RecruitmentStatusType = "SCHEDULED" | "OPEN" | "CLOSED";
 export interface RecruitmentData {
   id: string;
   clubId: string; // 동아리 ID
+  clubName?: string;
   title: string;
   body: string;
   posterUri: string;

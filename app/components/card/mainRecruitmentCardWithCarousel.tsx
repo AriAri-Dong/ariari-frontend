@@ -190,7 +190,7 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
                 <div className="flex flex-col w-full md:px-2 md:mt-2.5 md:mb-6">
                   <div className="flex justify-between">
                     <p className="text-subtext1 text-mobile_body3_m mb-[6px] md:text-h4">
-                      {item.title}
+                      {item.clubName || "이름 없음"}
                     </p>
                     <button
                       onClick={(e) => toggleScrap(e, index)}
@@ -204,7 +204,7 @@ const MainRecruitmentCardWithCarousel = ({ data }: CardProps) => {
                     </button>
                   </div>
                   <h3 className="line-clamp-2 overflow-hidden text-ellipsis max-w-[166px] text-text1 text-mobile_body1_sb mb-5 md:text-h3 md:h-[54px]">
-                    {item.body}
+                    {item.title}
                   </h3>
                   <p className="text-subtext2 text-mobile_body3_m md:text-body2_m">
                     {options.map((opt) => opt.value).join(" | ")}
