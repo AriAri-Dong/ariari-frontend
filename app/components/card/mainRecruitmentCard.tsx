@@ -98,11 +98,10 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
             <div className="relative min-w-[114px] md:w-full aspect-square">
               <Image
                 src={item.posterUri || defaultImg}
-                alt={item.title}
+                alt={item.clubName}
                 layout="fill"
                 objectFit="cover"
                 className="rounded-3xl"
-                // className="rounded-3xl shadow-default"
               />
               <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 md:bottom-5">
                 <DdayBadge date={item.endDateTime} />
@@ -111,7 +110,7 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
             <div className="flex flex-col w-full md:px-2 md:mt-2.5 md:mb-6">
               <div className="flex justify-between">
                 <p className="text-subtext1 text-mobile_body3_m mb-[6px] md:text-h4">
-                  {item.title}
+                  {item.clubName}
                 </p>
                 <button
                   onClick={(e) => toggleScrap(e, index)}
@@ -125,7 +124,7 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
                 </button>
               </div>
               <h3 className="line-clamp-2 overflow-hidden text-ellipsis max-w-[166px] text-text1 text-mobile_body1_sb mb-5 md:text-h3 md:h-[54px]">
-                {item.body}
+                {item.title}
               </h3>
               <p className="text-subtext2 text-mobile_body3_m md:text-body2_m">
                 {options.map((opt) => opt.value).join(" | ")}
