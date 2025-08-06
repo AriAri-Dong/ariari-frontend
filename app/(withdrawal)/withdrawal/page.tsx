@@ -43,8 +43,7 @@ const WithDrawal = () => {
   const confirmWithdrawal = async () => {
     try {
       await unregister();
-      localStorage.removeItem("ariari-auth");
-      localStorage.removeItem("ariari-user-store");
+
       setCurrentStep(currentStep + 1);
     } catch (error) {
       setIsModalOpen(false);

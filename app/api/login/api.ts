@@ -138,7 +138,7 @@ export const unregister = async () => {
     localStorage.removeItem("ariari-auth");
     localStorage.removeItem("ariari-user-store");
 
-    window.location.reload();
+    // window.location.reload();
   } catch (err) {
     console.error("회원탈퇴 실패:", err);
     throw err;
