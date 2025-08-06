@@ -418,12 +418,16 @@ const PostBox = ({ data, nickname }: PostBoxProps) => {
       {isMdUp
         ? isReportOpen && (
             <ReportModal
+              id={post.clubActivityId}
+              reportTargetType="CLUB_ACTIVITY"
               onClose={() => setIsReportOpen(false)}
               onSubmit={handleReportSubmit}
             />
           )
         : isReportOpen && (
             <ReportBottomSheet
+              id={post.clubActivityId}
+              reportTargetType="CLUB_ACTIVITY"
               onClose={() => setIsReportOpen(false)}
               onSubmit={handleReportSubmit}
             />

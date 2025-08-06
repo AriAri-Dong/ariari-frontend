@@ -356,15 +356,22 @@ const MainSection = () => {
           <span className="text-noti text-mobile_body3_m pl-1">*</span>
         </h3>
         {isMd ? (
-          <TextInputWithBtn
-            value={userName}
-            onChange={handleUserNameChange}
-            placeholder="사용자 이름"
-            maxLength={10}
-            className="mb-[30px] md:mb-7 max-w-[770px]"
-            onClick={handleModifyNickname}
-            btnTitle={"수정하기"}
-          />
+          <div className="flex flex-col">
+            <TextInputWithBtn
+              value={userName}
+              onChange={handleUserNameChange}
+              placeholder="사용자 이름"
+              maxLength={10}
+              className="mb-[30px] md:mb-7 max-w-[770px]"
+              onClick={handleModifyNickname}
+              btnTitle={"수정하기"}
+            />
+            {duplicateCheck && (
+              <p className="w-full text-noti text-mobile_body4_r mt-2 pl-2">
+                중복된 닉네임입니다.
+              </p>
+            )}
+          </div>
         ) : (
           <div className="flex flex-col mb-[30px]">
             <CustomInput
@@ -375,7 +382,7 @@ const MainSection = () => {
             />
             {duplicateCheck && (
               <p className="w-full text-noti text-mobile_body4_r mt-2 pl-2">
-                중복된 이메일입니다.
+                중복된 닉네임입니다.
               </p>
             )}
             <div

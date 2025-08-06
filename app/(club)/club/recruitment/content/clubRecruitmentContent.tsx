@@ -8,13 +8,11 @@ import WriteBtn from "@/components/button/iconBtn/writeBtn";
 import RecruitmentGuideFloatingBar from "@/components/bar/floatingBar/recruitmentGuideFloatingBar";
 import RecruitmentCard from "@/components/card/recruitmentCard";
 import DarkBtn from "@/components/button/withIconBtn/darkBtn";
-import NotiPopUp from "@/components/modal/notiPopUp";
 import MobileMenu from "../../components/menu/mobileMenu";
 import LeftMenu from "../../components/menu/leftMenu";
 import RecruitmentGuideForm from "../components/RecruitmentGuideForm";
 import Alert from "@/components/alert/alert";
 
-import { RecruitmentData } from "@/types/recruitment";
 import { formatTime } from "@/utils/formatKSTTime";
 import { useClubRecruitmentQuery } from "@/hooks/club/recruitment/useClubRecruitmentQuery";
 import { useUserStore } from "@/stores/userStore";

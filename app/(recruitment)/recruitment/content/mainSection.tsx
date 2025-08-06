@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import PlusBtn from "@/components/button/withIconBtn/plusBtn";
 import MainRecruitmentCard from "@/components/card/mainRecruitmentCard";
-import { POPULARITY_SORT_TYPE } from "@/data/pulldown";
+import { SORT_OPTIONS } from "@/data/pulldown";
 import {
   ClubRecruitmentListResponse,
   RecruitmentData,
@@ -16,14 +16,13 @@ import {
 } from "@/api/recruitment/api";
 import FilterSection from "./filterSection";
 import HeaderSection from "./headerSection";
+import { getLabelByValue, getValueByLabel } from "@/utils/getLabelByValue";
 
 const MainSection = () => {
   const [recruitmentData, setRecruitmentData] = useState<RecruitmentData[]>([]);
   const [page, setPage] = useState<number>(0);
   const [more, setMore] = useState<boolean>(true);
-  const [sortType, setSortType] = useState<string>(
-    POPULARITY_SORT_TYPE[0].label
-  );
+  const [sortType, setSortType] = useState<string>(SORT_OPTIONS[0].value);
 
   const [affiliationFilter, setAffiliationFilter] = useState<string | null>(
     null
@@ -43,7 +42,7 @@ const MainSection = () => {
       const pageable: Pageable = {
         page: newPage,
         size: 10,
-        sort: sortType === "정렬 기준" ? [] : [sortType],
+        sort: [getValueByLabel(sortType)],
       };
 
       let response: ClubRecruitmentListResponse;
@@ -91,8 +90,8 @@ const MainSection = () => {
           setSortType={setSortType}
         />
         <FilterSection
-          sortType={sortType}
-          setSortType={setSortType}
+          sortType={getLabelByValue(sortType)}
+          setSortType={(label: string) => setSortType(getValueByLabel(label))}
           dataCount={recruitmentData.length || 0}
         />
       </div>
