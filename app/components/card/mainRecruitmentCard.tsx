@@ -98,7 +98,7 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
             <div className="relative min-w-[114px] md:w-full aspect-square">
               <Image
                 src={item.posterUri || defaultImg}
-                alt={item.clubName}
+                alt={item.title}
                 layout="fill"
                 objectFit="cover"
                 className="rounded-3xl"
@@ -110,7 +110,7 @@ const MainRecruitmentCard = ({ data }: CardProps) => {
             <div className="flex flex-col w-full md:px-2 md:mt-2.5 md:mb-6">
               <div className="flex justify-between">
                 <p className="text-subtext1 text-mobile_body3_m mb-[6px] md:text-h4">
-                  {item.clubName}
+                  {item.clubName || "이름 없음"}
                 </p>
                 <button
                   onClick={(e) => toggleScrap(e, index)}
