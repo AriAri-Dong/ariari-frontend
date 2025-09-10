@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Head from "next/head";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 
 import Layout from "@/components/layout/layout";
@@ -26,18 +26,34 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="ko">
-      <Head>
-        <meta
-          name="naver-site-verification"
-          content="0917375535b924eb154f8dcb0dd0e3b240e49bc9"
-        />
-      </Head>
+      <head>
+        {/* Google Tag Manager */}
+        <Script id="gtm-script" strategy="afterInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-KHCLQ4RX');
+          `}
+        </Script>
+      </head>
       <body className={pretendard.variable}>
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-KHCLQ4RX"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+
         <QueryClientProvider>
           <Layout>{children}</Layout>
         </QueryClientProvider>
