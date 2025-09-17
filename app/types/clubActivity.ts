@@ -156,7 +156,7 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
             clubMember: {
               id: String(child.creatorId),
               name: child.creatorName || "(알수없음)",
-              profileType: parent.creatorProfileType,
+              profileType: child.creatorProfileType,
               clubMemberRoleType: "GENERAL",
               clubMemberStatusType: "ACTIVE",
               memberData: null,
