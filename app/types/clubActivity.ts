@@ -133,7 +133,7 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
         createdDateTime: parent.createdDateTime,
         likes: parent.likeCount,
         myLike: parent.myLiked,
-        isMine: false,
+        isMine: parent.mine,
         blocked: parent.blocked,
         clubMember: {
           id: String(parent.creatorId),
@@ -151,7 +151,7 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
             createdDateTime: child.createdDateTime,
             likes: child.likeCount,
             myLike: child.myLiked,
-            isMine: false,
+            isMine: child.mine,
             blocked: child.blocked,
             clubMember: {
               id: String(child.creatorId),
@@ -161,7 +161,7 @@ export const mapActivityDetailFromApi = (detail: any): ClubActivity => {
               clubMemberStatusType: "ACTIVE",
               memberData: null,
             },
-            comments: child.comments,
+            comments: [],
           })) ?? [],
       };
     }),
