@@ -13,10 +13,6 @@ import ReportBottomSheet from "../bottomSheet/report/reportBottomSheet";
 import Alert from "../alert/alert";
 import { ClubActivityComment } from "@/types/clubActivity";
 import {
-  formatKoreanDateOnly,
-  formatKoreanTimeOnly,
-} from "@/utils/dateFormatter";
-import {
   blockClubActivityCommentUser,
   createClubActivityComment,
   deleteClubActivityComment,
@@ -228,7 +224,9 @@ const Comment = (props: CommentBaseProps) => {
               <div className="flex items-center gap-2.5 mb-3">
                 <div className="flex flex-row items-center gap-2.5">
                   <Image
-                    src={getProfileImage(props.profileType)}
+                    src={getProfileImage(
+                      comment?.clubMember.profileType ?? props.profileType
+                    )}
                     alt="프로필 이미지"
                     width={28}
                     height={28}
