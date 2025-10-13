@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import logo from "@/images/logo/logo.svg";
 import instagram from "@/images/icon/instagram.svg";
+import youtube from "@/images/icon/youtube.svg";
 
 const Footer = () => {
   const router = useRouter();
@@ -32,14 +33,26 @@ const Footer = () => {
             height={30}
             className="md:w-[205px] md:h-[52px]"
           />
-          <Image
-            src={instagram}
-            alt="instagram"
-            width={28}
-            height={28}
-            onClick={() => router.push("https://www.instagram.com/ariari.kr/")}
-            className="cursor-pointer md:w-[44px] md:h-[44px]"
-          />
+          <div className="flex items-center gap-3 md:gap-4">
+            <Image
+              src={youtube}
+              alt="youtube"
+              width={28}
+              height={28}
+              onClick={() => router.push("https://www.youtube.com/")}
+              className="cursor-pointer md:w-[44px] md:h-[44px]"
+            />
+            <Image
+              src={instagram}
+              alt="instagram"
+              width={28}
+              height={28}
+              onClick={() =>
+                router.push("https://www.instagram.com/ariari.kr/")
+              }
+              className="cursor-pointer md:w-[44px] md:h-[44px]"
+            />
+          </div>
         </div>
         <div className="flex flex-col w-full space-y-3.5 mt-6 md:flex-row md:justify-between md:items-center">
           <div className="flex space-x-12 text-xs text-unselected font-medium md:text-15">
