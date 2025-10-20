@@ -39,7 +39,7 @@ const Footer = () => {
               alt="youtube"
               width={28}
               height={28}
-              onClick={() => router.push("https://www.youtube.com/")}
+              onClick={() => router.push("https://www.youtube.com/@ariariofficial")}
               className="cursor-pointer md:w-[44px] md:h-[44px]"
             />
             <Image
@@ -82,3 +82,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
