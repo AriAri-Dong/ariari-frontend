@@ -11,32 +11,37 @@ const nextConfig = {
   output: "standalone",
   images: {
     remotePatterns: [
+      // {
+      //   protocol: "https",
+      //   hostname: "cdn.ariari.kr",
+      //   port: "",
+      //   pathname: "/**",
+      // },
+      // {
+      //   protocol: "https",
+      //   hostname: "d19qg9zwo8is96.cloudfront.net",
+      //   port: "",
+      //   pathname: "/**",
+      // },
+      // {
+      //   protocol: "http",
+      //   hostname: "d19qg9zwo8is96.cloudfront.net",
+      //   port: "",
+      //   pathname: "/**",
+      // },
+      // {
+      //   protocol: "http",
+      //   hostname: "cdn.ariari.kr",
+      //   pathname: "/**",
+      // },
+      // {
+      //   protocol: "https",
+      //   hostname: "cdn.ariari.kr",
+      //   pathname: "/**",
+      // },
       {
         protocol: "https",
-        hostname: "cdn.ariari.kr",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "d19qg9zwo8is96.cloudfront.net",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "http",
-        hostname: "d19qg9zwo8is96.cloudfront.net",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "http",
-        hostname: "cdn.ariari.kr",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "cdn.ariari.kr",
+        hostname: "ariari-api.winterholic.net",
         pathname: "/**",
       },
     ],

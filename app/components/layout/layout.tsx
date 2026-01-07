@@ -13,7 +13,7 @@ import MobileProfileSettingModal from "../modal/profileSetting/mobile/mobileProf
 import MobileSnackBar from "../bar/mobileSnackBar";
 
 // 최대 노출 횟수
-const MAX_MODAL_COUNT_PER_SESSION = 1000;
+const MAX_MODAL_COUNT_PER_SESSION = 1;
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
