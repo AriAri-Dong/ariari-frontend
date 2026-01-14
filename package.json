@@ -18,7 +18,7 @@
     "heic2any": "^0.0.4",
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.1",
-    "next": "^14.2.21",
+    "next": "14.2.35",
     "react": "^18",
     "react-datepicker": "^7.6.0",
     "react-dom": "^18",
